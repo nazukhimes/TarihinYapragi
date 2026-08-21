@@ -1,0 +1,10 @@
+{
+  "files.encoding": "utf8",
+  "files.eol": "\n",
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "tailwindCSS.experimental.classRegex": [
+    ["className=\"([^\"]*)", "([a-zA-Z0-9\-:\[\]\.\/]+)"]
+  ]
+}

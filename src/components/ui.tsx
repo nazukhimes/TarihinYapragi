@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useInView } from "../lib/useInView";
 
 /* ---------- scroll reveal ---------- */
 export function Reveal({
@@ -12,27 +13,7 @@ export function Reveal({
   delay?: number;
   as?: "div" | "section" | "li" | "article";
 }) {
-  const ref = useRef<HTMLElement | null>(null);
-  const [inView, setInView] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            setInView(true);
-            obs.disconnect();
-          }
-        });
-      },
-      { threshold: 0.08, rootMargin: "0px 0px -40px 0px" }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-
+  const { ref, inView } = useInView<HTMLElement>();
   return (
     <Tag
       ref={ref as never}
@@ -46,32 +27,28 @@ export function Reveal({
 
 /* ---------- sayaç ---------- */
 export function CountUp({ to, duration = 900 }: { to: number; duration?: number }) {
+  const { ref, inView } = useInView<HTMLSpanElement>();
   const [val, setVal] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  const started = useRef(false);
+  const prev = useRef(0);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver((es) => {
-      es.forEach((e) => {
-        if (e.isIntersecting && !started.current) {
-          started.current = true;
-          const t0 = performance.now();
-          const tick = (t: number) => {
-            const p = Math.min(1, (t - t0) / duration);
-            const eased = 1 - Math.pow(1 - p, 3);
-            setVal(Math.round(to * eased));
-            if (p < 1) requestAnimationFrame(tick);
-          };
-          requestAnimationFrame(tick);
-          obs.disconnect();
-        }
-      });
-    });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [to, duration]);
+    if (!inView) return;
+
+    const from = prev.current; // önceki değerden yenisine yumuşak geçiş
+    const t0 = performance.now();
+    let raf = 0;
+
+    const tick = (t: number) => {
+      const p = Math.min(1, (t - t0) / duration);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setVal(Math.round(from + (to - from) * eased));
+      if (p < 1) raf = requestAnimationFrame(tick);
+      else prev.current = to;
+    };
+    raf = requestAnimationFrame(tick);
+
+    return () => cancelAnimationFrame(raf);
+  }, [to, duration, inView]); // ← to değişince YENİDEN çalışır
 
   return <span ref={ref}>{val}</span>;
 }

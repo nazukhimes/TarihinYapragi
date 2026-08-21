@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { CategoryId, TalkCard } from "../data/curated";
+import { WIKI_API_BASE as API } from "./config";
 
 export interface WikiPage {
   title: string;
@@ -47,8 +48,6 @@ interface RawDay {
   holidays?: { text?: string; pages?: WikiPage[] }[];
   selected?: RawOtd[];
 }
-
-const API = "https://api.wikimedia.org/feed/v1/wikipedia";
 
 const memCache = new Map<string, DayData>();
 

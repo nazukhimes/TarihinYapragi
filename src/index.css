@@ -209,4 +209,14 @@ body {
     transition-duration: 0.01ms !important;
   }
   html { scroll-behavior: auto; }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+@media print {
+  .reveal { opacity: 1 !important; transform: none !important; }
+  .noise, .gridlines, .ticker-track, .scanlines { display: none !important; }
+  header, nav { position: static !important; }
 }

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { IconArrow } from "./ui";
+import { dayOfYear, daysInMonth, isLeapYear, weekdayIndex } from "../lib/date";
 
 export const MONTHS_TR = [
   "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
@@ -7,16 +8,6 @@ export const MONTHS_TR = [
 ];
 export const WEEKDAYS_TR = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
 export const WEEKDAYS_SHORT = ["Pt", "Sa", "Ça", "Pe", "Cu", "Ct", "Pz"];
-
-export function dayOfYear(month: number, day: number): number {
-  const d = new Date(2024, month - 1, day);
-  const start = new Date(2024, 0, 1);
-  return Math.floor((d.getTime() - start.getTime()) / 86400000) + 1;
-}
-
-export function daysInMonth(month: number): number {
-  return new Date(2024, month, 0).getDate();
-}
 
 /* ---------- canlı saat ---------- */
 export function LiveClock() {
@@ -54,15 +45,23 @@ export function CalendarLeaf({
   pickerOpen: boolean;
   isToday: boolean;
 }) {
-  // yaprak: varsayılan 2024 referanslı (artık yıl) — hafta günü gerçek yıldan
   const weekday = useMemo(() => {
-    const refYear = new Date().getFullYear();
-    return WEEKDAYS_TR[new Date(refYear, month - 1, day).getDay()];
-  }, [day, month]);
+    const idx = weekdayIndex(month, day, year);
+    return idx === null ? null : WEEKDAYS_TR[idx];
+  }, [day, month, year]);
 
-  const total = daysInMonth(month);
-  const prev = () => onChangeDay(day === 1 ? daysInMonth(month === 1 ? 12 : month - 1) : day - 1, day === 1 ? (month === 1 ? 12 : month - 1) : month);
-  const next = () => onChangeDay(day === total ? 1 : day + 1, day === total ? (month === 12 ? 1 : month + 1) : month);
+  const shift = (delta: number) => {
+    let d = day + delta;
+    let m = month;
+    if (d < 1) {
+      m = m === 1 ? 12 : m - 1;
+      d = daysInMonth(m);
+    } else if (d > daysInMonth(m)) {
+      m = m === 12 ? 1 : m + 1;
+      d = 1;
+    }
+    onChangeDay(d, m);
+  };
 
   return (
     <div className="relative" style={{ perspective: "1400px" }}>
@@ -90,7 +89,7 @@ export function CalendarLeaf({
         <div key={`${day}-${month}`} className="leaf-flip relative px-6 pt-5 pb-7 text-center">
           <div className="paper-grain absolute inset-0 pointer-events-none" />
           <p className="font-mono text-[12px] tracking-[0.3em] uppercase text-brand font-semibold">
-            {weekday}
+            {weekday ?? "Artık gün"}
           </p>
           <p className="font-display font-black leading-none mt-1 text-inkpaper" style={{ fontSize: "clamp(6.5rem, 18vw, 11rem)" }}>
             {day}
@@ -99,9 +98,16 @@ export function CalendarLeaf({
             {MONTHS_TR[month - 1]}
           </p>
 
-          <div className="mt-5 pt-4 border-t border-dashed border-inkpaper-dim/40 flex items-center justify-between font-mono text-[11px] text-inkpaper-dim">
-            <span>Yılın {dayOfYear(month, day)}. günü</span>
-            <span>{month}. ay</span>
+          <div className="mt-5 pt-4 border-t border-dashed border-inkpaper-dim/40">
+            <div className="flex items-center justify-between font-mono text-[11px] text-inkpaper-dim">
+              <span>Yılın {dayOfYear(month, day, year)}. günü</span>
+              <span>{month}. ay</span>
+            </div>
+            {weekday === null && (
+              <p className="mt-2 font-mono text-[10.5px] text-inkpaper-dim text-center tracking-wide">
+                {year} artık yıl değil
+              </p>
+            )}
           </div>
 
           <button
@@ -121,7 +127,7 @@ export function CalendarLeaf({
       {/* yaprak navigasyonu */}
       <div className="flex items-center justify-between mt-7">
         <button
-          onClick={prev}
+          onClick={() => shift(-1)}
           aria-label="Önceki gün"
           className="group flex items-center gap-2 px-4 py-2.5 rounded-sm border border-line bg-panel text-ink-dim hover:text-ink hover:border-gold/60 hover:-translate-x-0.5 transition-all duration-200 cursor-pointer"
         >
@@ -144,7 +150,7 @@ export function CalendarLeaf({
           </button>
         )}
         <button
-          onClick={next}
+          onClick={() => shift(1)}
           aria-label="Sonraki gün"
           className="group flex items-center gap-2 px-4 py-2.5 rounded-sm border border-line bg-panel text-ink-dim hover:text-ink hover:border-gold/60 hover:translate-x-0.5 transition-all duration-200 cursor-pointer"
         >
@@ -157,6 +163,7 @@ export function CalendarLeaf({
         open={pickerOpen}
         day={day}
         month={month}
+        year={year}
         onPick={onChangeDay}
       />
     </div>
@@ -168,11 +175,13 @@ function MiniCalendar({
   open,
   day,
   month,
+  year,
   onPick,
 }: {
   open: boolean;
   day: number;
   month: number;
+  year: number;
   onPick: (d: number, m: number) => void;
 }) {
   const [viewMonth, setViewMonth] = useState(month);
@@ -183,7 +192,7 @@ function MiniCalendar({
   if (!open) return null;
 
   const total = daysInMonth(viewMonth);
-  const firstOffset = (new Date(2024, viewMonth - 1, 1).getDay() + 6) % 7; // Pzt başlangıç
+  const firstOffset = (new Date(year, viewMonth - 1, 1).getDay() + 6) % 7; // Pzt başlangıç
   const today = new Date();
 
   return (
@@ -222,15 +231,19 @@ function MiniCalendar({
           const selected = d === day && viewMonth === month;
           const isTodayCell =
             d === today.getDate() && viewMonth === today.getMonth() + 1;
+          const isLeapDay = viewMonth === 2 && d === 29 && !isLeapYear(year);
           return (
             <button
               key={d}
               onClick={() => onPick(d, viewMonth)}
+              title={isLeapDay ? "Artık gün" : undefined}
               className={`relative aspect-square rounded-sm font-mono text-[13px] transition-all duration-150 cursor-pointer ${
                 selected
                   ? "bg-brand text-paper font-bold shadow-[0_6px_14px_rgba(210,59,46,0.4)]"
                   : "text-inkpaper hover:bg-brand/15 hover:text-brand hover:-translate-y-px"
-              } ${isTodayCell && !selected ? "ring-1 ring-gold text-brand" : ""}`}
+              } ${isTodayCell && !selected ? "ring-1 ring-gold text-brand" : ""} ${
+                isLeapDay && !selected ? "border border-dashed border-inkpaper-dim/60" : ""
+              }`}
             >
               {d}
             </button>
