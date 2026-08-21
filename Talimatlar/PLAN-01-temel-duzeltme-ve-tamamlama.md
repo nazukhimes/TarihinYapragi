@@ -3,8 +3,8 @@
 | Alan | Değer |
 |---|---|
 | **Oluşturulma** | 2026-08-21 |
-| **Durum** | 🟡 Aktif — 7 / 14 tamamlandı |
-| **Son hareket** | 2026-08-21 · T-07 tamamlandı |
+| **Durum** | 🟡 Aktif — 8 / 14 tamamlandı |
+| **Son hareket** | 2026-08-21 · T-08 tamamlandı |
 | **Talimat sayısı** | 14 (T-01 … T-14) |
 | **Faz sayısı** | 5 |
 | **Dayanak** | [`../Dokumanlar/ANALIZ-RAPORU.md`](../Dokumanlar/ANALIZ-RAPORU.md) |
@@ -64,7 +64,7 @@ Plan bittiğinde:
 |---|---|---|---|---|
 | ~~T-06~~ ✅ | [Yönlendirme ve paylaşılabilir bağlantı](Tamamland%C4%B1/T-06-yonlendirme-ve-paylasilabilir-baglanti.md) | 🔴 Kritik | U-1 | ~4 sa |
 | ~~T-07~~ ✅ | [Erişilebilirlik ve klavye](Tamamland%C4%B1/T-07-erisilebilirlik-ve-klavye.md) | 🟠 Yüksek | O-6, O-7 | ~3,5 sa |
-| T-08 | [Site kimliği: favicon, SEO, PWA](T-08-site-kimligi-favicon-seo-pwa.md) | 🟠 Yüksek | U-4 | ~3 sa |
+| ~~T-08~~ ✅ | [Site kimliği: favicon, SEO, PWA](Tamamland%C4%B1/T-08-site-kimligi-favicon-seo-pwa.md) | 🟠 Yüksek | U-4 | ~3 sa |
 | T-09 | [Hata sınırı ve durum ekranları](T-09-hata-siniri-ve-durum-ekranlari.md) | 🟠 Yüksek | O-5, O-9, m-3, m-6 | ~3 sa |
 
 ### FAZ 3 — İçerik
@@ -184,9 +184,32 @@ T-01 ──┬─► T-02
   `leaf.tsx`'e gerçekten dokunacak bir talimata (T-13 veya yeni bir T-15) önerilir.
   T-08 ve T-09 zaten açıktı (bağımlılıkları yalnızca T-06'ydı), T-07'nin
   tamamlanması onları etkilemedi.
+- ~~**T-08.**~~ ✅ **2026-08-21'de tamamlandı.** `IconLeafMark`'ın yol verisinden
+  (`ui.tsx`) 7 marka görseli (`favicon.svg`/`.ico`, `apple-touch-icon.png`,
+  `icon-192/512.png`, `icon-maskable-512.png` — güvenli alan payı bırakılmış,
+  `og-image.png` 1200×630, Fraunces + IBM Plex Mono gömülü) `scripts/generate-brand-assets.mjs`
+  ile üretildi; `index.html`'e favicon/`manifest`/`og:*`/`twitter:*`/`canonical`
+  yer tutucusu/JSON-LD eklendi; `App.tsx`'e gün değişince `document.title` +
+  `canonical` + meta açıklamayı güncelleyen bir `useEffect` eklendi (canlı
+  doğrulandı — hem tam sayfa yüklemede hem `←`/`→` ile istemci taraflı geçişte
+  çalışıyor); `scripts/sitemap.mjs` 366 adresi `npm run build`'a bağlı üretiyor;
+  `vite-plugin-pwa` ile bir service worker (`NetworkFirst` Wikimedia API,
+  `CacheFirst` Wikimedia görselleri) kuruldu. U-4 çözüldü. Gerçek bir Lighthouse
+  denetimi (Bash üzerinden, Browser pane'den bağımsız) **SEO 100/100** verdi —
+  yol boyunca `robots.txt`'teki göreli `Sitemap:` satırının geçersiz olduğu
+  yakalandı ve talimatın kendi kod parçasından sapılarak mutlak yer tutucu
+  URL'e düzeltildi (bkz. T-08 Tamamlanma Kaydı). **Servis çalışanının canlı
+  kaydı bu oturumda doğrulanamadı** — Browser pane sandbox'ı service worker
+  kaydını genel olarak engelliyor (kendi `sw.js`'i **ve** ilgisiz bir kontrol
+  script'iyle aynı hata doğrulandı, bkz. Tamamlanma Kaydı); sunucu tarafı
+  (`curl`/`fetch` ile doğru içerik + `Content-Type`) ve Workbox çıktısının
+  kendisi doğrulandı. Bir sonraki oturumda gerçek bir tarayıcıda elle
+  doğrulanmalı. K-5'e T-08 de dokunmadı (yalnızca `index.html`, `App.tsx`'in
+  sonu, `vite.config.ts`, `public/`, `scripts/`).
 - **T-14 en sonda.** Belgeler ancak her şey bitince gerçeğe eşitlenebilir.
-- **T-06 → T-08 sırası zorunlu.** SEO meta etiketleri gün bazlı URL'lere bağlıdır.
-  ~~T-06 tamamlandı~~ — URL şeması (`/gun-ay`) sabitlendi, T-08 buna bağlı yazılabilir.
+- ~~**T-06 → T-08 sırası zorunlu.**~~ SEO meta etiketleri gün bazlı URL'lere
+  bağlıydı — T-06 tamamlandı, URL şeması (`/gun-ay`) sabitlendi, T-08 bu şema
+  üzerine yazıldı ve tamamlandı.
 - **T-10 ve T-11 paralel yürüyebilir** ama T-11 tamamlanmadan T-10'un otomatik
   içerik kalitesi ölçülemez.
 - **T-12 mümkün olduğunca erken.** T-03, T-04, T-11 testleri T-12 sonrası yazılırsa
@@ -207,7 +230,7 @@ T-01 ──┬─► T-02
 | T-05 | Ağ katmanı sağlamlaştırma | ✅ Tamamlandı | 2026-08-21 | TR önce denenir, dolu günde EN hiç çekilmiyor (istek 2→1) · `AbortController` ile iptal, `reqId` kaldırıldı · `localStorage` `savedAt`/24s TTL, `stale` arayüzde bakır renkle gösteriliyor · `pruneCache()` 60 kayıt, `memSet()` 40 kayıt FIFO · `DayError` (404/429/5xx/ağ), 429/5xx'te en fazla 2 deneme · O-4, O-8 çözüldü |
 | T-06 | Yönlendirme ve paylaşılabilir bağlantı | ✅ Tamamlandı | 2026-08-21 | `src/lib/slug.ts` eklendi (366 gün çift yönlü test edildi) · `createBrowserRouter` (`/`, `/:daySlug`, `*`) · `App.tsx`'te `day`/`month` `useState`'i kalktı, URL tek kaynak · `/08-21`→`/21-agustos` kanonikleşiyor · `NotFound.tsx` eklendi · Paylaş düğmesi (native share / panoya kopyalama) · `public/_redirects` + `vercel.json` · U-1 çözüldü · K-5 canlı yeniden doğrulandı, hâlâ atanmadı → T-07'ye önerilir |
 | T-07 | Erişilebilirlik ve klavye | ✅ Tamamlandı | 2026-08-21 | `Modal` odak tuzağı + odak iadesi + `aria-labelledby` · `Toaster` `aria-live` · "Ana içeriğe atla" · arama `aria-label`/`type=search` · `ink-faint` kontrastı 3,98→5,82:1 · `aria-pressed` çipler · `←/→/T//? Esc` klavye kısayolları + Kısayol Yardımı modalı (Modal açıkken de devre dışı) · kişi görsellerine `width/height` · altı bölüme `aria-labelledby` · O-6, O-7 çözüldü · Lighthouse Erişilebilirlik 89→96 (yol boyunca 2 bonus hata da düzeltildi) · **Yeni bulgu O-10** (text-brand kontrastı) kapsam dışı bırakıldı · K-5'e T-07 de dokunmadı (leaf.tsx'e hiç dokunmadı, hâlâ atanmadı) |
-| T-08 | Site kimliği: favicon, SEO, PWA | ⬜ Bekliyor | | |
+| T-08 | Site kimliği: favicon, SEO, PWA | ✅ Tamamlandı | 2026-08-21 | 7 marka görseli `ui.tsx`'teki `IconLeafMark`'tan üretildi (`scripts/generate-brand-assets.mjs`) · `index.html`'e favicon/manifest/`og:*`/`twitter:*`/canonical/JSON-LD eklendi · `App.tsx`'te gün bazlı dinamik başlık/canonical `useEffect`'i (canlı doğrulandı) · `scripts/sitemap.mjs` 366 adresi `build`'e bağlı üretiyor · `vite-plugin-pwa` ile service worker kuruldu · Lighthouse SEO **100/100** (yol boyunca `robots.txt`'teki göreli `Sitemap:` satırı düzeltildi) · U-4 çözüldü · Service worker'ın canlı kaydı Browser pane sandbox kısıtı yüzünden doğrulanamadı, sonraki oturumda gerçek tarayıcıda kontrol edilmeli |
 | T-09 | Hata sınırı ve durum ekranları | ⬜ Bekliyor | | |
 | T-10 | İçerik mimarisi ve kapsam genişletme | ⬜ Bekliyor | | |
 | T-11 | Sınıflandırma doğruluğu | ⬜ Bekliyor | | |
@@ -215,7 +238,7 @@ T-01 ──┬─► T-02
 | T-13 | Performans ve derleme iyileştirmesi | ⬜ Bekliyor | | |
 | T-14 | Dokümantasyon güncelleme ve yayın | ⬜ Bekliyor | | |
 
-**İlerleme:** 7 / 14 · `███████████░░░░░░░░░░` %50
+**İlerleme:** 8 / 14 · `████████████░░░░░░░░░` %57
 
 ---
 
@@ -237,9 +260,12 @@ Plan ancak aşağıdakilerin tamamı doğruysa kapatılabilir:
 ### Ürün
 - [x] Her gün için paylaşılabilir bir URL var (örn. `/21-agustos`)
 - [x] Tarayıcı geri/ileri tuşu gün geçişinde çalışıyor
-- [ ] Bağlantı sosyal medyada başlık + görselle önizleniyor
-- [ ] Favicon var, telefona uygulama olarak eklenebiliyor
-- [ ] Klavye ile tam gezinme mümkün, ekran okuyucu bildirimleri duyuyor
+- [x] Bağlantı sosyal medyada başlık + görselle önizleniyor (T-08 — statik `og:*`/`twitter:*`;
+      gün bazlı önizleme PLAN-02 kapsamında, bkz. T-08 Mevcut Durum sınırı)
+- [x] Favicon var, telefona uygulama olarak eklenebiliyor (T-08 — statik ön koşullar tam;
+      service worker'ın canlı kaydı bu oturumda doğrulanamadı, bkz. T-08 Tamamlanma Kaydı)
+- [x] Klavye ile tam gezinme mümkün, ekran okuyucu bildirimleri duyuyor (T-07 — bu kutu o
+      talimatta işaretlenmemiş kalmıştı, burada düzeltildi)
 
 ### İçerik
 - [ ] Editör içeriği en az 60 günde mevcut

@@ -121,14 +121,22 @@ TarihinYapragi/
 ├── .vscode/
 │   ├── extensions.json     ← önerilen eklentiler (Tailwind, ESLint, Prettier, EditorConfig)
 │   └── settings.json       ← format-on-save, tabSize 2, Tailwind sınıf regex'i
-├── index.html              ← Giriş noktası, meta etiketler, Google Fonts
+├── index.html              ← Giriş noktası, favicon/manifest/og:*/twitter:*/JSON-LD (T-08)
 ├── vercel.json             ← Vercel SPA yönlendirmesi (T-06)
-├── vite.config.ts          ← Sunucu portu + eklentiler (strictPort: false, HMR portu otomatik)
+├── vite.config.ts          ← Sunucu portu + eklentiler + vite-plugin-pwa (T-08)
 ├── tsconfig.json           ← strict TypeScript
 ├── package.json
 │
+├── scripts/
+│   ├── generate-brand-assets.mjs ← favicon/PWA simgeleri + og-image.png üretir (npm run icons, T-08)
+│   └── sitemap.mjs         ← 366 adresi public/sitemap.xml'e yazar (npm run build'a bağlı, T-08)
+│
 ├── public/
-│   └── _redirects          ← Netlify / Cloudflare Pages SPA yönlendirmesi (T-06)
+│   ├── _redirects          ← Netlify / Cloudflare Pages SPA yönlendirmesi (T-06)
+│   ├── favicon.svg / favicon.ico / apple-touch-icon.png
+│   ├── icon-192.png / icon-512.png / icon-maskable-512.png
+│   ├── og-image.png        ← sosyal medya önizleme kartı (1200×630, T-08)
+│   ├── manifest.webmanifest / robots.txt / sitemap.xml (T-08)
 │
 ├── src/
 │   ├── main.tsx            ← createBrowserRouter + RouterProvider (/, /:daySlug, *) (T-06)
@@ -162,8 +170,8 @@ TarihinYapragi/
 │
 └── Talimatlar/             ← İŞ AKIŞI klasörü
     ├── PLAN-01-*.md        ← aktif plan
-    ├── T-07-*.md ...       ← aktif talimatlar
-    ├── Tamamlandı/         ← biten talimatlar buraya taşınır (T-01…T-06)
+    ├── T-09-*.md ...       ← aktif talimatlar
+    ├── Tamamlandı/         ← biten talimatlar buraya taşınır (T-01…T-08)
     └── Plan/               ← tamamen biten planlar buraya taşınır
 ```
 
@@ -179,6 +187,9 @@ TarihinYapragi/
 | Yayın modunu değiştirmek | `src/components/talk.tsx` → `BroadcastMode` |
 | API tabanını değiştirmek | `.env` içine `VITE_WIKI_API_BASE=...` (örnek: `.env.example`) |
 | URL şemasını değiştirmek | `src/lib/slug.ts` → `toDaySlug`/`parseDaySlug`; rotalar `src/main.tsx` |
+| Favicon/PWA simgelerini yeniden üretmek | `npm run icons` → `scripts/generate-brand-assets.mjs` (kaynak: `ui.tsx` → `IconLeafMark`) |
+| SEO/OG/manifest etiketlerini değiştirmek | `index.html` `<head>` + `App.tsx`'teki gün bazlı `useEffect` + `public/manifest.webmanifest` |
+| Service worker önbellek kurallarını değiştirmek | `vite.config.ts` → `VitePWA({ workbox: {...} })` |
 
 ---
 
@@ -237,7 +248,7 @@ macOS/Linux'ta aynı menü `./baslat.sh` ile gelir.
 
 ## 7. Mevcut Durum — Dürüst Özet
 
-> **Plan ilerlemesi:** PLAN-01 · 7 / 14 talimat tamamlandı (T-01, T-02, T-03, T-04, T-05, T-06, T-07 · 2026-08-21).
+> **Plan ilerlemesi:** PLAN-01 · 8 / 14 talimat tamamlandı (T-01, T-02, T-03, T-04, T-05, T-06, T-07, T-08 · 2026-08-21).
 > Ayrıntı → [`../Talimatlar/PLAN-01-temel-duzeltme-ve-tamamlama.md`](../Talimatlar/PLAN-01-temel-duzeltme-ve-tamamlama.md)
 
 **Çalışan:** Takvim yaprağı ve gün geçişi, Vikipedi entegrasyonu (TR→EN yedeği),
@@ -263,7 +274,13 @@ bir kısayol yardımı açar; "Ana içeriğe atla" bağlantısı, `Modal` odak t
 kapanışta odak iadesi, `Toaster` ekran okuyucu bildirimi (`aria-live`), arama
 girdisinde `aria-label`, kategori çiplerinde `aria-pressed` ve AA eşiğini geçen
 bir metin kontrastı (`ink-faint`) eklendi (T-07). Gerçek bir Lighthouse denetimi
-Erişilebilirlik puanını 96/100'e çıkardı.
+Erişilebilirlik puanını 96/100'e çıkardı. Uygulamanın artık bir site kimliği var:
+tarayıcı sekmesinde takvim yaprağı favikonu, sosyal medyada başlık+görselle
+önizleme (`og:*`/`twitter:*`), telefona kurulabilir bir PWA kabuğu
+(`manifest.webmanifest`, service worker) ve arama motorları için `robots.txt` +
+366 adresi kapsayan `sitemap.xml` (T-08). Gün değişince sekme başlığı ve
+`canonical` bağlantısı otomatik güncelleniyor. Gerçek bir Lighthouse denetimi
+SEO puanını 100/100 verdi.
 
 **Eksik / hatalı:** Ayrıntılı liste ve kanıtlar için → [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md)
 Özet başlıklar:
@@ -290,7 +307,8 @@ Erişilebilirlik puanını 96/100'e çıkardı.
   yerde AA kontrastını karşılamıyor (Karanlık Dosyalar rozeti/düğmesi, haber bandı
   başlığı) — O-10, henüz bir talimata atanmadı →
   [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md#7-t-07-sırasında-keşfedilen-yeni-bulgular-2026-08-21)
-- Favicon, PWA, SEO meta eksik
+- ~~Favicon, PWA, SEO meta eksik~~ ✅ **T-08 ile çözüldü** (service worker'ın canlı
+  kaydı bir sonraki oturumda gerçek tarayıcıda doğrulanmalı — bkz. T-08 Tamamlanma Kaydı)
 - Editör içeriği 366 günün yalnızca 10'unda
 - Test, lint, format altyapısı yok
 

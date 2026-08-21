@@ -292,6 +292,30 @@ export default function App() {
     return [...new Set(ys)].slice(0, 3);
   }, [mergedEvents]);
 
+  // gün bazlı dinamik başlık + meta (statik index.html her günde aynı etiketi verir,
+  // burada JS çalıştıktan sonra günün gerçek başlığına güncellenir — bkz. T-08 sınırı:
+  // WhatsApp/Twitter gibi JS çalıştırmayan önizleyiciler statik etiketleri görmeye devam eder)
+  useEffect(() => {
+    const baslik = `${dayLabel} — Tarihte Bugün | Tarih Yaprağı`;
+    document.title = baslik;
+
+    const ayarla = (secici: string, deger: string) => {
+      const el = document.head.querySelector<HTMLMetaElement | HTMLLinkElement>(secici);
+      if (!el) return;
+      if (el instanceof HTMLMetaElement) el.content = deger;
+      else el.href = deger;
+    };
+
+    const ozet = spotlight?.title
+      ? `${dayLabel}: ${spotlight.title}`
+      : `${dayLabel} tarihinde yaşanan olaylar, doğanlar ve kaybettiklerimiz.`;
+
+    ayarla('meta[name="description"]', ozet);
+    ayarla('meta[property="og:title"]', baslik);
+    ayarla('meta[property="og:description"]', ozet);
+    ayarla('link[rel="canonical"]', `${location.origin}/${toDaySlug(month, day)}`);
+  }, [dayLabel, spotlight, month, day]);
+
   // geçersiz slug → 404 (tüm hook'lardan sonra, her render'da aynı sırayı korumak için)
   if (!parsed) return <NotFound />;
 

@@ -359,14 +359,28 @@ Evet. Her günün kendi adresi vardır (`siteadresi.com/21-agustos`); adres
 Evet. Zaman tünelinde `MÖ 480` biçiminde gösterilir.
 
 **S: İnternet olmadan çalışır mı?**
-Kısmen. Daha önce açtığınız günler tarayıcı hafızasına kaydedilir ve internet
-kesildiğinde bu yedekten okunur. Bu yedek 24 saatten eskiyse (ör. bir haftadır
-internetsizseniz) atılmaz, yine gösterilir — ama kaynak etiketi
-**"önbellekten · 24 saatten eski"** yazar ve bakır renge döner, böylece
-gördüğünüz bilginin güncel olmayabileceğini anlarsınız. Hiç açmadığınız bir gün
-için *"Arşive şu an ulaşılamıyor"* uyarısı ve **`YENİDEN DENE`** düğmesi çıkar.
-Arşiv sunucusu yoğunsa (çok sık istek) uygulama birkaç saniye içinde otomatik
-olarak bir kez daha dener; siz bir şey yapmanıza gerek kalmaz.
+Kısmen, iki ayrı katmanla. (1) Uygulamanın kendisi (sayfa iskeleti, tasarım,
+kod) bir **service worker** tarafından cihazınıza kaydedilir; internet kesilse
+bile daha önce ziyaret ettiğiniz gün sayfası açılır, bomboş bir ekranla
+karşılaşmazsınız. (2) Gün **verisi** (olaylar, doğanlar, vefatlar) ayrıca
+tarayıcı hafızasına kaydedilir ve internet kesildiğinde bu yedekten okunur.
+Bu yedek 24 saatten eskiyse (ör. bir haftadır internetsizseniz) atılmaz, yine
+gösterilir — ama kaynak etiketi **"önbellekten · 24 saatten eski"** yazar ve
+bakır renge döner, böylece gördüğünüz bilginin güncel olmayabileceğini
+anlarsınız. Hiç açmadığınız bir gün için *"Arşive şu an ulaşılamıyor"* uyarısı
+ve **`YENİDEN DENE`** düğmesi çıkar. Arşiv sunucusu yoğunsa (çok sık istek)
+uygulama birkaç saniye içinde otomatik olarak bir kez daha dener; siz bir şey
+yapmanıza gerek kalmaz.
+
+**S: Uygulamayı telefonuma veya bilgisayarıma yükleyebilir miyim?**
+Evet. Tarih Yaprağı bir PWA (Progressive Web App) olarak kurulabilir:
+- **Android / masaüstü Chrome:** Adres çubuğunun sağındaki **"Yükle"** simgesine
+  (veya menüdeki "Uygulamayı yükle" seçeneğine) tıklayın.
+- **iPhone / iPad (Safari):** Paylaş düğmesine, ardından **"Ana Ekrana Ekle"**ye
+  dokunun.
+
+Kurulunca uygulama kendi penceresinde, adres çubuğu olmadan açılır ve daha önce
+ziyaret ettiğiniz günler için kısmen çevrimdışı çalışır (bkz. bir önceki soru).
 
 **S: Verilerim bir yere gönderiliyor mu?**
 Hayır. Uygulamanın sunucusu yoktur; hesap, çerez izleme veya analitik yoktur.

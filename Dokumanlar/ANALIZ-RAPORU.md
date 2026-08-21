@@ -13,6 +13,7 @@
 > | 2026-08-21 | [T-05](../Talimatlar/Tamamland%C4%B1/T-05-ag-katmani-saglamlastirma.md) | O-4, O-8 |
 > | 2026-08-21 | [T-06](../Talimatlar/Tamamland%C4%B1/T-06-yonlendirme-ve-paylasilabilir-baglanti.md) | U-1 |
 > | 2026-08-21 | [T-07](../Talimatlar/Tamamland%C4%B1/T-07-erisilebilirlik-ve-klavye.md) | O-6, O-7 |
+> | 2026-08-21 | [T-08](../Talimatlar/Tamamland%C4%B1/T-08-site-kimligi-favicon-seo-pwa.md) | U-4 |
 >
 > Bu rapor **ilk analiz anının** fotoğrafıdır; metin korunur, çözülen bulguların
 > başlığına `✅ ÇÖZÜLDÜ` işareti ve bir *Çözüm* bloğu eklenir.
@@ -28,7 +29,7 @@
 | Uygulama açılıyor mu | ✅ Evet | Veri geliyor, 23 kayıt listelendi |
 | Kritik hata | ⚠️ 5 adet · **4 çözüldü** | K-1…K-5 · K-1 ✅ T-03, K-2 ✅ T-04, K-3 ✅ T-04, K-4 ✅ T-01 · K-5 T-03 sırasında keşfedildi, henüz atanmadı |
 | Orta seviye eksik | ⚠️ 10 adet · **7 çözüldü** | O-1…O-10 · O-1, O-2, O-3 ✅ T-01 · O-4, O-8 ✅ T-05 · O-6, O-7 ✅ T-07 · O-10 T-07 sırasında keşfedildi, henüz atanmadı |
-| Ürün/içerik boşluğu | ⚠️ 5 adet · **1 çözüldü** | U-1…U-5 · U-1 ✅ T-06 |
+| Ürün/içerik boşluğu | ⚠️ 5 adet · **2 çözüldü** | U-1…U-5 · U-1 ✅ T-06 · U-4 ✅ T-08 |
 | Küçük not | ⚠️ 7 adet · **2 çözüldü** | m-1…m-7 · m-2 ✅ T-01 · m-5 ✅ T-07 |
 
 **Kısa hüküm:** Uygulama sağlam bir iskelete ve gerçekten güzel bir tasarım diline sahip.
@@ -454,7 +455,7 @@ Somut örnekler:
 
 Bir doğruluk testi yok; kural değiştirildiğinde neyin bozulduğu görülemiyor.
 
-### U-4 · Site kabuğu eksik: favicon, PWA, SEO, paylaşım kartı
+### U-4 · Site kabuğu eksik: favicon, PWA, SEO, paylaşım kartı — ✅ ÇÖZÜLDÜ (T-08)
 
 `index.html` içinde:
 - ❌ favicon (hiç yok — tarayıcı varsayılan simgeyi gösteriyor)
@@ -464,6 +465,42 @@ Bir doğruluk testi yok; kural değiştirildiğinde neyin bozulduğu görülemiy
 - ❌ `robots.txt`, `sitemap.xml`
 - ❌ Service worker — `localStorage` yedeği varken çevrimdışı açılış hâlâ yok
 - ✅ `lang="tr"`, `description`, `theme-color` var (bunlar doğru yapılmış)
+
+> **✅ Çözüm — T-08 (2026-08-21)**
+>
+> `src/components/ui.tsx`'teki `IconLeafMark` yol verisinden, marka renkleriyle
+> (`#d23b2e` / `#f2ead9` / `#0f131a`) 7 görsel üretildi (`scripts/generate-brand-assets.mjs`,
+> elle çalıştırılır: `npm run icons`): `favicon.svg`, `favicon.ico` (16/32/48 birleşik),
+> `apple-touch-icon.png` (180×180), `icon-192.png`, `icon-512.png`, `icon-maskable-512.png`
+> (güvenli alan payı hesaplanarak bırakılmış), `og-image.png` (1200×630, Fraunces + IBM Plex
+> Mono `google/fonts` deposundan indirilip gömülü). `index.html`'e favicon/`apple-touch-icon`/
+> `manifest` `<link>`'leri, tam `og:*`/`twitter:*` seti, boş bir `canonical` yer tutucusu ve
+> `WebSite` JSON-LD eklendi. `App.tsx`'e gün değişince `document.title`, meta açıklama,
+> `og:title`/`og:description` ve `canonical`'ı güncelleyen bir `useEffect` eklendi.
+> `public/manifest.webmanifest` ve `public/robots.txt` eklendi; `scripts/sitemap.mjs`
+> (`npm run build`'a bağlı) 366 günün tamamı için adres üretiyor. `vite-plugin-pwa` ile bir
+> service worker kuruldu (Wikimedia API için `NetworkFirst`, Wikimedia görselleri için
+> `CacheFirst`).
+>
+> **Doğrulama:** Gerçek bir Lighthouse denetimi (Bash üzerinden, Browser pane'den bağımsız —
+> T-07'deki gibi `npx lighthouse` + yerel Chrome, üretim önizlemesine karşı) **SEO 100/100**
+> verdi (ilk ölçüm 92'ydi; tek başarısız denetim, talimatın kendi kod parçasındaki göreli
+> `Sitemap:` satırının sitemaps.org protokolüne göre geçersiz olmasıydı — mutlak yer tutucu
+> URL'e düzeltildi). Canlı tarayıcıda gün değişince `document.title` ve
+> `link[rel=canonical]`'ın hem tam sayfa yüklemede hem `←`/`→` klavye kısayoluyla istemci
+> taraflı geçişte doğru güncellendiği doğrulandı; tüm 7 görsel dosya `curl`/`fetch` ile doğru
+> `Content-Type` ve boyutla servis edildiği, `manifest.webmanifest`'in `application/
+> manifest+json` ile geçerli JSON olduğu, JSON-LD'nin geçerli JSON olduğu (Lighthouse
+> `structured-data` denetimi de geçti) doğrulandı. `npm run sitemap` 366 adres üretti,
+> son satır `29-subat` içeriyor; `scripts/sitemap.mjs`'teki ay-slug listesi `src/lib/slug.ts`
+> içindeki `MONTH_SLUGS` ile birebir eşit olduğu Node'da elle karşılaştırılarak doğrulandı.
+> **Servis çalışanının canlı kaydı bu oturumda doğrulanamadı** — sunucu tarafı (`sw.js`'in
+> doğru içerik/`Content-Type` ile servis edildiği, geçerli Workbox çıktısı olduğu) kanıtlandı,
+> ama Browser pane'in sandbox'lanmış tarayıcısında `navigator.serviceWorker.register(...)`
+> hem kendi `sw.js`'i hem tamamen ilgisiz, tek satırlık bir kontrol script'i için **aynı**
+> `"An unknown error occurred when fetching the script."` hatasıyla başarısız oldu — bu ortamın
+> service worker kaydını genel olarak engellediğinin kanıtı, kod kusuru değil. Ayrıntı →
+> T-08 Tamamlanma Kaydı.
 
 ### U-5 · Kalite güvencesi altyapısı hiç yok
 
@@ -498,7 +535,7 @@ Kritik saf fonksiyonlar (`dayOfYear`, `classifyItem`, `formatYear`, `firstSenten
 ÖNCE   →  K-1✅ K-2✅ K-4✅  K-5   (görünür yanlış bilgi + bozuk geliştirme deneyimi + kırık birincil gezinme)
 SONRA  →  O-1✅ O-2✅ O-3✅     (temizlik — sonraki her iş bundan faydalanır)  [T-01 ile bitti]
 SONRA  →  K-3✅ O-5  O-6✅       (sağlamlık ve erişilebilirlik)  [O-6 T-07 ile bitti]
-SONRA  →  U-1✅ U-4            (paylaşım + kabuk — ürünü "yayınlanabilir" yapar)  [U-1 T-06 ile bitti]
+SONRA  →  U-1✅ U-4✅           (paylaşım + kabuk — ürünü "yayınlanabilir" yapar)  [U-1 T-06, U-4 T-08 ile bitti]
 SONRA  →  O-4✅ O-7✅ O-8✅ O-9   (ağ, klavye, önbellek, içerik zenginliği)  [O-4/O-8 T-05, O-7 T-07 ile bitti]
 SONRA  →  U-2  U-3             (içerik hacmi ve doğruluğu — sürekli iş)
 SON    →  U-5                  (test/lint — sonraki tüm işleri korur)

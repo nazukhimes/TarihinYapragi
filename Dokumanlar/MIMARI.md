@@ -14,6 +14,8 @@
 │  index.html                                                      │
 │    · lang="tr", meta, theme-color, Google Fonts (Fraunces /      │
 │      IBM Plex Sans / IBM Plex Mono)                              │
+│    · favicon/apple-touch-icon/manifest <link>, og:*/twitter:*,   │
+│      canonical yer tutucusu, WebSite JSON-LD (T-08, bkz. 9)      │
 │    · <div id="root">                                             │
 └──────────────────────────────┬───────────────────────────────────┘
                                │
@@ -220,6 +222,30 @@ gereği) bugünün verisiyle boşa çalıştırıp en sonda `<NotFound/>` döner
 `day`/`month`'un state yerine URL'den türetilmiş olması bunu mümkün kılan
 tasarımın parçasıdır.
 
+### 2.9 Gün bazlı dinamik meta — `App.tsx` (T-08)
+
+`index.html`'deki etiketler **statik** (her günde aynı) — sunucu tarafı render
+yok, bu yüzden ilk HTML her zaman bugünün değil, varsayılan başlığı taşır. Bunu
+telafi etmek için `App.tsx`'in en sonuna (tüm diğer hook'lardan sonra, `if
+(!parsed) return <NotFound/>` erken çıkışından **önce** — hook sırası sabit
+kalsın diye) bir `useEffect` eklendi:
+
+```
+[dayLabel, spotlight, month, day] değişince:
+  document.title
+  meta[name=description]
+  meta[property=og:title]
+  meta[property=og:description]
+  link[rel=canonical]           → `${location.origin}/${toDaySlug(month,day)}`
+```
+
+**Sınır (bilinçli, talimatın kendi notu):** Bu güncelleme JS çalıştıktan
+**sonra** devreye girer. Google gibi JS çalıştıran botlar günceli görür; ama
+WhatsApp/Twitter gibi bağlantı-önizleme botları JS çalıştırmaz, `index.html`'deki
+**statik** `og:*` etiketlerini görmeye devam eder — yani paylaşılan her bağlantı
+aynı genel (gün-bağımsız) önizlemeyi gösterir. Gün bazlı sosyal önizleme için
+ön-işleme (prerender/SSR) gerekir; bu **PLAN-02** kapsamındadır (bkz. 9.5).
+
 ---
 
 ## 3. Veri Modeli — `src/data/curated.ts`
@@ -393,9 +419,11 @@ Hepsi dosya sonundaki `@media (prefers-reduced-motion: reduce)` bloğuyla 0.01ms
 
 ## 7. Performans Notları
 
-**Mevcut derleme:** 324,12 kB JS (105,76 kB gzip), 53,09 kB CSS (10,07 kB gzip), 44 modül.
-Artış `react-router-dom`'un artık gerçekten paketlenmesinden (T-06 öncesi kurulu
-ama kullanılmadığı için tree-shaking ile tamamen düşüyordu).
+**Mevcut derleme:** 328,74 kB JS (107,19 kB gzip), 54,93 kB CSS (10,44 kB gzip), 44 modül,
++ `registerSW.js` (0,13 kB, T-08 — service worker kaydı, ana pakete girmez). Artış
+`react-router-dom`'un artık gerçekten paketlenmesinden (T-06 öncesi kurulu ama
+kullanılmadığı için tree-shaking ile tamamen düşüyordu) ve T-08'in gün bazlı meta
+`useEffect`'inden geliyor.
 
 Bilinen maliyet kalemleri:
 
@@ -430,4 +458,104 @@ Tam liste ve kanıtlar → [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md)
 | O-10 | `text-brand` koyu zeminde metin/simge olarak yetersiz kontrast (Ticker başlığı, Karanlık Dosyalar rozeti/düğmesi) — T-07 sırasında gerçek bir Lighthouse denetimiyle keşfedildi | Henüz atanmadı |
 | ~~U-1~~ | ~~Yönlendirme / paylaşılabilir URL yok~~ **✅ çözüldü** (`createBrowserRouter` + `src/lib/slug.ts`, URL tek doğruluk kaynağı) | T-06 · 2026-08-21 |
 | U-2 | İçerik 10/366 gün | T-10 |
+| ~~U-4~~ | ~~Favicon, PWA, SEO, paylaşım kartı eksik~~ **✅ çözüldü** (favicon/manifest/`og:*`/`twitter:*`/JSON-LD/sitemap/service worker, bkz. 9) | T-08 · 2026-08-21 |
 | U-5 | Test/lint altyapısı yok | T-12 |
+
+---
+
+## 9. Site Kimliği, SEO ve PWA (T-08)
+
+### 9.1 Marka görselleri — `scripts/generate-brand-assets.mjs`
+
+Elle çalıştırılan bir üretim aracı (`npm run icons`), `build`'e **bağlı değil**
+(ağ erişimi gerektiriyor — Google Fonts indiriyor). Tek kaynak:
+`src/components/ui.tsx`'teki `IconLeafMark` yol verisi (aynı `<path>`'ler script
+içinde `leafGlyph()` olarak tekrarlanır — `currentColor` yerine sabit marka
+renkleri: `#d23b2e` gövde, `#f2ead9` iki delik).
+
+```
+leafGlyph()  →  favicon.svg (24×24 viewBox, saydam zemin)
+             →  squareIconSvg() (24×24 + gece zemini) → sharp ile rasterize:
+                  apple-touch-icon.png (180) · icon-192.png · icon-512.png
+             →  maskableIconSvg() (36×36, glif (6,6)'ya ötelenmiş) → icon-maskable-512.png
+             →  favicon.ico (16/32/48 aynı SVG'den, png-to-ico ile birleştirilir)
+```
+
+**Rasterizasyon kuralı:** her hedef boyut için `sharp(svg, { density: 72 *
+(hedefBoyut/viewBoxBoyutu) })` ile **taze** bir density hesaplanır, sonra o
+boyuta `resize()` edilir — küçük bir rasterden büyütmek yerine her seferinde
+vektörden doğru çözünürlükte basılır (bulanıklık yok).
+
+**Maskable güvenli alan:** orijinal glif 24×24 içinde (4,4)-(20,20) kutusunda;
+köşe-merkez uzaklığı 11,31 birim. 36×36 tuvale ortalanınca (glif `translate(6,6)`)
+güvenli yarıçapın (%40×36=14,4) **%78'inde** kalır — Android/iOS'un dairesel/
+yuvarlak-kare maskeleri glifi kesmez.
+
+**`og-image.png` (1200×630):** aynı script içinde, `google/fonts` deposundan
+Fraunces (değişken font, tüm ağırlıklar) ve IBM Plex Mono SemiBold'un **alt
+kümesiz tam** dosyaları indirilip (`fetch` + `node:os.tmpdir()` altında geçici
+bir klasöre) base64 ile `@font-face` üzerinden SVG'ye gömülür, `sharp` ile
+rasterize edilir, geçici klasör silinir. Google Fonts'un CSS2 API'sinin
+`latin`/`latin-ext` alt küme ayrımı Türkçe karakterleri (İ, Ğ, Ş) ikiye
+bölüyor; alt kümesiz dosyalar bu sorunu tamamen atlar. Arka plan `.glowfield`
+(bkz. 5.2) ile aynı üç radyal ışıma + `feTurbulence` gren dokusunu SVG
+filtreleriyle taklit eder; alt kenarda `.torn-edge` motifinin küçük bir
+yorumu var.
+
+### 9.2 `index.html` — statik kimlik etiketleri
+
+`favicon.svg`/`favicon.ico`/`apple-touch-icon.png` `<link>`'leri, boş bir
+`<link rel="canonical" href="/">` yer tutucusu (2.9'daki `useEffect` doldurur),
+tam `og:*`/`twitter:card` seti (`og:image` **göreli** — alan adı belli olana
+kadar, bkz. 9.4) ve `</body>` öncesi bir `WebSite` `application/ld+json` bloğu.
+
+### 9.3 `public/manifest.webmanifest` + service worker (`vite.config.ts`)
+
+Manifest elle yazılmış statik bir dosya (`vite-plugin-pwa`'ya `manifest: false`
+verildi — kendi dosyamız kullanılıyor). Service worker `vite-plugin-pwa`
+(`registerType: "autoUpdate"`, `generateSW` modu) ile üretiliyor:
+
+| Rota | Strateji | Neden |
+|---|---|---|
+| `api.wikimedia.org/*` | `NetworkFirst` (5s zaman aşımı) | Tarihsel veri nadiren değişir ama güncel veri önceliklidir |
+| `upload.wikimedia.org/*` | `CacheFirst` | Görseller değişmez |
+| Statik varlıklar (`js/css/html/svg/png/ico/woff2`) | precache (`globPatterns`) | Uygulama kabuğu çevrimdışı açılsın diye |
+
+`registerSW.js` (üretim derlemesinde `index.html`'e otomatik enjekte edilir)
+sayfa yüklenince `navigator.serviceWorker.register('/sw.js')` çağırır — yalnızca
+`npm run build` çıktısında var, `npm run dev`'de **yok** (`devOptions.enabled`
+ayarlanmadı, bilinçli — geliştirmede SW önbelleği HMR'ı karıştırmasın diye).
+Test etmek için `npm run build && npm run preview` gerekir.
+
+> **Bilinen doğrulama sınırı:** Bu servis çalışanının canlı kaydı T-08 sırasında
+> Browser pane'in sandbox'lanmış tarayıcısında doğrulanamadı (o ortam service
+> worker kaydını genel olarak engelliyor — kod kusuru değil, ayrıntı → T-08
+> Tamamlanma Kaydı). Sunucu tarafı (`sw.js`'in doğru içerik/`Content-Type` ile
+> servis edildiği) ve Workbox çıktısının kendisi doğrulandı; yalnızca gerçek
+> tarayıcıdaki canlı kayıt + çevrimdışı senaryo bir sonraki oturumda elle
+> teyit edilmeli.
+
+### 9.4 `public/robots.txt` + `scripts/sitemap.mjs`
+
+`sitemap.mjs`, `src/lib/slug.ts`'teki `MONTH_SLUGS`'ı **elle kopyalayan** bir
+`AY_SLUG` dizisi taşır (script düz Node ile çalışır, TS derlemesine bağlı
+değil) — ikisinin birebir eşit olduğu bu talimatta Node'da elle doğrulandı,
+**T-12'de kalıcı bir teste bağlanmalı** (talimatın kendi notu). `npm run build`
+artık önce `npm run sitemap` çalıştırır, sonra `vite build`.
+
+**Yer tutucu alan adı:** `sitemap.mjs`'teki `SITE_URL` ortam değişkeni
+(varsayılan `https://tarihyapragi.example`) ve `robots.txt`'teki `Sitemap:`
+satırı **aynı** yer tutucuyu paylaşır — sitemaps.org protokolü `Sitemap:`
+satırının mutlak URL olmasını şart koşuyor (Lighthouse'un `robots-txt`
+denetimi göreli bir satırı geçersiz sayıyor, bu T-08 sırasında canlı olarak
+yakalandı). `og:image`/`twitter:image`/`canonical` ise **göreli** bırakıldı
+(tarayıcı bunları sayfanın kendi origin'iyle çözüyor). T-14'te gerçek alan adı
+belli olunca yalnızca bu **tek** yer tutucuyu değiştirmek yeterli.
+
+### 9.5 Kapsam dışı bırakılanlar (bilinçli, PLAN-02'ye devredildi)
+
+Ön-işleme/SSR ve gün bazlı **statik** `og-image.png` üretimi bu planın
+kapsamında değil — mevcut mimari (backend'siz statik SPA, bkz. `BAGLAM.md` §2)
+bilinçli olarak korunuyor. Sonucu: paylaşılan bağlantılar WhatsApp/Twitter gibi
+JS çalıştırmayan önizleyicilerde her zaman **aynı genel** kart+açıklamayı
+gösterir, seçili günün başlığını değil (bkz. 2.9'daki sınır notu).
