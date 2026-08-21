@@ -3,8 +3,8 @@
 | Alan | Değer |
 |---|---|
 | **Oluşturulma** | 2026-08-21 |
-| **Durum** | 🟡 Aktif — 6 / 14 tamamlandı |
-| **Son hareket** | 2026-08-21 · T-06 tamamlandı |
+| **Durum** | 🟡 Aktif — 7 / 14 tamamlandı |
+| **Son hareket** | 2026-08-21 · T-07 tamamlandı |
 | **Talimat sayısı** | 14 (T-01 … T-14) |
 | **Faz sayısı** | 5 |
 | **Dayanak** | [`../Dokumanlar/ANALIZ-RAPORU.md`](../Dokumanlar/ANALIZ-RAPORU.md) |
@@ -63,7 +63,7 @@ Plan bittiğinde:
 | # | Talimat | Öncelik | Bulgu | Süre |
 |---|---|---|---|---|
 | ~~T-06~~ ✅ | [Yönlendirme ve paylaşılabilir bağlantı](Tamamland%C4%B1/T-06-yonlendirme-ve-paylasilabilir-baglanti.md) | 🔴 Kritik | U-1 | ~4 sa |
-| T-07 | [Erişilebilirlik ve klavye](T-07-erisilebilirlik-ve-klavye.md) | 🟠 Yüksek | O-6, O-7 | ~3,5 sa |
+| ~~T-07~~ ✅ | [Erişilebilirlik ve klavye](Tamamland%C4%B1/T-07-erisilebilirlik-ve-klavye.md) | 🟠 Yüksek | O-6, O-7 | ~3,5 sa |
 | T-08 | [Site kimliği: favicon, SEO, PWA](T-08-site-kimligi-favicon-seo-pwa.md) | 🟠 Yüksek | U-4 | ~3 sa |
 | T-09 | [Hata sınırı ve durum ekranları](T-09-hata-siniri-ve-durum-ekranlari.md) | 🟠 Yüksek | O-5, O-9, m-3, m-6 | ~3 sa |
 
@@ -164,6 +164,26 @@ T-01 ──┬─► T-02
   atlamak için (ayrıntı → T-06 Tamamlanma Kaydı). **K-5 hâlâ atanmadı** — canlı olarak
   yeniden doğrulandı, hâlâ hiçbir talimatın kapsamında değil, T-07 için önerilir
   (aynı gezinme bölgesine dokunacak). Artık T-07 ve T-08 açık.
+- ~~**T-07.**~~ ✅ **2026-08-21'de tamamlandı.** `ui.tsx`'teki `Modal`'a odak tuzağı
+  (Tab döngüsü) + kapanışta odak iadesi + `titleId`→`aria-labelledby` eklendi;
+  `Toaster` `role="status"`/`aria-live="polite"` taşıyor; "Ana içeriğe atla" bağlantısı
+  ve `index.css`'e `.skip-link`/`.sr-only`/`:focus-visible` eklendi; arama girdileri
+  `type="search"`+`aria-label` aldı; `--color-ink-faint` `#6f7481`→`#8b909c`
+  (3,98:1→5,82:1, AA geçti); kategori çipleri `aria-pressed` taşıyor; `App.tsx`'e
+  `←`/`→`/`T`/`/`/`?`/`Esc` global klavye kısayolları ve bir Kısayol Yardımı `Modal`'ı
+  eklendi (arama girdisinde, Yayın Modu'nda ve açık bir `Modal` varken devre dışı);
+  kişi kartı görsellerine `width`/`height` eklendi; altı bölüme `aria-labelledby`
+  bağlandı. O-6 ve O-7 çözüldü. Gerçek bir Lighthouse denetimi (Bash üzerinden, Browser
+  pane'den bağımsız) **89 → 96** iyileşme gösterdi; yol boyunca yakalanan iki bonus
+  hata (ikon-only "Yayın Modu" düğmesinde `aria-label` eksikliği, `PeopleRow`'da
+  `h4`→`h3` başlık sırası atlaması) de düzeltildi. **Yeni bulgu O-10** (`text-brand`
+  koyu zeminde metin olarak yetersiz kontrast, üç yerde) keşfedildi, bilinçli olarak
+  kapsam dışı bırakıldı — ayrıntı → `ANALIZ-RAPORU.md`. **K-5'e T-07 de dokunmadı**:
+  talimatın 11 adımının hiçbiri `leaf.tsx`'e dokunmuyor (varsayılan aksine) ve K-5 bir
+  fare/dokunmatik hatası olduğu için klavye kısayollarını etkilemiyor; hâlâ atanmadı,
+  `leaf.tsx`'e gerçekten dokunacak bir talimata (T-13 veya yeni bir T-15) önerilir.
+  T-08 ve T-09 zaten açıktı (bağımlılıkları yalnızca T-06'ydı), T-07'nin
+  tamamlanması onları etkilemedi.
 - **T-14 en sonda.** Belgeler ancak her şey bitince gerçeğe eşitlenebilir.
 - **T-06 → T-08 sırası zorunlu.** SEO meta etiketleri gün bazlı URL'lere bağlıdır.
   ~~T-06 tamamlandı~~ — URL şeması (`/gun-ay`) sabitlendi, T-08 buna bağlı yazılabilir.
@@ -186,7 +206,7 @@ T-01 ──┬─► T-02
 | T-04 | Sayaç ve görünürlük hataları | ✅ Tamamlandı | 2026-08-21 | `src/lib/useInView.ts` eklendi (tek paylaşılan gözlemci + `setTimeout` güvenlik ağı) · gözlemci sayısı 181→1 · `Reveal`/`CountUp` bu hook'u kullanıyor, props değişmedi · K-2 ve K-3 çözüldü · K-5'e bilinçli olarak dokunulmadı (kapsam dışı) |
 | T-05 | Ağ katmanı sağlamlaştırma | ✅ Tamamlandı | 2026-08-21 | TR önce denenir, dolu günde EN hiç çekilmiyor (istek 2→1) · `AbortController` ile iptal, `reqId` kaldırıldı · `localStorage` `savedAt`/24s TTL, `stale` arayüzde bakır renkle gösteriliyor · `pruneCache()` 60 kayıt, `memSet()` 40 kayıt FIFO · `DayError` (404/429/5xx/ağ), 429/5xx'te en fazla 2 deneme · O-4, O-8 çözüldü |
 | T-06 | Yönlendirme ve paylaşılabilir bağlantı | ✅ Tamamlandı | 2026-08-21 | `src/lib/slug.ts` eklendi (366 gün çift yönlü test edildi) · `createBrowserRouter` (`/`, `/:daySlug`, `*`) · `App.tsx`'te `day`/`month` `useState`'i kalktı, URL tek kaynak · `/08-21`→`/21-agustos` kanonikleşiyor · `NotFound.tsx` eklendi · Paylaş düğmesi (native share / panoya kopyalama) · `public/_redirects` + `vercel.json` · U-1 çözüldü · K-5 canlı yeniden doğrulandı, hâlâ atanmadı → T-07'ye önerilir |
-| T-07 | Erişilebilirlik ve klavye | ⬜ Bekliyor | | |
+| T-07 | Erişilebilirlik ve klavye | ✅ Tamamlandı | 2026-08-21 | `Modal` odak tuzağı + odak iadesi + `aria-labelledby` · `Toaster` `aria-live` · "Ana içeriğe atla" · arama `aria-label`/`type=search` · `ink-faint` kontrastı 3,98→5,82:1 · `aria-pressed` çipler · `←/→/T//? Esc` klavye kısayolları + Kısayol Yardımı modalı (Modal açıkken de devre dışı) · kişi görsellerine `width/height` · altı bölüme `aria-labelledby` · O-6, O-7 çözüldü · Lighthouse Erişilebilirlik 89→96 (yol boyunca 2 bonus hata da düzeltildi) · **Yeni bulgu O-10** (text-brand kontrastı) kapsam dışı bırakıldı · K-5'e T-07 de dokunmadı (leaf.tsx'e hiç dokunmadı, hâlâ atanmadı) |
 | T-08 | Site kimliği: favicon, SEO, PWA | ⬜ Bekliyor | | |
 | T-09 | Hata sınırı ve durum ekranları | ⬜ Bekliyor | | |
 | T-10 | İçerik mimarisi ve kapsam genişletme | ⬜ Bekliyor | | |
@@ -195,7 +215,7 @@ T-01 ──┬─► T-02
 | T-13 | Performans ve derleme iyileştirmesi | ⬜ Bekliyor | | |
 | T-14 | Dokümantasyon güncelleme ve yayın | ⬜ Bekliyor | | |
 
-**İlerleme:** 6 / 14 · `█████████░░░░░░░░░░░` %43
+**İlerleme:** 7 / 14 · `███████████░░░░░░░░░░` %50
 
 ---
 

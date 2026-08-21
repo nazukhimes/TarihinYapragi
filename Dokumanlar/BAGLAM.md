@@ -237,7 +237,7 @@ macOS/Linux'ta aynı menü `./baslat.sh` ile gelir.
 
 ## 7. Mevcut Durum — Dürüst Özet
 
-> **Plan ilerlemesi:** PLAN-01 · 6 / 14 talimat tamamlandı (T-01, T-02, T-03, T-04, T-05, T-06 · 2026-08-21).
+> **Plan ilerlemesi:** PLAN-01 · 7 / 14 talimat tamamlandı (T-01, T-02, T-03, T-04, T-05, T-06, T-07 · 2026-08-21).
 > Ayrıntı → [`../Talimatlar/PLAN-01-temel-duzeltme-ve-tamamlama.md`](../Talimatlar/PLAN-01-temel-duzeltme-ve-tamamlama.md)
 
 **Çalışan:** Takvim yaprağı ve gün geçişi, Vikipedi entegrasyonu (TR→EN yedeği),
@@ -257,7 +257,13 @@ biçiminde, `createBrowserRouter` + `src/lib/slug.ts`); `App.tsx`'te `day`/`mont
 için ayrı durum yok, URL tek doğruluk kaynağı; tarayıcı geri/ileri tuşu ve
 yenileme doğru çalışıyor; geçersiz adresler için kâğıt-yaprak temalı bir 404
 sayfası var; takvim yaprağının altında mobilde yerel paylaşım, masaüstünde panoya
-kopyalama yapan bir Paylaş düğmesi var (T-06).
+kopyalama yapan bir Paylaş düğmesi var (T-06). Uygulama artık klavyeyle tam
+gezilebilir: `←`/`→` gün değiştirir, `T` bugüne döner, `/` aramaya odaklanır, `?`
+bir kısayol yardımı açar; "Ana içeriğe atla" bağlantısı, `Modal` odak tuzağı +
+kapanışta odak iadesi, `Toaster` ekran okuyucu bildirimi (`aria-live`), arama
+girdisinde `aria-label`, kategori çiplerinde `aria-pressed` ve AA eşiğini geçen
+bir metin kontrastı (`ink-faint`) eklendi (T-07). Gerçek bir Lighthouse denetimi
+Erişilebilirlik puanını 96/100'e çıkardı.
 
 **Eksik / hatalı:** Ayrıntılı liste ve kanıtlar için → [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md)
 Özet başlıklar:
@@ -277,6 +283,13 @@ kopyalama yapan bir Paylaş düğmesi var (T-06).
 - ~~Ağ isteklerinde iptal yoktu, TR doluyken bile EN her zaman boşuna çekiliyordu,
   `localStorage` yedeğinde TTL/temizlik yoktu~~ ✅ **T-05 ile çözüldü**
 - ~~Paylaşılabilir URL / yönlendirme yok~~ ✅ **T-06 ile çözüldü**
+- ~~Klavye ile gezinme ve ekran okuyucu desteği yoktu~~ ✅ **T-07 ile çözüldü**
+  (ayrıntı → [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md) O-6, O-7)
+- **Bulgu (T-07 sırasında, gerçek bir Lighthouse denetimiyle keşfedildi, hâlâ açık):**
+  `text-brand` rengi (#d23b2e) koyu zeminde metin/simge olarak kullanıldığında üç
+  yerde AA kontrastını karşılamıyor (Karanlık Dosyalar rozeti/düğmesi, haber bandı
+  başlığı) — O-10, henüz bir talimata atanmadı →
+  [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md#7-t-07-sırasında-keşfedilen-yeni-bulgular-2026-08-21)
 - Favicon, PWA, SEO meta eksik
 - Editör içeriği 366 günün yalnızca 10'unda
 - Test, lint, format altyapısı yok

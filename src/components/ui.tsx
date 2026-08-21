@@ -85,7 +85,7 @@ export function SectionHead({
               {kicker}
             </span>
           </div>
-          <h2 className="font-display font-semibold text-3xl md:text-[2.6rem] leading-[1.05] text-ink">
+          <h2 id={`baslik-${index}`} className="font-display font-semibold text-3xl md:text-[2.6rem] leading-[1.05] text-ink">
             {title}
           </h2>
           {desc && <p className="mt-3 text-ink-dim max-w-xl text-[15px] leading-relaxed">{desc}</p>}
@@ -97,14 +97,45 @@ export function SectionHead({
 }
 
 /* ---------- modal ---------- */
-export function Modal({ onClose, children }: { onClose: () => void; children: ReactNode }) {
+export function Modal({
+  onClose,
+  children,
+  titleId,
+}: {
+  onClose: () => void;
+  children: ReactNode;
+  titleId?: string;
+}) {
+  const panelRef = useRef<HTMLDivElement>(null);
+  const oncekiOdak = useRef<HTMLElement | null>(null);
+
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    oncekiOdak.current = document.activeElement as HTMLElement;
+    panelRef.current?.focus();
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") { onClose(); return; }
+      if (e.key !== "Tab") return;
+
+      const odaklanabilir = panelRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (!odaklanabilir?.length) return;
+
+      const ilk = odaklanabilir[0];
+      const son = odaklanabilir[odaklanabilir.length - 1];
+
+      if (e.shiftKey && document.activeElement === ilk) { e.preventDefault(); son.focus(); }
+      else if (!e.shiftKey && document.activeElement === son) { e.preventDefault(); ilk.focus(); }
+    };
+
     window.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
+
     return () => {
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
+      oncekiOdak.current?.focus();
     };
   }, [onClose]);
 
@@ -113,13 +144,18 @@ export function Modal({ onClose, children }: { onClose: () => void; children: Re
       className="fixed inset-0 z-[80] flex items-end sm:items-center justify-center p-0 sm:p-6"
       role="dialog"
       aria-modal="true"
+      aria-labelledby={titleId}
     >
       <button
         aria-label="Kapat"
         className="absolute inset-0 bg-night/85 backdrop-blur-[3px] cursor-default"
         onClick={onClose}
       />
-      <div className="modal-in relative w-full sm:max-w-2xl max-h-[86vh] overflow-y-auto row-scroll rounded-t-xl sm:rounded-md border border-line bg-panel shadow-[0_40px_90px_rgba(0,0,0,0.6)]">
+      <div
+        ref={panelRef}
+        tabIndex={-1}
+        className="modal-in relative w-full sm:max-w-2xl max-h-[86vh] overflow-y-auto row-scroll rounded-t-xl sm:rounded-md border border-line bg-panel shadow-[0_40px_90px_rgba(0,0,0,0.6)]"
+      >
         {children}
       </div>
     </div>
@@ -148,7 +184,12 @@ export function Toaster() {
   }, []);
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[90] flex flex-col items-center gap-2 pointer-events-none">
+    <div
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+      className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[90] flex flex-col items-center gap-2 pointer-events-none"
+    >
       {items.map((t) => (
         <div
           key={t.id}

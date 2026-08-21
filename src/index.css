@@ -12,7 +12,7 @@
   --color-line: #28303f;
   --color-ink: #e9e4d6;
   --color-ink-dim: #a8a99f;
-  --color-ink-faint: #6f7481;
+  --color-ink-faint: #8b909c;
 
   --color-paper: #f2ead9;
   --color-paper-2: #e7dcc4;
@@ -219,4 +219,42 @@ body {
   .reveal { opacity: 1 !important; transform: none !important; }
   .noise, .gridlines, .ticker-track, .scanlines { display: none !important; }
   header, nav { position: static !important; }
+}
+
+/* ---------- erişilebilirlik ---------- */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  z-index: 100;
+  padding: 0.75rem 1.25rem;
+  background: var(--color-gold);
+  color: var(--color-night);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  border-radius: 2px;
+}
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* kâğıt yüzeylerde altın görünmez — kırmızıya geç */
+.paper :focus-visible {
+  outline-color: var(--color-brand);
 }

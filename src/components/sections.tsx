@@ -161,6 +161,7 @@ function CatChip({ active, color, label, onClick }: { active: boolean; color: st
   return (
     <button
       onClick={onClick}
+      aria-pressed={active}
       className="px-3.5 py-1.5 rounded-sm font-mono text-[12px] tracking-wide transition-all duration-200 cursor-pointer border"
       style={
         active
@@ -297,6 +298,9 @@ export function PeopleRow({
                         src={p.thumb}
                         alt={p.name}
                         loading="lazy"
+                        width={248}
+                        height={132}
+                        decoding="async"
                         className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-108"
                       />
                     ) : (
@@ -320,9 +324,9 @@ export function PeopleRow({
                         {catInfo.label}
                       </span>
                     </div>
-                    <h4 className="font-display font-semibold text-[17px] leading-snug text-ink group-hover:text-gold transition-colors duration-200">
+                    <h3 className="font-display font-semibold text-[17px] leading-snug text-ink group-hover:text-gold transition-colors duration-200">
                       {p.name}
-                    </h4>
+                    </h3>
                     {p.excerpt && (
                       <p className="mt-2 text-[13px] leading-relaxed text-ink-dim line-clamp-3">
                         {p.excerpt}
@@ -340,7 +344,7 @@ export function PeopleRow({
       )}
 
       {modal && (
-        <Modal onClose={() => setModal(null)}>
+        <Modal onClose={() => setModal(null)} titleId={`person-modal-${modal.id}`}>
           <div className="p-6 sm:p-8">
             <div className="flex items-center justify-between gap-4 mb-5">
               <span className="font-mono text-[11px] tracking-[0.24em] uppercase" style={{ color: accentColor }}>
@@ -356,10 +360,16 @@ export function PeopleRow({
             </div>
             <div className="flex gap-5 items-start">
               {modal.thumb && (
-                <img src={modal.thumb} alt={modal.name} className="w-24 h-28 object-cover object-top rounded-sm border border-line shrink-0" />
+                <img
+                  src={modal.thumb}
+                  alt={modal.name}
+                  width={96}
+                  height={112}
+                  className="w-24 h-28 object-cover object-top rounded-sm border border-line shrink-0"
+                />
               )}
               <div>
-                <h3 className="font-display font-bold text-2xl md:text-3xl leading-tight text-ink">{modal.name}</h3>
+                <h3 id={`person-modal-${modal.id}`} className="font-display font-bold text-2xl md:text-3xl leading-tight text-ink">{modal.name}</h3>
                 <span
                   className="mt-2 inline-block font-mono text-[10.5px] tracking-[0.16em] uppercase px-2 py-1 rounded-sm"
                   style={{
@@ -551,9 +561,17 @@ function AtomMini() {
 }
 
 /* ================= genel yardımcı: bölüm kabuğu ================= */
-export function SectionShell({ children, id }: { children: ReactNode; id: string }) {
+export function SectionShell({
+  children,
+  id,
+  labelledBy,
+}: {
+  children: ReactNode;
+  id: string;
+  labelledBy?: string;
+}) {
   return (
-    <section id={id} className="relative scroll-mt-28">
+    <section id={id} aria-labelledby={labelledBy} className="relative scroll-mt-28">
       {children}
     </section>
   );

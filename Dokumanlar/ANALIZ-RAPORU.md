@@ -12,6 +12,7 @@
 > | 2026-08-21 | [T-04](../Talimatlar/Tamamland%C4%B1/T-04-sayac-ve-gorunurluk-hatalari.md) | K-2, K-3 |
 > | 2026-08-21 | [T-05](../Talimatlar/Tamamland%C4%B1/T-05-ag-katmani-saglamlastirma.md) | O-4, O-8 |
 > | 2026-08-21 | [T-06](../Talimatlar/Tamamland%C4%B1/T-06-yonlendirme-ve-paylasilabilir-baglanti.md) | U-1 |
+> | 2026-08-21 | [T-07](../Talimatlar/Tamamland%C4%B1/T-07-erisilebilirlik-ve-klavye.md) | O-6, O-7 |
 >
 > Bu rapor **ilk analiz anının** fotoğrafıdır; metin korunur, çözülen bulguların
 > başlığına `✅ ÇÖZÜLDÜ` işareti ve bir *Çözüm* bloğu eklenir.
@@ -26,9 +27,9 @@
 | `npm run build` | ✅ Geçiyor | 2.90 s · 253 kB JS (82 kB gzip) · 51 kB CSS |
 | Uygulama açılıyor mu | ✅ Evet | Veri geliyor, 23 kayıt listelendi |
 | Kritik hata | ⚠️ 5 adet · **4 çözüldü** | K-1…K-5 · K-1 ✅ T-03, K-2 ✅ T-04, K-3 ✅ T-04, K-4 ✅ T-01 · K-5 T-03 sırasında keşfedildi, henüz atanmadı |
-| Orta seviye eksik | ⚠️ 9 adet · **5 çözüldü** | O-1…O-9 · O-1, O-2, O-3 ✅ T-01 · O-4, O-8 ✅ T-05 |
+| Orta seviye eksik | ⚠️ 10 adet · **7 çözüldü** | O-1…O-10 · O-1, O-2, O-3 ✅ T-01 · O-4, O-8 ✅ T-05 · O-6, O-7 ✅ T-07 · O-10 T-07 sırasında keşfedildi, henüz atanmadı |
 | Ürün/içerik boşluğu | ⚠️ 5 adet · **1 çözüldü** | U-1…U-5 · U-1 ✅ T-06 |
-| Küçük not | ⚠️ 7 adet · **1 çözüldü** | m-1…m-7 · m-2 ✅ T-01 |
+| Küçük not | ⚠️ 7 adet · **2 çözüldü** | m-1…m-7 · m-2 ✅ T-01 · m-5 ✅ T-07 |
 
 **Kısa hüküm:** Uygulama sağlam bir iskelete ve gerçekten güzel bir tasarım diline sahip.
 Kod temiz, tipli ve tutarlı. Sorun "bozuk olması" değil, **yarım kalmış olması**:
@@ -302,7 +303,7 @@ EN yalnızca TR boşsa kullanılıyor. İsteklerin yaklaşık yarısı boşa gid
 `src/main.tsx` doğrudan `<App />` render ediyor. Herhangi bir bileşende oluşan bir
 runtime hatası **tüm sayfayı beyaz ekrana** çevirir; kullanıcıya hiçbir mesaj gösterilmez.
 
-### O-6 · Erişilebilirlik boşlukları
+### O-6 · Erişilebilirlik boşlukları — ✅ ÇÖZÜLDÜ (T-07)
 
 | Sorun | Yer |
 |---|---|
@@ -313,10 +314,45 @@ runtime hatası **tüm sayfayı beyaz ekrana** çevirir; kullanıcıya hiçbir m
 | `text-ink-faint` (#6f7481) koyu zeminde **4.0:1** — WCAG AA eşiği 4.5:1, altında kalıyor | `index.css:22` |
 | Kategori filtre çipleri `aria-pressed` taşımıyor | `sections.tsx:159-180` |
 
-### O-7 · Klavye kısayolları yalnızca Yayın Modu'nda
+> **✅ Çözüm — T-07 (2026-08-21)**
+>
+> `Modal` (`ui.tsx`) artık `panelRef` + `tabIndex={-1}` ile Tab döngüsünü paneli
+> içinde tutuyor, açılıştan önceki `document.activeElement`'i kaydedip kapanışta
+> geri veriyor, isteğe bağlı `titleId` prop'uyla dış sarmalayıcıya
+> `aria-labelledby` bağlıyor. `Toaster` kabı `role="status"` `aria-live="polite"`
+> `aria-atomic="true"` taşıyor. `App.tsx`'e `<main id="top">`'a giden bir
+> "Ana içeriğe atla" bağlantısı (`.skip-link`, yalnızca odaklanınca görünür)
+> eklendi. İki arama girdisi (masaüstü/mobil) `type="search"` + `aria-label`
+> aldı. `--color-ink-faint` `#6f7481` (≈3,98:1) → `#8b909c` (≈5,82:1) oldu — AA
+> eşiğini geçiyor, `ink` > `ink-dim` > `ink-faint` parlaklık sıralaması korunuyor.
+> Kategori çipleri (`CatChip`) `aria-pressed={active}` taşıyor. Ayrıca bölüm
+> başlıkları (`<h2 id="baslik-0N">`) ile `<section aria-labelledby>` eşleştirildi
+> ve bölüm nav'ına `aria-label="Bölümler"` eklendi (talimatın Adım 11'i).
+>
+> **Doğrulama:** Gerçek bir Lighthouse denetimi (Bash üzerinden, yerel Chrome ile,
+> üretim önizlemesine karşı — bu oturumda Browser pane'e hiç ulaşılamadığı için)
+> Erişilebilirlik puanını **89 → 96**'ya çıkardı. Kontrast oranları Node'da WCAG
+> göreli parlaklık formülüyle elle doğrulandı. Ayrıntı → T-07 Tamamlanma Kaydı.
+
+### O-7 · Klavye kısayolları yalnızca Yayın Modu'nda — ✅ ÇÖZÜLDÜ (T-07)
 
 `BroadcastMode` içinde `←` `→` `Space` `Esc` çalışıyor (`talk.tsx:170-186`), fakat
 ana sayfada gün değiştirmek için klavye kısayolu yok. Gün geçişi bu ürünün ana eylemi.
+
+> **✅ Çözüm — T-07 (2026-08-21)**
+>
+> `App.tsx`'e global bir `keydown` dinleyicisi eklendi: `←`/`→` gün kaydırır
+> (`gunKaydir`, `CalendarLeaf`'teki `shift()` ile aynı ay-sınırı mantığı), `T`
+> bugüne döner, `/` arama kutusuna odaklanır, `?` bir Kısayol Yardımı `Modal`'ı
+> açar, `Esc` kapatır. Arama girdisinde yazarken (`INPUT`/`TEXTAREA`/
+> `contentEditable` hedefi), Yayın Modu açıkken **ve açık bir `Modal` varken**
+> (`[aria-modal="true"]` kontrolü — talimatın kod parçasında yoktu, bu oturumda
+> odak tuzağıyla birleşince ortaya çıkan bir regresyonu önlemek için eklendi,
+> bkz. T-07 Tamamlanma Kaydı) kısayollar devre dışı kalıyor.
+>
+> **Doğrulama:** Kod incelemesiyle talimatın kendi kod parçasına sadakat
+> doğrulandı; gerçek tuş vuruşlarıyla canlı deneme bu oturumda Browser pane'e
+> ulaşılamadığı için yapılamadı (bkz. T-07 Tamamlanma Kaydı).
 
 ### O-8 · Önbellek stratejisi yarım — ✅ ÇÖZÜLDÜ (T-05)
 
@@ -450,7 +486,7 @@ Kritik saf fonksiyonlar (`dayOfYear`, `classifyItem`, `formatYear`, `firstSenten
 | m-2 | ~~`vite.config.js` — proje TS olduğu hâlde config JS~~ **✅ ÇÖZÜLDÜ (T-01)** — `vite.config.ts` | kök |
 | m-3 | `CasesSection` otomatik dosyaları `slice(0, 6)` ile kesiyor, "daha fazla" yok | `App.tsx` allCases |
 | m-4 | Ticker `55s` sabit; 3 öğede de 14 öğede de aynı hız | `index.css:127` |
-| m-5 | Kişi kartlarında görseller `loading="lazy"` var ama `width/height` yok → düzen kayması | `sections.tsx` PeopleRow |
+| m-5 | ~~Kişi kartlarında görseller `loading="lazy"` var ama `width/height` yok → düzen kayması~~ **✅ ÇÖZÜLDÜ (T-07)** — kart küçük resmi `248×132`, modal küçük resmi `96×112` | `sections.tsx` PeopleRow |
 | m-6 | Arama sonucu global sayacı yok; kullanıcı hangi bölümde kaç sonuç olduğunu göremiyor | `App.tsx` |
 | m-7 | Yazdırma (print) stil sayfası yok — kart çıktısı alınamıyor | `index.css` |
 
@@ -461,16 +497,18 @@ Kritik saf fonksiyonlar (`dayOfYear`, `classifyItem`, `formatYear`, `firstSenten
 ```
 ÖNCE   →  K-1✅ K-2✅ K-4✅  K-5   (görünür yanlış bilgi + bozuk geliştirme deneyimi + kırık birincil gezinme)
 SONRA  →  O-1✅ O-2✅ O-3✅     (temizlik — sonraki her iş bundan faydalanır)  [T-01 ile bitti]
-SONRA  →  K-3✅ O-5  O-6        (sağlamlık ve erişilebilirlik)
+SONRA  →  K-3✅ O-5  O-6✅       (sağlamlık ve erişilebilirlik)  [O-6 T-07 ile bitti]
 SONRA  →  U-1✅ U-4            (paylaşım + kabuk — ürünü "yayınlanabilir" yapar)  [U-1 T-06 ile bitti]
-SONRA  →  O-4✅ O-7  O-8✅ O-9   (ağ, klavye, önbellek, içerik zenginliği)  [O-4/O-8 T-05 ile bitti]
+SONRA  →  O-4✅ O-7✅ O-8✅ O-9   (ağ, klavye, önbellek, içerik zenginliği)  [O-4/O-8 T-05, O-7 T-07 ile bitti]
 SONRA  →  U-2  U-3             (içerik hacmi ve doğruluğu — sürekli iş)
 SON    →  U-5                  (test/lint — sonraki tüm işleri korur)
 ```
 
 Bu sıralama `../Talimatlar/PLAN-01-temel-duzeltme-ve-tamamlama.md` dosyasında
 T-01…T-14 talimatlarına dönüştürülmüştür. K-5, T-03 sırasında keşfedilmiş yeni
-bir bulgudur ve henüz bir talimata atanmamıştır — bkz. bölüm 6.
+bir bulgudur ve henüz bir talimata atanmamıştır — bkz. bölüm 6. O-10, T-07
+sırasında (gerçek bir Lighthouse denetimiyle) keşfedilmiş yeni bir bulgudur ve
+henüz bir talimata atanmamıştır — bkz. bölüm 7.
 
 ---
 
@@ -551,3 +589,72 @@ T-04 **bilinçli olarak** K-5'e dokunmadı (bkz. T-04 Tamamlanma Kaydı). K-5 h�
 ya da mevcut bir sonraki talimata (T-06 gün gezinmesini URL'e bağlarken aynı
 DOM bölgesine dokunacağı için uygun bir aday olabilir) eklenmesi önerilir — nihai
 karar plan sahibine aittir.
+
+> **Güncelleme (T-06, 2026-08-21):** Canlı olarak yeniden doğrulandı, hâlâ mevcut.
+> T-06 bilinçli olarak dokunmadı; T-07 için önerildi (aynı gezinme bölgesine
+> dokunacağı varsayımıyla).
+>
+> **Güncelleme (T-07, 2026-08-21):** Bu varsayım **doğrulanmadı** — T-07'nin 11
+> adımının hiçbiri `leaf.tsx`'e dokunmadı (klavye kısayolları `App.tsx`'te ayrı bir
+> global dinleyici olarak yaşıyor). Ayrıca K-5 bir **fare/dokunmatik**
+> hit-testing hatasıdır (yukarıdaki kanıt `button.click()`'in doğru çalıştığını
+> gösteriyor); `Tab` + `Enter` ile klavye üzerinden düğmeye ulaşıp etkinleştirmek
+> bu hatadan **etkilenmiyor**. Bu oturumda Browser pane'e hiç ulaşılamadığı için
+> (bkz. T-07 Tamamlanma Kaydı) canlı olarak yeniden doğrulanamadı. K-5 hâlâ
+> atanmadı; `leaf.tsx`'e gerçekten dokunacak bir sonraki talimat (T-13 ya da yeni
+> bir T-15) önerilir.
+
+---
+
+## 7. T-07 Sırasında Keşfedilen Yeni Bulgular (2026-08-21)
+
+> Bu bölüm ilk analiz anının parçası değildir. T-07 (erişilebilirlik ve klavye)
+> talimatının doğrulaması sırasında — bu kez Browser pane'e ulaşılamadığı için
+> Bash üzerinden gerçek bir Lighthouse (axe-core tabanlı) denetimiyle — keşfedilmiş,
+> ilk analizde yakalanmamış bulgulardır.
+
+### Aynı oturumda keşfedilip düzeltilen iki hata
+
+Talimatın 11 adımının parçası değildi; `npm run build && npm run preview`'a karşı
+çalıştırılan gerçek bir Lighthouse denetimi (89/100) tarafından yakalandı ve her
+ikisi de tek satırlık, sıfır görsel etkili düzeltmelerle aynı oturumda giderildi
+(ikinci denetim: 96/100):
+
+| # | Bulgu | Yer | Düzeltme |
+|---|---|---|---|
+| 1 | Üst bardaki "Yayın Modu" düğmesinin metni `hidden md:inline` — dar viewport'ta düğmenin tek içeriği `aria-hidden` bir SVG ikon, erişilebilir adı yok | `App.tsx` | `aria-label="Yayın Modu"` eklendi |
+| 2 | `PeopleRow` kart başlığı `<h4>`, `<h2>` (bölüm başlığı) altında doğrudan geliyor — `h3` atlanıyor | `sections.tsx` | `<h4>` → `<h3>` (kişi modalındaki başlık zaten `<h3>`, çakışma yok) |
+
+### O-10 · `text-brand` koyu zeminde metin/simge rengi olarak yetersiz kontrast
+
+**Dosyalar:** `src/components/leaf.tsx:267` (`Ticker` başlığı), `src/components/sections.tsx` (`CasesSection` dosya türü rozeti ve "Dosyayı aç/kapat" düğmesi)
+
+Gerçek Lighthouse/axe denetimi üç yerde `color-contrast` hatası verdi — hepsi
+`--color-brand` (#d23b2e) kırmızısının **metin/simge rengi** olarak kullanıldığı
+ve arka planla yeterli kontrast oluşturmadığı yerler:
+
+| Yer | Renk çifti | Ölçülen oran | AA eşiği |
+|---|---|---|---|
+| `Ticker` "Bugün Tarihte" etiketi | `text-paper` (#f2ead9) / `bg-brand` (#d23b2e) | **3,98:1** | 4,5:1 |
+| `CasesSection` dosya türü rozeti (örn. "SUİKAST") | `text-brand` (#d23b2e) / panel zemini (~#171d29) | **≈3,54:1** | 4,5:1 |
+| `CasesSection` "Dosyayı aç/kapat" düğmesi | `text-brand` (#d23b2e) / panel zemini | **≈3,54:1** | 4,5:1 |
+
+(Oranlar Node'da WCAG göreli parlaklık formülüyle elle hesaplandı, ardından
+gerçek bir Lighthouse denetimiyle bağımsız olarak doğrulandı.)
+
+**Etki:** Karanlık Dosyalar bölümü **her açık günde görünen** iki öğeyi (dosya
+türü rozeti + aç/kapat düğmesi) düşük kontrastlı metinle gösteriyor; düşük
+görüşlü kullanıcılar için okunabilirlik sorunu.
+
+**Kapsam notu:** T-07 yalnızca `--color-ink-faint` (ve gerekirse `--color-ink-dim`)
+değişikliğine izin veriyordu (bkz. talimatın *Kapsam Dışı* tablosu); `--color-brand`
+tamamen farklı bir renk ve `ink-faint` gibi talimatın hazır bir değer verdiği bir
+durum değil — metin kullanımı için daha açık bir kırmızı ton mu gerekiyor, yoksa
+bu iki yerin arka plan/kullanım biçimi mi değişmeli, bu ayrı bir tasarım kararı.
+Bu yüzden T-07 **bilinçli olarak** dokunmadı (bkz. T-07 Tamamlanma Kaydı).
+
+**Önerilen talimat:** Henüz hiçbir talimata atanmadı. `sections.tsx`'e zaten
+dokunacak bir talimat (T-11 sınıflandırma doğruluğu, ya da T-13 performans/temizlik)
+iyi bir aday olabilir; ayrı bir küçük talimat da (`--color-brand`'ın metin
+kullanımı için daha açık bir varyantını tanımlamak, örn. `--color-brand-light`)
+mümkün — nihai karar plan sahibine aittir.

@@ -326,8 +326,8 @@ her gün değişiminde tekrar oynar. Bu bilinçli bir hiledir.
 | `Reveal` | Giriş animasyonu; görünürlük `useInView` (2.7) üzerinden — güvenlik ağlı *(K-3 ✅ T-04)* |
 | `CountUp` | Sayaç animasyonu; `useInView`'dan gelen `inView` her `to` değişiminde yeniden tetikler, önceki değerden geçiş yapar *(K-2 ✅ T-04)* |
 | `SectionHead` | "BÖLÜM 01 · Kronoloji" başlık bloğu |
-| `Modal` | Esc ile kapanır, `body` kaydırmasını kilitler *(⚠ odak tuzağı yok)* |
-| `toast()` / `Toaster` | `window` CustomEvent tabanlı, en fazla 3 bildirim |
+| `Modal` | Esc ile kapanır, `body` kaydırmasını kilitler, Tab döngüsü (odak tuzağı) + kapanışta odağı çağırana iade eder, isteğe bağlı `titleId` prop ile `aria-labelledby` *(odak tuzağı T-07'de eklendi)* |
+| `toast()` / `Toaster` | `window` CustomEvent tabanlı, en fazla 3 bildirim, kap `role="status"`/`aria-live="polite"` taşır *(T-07)* |
 | `copyText()` | `navigator.clipboard` → `execCommand` yedeği |
 | `IconXxx` (11 adet) | Elle çizilmiş SVG; `currentColor` kullanır |
 
@@ -420,11 +420,14 @@ Tam liste ve kanıtlar → [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md)
 | ~~K-2~~ | ~~`CountUp` gün değişiminde tetiklenmiyor~~ **✅ çözüldü** (`useInView` + `[to,duration,inView]` bağımlılığı) | T-04 · 2026-08-21 |
 | ~~K-3~~ | ~~`Reveal` için IO yedeği yok~~ **✅ çözüldü** (paylaşılan gözlemci + `setTimeout` güvenlik ağı) | T-04 · 2026-08-21 |
 | ~~K-4~~ | ~~HMR sabit port~~ **✅ çözüldü** | T-01 · 2026-08-21 |
-| K-5 | Gün gezinme düğmeleri (Önceki/Sonraki/Bugüne dön) dekoratif katman yüzünden tıklanamıyor — T-03 sırasında keşfedildi | Henüz atanmadı (T-04 kapsamı yalnızca K-2/K-3 idi) |
+| K-5 | Gün gezinme düğmeleri (Önceki/Sonraki/Bugüne dön) dekoratif katman yüzünden fare/dokunmatikle tıklanamıyor — T-03 sırasında keşfedildi | Henüz atanmadı (T-04, T-06 ve T-07 sırayla değerlendirdi, üçü de bilinçli olarak dokunmadı — `leaf.tsx`'e gerçekten dokunacak bir talimat gerekiyor) |
 | ~~O-1~~ | ~~10 kullanılmayan bağımlılık~~ **✅ çözüldü** (11 paket kaldırıldı, `react-router-dom` korundu) | T-01 · 2026-08-21 |
 | ~~O-4~~ | ~~Ağ isteği iptali yok, TR doluyken de EN çekiliyordu~~ **✅ çözüldü** (`AbortController` + TR-önce/EN-tamamlayıcı + 429/5xx için sınırlı deneme) | T-05 · 2026-08-21 |
 | ~~O-8~~ | ~~Önbellek stratejisi yarım (TTL/sınır yok)~~ **✅ çözüldü** (`savedAt`/`stale`, `pruneCache()` 60 kayıt, `memSet()` 40 kayıt FIFO) | T-05 · 2026-08-21 |
+| ~~O-6~~ | ~~Erişilebilirlik boşlukları (odak tuzağı, `aria-live`, skip link, arama etiketi, kontrast, `aria-pressed`)~~ **✅ çözüldü** | T-07 · 2026-08-21 |
+| ~~O-7~~ | ~~Klavye kısayolları yalnızca Yayın Modu'nda~~ **✅ çözüldü** (`←`/`→`/`T`/`/`/`?`/`Esc` + Kısayol Yardımı) | T-07 · 2026-08-21 |
 | O-5 | ErrorBoundary yok | T-09 |
+| O-10 | `text-brand` koyu zeminde metin/simge olarak yetersiz kontrast (Ticker başlığı, Karanlık Dosyalar rozeti/düğmesi) — T-07 sırasında gerçek bir Lighthouse denetimiyle keşfedildi | Henüz atanmadı |
 | ~~U-1~~ | ~~Yönlendirme / paylaşılabilir URL yok~~ **✅ çözüldü** (`createBrowserRouter` + `src/lib/slug.ts`, URL tek doğruluk kaynağı) | T-06 · 2026-08-21 |
 | U-2 | İçerik 10/366 gün | T-10 |
 | U-5 | Test/lint altyapısı yok | T-12 |

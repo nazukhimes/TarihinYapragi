@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   CATEGORIES,
@@ -15,6 +15,7 @@ import {
   detectDarkItem,
   useDayData,
 } from "./lib/wiki";
+import { daysInMonth } from "./lib/date";
 import { CalendarLeaf, LiveClock, MONTHS_TR, Ticker } from "./components/leaf";
 import { NotFound } from "./components/NotFound";
 import {
@@ -39,6 +40,7 @@ import {
   IconSearch,
   IconShare,
   IconSkull,
+  Modal,
   Reveal,
   SectionHead,
   toast,
@@ -84,6 +86,9 @@ export default function App() {
   const [pickerOpen, setPickerOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [broadcast, setBroadcast] = useState(false);
+  const [kisayolYardimi, setKisayolYardimi] = useState(false);
+  const aramaRef = useRef<HTMLInputElement>(null);
+  const aramaMobilRef = useRef<HTMLInputElement>(null);
 
   const { data, loading, reload } = useDayData(month, day);
 
@@ -91,6 +96,50 @@ export default function App() {
     (d: number, m: number) => navigate(`/${toDaySlug(m, d)}`),
     [navigate]
   );
+
+  // klavye kısayolu için gün kaydırma (CalendarLeaf'teki shift() ile aynı mantık)
+  const gunKaydir = useCallback(
+    (delta: number) => {
+      let d = day + delta;
+      let m = month;
+      if (d < 1) {
+        m = m === 1 ? 12 : m - 1;
+        d = daysInMonth(m);
+      } else if (d > daysInMonth(m)) {
+        m = m === 12 ? 1 : m + 1;
+        d = 1;
+      }
+      setDate(d, m);
+    },
+    [day, month, setDate]
+  );
+
+  const bugüneDön = useCallback(() => {
+    const t = new Date();
+    setDate(t.getDate(), t.getMonth() + 1);
+  }, [setDate]);
+
+  // ana sayfa klavye kısayolları — arama kutusunda ve Yayın Modu'nda devre dışı (O-7)
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement;
+      if (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable) return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (broadcast) return;
+      if (document.querySelector('[aria-modal="true"]')) return; // açık bir Modal varken odak tuzağını atlama
+
+      switch (e.key) {
+        case "ArrowLeft": e.preventDefault(); gunKaydir(-1); break;
+        case "ArrowRight": e.preventDefault(); gunKaydir(1); break;
+        case "t": case "T": e.preventDefault(); bugüneDön(); break;
+        case "/": e.preventDefault(); (aramaRef.current?.offsetParent ? aramaRef.current : aramaMobilRef.current)?.focus(); break;
+        case "?": setKisayolYardimi(true); break;
+        case "Escape": setKisayolYardimi(false); break;
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [broadcast, gunKaydir, bugüneDön]);
 
   // sayısal biçim (/08-21) → kanonik ad biçimine (/21-agustos) yönlendir
   useEffect(() => {
@@ -259,6 +308,7 @@ export default function App() {
       <div className="gridlines fixed inset-0 pointer-events-none" />
       <div className="noise" />
       <Toaster />
+      <a href="#top" className="skip-link">Ana içeriğe atla</a>
 
       {/* ======== ÜST BAR ======== */}
       <header className="sm:sticky sm:top-0 z-[60] border-b border-line/80 bg-night/85 backdrop-blur-md">
@@ -283,8 +333,11 @@ export default function App() {
                 <IconSearch className="w-4 h-4" />
               </span>
               <input
+                ref={aramaRef}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
+                type="search"
+                aria-label={`${dayLabel} arşivinde ara`}
                 placeholder={`${dayLabel} arşivinde ara: olay, kişi, dosya…`}
                 className="w-full pl-10 pr-4 py-2.5 rounded-sm bg-panel border border-line text-[14px] text-ink placeholder:text-ink-faint outline-none focus:border-gold/70 focus:shadow-[0_0_0_3px_rgba(232,176,75,0.12)] transition-all duration-200"
               />
@@ -304,6 +357,7 @@ export default function App() {
             <button
               onClick={() => setBroadcast(true)}
               disabled={talkCards.length === 0}
+              aria-label="Yayın Modu"
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-sm bg-brand text-paper font-mono text-[11.5px] tracking-[0.18em] uppercase font-semibold hover:bg-brand-deep hover:shadow-[0_10px_26px_rgba(210,59,46,0.4)] hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
             >
               <IconMic className="w-4 h-4" />
@@ -319,14 +373,18 @@ export default function App() {
               <IconSearch className="w-4 h-4" />
             </span>
             <input
+              ref={aramaMobilRef}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
+              type="search"
+              aria-label={`${dayLabel} arşivinde ara`}
               placeholder="Arşivde ara…"
               className="w-full pl-10 pr-4 py-2.5 rounded-sm bg-panel border border-line text-[14px] text-ink placeholder:text-ink-faint outline-none focus:border-gold/70 transition-colors"
             />
           </label>
         </div>
       </header>
+      <p className="sr-only" role="status" aria-live="polite" />
 
       <main id="top" className="relative">
         {/* ======== AÇILIŞ: TAKVİM YAPRAĞI ======== */}
@@ -513,7 +571,7 @@ export default function App() {
         </section>
 
         {/* ======== BÖLÜM NAVİGASYONU ======== */}
-        <nav className="sticky top-0 sm:top-16 z-[55] border-b border-line/80 bg-night/85 backdrop-blur-md">
+        <nav aria-label="Bölümler" className="sticky top-0 sm:top-16 z-[55] border-b border-line/80 bg-night/85 backdrop-blur-md">
           <div className="max-w-7xl mx-auto px-4 md:px-8 flex gap-1 overflow-x-auto row-scroll">
             {NAV.map((n, i) => (
               <a
@@ -530,7 +588,7 @@ export default function App() {
 
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           {/* ======== 01 ZAMAN TÜNELİ ======== */}
-          <SectionShell id="tunel">
+          <SectionShell id="tunel" labelledBy="baslik-01">
             <div className="pt-16">
               <SectionHead
                 index="01"
@@ -548,7 +606,7 @@ export default function App() {
           </SectionShell>
 
           {/* ======== 02 DOĞANLAR ======== */}
-          <SectionShell id="doganlar">
+          <SectionShell id="doganlar" labelledBy="baslik-02">
             <div className="pt-20">
               <SectionHead
                 index="02"
@@ -572,7 +630,7 @@ export default function App() {
           </SectionShell>
 
           {/* ======== 03 KAYBETTİKLERİMİZ ======== */}
-          <SectionShell id="kaybettiklerimiz">
+          <SectionShell id="kaybettiklerimiz" labelledBy="baslik-03">
             <div className="pt-20">
               <SectionHead
                 index="03"
@@ -596,7 +654,7 @@ export default function App() {
           </SectionShell>
 
           {/* ======== 04 KARANLIK DOSYALAR ======== */}
-          <SectionShell id="karanlik">
+          <SectionShell id="karanlik" labelledBy="baslik-04">
             <div className="pt-20">
               <SectionHead
                 index="04"
@@ -610,7 +668,7 @@ export default function App() {
           </SectionShell>
 
           {/* ======== 05 BİLİM & KEŞİF ======== */}
-          <SectionShell id="bilim">
+          <SectionShell id="bilim" labelledBy="baslik-05">
             <div className="pt-20">
               <SectionHead
                 index="05"
@@ -624,7 +682,7 @@ export default function App() {
           </SectionShell>
 
           {/* ======== 06 SOHBET KARTLARI ======== */}
-          <SectionShell id="sohbet">
+          <SectionShell id="sohbet" labelledBy="baslik-06">
             <div className="pt-20 pb-24">
               <SectionHead
                 index="06"
@@ -681,12 +739,73 @@ export default function App() {
             <p className="mt-6 font-mono text-[11px] text-ink-faint">
               © {today.getFullYear()} Tarih Yaprağı · 366 gün, tek arşiv
             </p>
+            <p className="mt-2 font-mono text-[11px] text-ink-faint">
+              Kısayollar için <kbd className="px-1.5 py-0.5 rounded-sm border border-line bg-panel-2 text-gold">?</kbd> tuşuna basın
+            </p>
           </div>
         </div>
       </footer>
 
       {broadcast && talkCards.length > 0 && (
         <BroadcastMode cards={talkCards} dayLabel={dayLabel} onClose={() => setBroadcast(false)} />
+      )}
+
+      {kisayolYardimi && (
+        <Modal onClose={() => setKisayolYardimi(false)} titleId="kisayol-modal-baslik">
+          <div className="p-6 sm:p-8">
+            <div className="flex items-center justify-between gap-4 mb-6">
+              <h3 id="kisayol-modal-baslik" className="font-display font-bold text-2xl text-ink">
+                Klavye Kısayolları
+              </h3>
+              <button
+                onClick={() => setKisayolYardimi(false)}
+                aria-label="Kapat"
+                className="w-9 h-9 grid place-items-center rounded-sm border border-line text-ink-dim hover:text-brand hover:border-brand transition-colors cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+
+            <p className="font-mono text-[11px] tracking-[0.24em] uppercase text-gold mb-3">Ana sayfa</p>
+            <dl className="space-y-2.5 mb-7">
+              {[
+                ["←", "Önceki gün"],
+                ["→", "Sonraki gün"],
+                ["T", "Bugüne dön"],
+                ["/", "Arama kutusuna odaklan"],
+                ["?", "Bu yardımı aç"],
+                ["Esc", "Yardımı/modalı kapat"],
+              ].map(([key, desc]) => (
+                <div key={key} className="flex items-center gap-3">
+                  <dt>
+                    <kbd className="inline-block min-w-[2.5rem] text-center px-2 py-1 rounded-sm border border-line bg-panel-2 font-mono text-[12px] text-gold">
+                      {key}
+                    </kbd>
+                  </dt>
+                  <dd className="text-[14px] text-ink-dim">{desc}</dd>
+                </div>
+              ))}
+            </dl>
+
+            <p className="font-mono text-[11px] tracking-[0.24em] uppercase text-gold mb-3">Yayın Modu</p>
+            <dl className="space-y-2.5">
+              {[
+                ["←", "Önceki kart"],
+                ["→ / Boşluk", "Sonraki kart"],
+                ["Esc", "Yayın Modunu kapat"],
+              ].map(([key, desc]) => (
+                <div key={key} className="flex items-center gap-3">
+                  <dt>
+                    <kbd className="inline-block min-w-[2.5rem] text-center px-2 py-1 rounded-sm border border-line bg-panel-2 font-mono text-[12px] text-gold">
+                      {key}
+                    </kbd>
+                  </dt>
+                  <dd className="text-[14px] text-ink-dim">{desc}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </Modal>
       )}
     </div>
   );

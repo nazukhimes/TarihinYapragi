@@ -283,6 +283,33 @@ Zaman Tüneli · Doğanlar · Kaybettiklerimiz · Karanlık Dosyalar · Bilim & 
 
 ## 7. Klavye Kısayolları
 
+Uygulama artık **fareye hiç dokunmadan** kullanılabilir.
+
+### Ana sayfada
+
+| Tuş | İşlev |
+|---|---|
+| `→` | Sonraki gün |
+| `←` | Önceki gün |
+| `T` | Bugüne dön |
+| `/` | Arama kutusuna odaklan |
+| `?` | Kısayol yardımı penceresini aç |
+| `Esc` | Açık pencereyi/yardımı kapat |
+
+> Bu kısayollar **arama kutusuna yazarken** ve **Yayın Modu açıkken** çalışmaz —
+> aksi hâlde yazdığınız harfler veya yayın kartları arasında gezinme
+> etkilenirdi. Kısayolların tam listesini her an `?` tuşuna basarak
+> görebilirsiniz; alt bilgide de küçük bir hatırlatma vardır.
+
+### Tab tuşuyla gezinme
+
+Sayfaya girip ilk `Tab`'a bastığınızda ekranın sol üstünde **"Ana içeriğe
+atla"** bağlantısı belirir — `Enter`'a basarsanız üst bar ve gezinme
+menüsünü atlayıp doğrudan içeriğe inersiniz. `Tab` ile sırayla üst bara,
+arama kutusuna, Yayın Modu düğmesine, kartlara ve düğmelere ulaşırsınız;
+odaklandığınız öğenin etrafında **altın (kâğıt yüzeylerde kırmızı) bir
+çerçeve** belirir.
+
 ### Yayın Modu içinde
 
 | Tuş | İşlev |
@@ -295,10 +322,12 @@ Zaman Tüneli · Doğanlar · Kaybettiklerimiz · Karanlık Dosyalar · Bilim & 
 
 | Tuş | İşlev |
 |---|---|
-| `Esc` | Pencereyi kapat |
+| `Tab` / `Shift+Tab` | Pencere içindeki öğeler arasında dolaş — odak pencerenin **dışına çıkmaz** |
+| `Esc` | Pencereyi kapat, odak açtığınız karta geri döner |
 
-> **Not:** Ana sayfada gün değiştirmek için henüz klavye kısayolu yok.
-> `←` `→` ile gün geçişi planlanan özelliktir (T-07).
+> **Ekran okuyucu kullanıyorsanız:** bir kartı kopyaladığınızda ("Kart panoya
+> kopyalandı" gibi) bildirimler otomatik olarak duyulur; kategori çiplerinde
+> hangisinin seçili olduğu ("basılı") bilgisi de aktarılır.
 
 ---
 
@@ -362,7 +391,7 @@ Evet, arayüz mobil uyumludur. Kart şeritleri dokunmatik kaydırılır.
 | Sayaçlar gün değişince güncellenmiyor | Bilinen hataydı | *(K-2 · T-04 ile düzeltildi — sayaçlar artık her gün değişiminde önceki değerden yeni değere doğru güncelleniyor.)* |
 | Kod değişikliği tarayıcıya yansımıyor | HMR bağlantısı koptu | *(K-4 · T-01 ile düzeltildi — hangi portta çalışırsanız çalışın HMR bağlanır.)* Yine de olursa sayfayı yenileyin |
 | "Yılın X. günü" bir fazla görünüyordu | Bilinen hataydı | *(K-1 · T-03 ile düzeltildi — 2026-08-21'den itibaren gün sayısı her yıl için doğru.)* |
-| "Önceki gün" / "Sonraki gün" / "Bugüne dön" düğmeleri tıklamaya yanıt vermiyor | Bilinen görsel katman hatası (K-5) | Şimdilik bunun yerine `[AY ADI] TAKVİMİ` düğmesini açıp güne doğrudan tıklayın — o yöntem çalışıyor. Düzeltme henüz bir talimata bağlanmadı |
+| "Önceki gün" / "Sonraki gün" / "Bugüne dön" düğmeleri tıklamaya yanıt vermiyor | Bilinen görsel katman hatası (K-5) — yalnızca fare/dokunmatikle tıklamayı etkiler | İki çalışan alternatif var: (1) klavyeden `←` `→` `T` tuşlarına basın — bkz. [Klavye Kısayolları](#7-klavye-kısayolları); (2) `[AY ADI] TAKVİMİ` düğmesini açıp güne doğrudan tıklayın. Düğmelerin kendisi henüz bir talimata bağlanmadı |
 | Kopyala çalışmıyor | Tarayıcı pano izni vermedi | Adres çubuğundaki izin simgesinden panoya erişime izin verin |
 | Port 3000 meşgul | Başka uygulama kullanıyor | Vite kendiliğinden bir sonraki boş porta geçer (3001, 3002…) ve adresi konsola yazar. Belirli bir port isterseniz: `npm run dev -- --port 3005` |
 
