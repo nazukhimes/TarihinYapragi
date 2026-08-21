@@ -44,7 +44,7 @@ bu amaca hizmet eder.
 | Çatı | React 18 + TypeScript 5.7 (`strict: true`) | Sınıf bileşeni yok, hepsi fonksiyon + hook |
 | Derleyici | Vite 6 | `npm run dev` / `build` / `preview` / `typecheck` · yapılandırma `vite.config.ts` |
 | Stil | Tailwind CSS **v4** (`@tailwindcss/vite`) | Config dosyası **yok**; tema `src/index.css` içindeki `@theme` bloğunda |
-| Yönlendirme | *(yok)* | `react-router-dom` kurulu ama henüz kullanılmıyor; T-01'in bağımlılık temizliğinde **bilerek korundu** — bkz. T-06 |
+| Yönlendirme | `react-router-dom` v6 (`createBrowserRouter`) | Her gün kendi URL'sinde: `/21-agustos` biçimi (T-06). `src/lib/slug.ts` ↔ URL çevrimi yapar |
 | Durum yönetimi | React `useState` / `useMemo` | Redux/Zustand yok, gerek de yok |
 | Veri | Wikimedia REST "On this day" API | Sunucu/backend **yok**, tamamen istemci taraflı |
 | Kalıcılık | `localStorage` (çevrimdışı yedek) + bellek içi `Map` | Veritabanı yok |
@@ -69,13 +69,17 @@ sınıflar Tailwind v4'ün dinamik ölçek motoru sayesinde geçerlidir; **silme
 Kullanıcı bir gün seçer  (day, month)
           │
           ▼
-   useDayData(month, day)            ← src/lib/wiki.ts
+   useDayData(month, day)            ← src/lib/wiki.ts (AbortController ile iptal edilebilir)
           │
-          ├─ TR Vikipedi  ──┐
-          │                 ├─ Promise.all → normalize → DayData
-          └─ EN Vikipedi  ──┘        (TR boşsa EN'e düşer)
+          ├─ TR Vikipedi (önce denenir)
+          │     └─ events/births/deaths'ten biri boşsa (trThin) ──► EN Vikipedi (tamamlayıcı)
           │
-          │  ağ hatası → localStorage yedeği → o da yoksa offline:true
+          │  ağ hatası → localStorage yedeği (savedAt zaman damgalı, TTL 24s)
+          │              24 saatten eskiyse stale:true (arayüzde belirtilir)
+          │              o da yoksa offline:true
+          ▼
+       normalize → DayData
+          │
           ▼
    App.tsx  useMemo katmanı
           │
@@ -118,13 +122,17 @@ TarihinYapragi/
 │   ├── extensions.json     ← önerilen eklentiler (Tailwind, ESLint, Prettier, EditorConfig)
 │   └── settings.json       ← format-on-save, tabSize 2, Tailwind sınıf regex'i
 ├── index.html              ← Giriş noktası, meta etiketler, Google Fonts
+├── vercel.json             ← Vercel SPA yönlendirmesi (T-06)
 ├── vite.config.ts          ← Sunucu portu + eklentiler (strictPort: false, HMR portu otomatik)
 ├── tsconfig.json           ← strict TypeScript
 ├── package.json
 │
+├── public/
+│   └── _redirects          ← Netlify / Cloudflare Pages SPA yönlendirmesi (T-06)
+│
 ├── src/
-│   ├── main.tsx            ← ReactDOM.createRoot — 6 satır
-│   ├── App.tsx             ← TEK sayfa. Tüm veri birleştirme (useMemo) burada. ~660 satır
+│   ├── main.tsx            ← createBrowserRouter + RouterProvider (/, /:daySlug, *) (T-06)
+│   ├── App.tsx             ← TEK sayfa. Tüm veri birleştirme (useMemo) burada. URL → day/month (T-06)
 │   ├── index.css           ← Tailwind v4 @theme + tüm özel animasyon/doku sınıfları
 │   ├── vite-env.d.ts       ← `ImportMetaEnv` tipi (VITE_WIKI_API_BASE)
 │   │
@@ -134,11 +142,13 @@ TarihinYapragi/
 │   ├── lib/
 │   │   ├── config.ts       ← WIKI_API_BASE (ortam değişkeninden, varsayılanlı)
 │   │   ├── date.ts         ← Artık yıl / gün sayısı / haftanın günü — saf fonksiyonlar
+│   │   ├── slug.ts         ← toDaySlug / parseDaySlug — gün ↔ URL çevrimi (T-06)
 │   │   ├── useInView.ts    ← Paylaşılan IntersectionObserver + setTimeout güvenlik ağı (T-04)
 │   │   └── wiki.ts         ← API çağrısı, önbellek, sınıflandırma, otomatik kart üretimi
 │   │
 │   └── components/
 │       ├── leaf.tsx        ← Takvim yaprağı, mini takvim, canlı saat, haber bandı
+│       ├── NotFound.tsx    ← 404 sayfası — geçersiz gün adresi (T-06)
 │       ├── sections.tsx    ← Zaman tüneli, kişi kartları, karanlık dosyalar, bilim
 │       ├── talk.tsx        ← Sohbet kartları + Yayın Modu (teleprompter)
 │       └── ui.tsx          ← Reveal, CountUp, Modal, Toaster, copyText, tüm SVG ikonlar
@@ -152,8 +162,8 @@ TarihinYapragi/
 │
 └── Talimatlar/             ← İŞ AKIŞI klasörü
     ├── PLAN-01-*.md        ← aktif plan
-    ├── T-03-*.md ...       ← aktif talimatlar
-    ├── Tamamlandı/         ← biten talimatlar buraya taşınır (T-01, T-02)
+    ├── T-07-*.md ...       ← aktif talimatlar
+    ├── Tamamlandı/         ← biten talimatlar buraya taşınır (T-01…T-06)
     └── Plan/               ← tamamen biten planlar buraya taşınır
 ```
 
@@ -168,6 +178,7 @@ TarihinYapragi/
 | Yeni ikon eklemek | `src/components/ui.tsx` → `IconXxx` fonksiyonu |
 | Yayın modunu değiştirmek | `src/components/talk.tsx` → `BroadcastMode` |
 | API tabanını değiştirmek | `.env` içine `VITE_WIKI_API_BASE=...` (örnek: `.env.example`) |
+| URL şemasını değiştirmek | `src/lib/slug.ts` → `toDaySlug`/`parseDaySlug`; rotalar `src/main.tsx` |
 
 ---
 
@@ -226,7 +237,7 @@ macOS/Linux'ta aynı menü `./baslat.sh` ile gelir.
 
 ## 7. Mevcut Durum — Dürüst Özet
 
-> **Plan ilerlemesi:** PLAN-01 · 4 / 14 talimat tamamlandı (T-01, T-02, T-03, T-04 · 2026-08-21).
+> **Plan ilerlemesi:** PLAN-01 · 6 / 14 talimat tamamlandı (T-01, T-02, T-03, T-04, T-05, T-06 · 2026-08-21).
 > Ayrıntı → [`../Talimatlar/PLAN-01-temel-duzeltme-ve-tamamlama.md`](../Talimatlar/PLAN-01-temel-duzeltme-ve-tamamlama.md)
 
 **Çalışan:** Takvim yaprağı ve gün geçişi, Vikipedi entegrasyonu (TR→EN yedeği),
@@ -236,7 +247,17 @@ arama, çevrimdışı yedek, tip kontrolü ve üretim derlemesi. Geliştirme ort
 tek satırlık başlatıcılarla (`başlat.bat` / `baslat.sh`) ve sabit editör ayarlarıyla
 (`.editorconfig`, `.nvmrc`, `.vscode/*`) herkes için aynı. İstatistik sayaçları ve
 sayfa görünürlüğü artık tek paylaşılan bir `useInView` gözlemcisine ve
-`setTimeout` güvenlik ağına dayanıyor (`src/lib/useInView.ts`).
+`setTimeout` güvenlik ağına dayanıyor (`src/lib/useInView.ts`). Ağ katmanı artık
+TR'yi önce deniyor ve TR doluysa EN'i hiç çekmiyor, gün değişince önceki isteği
+`AbortController` ile iptal ediyor, `localStorage` yedeği 24 saatlik TTL ve
+60/40 kayıtlık önbellek sınırları taşıyor, HTTP hataları `network`/`notfound`/
+`ratelimit`/`server`/`unknown` olarak ayrı `kind`'lara sınıflandırılıyor
+(`src/lib/wiki.ts`, T-05). Her günün artık kendi adresi var (`/21-agustos`
+biçiminde, `createBrowserRouter` + `src/lib/slug.ts`); `App.tsx`'te `day`/`month`
+için ayrı durum yok, URL tek doğruluk kaynağı; tarayıcı geri/ileri tuşu ve
+yenileme doğru çalışıyor; geçersiz adresler için kâğıt-yaprak temalı bir 404
+sayfası var; takvim yaprağının altında mobilde yerel paylaşım, masaüstünde panoya
+kopyalama yapan bir Paylaş düğmesi var (T-06).
 
 **Eksik / hatalı:** Ayrıntılı liste ve kanıtlar için → [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md)
 Özet başlıklar:
@@ -244,16 +265,18 @@ sayfa görünürlüğü artık tek paylaşılan bir `useInView` gözlemcisine ve
 - ~~Takvimde artık yıl kaynaklı gün-sayısı hatası~~ ✅ **T-03 ile çözüldü**
 - ~~Gün değişince sayaçların güncellenmemesi~~ ✅ **T-04 ile çözüldü**
 - ~~Sekme arka planda açıldığında sayfanın tamamen boş görünmesi~~ ✅ **T-04 ile çözüldü**
-- **Bulgu (T-03 sırasında keşfedildi, hâlâ açık):** "Önceki gün" / "Sonraki gün" /
-  "Bugüne dön" düğmeleri, dekoratif bir arka plan katmanının üzerlerini
-  kaplaması yüzünden gerçek bir tıklamayla tetiklenemiyor (K-5, henüz bir
-  talimata atanmadı — T-04 bilinçli olarak bunun dışında kaldı, kapsamı yalnızca
-  K-2/K-3 idi) → ayrıntı [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md#6-t-03-sırasında-keşfedilen-yeni-bulgu-2026-08-21)
+- **Bulgu (T-03 sırasında keşfedildi, hâlâ açık, T-06'da canlı yeniden doğrulandı):**
+  "Önceki gün" / "Sonraki gün" / "Bugüne dön" düğmeleri, dekoratif bir arka plan
+  katmanının üzerlerini kaplaması yüzünden gerçek bir tıklamayla tetiklenemiyor
+  (K-5, henüz bir talimata atanmadı — T-04 ve T-06 bilinçli olarak bunun dışında
+  kaldı) → ayrıntı [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md#6-t-03-sırasında-keşfedilen-yeni-bulgu-2026-08-21)
 - ~~HMR WebSocket'inin sabit porta bağlı olması~~ ✅ **T-01 ile çözüldü**
 - ~~Kullanılmayan 10 bağımlılık (paket boyutu ve kurulum süresi)~~ ✅ **T-01 ile çözüldü**
 - ~~`başlat.bat`'ın PowerShell ile elle port araması~~ ✅ **T-02 ile çözüldü**
 - ~~Editör ayarı / `.env` iskeleti / macOS-Linux başlatıcı yokluğu~~ ✅ **T-02 ile çözüldü**
-- Paylaşılabilir URL / yönlendirme yok
+- ~~Ağ isteklerinde iptal yoktu, TR doluyken bile EN her zaman boşuna çekiliyordu,
+  `localStorage` yedeğinde TTL/temizlik yoktu~~ ✅ **T-05 ile çözüldü**
+- ~~Paylaşılabilir URL / yönlendirme yok~~ ✅ **T-06 ile çözüldü**
 - Favicon, PWA, SEO meta eksik
 - Editör içeriği 366 günün yalnızca 10'unda
 - Test, lint, format altyapısı yok

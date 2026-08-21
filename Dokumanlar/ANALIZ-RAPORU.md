@@ -10,6 +10,8 @@
 > | 2026-08-21 | [T-01](../Talimatlar/Tamamland%C4%B1/T-01-proje-kimligi-ve-bagimlilik-temizligi.md) | K-4, O-1, O-2, O-3, m-2 |
 > | 2026-08-21 | [T-03](../Talimatlar/Tamamland%C4%B1/T-03-takvim-tarih-dogrulugu.md) | K-1 |
 > | 2026-08-21 | [T-04](../Talimatlar/Tamamland%C4%B1/T-04-sayac-ve-gorunurluk-hatalari.md) | K-2, K-3 |
+> | 2026-08-21 | [T-05](../Talimatlar/Tamamland%C4%B1/T-05-ag-katmani-saglamlastirma.md) | O-4, O-8 |
+> | 2026-08-21 | [T-06](../Talimatlar/Tamamland%C4%B1/T-06-yonlendirme-ve-paylasilabilir-baglanti.md) | U-1 |
 >
 > Bu rapor **ilk analiz anının** fotoğrafıdır; metin korunur, çözülen bulguların
 > başlığına `✅ ÇÖZÜLDÜ` işareti ve bir *Çözüm* bloğu eklenir.
@@ -24,8 +26,8 @@
 | `npm run build` | ✅ Geçiyor | 2.90 s · 253 kB JS (82 kB gzip) · 51 kB CSS |
 | Uygulama açılıyor mu | ✅ Evet | Veri geliyor, 23 kayıt listelendi |
 | Kritik hata | ⚠️ 5 adet · **4 çözüldü** | K-1…K-5 · K-1 ✅ T-03, K-2 ✅ T-04, K-3 ✅ T-04, K-4 ✅ T-01 · K-5 T-03 sırasında keşfedildi, henüz atanmadı |
-| Orta seviye eksik | ⚠️ 9 adet · **3 çözüldü** | O-1…O-9 · O-1, O-2, O-3 ✅ T-01 |
-| Ürün/içerik boşluğu | ⚠️ 5 adet | U-1…U-5 |
+| Orta seviye eksik | ⚠️ 9 adet · **5 çözüldü** | O-1…O-9 · O-1, O-2, O-3 ✅ T-01 · O-4, O-8 ✅ T-05 |
+| Ürün/içerik boşluğu | ⚠️ 5 adet · **1 çözüldü** | U-1…U-5 · U-1 ✅ T-06 |
 | Küçük not | ⚠️ 7 adet · **1 çözüldü** | m-1…m-7 · m-2 ✅ T-01 |
 
 **Kısa hüküm:** Uygulama sağlam bir iskelete ve gerçekten güzel bir tasarım diline sahip.
@@ -265,7 +267,7 @@ gürültülü hâle geliyor. Üretim paketine girmiyorlar (tree-shaking) ama pro
 > `.env` / `.env.*` (`!.env.example` istisnasıyla) eklendi. Dosya başlıklı
 > bloklara ayrıldı.
 
-### O-4 · Ağ katmanında iptal (abort) yok
+### O-4 · Ağ katmanında iptal (abort) yok — ✅ ÇÖZÜLDÜ (T-05)
 
 **Dosya:** `src/lib/wiki.ts:88-105, 289-303`
 
@@ -275,6 +277,25 @@ ve hepsi tamamlanır. Wikimedia hız sınırına takılmak mümkün.
 
 **İlgili:** `fetchDayData` **her zaman** TR ve EN'i paralel çeker (`Promise.all`), oysa
 EN yalnızca TR boşsa kullanılıyor. İsteklerin yaklaşık yarısı boşa gidiyor.
+
+> **✅ Çözüm — T-05 (2026-08-21)**
+>
+> `fetchDayData` artık TR'yi **önce** dener; `events`/`births`/`deaths`'ten biri bile
+> boşsa (`trThin`) EN'i **tamamlayıcı** olarak çeker — TR dolu bir günde EN hiç
+> çekilmiyor. `reqId` sayacı tamamen kaldırıldı; `useDayData` her efektte yeni bir
+> `AbortController` kurup temizlik fonksiyonunda `ctrl.abort()` çağırıyor, `load()` ve
+> `fetchWithRetry()` bu `signal`'i `fetch()`'e iletiyor. Ayrıca 429/5xx için en fazla
+> 2 deneme (400ms/800ms bekleme) eklendi; 404 ve diğer kalıcı hatalarda hiç deneme
+> yapılmıyor.
+>
+> **Doğrulama:** Canlı ortamda, `javascript_tool` ile uygulamanın kendi `wiki.ts`
+> modülü doğrudan çağrılarak doğrulandı (DevTools panelinin bu oturumda
+> compositing yapmaması ve K-5'in gün gezinme UI'sını engellemesi nedeniyle —
+> bkz. T-05 Tamamlanma Kaydı). TR verisi dolu bir günde (22 Ağustos, 20/80/75 kayıt)
+> **1 istek** (`/tr/`) — önceden 2 idi. `AbortController.abort()` çağrıldığında
+> `fetchDayData`'nın promise'i `AbortError` (`DOMException`) ile reddediyor ve bu
+> konsola hiçbir hata düşürmüyor. 404 için her dilde 1 çağrı (deneme yok); 429/5xx
+> için her dilde 2 çağrı (toplam 4). Ayrıntı → T-05 Tamamlanma Kaydı.
 
 ### O-5 · Hata sınırı (ErrorBoundary) yok
 
@@ -297,12 +318,30 @@ runtime hatası **tüm sayfayı beyaz ekrana** çevirir; kullanıcıya hiçbir m
 `BroadcastMode` içinde `←` `→` `Space` `Esc` çalışıyor (`talk.tsx:170-186`), fakat
 ana sayfada gün değiştirmek için klavye kısayolu yok. Gün geçişi bu ürünün ana eylemi.
 
-### O-8 · Önbellek stratejisi yarım
+### O-8 · Önbellek stratejisi yarım — ✅ ÇÖZÜLDÜ (T-05)
 
 - `memCache` (`wiki.ts:52`) hiç boşaltılmıyor — uzun oturumda sınırsız büyür.
 - `localStorage` yedeğinde **zaman damgası/TTL yok**; bir gün için kaydedilen veri
   Vikipedi güncellense bile ağ hatası anında süresiz kullanılır.
 - Ayrı ayrı `ty-otd-tr-MM-DD` anahtarları birikiyor, temizlik mekanizması yok.
+
+> **✅ Çözüm — T-05 (2026-08-21)**
+>
+> `localStorage` kayıtları artık `{ savedAt, data }` zarfında tutuluyor; 24 saatten
+> (`TTL_MS`) eski bir kayıt **atılmıyor**, `stale: true` ile dönüyor ve arayüzde
+> "önbellekten · 24 saatten eski" (bakır renkte) olarak gösteriliyor —
+> `App.tsx`'teki kaynak etiketi. Yeni `pruneCache()`, `ty-otd-` önekli anahtarları
+> tarayıp en eski olanlardan başlayarak **60 kaydın üzerini** siliyor; her başarılı
+> yazımdan sonra (yalnızca kota dolduğunda değil) çalışıyor. `memCache` için de
+> `memSet()` eklendi: **40 kayıt** sınırı, aşılırsa en eski giriş FIFO ile atılıyor.
+>
+> **Doğrulama:** 25 saat önce yazılmış bir kayıt + tamamen kesik ağ simülasyonuyla
+> `stale:true, offline:false` ve önbellekteki verinin doğru döndüğü kanıtlandı.
+> 65 sahte kayıt + 1 gerçek yazımla `pruneCache()`'in sayıyı **65'ten 60'a**
+> indirdiği doğrulandı. 41 farklı güne art arda istek yapılıp en eskisi tekrar
+> istendiğinde **yeni bir ağ isteğinin tetiklendiği** (belleğe alınmış hâlinin FIFO
+> ile atıldığı), en yenisinin ise hâlâ bellekte olduğu (yeni istek tetiklemediği)
+> canlı olarak kanıtlandı. Ayrıntı → T-05 Tamamlanma Kaydı.
 
 ### O-9 · `holidays` verisi çekiliyor ama neredeyse kullanılmıyor
 
@@ -314,13 +353,45 @@ başlı başına bir bölüm olmayı hak ediyor.
 
 ## 3. ÜRÜN VE İÇERİK BOŞLUKLARI
 
-### U-1 · Paylaşılabilir bağlantı yok — en büyük ürün eksiği
+### U-1 · Paylaşılabilir bağlantı yok — en büyük ürün eksiği — ✅ ÇÖZÜLDÜ (T-06)
 
 Uygulama tek URL'de çalışıyor. `21 Ağustos` sayfasının adresi yok; kullanıcı seçtiği
 günü **paylaşamıyor**, **yer imine ekleyemiyor**, tarayıcı **geri tuşu çalışmıyor**.
 "Bugün tarihte" türü bir üründe paylaşım birincil büyüme kanalıdır.
 
 `react-router-dom` zaten kurulu — sadece devreye alınmamış.
+
+> **✅ Çözüm — T-06 (2026-08-21)**
+>
+> Yeni `src/lib/slug.ts`: `toDaySlug`/`parseDaySlug`, ay adı biçiminde (`/21-agustos`)
+> okunur URL'ler üretir; `08-21` gibi sayısal biçimi de kabul edip kanonik ad biçimine
+> `replace` ile yönlendirir. `src/main.tsx`'te `createBrowserRouter` üç rota kuruyor:
+> `/` (bugüne `replace`), `/:daySlug` (`App`), `*` (yeni `NotFound.tsx`, 404). `App.tsx`
+> içindeki `day`/`month` için ayrı `useState` tamamen kaldırıldı; ikisi de artık
+> `useParams` → `parseDaySlug` üzerinden **URL'den türetiliyor** — URL tek doğruluk
+> kaynağı. Takvim yaprağının altına, mobilde `navigator.share` masaüstünde panoya
+> kopyalama yapan bir **Paylaş** düğmesi eklendi. Üretim SPA yönlendirmesi için
+> `public/_redirects` (Netlify/Cloudflare) ve kök `vercel.json` eklendi.
+>
+> **Doğrulama:** Canlı tarayıcıda `/` → `/21-agustos` (bugün) yönlendirmesi,
+> `/29-subat`'ın **404 vermediği** (29 Şubat arşiv modunda geçerli), `/32-agustos` /
+> `/0-ocak` / `/31-subat` / `/agustos`'un 404 gösterdiği, `/08-21`'in `/21-agustos`'a
+> kanonikleştiği doğrulandı. Gerçek tıklamayla hızlı seçim düğmesi ve mini takvimden
+> gün değiştirme URL'i güncelledi; tarayıcı geri/ileri tuşu bu geçişler arasında doğru
+> gezindi; `/29-ekim`'e doğrudan yükleme bugüne dönmedi. Paylaş düğmesi gerçek
+> tıklamayla test edildi — bu ortamda `navigator.share` yok, `copyText` yedeği
+> devreye girdi ve işletim sistemi panosunun değiştiği bağımsız olarak doğrulandı.
+> `npm run build && npm run preview` sonrası `/29-ekim`'e doğrudan `curl` HTTP 200
+> döndürdü (üretim SPA yönlendirmesi çalışıyor). `src/lib/date.ts` + `slug.ts`
+> mantığı ayrıca Node'da tarayıcısız, 366 günün tamamı için çift yönlü tutarlılık
+> testiyle doğrulandı. Ayrıntı → T-06 Tamamlanma Kaydı (döngüsel import düzeltmesi ve
+> Hooks sırası düzeltmesi dahil, ikisi de talimatın taslak koduna göre bir sapmaydı).
+>
+> **K-5 ile ilişki:** T-06 sırasında K-5 (gezinme düğmeleri gerçek tıklamayla
+> çalışmıyor, bkz. bölüm 6) canlı olarak **yeniden doğrulandı** — hâlâ mevcut, hâlâ
+> hiçbir talimata atanmadı. T-06 bilinçli olarak K-5'in DOM bölgesine dokunmadı; yeni
+> Paylaş düğmesi bu yüzden `CalendarLeaf`'in içine değil, `App.tsx`'te ona komşu
+> eklendi (K-5'in etki alanı dışında).
 
 ### U-2 · Editör içeriği 366 günün 10'unda (%2,7)
 
@@ -391,8 +462,8 @@ Kritik saf fonksiyonlar (`dayOfYear`, `classifyItem`, `formatYear`, `firstSenten
 ÖNCE   →  K-1✅ K-2✅ K-4✅  K-5   (görünür yanlış bilgi + bozuk geliştirme deneyimi + kırık birincil gezinme)
 SONRA  →  O-1✅ O-2✅ O-3✅     (temizlik — sonraki her iş bundan faydalanır)  [T-01 ile bitti]
 SONRA  →  K-3✅ O-5  O-6        (sağlamlık ve erişilebilirlik)
-SONRA  →  U-1  U-4             (paylaşım + kabuk — ürünü "yayınlanabilir" yapar)
-SONRA  →  O-4  O-7  O-8  O-9   (ağ, klavye, önbellek, içerik zenginliği)
+SONRA  →  U-1✅ U-4            (paylaşım + kabuk — ürünü "yayınlanabilir" yapar)  [U-1 T-06 ile bitti]
+SONRA  →  O-4✅ O-7  O-8✅ O-9   (ağ, klavye, önbellek, içerik zenginliği)  [O-4/O-8 T-05 ile bitti]
 SONRA  →  U-2  U-3             (içerik hacmi ve doğruluğu — sürekli iş)
 SON    →  U-5                  (test/lint — sonraki tüm işleri korur)
 ```

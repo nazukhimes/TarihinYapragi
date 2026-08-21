@@ -276,6 +276,17 @@ export function IconSearch({ className = "w-4 h-4" }: { className?: string }) {
   );
 }
 
+export function IconShare({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={`${ic} ${className}`} fill="none" aria-hidden>
+      <circle cx="18" cy="5.5" r="2.5" stroke="currentColor" strokeWidth="1.6" />
+      <circle cx="6" cy="12" r="2.5" stroke="currentColor" strokeWidth="1.6" />
+      <circle cx="18" cy="18.5" r="2.5" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M8.2 10.7 15.8 6.8M8.2 13.3l7.6 3.9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export function IconExternal({ className = "w-4 h-4" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={`${ic} ${className}`} fill="none" aria-hidden>

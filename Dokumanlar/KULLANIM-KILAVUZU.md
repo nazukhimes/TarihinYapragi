@@ -108,6 +108,9 @@ haftanın günü, gün sayısı, ay adı, yılın kaçıncı günü olduğu ve a
 
 Gün değiştiğinde yaprak **çevrilme animasyonuyla** yenilenir.
 
+Yaprağın altındaki gezinme düğmelerinin hemen altında bir **`PAYLAŞ`** düğmesi
+vardır — bkz. [Paylaşım](#paylaşım).
+
 ### Sayaçlar
 
 Dört kutu, o güne ait kayıt sayılarını gösterir. Her kutuya tıklayınca
@@ -142,10 +145,26 @@ yanında **"◆ dosya açık"** yazar.
 | **Bugüne dön** | Başka bir gündeyken ortadaki `BUGÜNE DÖN` düğmesi. Bugündeyseniz yerine yanıp sönen **● Bugün** yazar. |
 | **Ay takvimi** | Yaprağın üzerindeki `AĞUSTOS TAKVİMİ ▾` düğmesi → tam ay ızgarası açılır. Ok tuşlarıyla ay değiştirin, bir güne tıklayın. |
 | **Özel dosyalı gün** | Kısayol düğmelerinden birine tıklayın; sayfa yukarı kayar. |
-| **Adres çubuğu** | *Şu an desteklenmiyor* — planlanan özellik (T-06). |
+| **Adres çubuğu** | Her günün kendi adresi var: `siteadresi.com/21-agustos`. Adresi doğrudan yazıp Enter'a basabilir, yer imine ekleyebilir veya bir bağlantı olarak paylaşabilirsiniz. |
 
 > **Ay takviminde:** Seçili gün **kırmızı**, bugün **altın çerçeveli**tir.
 > Hafta Pazartesi'den başlar.
+
+> **Tarayıcı geri/ileri tuşu:** Gün değiştirdikçe adres çubuğu güncellenir, bu
+> yüzden tarayıcının **geri** ve **ileri** tuşları da önceki/sonraki günler
+> arasında gezinir — siteden çıkmaz.
+
+### Paylaşım
+
+Yaprağın altındaki **`PAYLAŞ`** düğmesi, o an baktığınız günün adresini paylaşır:
+
+- **Telefonda:** İşletim sisteminin kendi paylaşım ekranı açılır (WhatsApp,
+  Mesajlar, e-posta…) — orada göndermek istediğiniz uygulamayı seçin.
+- **Bilgisayarda:** Adres doğrudan panoya kopyalanır; **"Bağlantı panoya
+  kopyalandı"** bildirimi çıkar. Yapıştırmak istediğiniz yere `Ctrl+V` yapın.
+
+Paylaştığınız bağlantı açıldığında **aynı gün** doğrudan açılır — alıcı bugüne
+değil, sizin baktığınız güne bakar.
 
 ---
 
@@ -302,13 +321,23 @@ Kesin bilgi için kartlardaki **Vikipedi** bağlantısını izleyin.
 **S: 29 Şubat'ı seçebilir miyim?**
 Evet, tarihsel arşivde 29 Şubat kayıtları vardır ve takvimde her zaman görünür.
 
+**S: Belirli bir günü birine gönderebilir miyim?**
+Evet. Her günün kendi adresi vardır (`siteadresi.com/21-agustos`); adres
+çubuğundaki bağlantıyı kopyalayıp gönderebilir ya da yaprağın altındaki
+**`PAYLAŞ`** düğmesini kullanabilirsiniz — bkz. [Paylaşım](#paylaşım).
+
 **S: MÖ tarihler var mı?**
 Evet. Zaman tünelinde `MÖ 480` biçiminde gösterilir.
 
 **S: İnternet olmadan çalışır mı?**
 Kısmen. Daha önce açtığınız günler tarayıcı hafızasına kaydedilir ve internet
-kesildiğinde bu yedekten okunur. Hiç açmadığınız bir gün için
-*"Arşive şu an ulaşılamıyor"* uyarısı ve **`YENİDEN DENE`** düğmesi çıkar.
+kesildiğinde bu yedekten okunur. Bu yedek 24 saatten eskiyse (ör. bir haftadır
+internetsizseniz) atılmaz, yine gösterilir — ama kaynak etiketi
+**"önbellekten · 24 saatten eski"** yazar ve bakır renge döner, böylece
+gördüğünüz bilginin güncel olmayabileceğini anlarsınız. Hiç açmadığınız bir gün
+için *"Arşive şu an ulaşılamıyor"* uyarısı ve **`YENİDEN DENE`** düğmesi çıkar.
+Arşiv sunucusu yoğunsa (çok sık istek) uygulama birkaç saniye içinde otomatik
+olarak bir kez daha dener; siz bir şey yapmanıza gerek kalmaz.
 
 **S: Verilerim bir yere gönderiliyor mu?**
 Hayır. Uygulamanın sunucusu yoktur; hesap, çerez izleme veya analitik yoktur.

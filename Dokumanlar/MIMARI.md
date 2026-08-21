@@ -17,13 +17,19 @@
 │    · <div id="root">                                             │
 └──────────────────────────────┬───────────────────────────────────┘
                                │
-                    src/main.tsx  (6 satır)
+                    src/main.tsx
+                    createBrowserRouter([
+                      "/"         → Navigate → /{bugünün-slug'ı} (replace)
+                      "/:daySlug" → <App/>
+                      "*"         → <NotFound/>
+                    ])
                                │
                     ┌──────────▼──────────┐
                     │      App.tsx        │  ← TEK sayfa, tek durum sahibi
                     │  ------------------ │
+                    │  useParams():       │
+                    │   daySlug           │  → parseDaySlug → day, month (URL tek kaynak)
                     │  state:             │
-                    │   day, month        │  seçili gün
                     │   pickerOpen        │  mini takvim açık mı
                     │   query             │  arama metni
                     │   broadcast         │  yayın modu açık mı
@@ -31,6 +37,8 @@
                     │  useDayData()       │  → { data, loading, reload }
                     │  ------------------ │
                     │  6 adet useMemo     │  ham veriyi bölüm verisine dönüştürür
+                    │  ------------------ │
+                    │  !parsed → <NotFound/> (tüm hook'lardan sonra, en son)
                     └──────────┬──────────┘
                                │  props (aşağı doğru tek yön)
         ┌──────────────┬───────┴────────┬──────────────┐
@@ -41,7 +49,9 @@
 
 **Mimari karar:** Global durum yönetimi (Context/Redux/Zustand) **yok**.
 `App.tsx` tek durum sahibi, alt bileşenler saf sunum. Uygulama tek sayfa ve tek
-"seçili gün" ekseninde döndüğü için bu doğru bir sadeleştirme.
+"seçili gün" ekseninde döndüğü için bu doğru bir sadeleştirme. **Seçili günün
+kendisi de artık `App.tsx`'in kendi state'i değil** — `react-router-dom`'un URL
+state'i (T-06, bkz. 2.8).
 
 ---
 
@@ -52,13 +62,13 @@ Dosya dört sorumluluğu üstlenir:
 ### 2.1 Getirme ve normalleştirme
 
 ```
-fetchDayData(month, day)
-  ├─ memCache kontrolü            → varsa anında dön
-  ├─ load("tr") ve load("en") paralel
-  │    ├─ fetch(API/{lang}/onthisday/all/MM/DD)
-  │    ├─ başarılı → localStorage'a yaz ("ty-otd-{lang}-MM-DD")
-  │    └─ başarısız → localStorage'dan oku
-  ├─ ikisi de null → { offline: true, ...boş }
+fetchDayData(month, day, signal?)
+  ├─ memCache kontrolü (en fazla 40 kayıt, FIFO) → varsa anında dön
+  ├─ load("tr")  — fetchWithRetry(API/tr/onthisday/all/MM/DD, signal)
+  │    ├─ başarılı → localStorage'a { savedAt, data } yaz ("ty-otd-tr-MM-DD") + pruneCache()
+  │    └─ başarısız → localStorage'dan oku (varsa stale bayrağıyla) → yoksa DayError üret
+  ├─ trThin? (events/births/deaths'ten biri boş) → load("en") aynı akışla (tamamlayıcı)
+  ├─ ikisi de null → { offline: true, error: DayError, ...boş }
   ├─ pick(key): TR doluysa TR, değilse EN     ← alan bazında (events/births/deaths ayrı)
   └─ normalize(): year+text doğrula, pages'i 3 ile sınırla, id ata
 ```
@@ -67,11 +77,28 @@ fetchDayData(month, day)
 doğum yoksa; olaylar TR'den, doğumlar EN'den gelir. `data.sources` bunu takip eder ve
 arayüzde "kaynak: TR Vikipedi" olarak gösterilir.
 
+**TR-önce optimizasyonu (T-05):** `fetchDayData` artık EN'i **koşulsuz** çekmez —
+yalnızca TR'nin `events`/`births`/`deaths` alanlarından biri bile boşsa (`trThin`)
+EN tamamlayıcı olarak çekilir. TR'nin üç ana alanı doluyken `tr.holidays`/`tr.selected`
+boş kalsa bile EN'e düşülmez (istek sayısını yarıya indirmenin bilinçli bir bedeli —
+bkz. T-05 Tamamlanma Kaydı). `load()` ve `fetchWithRetry()` bir `AbortSignal` alır;
+`useDayData` her gün değişiminde önceki isteği `AbortController.abort()` ile iptal
+eder (eski `reqId` sayacı **kaldırıldı**). `fetchWithRetry()` yalnızca 429/5xx için
+en fazla 2 deneme yapar (400ms/800ms bekleme); 404 ve diğer kalıcı hatalarda hiç
+denemez. HTTP durumu `classifyStatus()` ile `DayErrorKind`'a
+(`network`/`notfound`/`ratelimit`/`server`/`unknown`) sınıflandırılır.
+
+**Önbellek (T-05):** `localStorage` kaydı artık `{ savedAt, data }` zarfında; 24 saat
+(`TTL_MS`) sonra `stale: true` ile döner (veri **atılmaz**, yalnızca işaretlenir —
+arayüzde "önbellekten · 24 saatten eski" olarak gösterilir). `pruneCache()` her
+başarılı yazımdan sonra `ty-otd-` önekli anahtarları tarar, en eski olanlardan
+başlayarak **60 kaydın üzerini** siler. `memCache` için `memSet()` aynı mantığı
+FIFO ile bellek üzerinde uygular, sınır **40 kayıt**.
+
 **`API` sabiti nereden geliyor:** `wiki.ts` artık URL'i kendi içinde tanımlamaz;
 `import { WIKI_API_BASE as API } from "./config"` ile alır (T-02). `config.ts`
 `VITE_WIKI_API_BASE` ortam değişkenini okur, yoksa üretim Wikimedia adresine düşer.
-API sözleşmesini değiştirecek talimatlar (T-05) yine yalnızca `wiki.ts`'e dokunur;
-taban adresi değiştirecekseniz `config.ts`'e bakın.
+Taban adresi değiştirecekseniz `config.ts`'e bakın.
 
 ### 2.2 Sınıflandırma — `classifyItem()`
 
@@ -115,9 +142,14 @@ En fazla 5 kart üretir, sabit bir sırayla:
 
 ### 2.5 Hook — `useDayData(month, day)`
 
-`reqId` sayacı yarış durumuna (race condition) karşı koruma sağlar: geç dönen eski
-istek, `reqId.current === id` kontrolünü geçemez ve state'i kirletemez.
-**Not:** İstek iptal edilmez, yalnızca sonucu yok sayılır (bkz. ANALIZ-RAPORU O-4).
+`{ data, loading, error, reload }` döner (T-05'te `error: DayError | null` eklendi;
+`App.tsx` şu an bunu tüketmiyor — hata **ekranı** T-09'un kapsamında). Yarış durumuna
+(race condition) karşı koruma artık eski `reqId` sayacı yerine gerçek iptaldir: her
+efekt yeni bir `AbortController` kurar, temizlik fonksiyonu `ctrl.abort()` çağırır,
+`fetchDayData`'ya `ctrl.signal` iletilir. Geç dönen eski istek artık yalnızca
+yok sayılmaz — **ağ düzeyinde iptal edilir** (bkz. ANALIZ-RAPORU O-4, ✅ T-05).
+`AbortError` `isAbortError()` ile ayırt edilip sessizce yutulur; `error` state'i
+yalnızca *beklenmeyen* (abort dışı) bir promise reddi için bir güvenlik ağıdır.
 
 ### 2.6 Tarih yardımcıları — `src/lib/date.ts`
 
@@ -152,6 +184,41 @@ kesişim, (2) `setTimeout` zaman aşımı, (3) `IntersectionObserver` tarayıcı
 yoksa senkron olarak. Üçü de aynı sonucu üretir: **içerik hiçbir koşulda kalıcı
 olarak gizli kalmaz.** `Reveal` ve `CountUp` (bkz. 4.5) bu hook'u kullanır;
 `ui.tsx` içinde artık doğrudan `new IntersectionObserver` çağrısı yoktur.
+
+### 2.8 Yönlendirme — `src/lib/slug.ts` + `src/main.tsx` (T-06)
+
+Her gün kendi URL'sine sahip: `/21-agustos` (ana biçim, ay adıyla) veya `/08-21`
+(sayısal, kanonik ad biçimine `replace` ile yönlenir).
+
+```
+toDaySlug(month, day)   → "21-agustos"   (ay adı MONTH_SLUGS'tan, Türkçe karaktersiz)
+parseDaySlug(slug)      → { month, day } | null
+  ├─ "\d{1,2}-\d{1,2}"     → sayısal biçim (08-21)
+  ├─ "\d{1,2}-[a-z]+"      → ad biçimi (21-agustos), MONTH_SLUGS.indexOf ile ay bulunur
+  └─ isValidDay()          → daysInMonth(month) ile sınır kontrolü, YIL VERİLMEZ
+                              (29 Şubat arşiv modunda her zaman geçerli)
+```
+
+`MONTH_SLUGS`, `../components/leaf`'teki `MONTHS_TR`'den türetilir (tek kaynak,
+tekrar yok) — **bu, `lib` → `components` yönünde bir bağımlılık** ve projenin
+genel katman yönüne ters düşer; bilinçli bir ödünleşim (T-06'da böyle
+belirlendi). **Dikkat:** `components/leaf.tsx`'in kendisi `slug.ts`'ten hiçbir
+şey içe aktarmamalı — aksi hâlde döngüsel import oluşur. T-06 sırasında tam
+olarak bu hataya düşüldü (Paylaş düğmesi ilk denemede `leaf.tsx`'e eklenmişti,
+`toDaySlug` içe aktarımıyla döngü oluştu); `vite build` (Rollup) bunu
+**yakalamadı**, yalnızca `vite dev`'in native ESM sırası `ReferenceError: Cannot
+access 'MONTHS_TR' before initialization` olarak açığa çıkardı. Bu yüzden Paylaş
+düğmesi (`shareDay`) `App.tsx`'te yaşıyor, `leaf.tsx`'te değil.
+
+`src/main.tsx`, `createBrowserRouter` ile üç rota kurar: `/` bugünün slug'ına
+`replace` ile yönlenir (geçmişte iz bırakmaz), `/:daySlug` `App`'i render eder,
+`*` (eşleşmeyen her şey) `NotFound`'u render eder. `App.tsx` içinde `day`/`month`
+için **ayrı `useState` yoktur** — `useParams()` → `parseDaySlug()` üzerinden
+URL'den türetilir; gün değiştirme (`setDate`) `navigate(/${toDaySlug(m,d)})`
+çağırır. Slug geçersizse `App` yine de **tüm hook'larını** (Hooks kuralları
+gereği) bugünün verisiyle boşa çalıştırıp en sonda `<NotFound/>` döner —
+`day`/`month`'un state yerine URL'den türetilmiş olması bunu mümkün kılan
+tasarımın parçasıdır.
 
 ---
 
@@ -326,7 +393,9 @@ Hepsi dosya sonundaki `@media (prefers-reduced-motion: reduce)` bloğuyla 0.01ms
 
 ## 7. Performans Notları
 
-**Mevcut derleme:** 253 kB JS (82 kB gzip), 51 kB CSS (10 kB gzip), 34 modül, 2.9 s.
+**Mevcut derleme:** 324,12 kB JS (105,76 kB gzip), 53,09 kB CSS (10,07 kB gzip), 44 modül.
+Artış `react-router-dom`'un artık gerçekten paketlenmesinden (T-06 öncesi kurulu
+ama kullanılmadığı için tree-shaking ile tamamen düşüyordu).
 
 Bilinen maliyet kalemleri:
 
@@ -353,8 +422,9 @@ Tam liste ve kanıtlar → [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md)
 | ~~K-4~~ | ~~HMR sabit port~~ **✅ çözüldü** | T-01 · 2026-08-21 |
 | K-5 | Gün gezinme düğmeleri (Önceki/Sonraki/Bugüne dön) dekoratif katman yüzünden tıklanamıyor — T-03 sırasında keşfedildi | Henüz atanmadı (T-04 kapsamı yalnızca K-2/K-3 idi) |
 | ~~O-1~~ | ~~10 kullanılmayan bağımlılık~~ **✅ çözüldü** (11 paket kaldırıldı, `react-router-dom` korundu) | T-01 · 2026-08-21 |
-| O-4 | Ağ isteği iptali yok | T-05 |
+| ~~O-4~~ | ~~Ağ isteği iptali yok, TR doluyken de EN çekiliyordu~~ **✅ çözüldü** (`AbortController` + TR-önce/EN-tamamlayıcı + 429/5xx için sınırlı deneme) | T-05 · 2026-08-21 |
+| ~~O-8~~ | ~~Önbellek stratejisi yarım (TTL/sınır yok)~~ **✅ çözüldü** (`savedAt`/`stale`, `pruneCache()` 60 kayıt, `memSet()` 40 kayıt FIFO) | T-05 · 2026-08-21 |
 | O-5 | ErrorBoundary yok | T-09 |
-| U-1 | Yönlendirme / paylaşılabilir URL yok | T-06 |
+| ~~U-1~~ | ~~Yönlendirme / paylaşılabilir URL yok~~ **✅ çözüldü** (`createBrowserRouter` + `src/lib/slug.ts`, URL tek doğruluk kaynağı) | T-06 · 2026-08-21 |
 | U-2 | İçerik 10/366 gün | T-10 |
 | U-5 | Test/lint altyapısı yok | T-12 |

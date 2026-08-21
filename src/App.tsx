@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   CATEGORIES,
   CURATED,
@@ -15,6 +16,7 @@ import {
   useDayData,
 } from "./lib/wiki";
 import { CalendarLeaf, LiveClock, MONTHS_TR, Ticker } from "./components/leaf";
+import { NotFound } from "./components/NotFound";
 import {
   CasesSection,
   formatYear,
@@ -27,6 +29,7 @@ import {
 } from "./components/sections";
 import { BroadcastMode, TalkSection } from "./components/talk";
 import {
+  copyText,
   CountUp,
   IconAtom,
   IconDossier,
@@ -34,11 +37,14 @@ import {
   IconMic,
   IconQuill,
   IconSearch,
+  IconShare,
   IconSkull,
   Reveal,
   SectionHead,
+  toast,
   Toaster,
 } from "./components/ui";
+import { parseDaySlug, toDaySlug } from "./lib/slug";
 
 const trLower = (s: string) => s.toLocaleLowerCase("tr-TR");
 
@@ -64,19 +70,58 @@ const NAV = [
 ];
 
 export default function App() {
+  const { daySlug } = useParams<{ daySlug: string }>();
+  const navigate = useNavigate();
   const today = new Date();
-  const [day, setDay] = useState(today.getDate());
-  const [month, setMonth] = useState(today.getMonth() + 1);
+
+  // URL tek doğruluk kaynağıdır — day/month için ayrı state yok.
+  // Slug geçersizse aşağıdaki tüm hesaplamalar bugünün verisiyle boşa döner;
+  // hook sırası sabit kalsın diye erken çıkış en sondaki JSX dönüşüne bırakılır.
+  const parsed = useMemo(() => parseDaySlug(daySlug ?? ""), [daySlug]);
+  const day = parsed?.day ?? today.getDate();
+  const month = parsed?.month ?? today.getMonth() + 1;
+
   const [pickerOpen, setPickerOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [broadcast, setBroadcast] = useState(false);
 
   const { data, loading, reload } = useDayData(month, day);
 
+  const setDate = useCallback(
+    (d: number, m: number) => navigate(`/${toDaySlug(m, d)}`),
+    [navigate]
+  );
+
+  // sayısal biçim (/08-21) → kanonik ad biçimine (/21-agustos) yönlendir
+  useEffect(() => {
+    if (!parsed) return;
+    const canonical = toDaySlug(parsed.month, parsed.day);
+    if (daySlug !== canonical) navigate(`/${canonical}`, { replace: true });
+  }, [parsed, daySlug, navigate]);
+
   const key = curatedKey(month, day);
   const curated = CURATED[key];
   const dayLabel = `${day} ${MONTHS_TR[month - 1]}`;
   const isToday = day === today.getDate() && month === today.getMonth() + 1;
+
+  const shareDay = useCallback(async () => {
+    const url = `${location.origin}/${toDaySlug(month, day)}`;
+    const shareData = {
+      title: `${dayLabel} — Tarih Yaprağı`,
+      text: `${dayLabel} tarihinde neler olmuş?`,
+      url,
+    };
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+        return;
+      } catch {
+        /* kullanıcı vazgeçti */
+      }
+    }
+    const ok = await copyText(url);
+    toast(ok ? "Bağlantı panoya kopyalandı" : "Kopyalanamadı");
+  }, [month, day, dayLabel]);
 
   /* ---------- birleşik zaman tüneli ---------- */
   const mergedEvents: MergedEvent[] = useMemo(() => {
@@ -198,6 +243,9 @@ export default function App() {
     return [...new Set(ys)].slice(0, 3);
   }, [mergedEvents]);
 
+  // geçersiz slug → 404 (tüm hook'lardan sonra, her render'da aynı sırayı korumak için)
+  if (!parsed) return <NotFound />;
+
   const searching = query.trim().length > 0;
   const stats = [
     { label: "Tarihî olay", value: mergedEvents.length, color: "#e8b04b", icon: <IconQuill className="w-4.5 h-4.5" /> },
@@ -306,14 +354,21 @@ export default function App() {
                 day={day}
                 month={month}
                 year={today.getFullYear()}
-                onChangeDay={(d, m) => {
-                  setDay(d);
-                  setMonth(m);
-                }}
+                onChangeDay={setDate}
                 onOpenPicker={() => setPickerOpen((o) => !o)}
                 pickerOpen={pickerOpen}
                 isToday={isToday}
               />
+              <div className="mt-3 flex justify-center">
+                <button
+                  onClick={shareDay}
+                  aria-label={`${dayLabel} gününü paylaş`}
+                  className="group inline-flex items-center gap-2 px-4 py-2 rounded-sm border border-line bg-panel/60 text-ink-faint hover:text-gold hover:border-gold/60 transition-all duration-200 cursor-pointer"
+                >
+                  <IconShare className="w-3.5 h-3.5 group-hover:text-gold transition-colors" />
+                  <span className="font-mono text-[11px] tracking-[0.2em] uppercase">Paylaş</span>
+                </button>
+              </div>
             </Reveal>
 
             {/* günün özeti */}
@@ -325,8 +380,12 @@ export default function App() {
                   </span>
                   <span className="h-px flex-1 bg-line" />
                   {data && !loading && (
-                    <span className="font-mono text-[11px] text-ink-faint">
-                      {data.offline ? "çevrimdışı önbellek" : `kaynak: ${data.sources.events === "tr" ? "TR" : "EN"} Vikipedi`}
+                    <span className={`font-mono text-[11px] ${data.stale ? "text-copper" : "text-ink-faint"}`}>
+                      {data.offline
+                        ? "çevrimdışı önbellek"
+                        : data.stale
+                          ? "önbellekten · 24 saatten eski"
+                          : `kaynak: ${data.sources.events === "tr" ? "TR" : "EN"} Vikipedi`}
                     </span>
                   )}
                 </div>
@@ -427,8 +486,7 @@ export default function App() {
                       <button
                         key={k}
                         onClick={() => {
-                          setDay(d);
-                          setMonth(m);
+                          setDate(d, m);
                           window.scrollTo({ top: 0, behavior: "smooth" });
                         }}
                         className={`px-3 py-1.5 rounded-sm font-mono text-[11.5px] tracking-wide transition-all duration-200 cursor-pointer border ${

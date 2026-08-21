@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import type { CategoryId, TalkCard } from "../data/curated";
 import { WIKI_API_BASE as API } from "./config";
 
@@ -25,6 +25,14 @@ export interface HolidayItem {
   id: string;
 }
 
+export type DayErrorKind = "network" | "notfound" | "ratelimit" | "server" | "unknown";
+
+export interface DayError {
+  kind: DayErrorKind;
+  message: string; // kullanıcıya gösterilecek Türkçe metin
+  retryable: boolean;
+}
+
 export interface DayData {
   events: OtdItem[];
   births: OtdItem[];
@@ -33,6 +41,8 @@ export interface DayData {
   selected: OtdItem[];
   sources: { events: "tr" | "en"; births: "tr" | "en"; deaths: "tr" | "en" };
   offline: boolean;
+  stale: boolean; // TTL dolmuş önbellekten geldi
+  error: DayError | null;
   fetchedAt: number;
 }
 
@@ -49,7 +59,23 @@ interface RawDay {
   selected?: RawOtd[];
 }
 
+interface LoadResult {
+  raw: RawDay | null;
+  stale: boolean;
+  error: DayError | null;
+}
+
 const memCache = new Map<string, DayData>();
+
+const TTL_MS = 24 * 60 * 60 * 1000; // 24 saat
+const LS_PREFIX = "ty-otd-";
+const MAX_ENTRIES = 60;
+const MAX_MEM = 40;
+
+interface CachedDay {
+  savedAt: number;
+  data: RawDay;
+}
 
 function normalize(raw: RawOtd[] | undefined, lang: "tr" | "en", prefix: string): OtdItem[] {
   if (!raw) return [];
@@ -64,11 +90,47 @@ function normalize(raw: RawOtd[] | undefined, lang: "tr" | "en", prefix: string)
     }));
 }
 
-function lsGet(key: string): RawDay | null {
+function isAbortError(e: unknown): e is DOMException {
+  return e instanceof DOMException && e.name === "AbortError";
+}
+
+function classifyStatus(status: number): DayError {
+  if (status === 404) {
+    return { kind: "notfound", message: "Bu gün için Vikipedi'de kayıt bulunamadı.", retryable: false };
+  }
+  if (status === 429) {
+    return { kind: "ratelimit", message: "Arşiv çok yoğun. Biraz sonra tekrar deneyin.", retryable: true };
+  }
+  if (status >= 500) {
+    return { kind: "server", message: "Vikipedi sunucusu yanıt vermiyor.", retryable: true };
+  }
+  return { kind: "unknown", message: "Beklenmeyen bir sorun oluştu.", retryable: true };
+}
+
+function toDayError(_e: unknown): DayError {
+  return { kind: "unknown", message: "Beklenmeyen bir sorun oluştu.", retryable: true };
+}
+
+/** 429 ve 5xx için en fazla `tries` deneme (400ms, 800ms bekleme); diğer hatalarda ilk yanıt döner. */
+async function fetchWithRetry(url: string, signal?: AbortSignal, tries = 2): Promise<Response> {
+  let last: Response | undefined;
+  for (let i = 0; i < tries; i++) {
+    const res = await fetch(url, { signal });
+    if (res.ok) return res;
+    if (res.status !== 429 && res.status < 500) return res; // kalıcı hata, deneme
+    last = res;
+    await new Promise((r) => setTimeout(r, 400 * (i + 1))); // 400ms, 800ms
+  }
+  return last!;
+}
+
+function lsGet(key: string): { data: RawDay; stale: boolean } | null {
   try {
     const raw = localStorage.getItem(key);
     if (!raw) return null;
-    return JSON.parse(raw) as RawDay;
+    const parsed = JSON.parse(raw) as CachedDay;
+    if (!parsed?.data) return null; // eski biçim → yok say
+    return { data: parsed.data, stale: Date.now() - parsed.savedAt > TTL_MS };
   } catch {
     return null;
   }
@@ -76,13 +138,46 @@ function lsGet(key: string): RawDay | null {
 
 function lsSet(key: string, data: RawDay) {
   try {
-    localStorage.setItem(key, JSON.stringify(data));
+    const payload: CachedDay = { savedAt: Date.now(), data };
+    localStorage.setItem(key, JSON.stringify(payload));
+    pruneCache(); // MAX_ENTRIES sınırını her yazımda uygula (ucuz: sınır altındaysa hiçbir şey silmez)
   } catch {
-    /* dolu olabilir */
+    pruneCache(); // dolmuşsa temizle
+    try {
+      localStorage.setItem(key, JSON.stringify({ savedAt: Date.now(), data } as CachedDay));
+    } catch {
+      /* pes */
+    }
   }
 }
 
-export async function fetchDayData(month: number, day: number): Promise<DayData> {
+function pruneCache() {
+  const entries: { key: string; savedAt: number }[] = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (!k?.startsWith(LS_PREFIX)) continue;
+    try {
+      const p = JSON.parse(localStorage.getItem(k)!) as CachedDay;
+      entries.push({ key: k, savedAt: p?.savedAt ?? 0 });
+    } catch {
+      localStorage.removeItem(k); // bozuk kayıt
+    }
+  }
+  entries
+    .sort((a, b) => a.savedAt - b.savedAt) // en eski önce
+    .slice(0, Math.max(0, entries.length - MAX_ENTRIES))
+    .forEach((e) => localStorage.removeItem(e.key));
+}
+
+function memSet(key: string, data: DayData) {
+  if (memCache.size >= MAX_MEM) {
+    const oldestKey = memCache.keys().next().value;
+    if (oldestKey !== undefined) memCache.delete(oldestKey); // en eskisini at (FIFO)
+  }
+  memCache.set(key, data);
+}
+
+export async function fetchDayData(month: number, day: number, signal?: AbortSignal): Promise<DayData> {
   const cacheKey = `day-${month}-${day}`;
   const hit = memCache.get(cacheKey);
   if (hit) return hit;
@@ -90,20 +185,38 @@ export async function fetchDayData(month: number, day: number): Promise<DayData>
   const mm = String(month).padStart(2, "0");
   const dd = String(day).padStart(2, "0");
 
-  const load = async (lang: "tr" | "en"): Promise<RawDay | null> => {
-    const lsKey = `ty-otd-${lang}-${mm}-${dd}`;
+  const load = async (lang: "tr" | "en"): Promise<LoadResult> => {
+    const lsKey = `${LS_PREFIX}${lang}-${mm}-${dd}`;
     try {
-      const res = await fetch(`${API}/${lang}/onthisday/all/${mm}/${dd}`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const res = await fetchWithRetry(`${API}/${lang}/onthisday/all/${mm}/${dd}`, signal);
+      if (!res.ok) {
+        const cached = lsGet(lsKey);
+        if (cached) return { raw: cached.data, stale: cached.stale, error: null };
+        return { raw: null, stale: false, error: classifyStatus(res.status) };
+      }
       const data = (await res.json()) as RawDay;
       lsSet(lsKey, data);
-      return data;
-    } catch {
-      return lsGet(lsKey);
+      return { raw: data, stale: false, error: null };
+    } catch (e) {
+      if (isAbortError(e)) throw e; // beklenen iptal, yukarı ilet
+      const cached = lsGet(lsKey);
+      if (cached) return { raw: cached.data, stale: cached.stale, error: null };
+      return { raw: null, stale: false, error: { kind: "network", message: "İnternet bağlantısı kurulamadı.", retryable: true } };
     }
   };
 
-  const [tr, en] = await Promise.all([load("tr"), load("en")]);
+  // TR'yi önce dene; TR'de üç ana alandan biri bile boşsa EN'i tamamlayıcı olarak çek
+  const trResult = await load("tr");
+  const trThin =
+    !trResult.raw ||
+    !trResult.raw.events?.length ||
+    !trResult.raw.births?.length ||
+    !trResult.raw.deaths?.length;
+
+  const enResult = trThin ? await load("en") : null;
+
+  const tr = trResult.raw;
+  const en = enResult?.raw ?? null;
 
   if (!tr && !en) {
     return {
@@ -114,6 +227,8 @@ export async function fetchDayData(month: number, day: number): Promise<DayData>
       selected: [],
       sources: { events: "en", births: "en", deaths: "en" },
       offline: true,
+      stale: false,
+      error: trResult.error ?? enResult?.error ?? null,
       fetchedAt: Date.now(),
     };
   }
@@ -147,9 +262,11 @@ export async function fetchDayData(month: number, day: number): Promise<DayData>
     selected,
     sources: { events: events.src, births: births.src, deaths: deaths.src },
     offline: false,
+    stale: trResult.stale || (enResult?.stale ?? false),
+    error: null,
     fetchedAt: Date.now(),
   };
-  memCache.set(cacheKey, data);
+  memSet(cacheKey, data);
   return data;
 }
 
@@ -292,19 +409,27 @@ export function buildAutoTalk(day: DayData): TalkCard[] {
 export function useDayData(month: number, day: number) {
   const [data, setData] = useState<DayData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<DayError | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
-  const reqId = useRef(0);
 
   useEffect(() => {
-    const id = ++reqId.current;
+    const ctrl = new AbortController();
     setLoading(true);
-    fetchDayData(month, day).then((d) => {
-      if (reqId.current === id) {
+    setError(null);
+
+    fetchDayData(month, day, ctrl.signal)
+      .then((d) => {
         setData(d);
         setLoading(false);
-      }
-    });
+      })
+      .catch((e: unknown) => {
+        if (isAbortError(e)) return; // beklenen iptal, sessiz geç
+        setError(toDayError(e));
+        setLoading(false);
+      });
+
+    return () => ctrl.abort(); // gün değişince öncekini kes
   }, [month, day, reloadKey]);
 
-  return { data, loading, reload: () => setReloadKey((k) => k + 1) };
+  return { data, loading, error, reload: () => setReloadKey((k) => k + 1) };
 }

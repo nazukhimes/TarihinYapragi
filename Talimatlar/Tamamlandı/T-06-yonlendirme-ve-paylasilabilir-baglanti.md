@@ -7,7 +7,7 @@
 | **Tahmini süre** | ~4 saat |
 | **Bağımlılık** | T-01, T-03, T-04 |
 | **İlgili bulgu** | U-1 |
-| **Durum** | ⬜ Bekliyor |
+| **Durum** | ✅ Tamamlandı |
 
 ---
 
@@ -276,19 +276,19 @@ sunucunun `index.html` döndürmesi gerekir.
 
 ## ☑️ Kabul Kriterleri
 
-- [ ] `src/lib/slug.ts` var; `toDaySlug` ve `parseDaySlug` çift yönlü tutarlı
-- [ ] `/` adresi bugünün slug'ına `replace` ile yönleniyor (geçmişte iz bırakmıyor)
-- [ ] `/21-agustos` doğrudan açılıyor ve doğru günü gösteriyor
-- [ ] `/08-21` açılıyor ve `/21-agustos` adresine `replace` ile yönleniyor
-- [ ] `/olmayan-sey` 404 sayfası gösteriyor
-- [ ] `/32-agustos` ve `/0-ocak` 404 gösteriyor
-- [ ] `/29-subat` **geçerli** — 404 değil
-- [ ] `App.tsx` içinde `day` / `month` için `useState` **yok** — tek kaynak URL
-- [ ] Geri / ileri tuşları gün geçişlerinde çalışıyor
-- [ ] Paylaş düğmesi var; mobilde yerel paylaşım, masaüstünde panoya kopyalama
-- [ ] `public/_redirects` ve `vercel.json` var
-- [ ] `npm run typecheck` hatasız
-- [ ] `npm run build` hatasız
+- [x] `src/lib/slug.ts` var; `toDaySlug` ve `parseDaySlug` çift yönlü tutarlı
+- [x] `/` adresi bugünün slug'ına `replace` ile yönleniyor (geçmişte iz bırakmıyor)
+- [x] `/21-agustos` doğrudan açılıyor ve doğru günü gösteriyor
+- [x] `/08-21` açılıyor ve `/21-agustos` adresine `replace` ile yönleniyor
+- [x] `/olmayan-sey` 404 sayfası gösteriyor
+- [x] `/32-agustos` ve `/0-ocak` 404 gösteriyor
+- [x] `/29-subat` **geçerli** — 404 değil
+- [x] `App.tsx` içinde `day` / `month` için `useState` **yok** — tek kaynak URL
+- [x] Geri / ileri tuşları gün geçişlerinde çalışıyor
+- [x] Paylaş düğmesi var; mobilde yerel paylaşım, masaüstünde panoya kopyalama
+- [x] `public/_redirects` ve `vercel.json` var
+- [x] `npm run typecheck` hatasız
+- [x] `npm run build` hatasız
 
 ---
 
@@ -363,7 +363,97 @@ npm run build && npm run preview
 
 ## 📝 Tamamlanma Kaydı
 
-- **Tamamlanma tarihi:**
+- **Tamamlanma tarihi:** 2026-08-21
+
 - **Değişen dosyalar:**
+  - `src/lib/slug.ts` *(yeni)* — `toDaySlug`, `parseDaySlug`, `MONTH_SLUGS`
+  - `src/components/NotFound.tsx` *(yeni)* — 404 sayfası (yırtık kâğıt yaprak metaforu)
+  - `src/components/ui.tsx` — `IconShare` eklendi
+  - `src/main.tsx` — `createBrowserRouter` + `RouterProvider` kuruldu (`/`, `/:daySlug`, `*`)
+  - `src/App.tsx` — `day`/`month` `useState`'i kaldırıldı, `useParams`/`parseDaySlug`'tan türetiliyor; `setDate` (→ `navigate`) eklendi; sayısal biçim → kanonik yönlendirme `useEffect`'i eklendi; geçersiz slug için `<NotFound/>` erken dönüşü eklendi; Paylaş düğmesi + `shareDay` eklendi; iki `setDay/setMonth` çağrı noktası `setDate`'e taşındı
+  - `public/_redirects` *(yeni)* — Netlify/Cloudflare Pages SPA yönlendirmesi
+  - `vercel.json` *(yeni, kökte)* — Vercel SPA yönlendirmesi
+  - `.claude/launch.json` — `autoPort: true` (bu oturumda port 3000 başka bir oturumun sunucusuyla çakıştığı için; kalıcı, zararsız bir sağlamlaştırma — `vite.config.ts`'teki `strictPort: false` ile aynı felsefe)
+
 - **Sapmalar / notlar:**
+  - **Kod tanımlayıcı dili:** Talimattaki örnek kod `paylas`, `veri`, `bugun` gibi Türkçe
+    tanımlayıcılar kullanıyor; bu, `BAGLAM.md` §5'teki "kod tanımlayıcıları İngilizce"
+    kuralıyla çelişiyordu. Kural uygulandı: `paylas`→`shareDay`, `veri`→`shareData`,
+    `bugun`→`today`. Davranış birebir aynı.
+  - **Hook sırası düzeltmesi (talimat taslağındaki bir hataydı):** Talimatın Adım 4 örneği
+    `if (!parsed) return <NotFound />;`'ı `useDayData` ve altındaki `useMemo`'lardan **önce**
+    gösteriyor. Bu, React'ın Hooks kurallarını ihlal eder: aynı `App` bileşen örneği geçerli
+    bir slug'dan geçersiz bir slug'a (veya tersi) istemci tarafı geçiş yaptığında render
+    başına çağrılan hook sayısı değişir → React "Rendered fewer hooks than expected" ile
+    çöker. Çözüm: `parsed` geçersizken `day`/`month` bugünün tarihine düşer (hesaplama
+    çalışır ama sonucu kullanılmaz), tüm hook'lar (dahil `useDayData`, tüm `useMemo`'lar,
+    yeni `useCallback`/`useEffect`) **koşulsuz** her render'da çağrılır; `if (!parsed) return
+    <NotFound />` en son hook'tan (`ambientYears`) **sonra**, ilk hook-olmayan satırdan
+    (`searching`) **önce** konumlandırıldı. Bedel: geçersiz bir adres için gereksiz bir
+    "bugün" verisi çekilir (kullanılmaz) — kabul edilebilir bir ödünleşim.
+  - **Döngüsel import (canlı testte yakalandı):** Talimat, `slug.ts`'in `MONTHS_TR`'yi
+    `components/leaf.tsx`'ten almasını öneriyor. Paylaş düğmesini de `leaf.tsx`'e (`toDaySlug`
+    kullanarak) eklemek `leaf.tsx ↔ slug.ts` döngüsü yarattı; `tsc` ve `vite build`
+    (Rollup) bunu **yakalamadı**, ama `vite dev`'in native ESM sırası anında
+    `ReferenceError: Cannot access 'MONTHS_TR' before initialization` fırlattı — sayfa
+    tamamen beyaz kaldı. Bu, doğrulamanın yalnızca `typecheck`/`build`'e değil, **gerçek
+    tarayıcıya** neden bakılması gerektiğinin doğrudan kanıtı. Çözüm: Paylaş düğmesi ve
+    `shareDay` `leaf.tsx`'ten `App.tsx`'e taşındı (döngü tamamen ortadan kalktı; `App.tsx`
+    zaten hem `MONTHS_TR`'yi hem `lib/slug`'ı içe aktarıyordu).
+  - **Paylaş düğmesinin yeri — talimattan bilinçli sapma:** Talimat "Takvim yaprağının
+    altındaki gezinme satırına ekle" diyor (yani `CalendarLeaf`'in "Önceki/Bugün/Sonraki"
+    satırının içine). Yukarıdaki döngü sorunu bunu zaten engelliyordu; ayrıca o satır
+    **K-5**'in tam olarak etkilediği DOM bölgesi (bkz. `ANALIZ-RAPORU.md` K-5) —
+    dekoratif `position:absolute; inset:0` katmanlar, konumlanmamış (`static`) kardeşlerin
+    üzerinde boyanıyor. Düğme `App.tsx`'te `<CalendarLeaf/>`'in **kardeşi** olarak, `Reveal`
+    sarmalayıcının içinde ama `CalendarLeaf`'in kendi `.relative` kök `div`'inin **dışında**
+    eklendi — bu bölge K-5'in dekoratif katmanlarının kapsama alanı dışında, ekstra bir CSS
+    hilesi gerekmedi. **K-5'in kendisine dokunulmadı** (T-06'nın kapsamında değil; hâlâ
+    hiçbir talimata resmî olarak atanmamış — bkz. aşağıdaki not).
+  - **`react-router-dom` gelecek bayrağı uyarısı:** Konsolda zararsız bir bilgi uyarısı var
+    (`v7_startTransition`). Talimatın kabul kriterlerinde geçmiyor, davranışı etkilemiyor,
+    dokunulmadı.
+
+- **Doğrulama (canlı tarayıcı, bu oturumda gerçekleşti):**
+  - `npm run typecheck` ve `npm run build` temiz geçti (44 modül, 324 kB JS / 53 kB CSS).
+  - `/` → `/21-agustos` (bugün, 2026-08-21) `replace` ile yönlendi.
+  - `/21-agustos`, `/29-subat` (**404 değil** — "ARTIK GÜN", "2026 artık yıl değil" doğru
+    gösterildi), `/29-ekim` doğru içerikle açıldı.
+  - `/08-21` → `/21-agustos`'a kanonikleşti (`location.pathname` ile doğrulandı).
+  - `/32-agustos`, `/0-ocak`, `/31-subat`, `/agustos` → hepsi 404 sayfasını gösterdi.
+  - Gerçek koordinat tıklamasıyla "29 Eki" hızlı seçim düğmesi → `/29-ekim`; mini takvimde
+    "5" günü → `/5-ekim`. Tarayıcı **geri** iki kez → `/29-ekim` → `/21-agustos`; **ileri**
+    → `/29-ekim` (tümü `location.pathname` ile doğrulandı).
+  - `/29-ekim` adresine doğrudan tam sayfa yükleme (F5 eşdeğeri) → aynı sayfa, bugüne
+    dönmedi.
+  - Paylaş düğmesi gerçek tıklamayla çalıştı: bu ortamda `navigator.share` yok
+    (`typeof navigator.share === "undefined"`), `copyText` yedeği devreye girdi —
+    işletim sistemi panosunun değiştiği araç katmanınca bağımsız olarak doğrulandı.
+    Mobil `navigator.share` yolu bu ortamda (masaüstü tarayıcı, Web Share API'siz)
+    **denenemedi**; kod yolu standart bir özellik algılama deseni (`if (navigator.share)`).
+  - `npm run build && npm run preview` sonrası `/29-ekim`'e doğrudan `curl` → HTTP 200,
+    doğru `index.html` (SPA fallback üretim sunucusunda çalışıyor).
+  - **K-5 canlı olarak yeniden doğrulandı:** "Sonraki gün" düğmesine gerçek koordinat
+    tıklaması URL'i değiştirmedi; `document.elementFromPoint` düğmenin merkezinde dekoratif
+    `<div class="absolute inset-0 ... rotate-1">`'i döndürdü — `button` değil. Bu T-06'nın
+    getirdiği bir regresyon **değil**; T-03'te keşfedilen, henüz hiçbir talimata atanmamış
+    önceden var olan bir hata, bilinçli olarak dokunulmadı.
+  - Ekran görüntüsü alınamadı — bu oturumda tarayıcı paneli ekrana basılmıyor (T-03/T-04/T-05
+    ile aynı ortam kısıtı); bunun yerine `read_page`/`get_page_text`/`javascript_tool`/
+    `read_console_messages` ile canlı DOM, konsol ve gezinme durumu doğrulandı.
+  - Ayrıca `src/lib/date.ts` + `slug.ts` mantığı Node'da tarayıcısız, bağımsız bir betikle
+    366 günün tamamı için çift yönlü tutarlılık, ASCII slug kontrolü ve talimattaki URL
+    doğrulama tablosunun tüm satırları için test edildi — hepsi geçti.
+
 - **Sonraki talimata not:**
+  - **K-5 hâlâ atanmadı.** "Önceki gün" / "Sonraki gün" / "Bugüne dön" düğmeleri gerçek
+    tıklamayla hâlâ çalışmıyor (bkz. `ANALIZ-RAPORU.md` K-5). T-06 bu DOM bölgesine
+    (`CalendarLeaf`'in gezinme satırı) dokunmadı — yalnızca `onChangeDay`'in **davranışını**
+    (state yerine `navigate`) değiştirdi, tıklamanın düğmeye ulaşıp ulaşmadığını değil.
+    Önerilen düzeltme değişmedi: iki dekoratif katmana `pointer-events-none` eklemek. Bir
+    sonraki uygun talimata (T-07 klavye/erişilebilirlik iyi bir aday — aynı gezinme
+    bölgesine dokunacak) ya da yeni bir T-15'e atanması önerilir.
+  - T-07 ve T-08 artık açık (bu ikisinin bağımlılığı T-06'ydı). T-08'in `canonical`/`og:`
+    etiketleri için URL şeması (`/gun-ay`) burada sabitlendi — değiştirmeyin, T-08 buna bağlı.
+  - T-09 (hata sınırı) `createBrowserRouter`'ın `errorElement` desteğinden faydalanabilir —
+    T-06 bilerek `errorElement` eklemedi (kapsam dışı, bkz. yukarı).

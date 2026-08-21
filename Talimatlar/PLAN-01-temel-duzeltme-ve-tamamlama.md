@@ -3,8 +3,8 @@
 | Alan | Değer |
 |---|---|
 | **Oluşturulma** | 2026-08-21 |
-| **Durum** | 🟡 Aktif — 4 / 14 tamamlandı |
-| **Son hareket** | 2026-08-21 · T-04 tamamlandı |
+| **Durum** | 🟡 Aktif — 6 / 14 tamamlandı |
+| **Son hareket** | 2026-08-21 · T-06 tamamlandı |
 | **Talimat sayısı** | 14 (T-01 … T-14) |
 | **Faz sayısı** | 5 |
 | **Dayanak** | [`../Dokumanlar/ANALIZ-RAPORU.md`](../Dokumanlar/ANALIZ-RAPORU.md) |
@@ -55,14 +55,14 @@ Plan bittiğinde:
 |---|---|---|---|---|
 | ~~T-03~~ ✅ | [Takvim ve tarih doğruluğu](Tamamland%C4%B1/T-03-takvim-tarih-dogrulugu.md) | 🔴 Kritik | K-1 | ~2 sa |
 | ~~T-04~~ ✅ | [Sayaç ve görünürlük hataları](Tamamland%C4%B1/T-04-sayac-ve-gorunurluk-hatalari.md) | 🔴 Kritik | K-2, K-3 | ~2,5 sa |
-| T-05 | [Ağ katmanı sağlamlaştırma](T-05-ag-katmani-saglamlastirma.md) | 🟠 Yüksek | O-4, O-8 | ~3 sa |
+| ~~T-05~~ ✅ | [Ağ katmanı sağlamlaştırma](Tamamland%C4%B1/T-05-ag-katmani-saglamlastirma.md) | 🟠 Yüksek | O-4, O-8 | ~3 sa |
 
 ### FAZ 2 — Ürün Kabuğu
 *Uygulamayı "web sitesi" yapan katman: paylaşım, simge, hata dayanıklılığı, erişilebilirlik.*
 
 | # | Talimat | Öncelik | Bulgu | Süre |
 |---|---|---|---|---|
-| T-06 | [Yönlendirme ve paylaşılabilir bağlantı](T-06-yonlendirme-ve-paylasilabilir-baglanti.md) | 🔴 Kritik | U-1 | ~4 sa |
+| ~~T-06~~ ✅ | [Yönlendirme ve paylaşılabilir bağlantı](Tamamland%C4%B1/T-06-yonlendirme-ve-paylasilabilir-baglanti.md) | 🔴 Kritik | U-1 | ~4 sa |
 | T-07 | [Erişilebilirlik ve klavye](T-07-erisilebilirlik-ve-klavye.md) | 🟠 Yüksek | O-6, O-7 | ~3,5 sa |
 | T-08 | [Site kimliği: favicon, SEO, PWA](T-08-site-kimligi-favicon-seo-pwa.md) | 🟠 Yüksek | U-4 | ~3 sa |
 | T-09 | [Hata sınırı ve durum ekranları](T-09-hata-siniri-ve-durum-ekranlari.md) | 🟠 Yüksek | O-5, O-9, m-3, m-6 | ~3 sa |
@@ -138,8 +138,35 @@ T-01 ──┬─► T-02
   çözüldü. K-5'e **bilinçli olarak dokunulmadı** — kapsamı yalnızca K-2/K-3
   idi, K-5 ayrı bir CSS yığılım hatası (bkz. T-03 notu yukarıda), hâlâ hiçbir
   talimata atanmadı. Artık T-05 açık.
+- ~~**T-05.**~~ ✅ **2026-08-21'de tamamlandı.** `src/lib/wiki.ts` ağ/önbellek katmanı
+  baştan yazıldı: TR önce denenir, üç ana alandan (`events`/`births`/`deaths`) biri
+  boşsa EN tamamlayıcı olarak çekilir (TR dolu bir günde istek 2'den 1'e indi);
+  `reqId` kaldırıldı, yerine gün değişiminde önceki isteği kesen `AbortController`
+  geldi; `localStorage` yedeği `savedAt` zaman damgası + 24 saatlik TTL taşıyor
+  (süresi dolan veri atılmaz, `stale:true` ile döner, arayüzde bakır renkle
+  belirtilir); `pruneCache()` (60 kayıt) ve `memSet()` (40 kayıt, FIFO) önbellek
+  sınırlarını uyguluyor; `DayError` tipi 404/429/5xx/ağ hatasını ayrı `kind`'lara
+  sınıflandırıyor, 429/5xx en fazla 2 deneniyor. O-4 ve O-8 çözüldü. **FAZ 1 tamamen
+  bitti (T-01…T-05).** T-06 zaten T-04 sonrasında açıktı (bağımlılığı T-01/T-03/T-04);
+  T-05'in tamamlanmasıyla T-09'un iki bağımlılığından biri (`DayError` tipi) de
+  karşılandı — T-09 hâlâ T-06'yı bekliyor. T-07 ve T-08 da hâlâ T-06'ya bağımlı.
+- ~~**T-06.**~~ ✅ **2026-08-21'de tamamlandı.** Yeni `src/lib/slug.ts`
+  (`toDaySlug`/`parseDaySlug`, 366 gün çift yönlü test edildi); `src/main.tsx`
+  `createBrowserRouter` ile `/`, `/:daySlug`, `*` (404) rotalarını kuruyor;
+  `App.tsx`'te `day`/`month` `useState`'i tamamen kaldırıldı, URL tek doğruluk
+  kaynağı oldu (`useParams` → `parseDaySlug`); sayısal biçim (`/08-21`) kanonik
+  ad biçimine (`/21-agustos`) `replace` ile yönleniyor; yeni `NotFound.tsx` (404);
+  Paylaş düğmesi eklendi (mobilde `navigator.share`, masaüstünde panoya kopyalama);
+  `public/_redirects` + kök `vercel.json` ile üretim SPA yönlendirmesi. U-1 çözüldü.
+  **Sapma:** Paylaş düğmesi, talimatın önerdiği gibi `CalendarLeaf`'in gezinme
+  satırının *içine* değil, `App.tsx`'te ona komşu eklendi — hem `leaf.tsx`↔`slug.ts`
+  döngüsel import'unu (canlı testte yakalandı) hem de K-5'in etkilediği DOM bölgesini
+  atlamak için (ayrıntı → T-06 Tamamlanma Kaydı). **K-5 hâlâ atanmadı** — canlı olarak
+  yeniden doğrulandı, hâlâ hiçbir talimatın kapsamında değil, T-07 için önerilir
+  (aynı gezinme bölgesine dokunacak). Artık T-07 ve T-08 açık.
 - **T-14 en sonda.** Belgeler ancak her şey bitince gerçeğe eşitlenebilir.
 - **T-06 → T-08 sırası zorunlu.** SEO meta etiketleri gün bazlı URL'lere bağlıdır.
+  ~~T-06 tamamlandı~~ — URL şeması (`/gun-ay`) sabitlendi, T-08 buna bağlı yazılabilir.
 - **T-10 ve T-11 paralel yürüyebilir** ama T-11 tamamlanmadan T-10'un otomatik
   içerik kalitesi ölçülemez.
 - **T-12 mümkün olduğunca erken.** T-03, T-04, T-11 testleri T-12 sonrası yazılırsa
@@ -157,8 +184,8 @@ T-01 ──┬─► T-02
 | T-02 | Geliştirme ortamı ve başlatıcı | ✅ Tamamlandı | 2026-08-21 | `başlat.bat` sadeleşti (PowerShell port taraması kalktı) · `baslat.sh` eklendi · `.editorconfig`/`.nvmrc`/`.vscode/*` kuruldu · API tabanı `config.ts` + `.env.example` üzerinden ortam değişkenine taşındı |
 | T-03 | Takvim ve tarih doğruluğu | ✅ Tamamlandı | 2026-08-21 | `src/lib/date.ts` eklendi · 2024 sabiti kaldırıldı · "Yılın 233. günü" doğrulandı · Yeni bulgu K-5 (gezinme düğmeleri tıklanamıyor) → `ANALIZ-RAPORU.md` |
 | T-04 | Sayaç ve görünürlük hataları | ✅ Tamamlandı | 2026-08-21 | `src/lib/useInView.ts` eklendi (tek paylaşılan gözlemci + `setTimeout` güvenlik ağı) · gözlemci sayısı 181→1 · `Reveal`/`CountUp` bu hook'u kullanıyor, props değişmedi · K-2 ve K-3 çözüldü · K-5'e bilinçli olarak dokunulmadı (kapsam dışı) |
-| T-05 | Ağ katmanı sağlamlaştırma | ⬜ Bekliyor | | |
-| T-06 | Yönlendirme ve paylaşılabilir bağlantı | ⬜ Bekliyor | | |
+| T-05 | Ağ katmanı sağlamlaştırma | ✅ Tamamlandı | 2026-08-21 | TR önce denenir, dolu günde EN hiç çekilmiyor (istek 2→1) · `AbortController` ile iptal, `reqId` kaldırıldı · `localStorage` `savedAt`/24s TTL, `stale` arayüzde bakır renkle gösteriliyor · `pruneCache()` 60 kayıt, `memSet()` 40 kayıt FIFO · `DayError` (404/429/5xx/ağ), 429/5xx'te en fazla 2 deneme · O-4, O-8 çözüldü |
+| T-06 | Yönlendirme ve paylaşılabilir bağlantı | ✅ Tamamlandı | 2026-08-21 | `src/lib/slug.ts` eklendi (366 gün çift yönlü test edildi) · `createBrowserRouter` (`/`, `/:daySlug`, `*`) · `App.tsx`'te `day`/`month` `useState`'i kalktı, URL tek kaynak · `/08-21`→`/21-agustos` kanonikleşiyor · `NotFound.tsx` eklendi · Paylaş düğmesi (native share / panoya kopyalama) · `public/_redirects` + `vercel.json` · U-1 çözüldü · K-5 canlı yeniden doğrulandı, hâlâ atanmadı → T-07'ye önerilir |
 | T-07 | Erişilebilirlik ve klavye | ⬜ Bekliyor | | |
 | T-08 | Site kimliği: favicon, SEO, PWA | ⬜ Bekliyor | | |
 | T-09 | Hata sınırı ve durum ekranları | ⬜ Bekliyor | | |
@@ -168,7 +195,7 @@ T-01 ──┬─► T-02
 | T-13 | Performans ve derleme iyileştirmesi | ⬜ Bekliyor | | |
 | T-14 | Dokümantasyon güncelleme ve yayın | ⬜ Bekliyor | | |
 
-**İlerleme:** 4 / 14 · `██████░░░░░░░░░░░░░░` %29
+**İlerleme:** 6 / 14 · `█████████░░░░░░░░░░░` %43
 
 ---
 
@@ -184,12 +211,12 @@ Plan ancak aşağıdakilerin tamamı doğruysa kapatılabilir:
 ### Sağlamlık
 - [x] Sekme arka planda açılsa bile içerik görünüyor
 - [ ] Bir bileşen hata verse bile sayfa çökmüyor, kullanıcı mesaj görüyor
-- [ ] Hızlı gün değiştirmede eski istekler iptal ediliyor
-- [ ] Çevrimdışı yedek TTL'li çalışıyor
+- [x] Hızlı gün değiştirmede eski istekler iptal ediliyor
+- [x] Çevrimdışı yedek TTL'li çalışıyor
 
 ### Ürün
-- [ ] Her gün için paylaşılabilir bir URL var (örn. `/21-agustos`)
-- [ ] Tarayıcı geri/ileri tuşu gün geçişinde çalışıyor
+- [x] Her gün için paylaşılabilir bir URL var (örn. `/21-agustos`)
+- [x] Tarayıcı geri/ileri tuşu gün geçişinde çalışıyor
 - [ ] Bağlantı sosyal medyada başlık + görselle önizleniyor
 - [ ] Favicon var, telefona uygulama olarak eklenebiliyor
 - [ ] Klavye ile tam gezinme mümkün, ekran okuyucu bildirimleri duyuyor
