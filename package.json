@@ -18,7 +18,8 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "sitemap": "node scripts/sitemap.mjs",
-    "icons": "node scripts/generate-brand-assets.mjs"
+    "icons": "node scripts/generate-brand-assets.mjs",
+    "siniflandirma": "node scripts/siniflandirma-raporu.mjs"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -30,6 +31,7 @@
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "@vitejs/plugin-react": "^4.3.4",
+    "esbuild": "^0.25.0",
     "png-to-ico": "^3.0.2",
     "sharp": "^0.35.3",
     "tailwindcss": "^4.1.7",

@@ -15,6 +15,8 @@
 > | 2026-08-21 | [T-07](../Talimatlar/Tamamland%C4%B1/T-07-erisilebilirlik-ve-klavye.md) | O-6, O-7 |
 > | 2026-08-21 | [T-08](../Talimatlar/Tamamland%C4%B1/T-08-site-kimligi-favicon-seo-pwa.md) | U-4 |
 > | 2026-08-22 | [T-09](../Talimatlar/Tamamland%C4%B1/T-09-hata-siniri-ve-durum-ekranlari.md) | O-5, O-9, m-3, m-6 |
+> | 2026-08-22 | [T-10](../Talimatlar/Tamamland%C4%B1/T-10-icerik-mimarisi-ve-kapsam.md) | U-2 |
+> | 2026-08-22 | [T-11](../Talimatlar/Tamamland%C4%B1/T-11-siniflandirma-dogrulugu.md) | U-3 |
 >
 > Bu rapor **ilk analiz anının** fotoğrafıdır; metin korunur, çözülen bulguların
 > başlığına `✅ ÇÖZÜLDÜ` işareti ve bir *Çözüm* bloğu eklenir.
@@ -30,7 +32,7 @@
 | Uygulama açılıyor mu | ✅ Evet | Veri geliyor, 23 kayıt listelendi |
 | Kritik hata | ⚠️ 5 adet · **4 çözüldü** | K-1…K-5 · K-1 ✅ T-03, K-2 ✅ T-04, K-3 ✅ T-04, K-4 ✅ T-01 · K-5 T-03 sırasında keşfedildi, henüz atanmadı |
 | Orta seviye eksik | ⚠️ 12 adet · **9 çözüldü** | O-1…O-12 · O-1, O-2, O-3 ✅ T-01 · O-4, O-8 ✅ T-05 · O-5, O-9 ✅ T-09 · O-6, O-7 ✅ T-07 · O-10 T-07 sırasında keşfedildi, henüz atanmadı · O-11 T-09 sırasında keşfedildi, henüz atanmadı · O-12 T-10 sırasında keşfedildi, henüz atanmadı |
-| Ürün/içerik boşluğu | ⚠️ 5 adet · **3 çözüldü** | U-1…U-5 · U-1 ✅ T-06 · U-4 ✅ T-08 · U-2 ✅ T-10 |
+| Ürün/içerik boşluğu | ⚠️ 5 adet · **4 çözüldü** | U-1…U-5 · U-1 ✅ T-06 · U-4 ✅ T-08 · U-2 ✅ T-10 · U-3 ✅ T-11 |
 | Küçük not | ⚠️ 7 adet · **4 çözüldü** | m-1…m-7 · m-2 ✅ T-01 · m-3, m-6 ✅ T-09 · m-5 ✅ T-07 |
 
 **Kısa hüküm:** Uygulama sağlam bir iskelete ve gerçekten güzel bir tasarım diline sahip.
@@ -518,10 +520,10 @@ Ayrıca 1.001 satırlık tek dosya, içerik büyüdükçe yönetilemez hâle gel
 > çıktı verdi); paket boyutu artışı +64,64 kB gzip (< 100 kB eşiği, tembel yükleme
 > gerekmedi); iki örnek gün (30 Eylül, 25 Aralık) tarayıcıda canlı doğrulandı.
 
-### U-3 · Otomatik sınıflandırma kalitesi ölçülmemiş
+### U-3 · Otomatik sınıflandırma kalitesi ölçülmemiş — ✅ ÇÖZÜLDÜ (T-11)
 
-`classifyItem` ve `detectDarkItem` (`wiki.ts:151-196`) sıralı regex denemesiyle çalışır:
-**ilk eşleşen kural kazanır.** Bu, hem yanlış pozitif hem öncelik hatası üretir.
+`classifyItem` ve `detectDarkItem` (eskiden `wiki.ts:151-196`) sıralı regex denemesiyle çalışıyordu:
+**ilk eşleşen kural kazanır.** Bu, hem yanlış pozitif hem öncelik hatası üretiyordu.
 
 Somut örnekler:
 - `/saldırı/` hem `savas` (2. kural) hem `Şiddet` (5. karanlık tema) kalıbında var.
@@ -530,7 +532,69 @@ Somut örnekler:
 - `/ay'/` kalıbı "Ay'a iniş" ile birlikte **"Saray'a"**, **"Saray'ın"** kelimelerini de keşif sayar.
 - `/ordu(su)? /` kalıbı **Ordu ili** geçen her cümleyi savaş kategorisine atar.
 
-Bir doğruluk testi yok; kural değiştirildiğinde neyin bozulduğu görülemiyor.
+Bir doğruluk testi yoktu; kural değiştirildiğinde neyin bozulduğu görülemiyordu.
+
+> **✅ Çözüm — T-11 (2026-08-22)**
+>
+> Sınıflandırma mantığı `wiki.ts`'ten bağımsız bir modüle (`src/lib/classification.ts`)
+> taşındı; "ilk eşleşen kazanır" yerine **puanlama** geldi (her kural 1-3 puan,
+> kategori bazında toplanır, en yüksek toplam kazanır, eşitlikte dosya başında
+> belgelenen sabit bir öncelik sırası — `felaket > savas > siyaset > bilim >
+> kesif > kultur > spor` — devreye girer). `detectDarkItem` aynı yöntemle yeniden
+> yazıldı, ayrıca bir **eşik** kazandı: toplam puan 3'ün altındaysa `null` döner
+> (tek başına zayıf bir `saldır` eşleşmesi artık yetmiyor). Yukarıdaki 5 somut
+> örneğin hepsi düzeltildi — `kazas`/`ay'`/`ordu(su)? `/`patlama`/`sel( |i)`
+> bağlamla birlikte yazıldı (ör. `/\b(uçak|tren|maden|trafik|otobüs) kaza/`),
+> `/makale/` (çok genel, ayırt edici değildi) tamamen kaldırıldı,
+> `/bat(tı|an)/` gemi/vapur/feribot bağlamına bağlandı. `saldırı`'nın
+> `savas`/`Şiddet` çakışması artık **kontrollü**: kategori tarafında orta (2)
+> puan, karanlık tarafında zayıf (2, tek başına eşiği geçmiyor) — `bombalı
+> saldırı`/`silahlı saldır` gibi somut ifadeler ayrıca güçlü (3) sinyal taşıyor.
+>
+> **Kritik bir yan bulgu:** JS'in `\b`/`\w`'ı yalnızca ASCII harfleri kelime
+> karakteri sayıyor — ç/ğ/ı/ö/ş/ü bunun dışında. Sonuç: `\bçığ\b` gibi bir kalıp
+> gerçek veride **hiç eşleşmiyordu** (boşluk + Türkçe harf = ikisi de "kelime
+> dışı" sayıldığından `\b` hiç oluşmuyor) — bu, kuralları ilk yazdığımda fark
+> etmediğim, yalnızca gerçek Vikipedi cümleleriyle test edince ortaya çıkan bir
+> hataydı. Türkçe harfle başlayan/biten kalıplarda artık elle yazılmış bir sınır
+> (`(?<![a-zçğıöşü])`/`(?![a-zçğıöşü])`) kullanılıyor. Ayrıntı → `classification.ts`
+> başındaki yorum, T-11 Tamamlanma Kaydı.
+>
+> **Doğrulama:** `src/lib/__fixtures__/siniflandirma-ornekleri.ts` — 66 örnek
+> (gerçek Vikipedi TR "bugün tarihte" verisinden 16 gün taranarak + talimatın
+> kendi örnekleri), 16'sı bilinçli yanlış-pozitif tuzağı. `npm run siniflandirma`
+> (yeni betik, `scripts/siniflandirma-raporu.mjs`) altın kümeye karşı **kategori
+> doğruluğu %100** (hedef ≥%85), **karanlık kesinlik %100, yanlış pozitif 0**
+> (hedef: 0) verdi; 100 öğe sınıflandırma ~3 ms sürdü (hedef <5 ms). Golden
+> kümenin ötesinde, aynı 16 günden çekilen **~1.600 gerçek kayıt** üzerinde
+> elle tur atıldı (talimatın "gerçek veri turu" adımı): `genel` oranı günlere
+> göre %23-%61 arasında değişiyor (ortalama ~%45 — talimatın "%40 altı"
+> önerisinden yüksek, bilinçli kabul edildi, aşağıya bakın); 70'den fazla
+> gerçek karanlık-işaretli kayıt elle gözden geçirildi, bariz bir yanlış
+> pozitif bulunmadı (Eurovision'ın "pandemi **nedeniyle** ertelenmesi" gerçek
+> veride yakalanan tek somut yanlış pozitifti, can kaybı/yaralanma yakınlık
+> şartı eklenerek düzeltildi — bkz. yukarı).
+>
+> **Bilinçli olarak kapsam dışı bırakılan iki bulgu:**
+> 1. `genel` oranının bazı günlerde talimatın önerdiği %40 eşiğinin üstünde
+>    kalması (ör. taranan 16 günün ortalaması ~%45) — anahtar kelime listesi
+>    genişletildikçe kazanım azalıyor (üç ayrı gerçek-veri turunda toplam ~20
+>    yeni kural eklendi, her turda daha az kazanım); daha fazla genişletmek
+>    kesinlik riskini artırmadan sürdürülemez hâle geliyor. `%40` bu talimatın
+>    Kabul Kriterleri'nde bir sayı olarak yok (yalnızca Doğrulama bölümünde bir
+>    sağlık kontrolü önerisi) — resmî ölçütler (kategori ≥%85, karanlık
+>    yanlış pozitif 0, kesinlik ≥%90) rahatça aşıldı.
+> 2. Anahtar kelime taraması bir felaket sözcüğünün cümlenin **konusu** mu
+>    yoksa yalnızca bir **zaman belirteci/isim** mi olduğunu ayıramıyor —
+>    ör. "Çernobil Faciası'nın yıl dönümünde bir bilgisayar virüsü yayıldı"
+>    gerçek veride hâlâ `facia` kalıbına takılıp karanlık sayılıyor
+>    (en yaygın biçim — "X **nedeniyle** ertelendi/iptal edildi" — düzeltildi,
+>    bu daha nadir "X'in yıl dönümünde" biçimi düzeltilmeden bırakıldı).
+>    Gerçek bir çözüm gömme (embedding) tabanlı anlam analizi gerektirir —
+>    T-11'in kendi *Kapsam Dışı* tablosu bunu açıkça dışarıda bırakıyor
+>    ("istemci taraflı ürün, regex yeterli").
+>
+> Ayrıntı → T-11 Tamamlanma Kaydı.
 
 ### U-4 · Site kabuğu eksik: favicon, PWA, SEO, paylaşım kartı — ✅ ÇÖZÜLDÜ (T-08)
 
@@ -614,7 +678,7 @@ SONRA  →  O-1✅ O-2✅ O-3✅     (temizlik — sonraki her iş bundan faydal
 SONRA  →  K-3✅ O-5✅ O-6✅       (sağlamlık ve erişilebilirlik)  [O-5 T-09, O-6 T-07 ile bitti]
 SONRA  →  U-1✅ U-4✅           (paylaşım + kabuk — ürünü "yayınlanabilir" yapar)  [U-1 T-06, U-4 T-08 ile bitti]
 SONRA  →  O-4✅ O-7✅ O-8✅ O-9✅   (ağ, klavye, önbellek, içerik zenginliği)  [O-4/O-8 T-05, O-7 T-07, O-9 T-09 ile bitti]
-SONRA  →  U-2✅ U-3             (içerik hacmi ve doğruluğu — sürekli iş)  [U-2 T-10 ile bitti]
+SONRA  →  U-2✅ U-3✅            (içerik hacmi ve doğruluğu — sürekli iş)  [U-2 T-10, U-3 T-11 ile bitti]
 SON    →  U-5                  (test/lint — sonraki tüm işleri korur)
 ```
 

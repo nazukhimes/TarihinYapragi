@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
-import type { CategoryId, TalkCard } from "../data";
+import type { TalkCard } from "../data";
 import { WIKI_API_BASE as API } from "./config";
+import { classifyItem, detectDarkItem } from "./classification";
+
+export { classifyItem, detectDarkItem } from "./classification";
 
 export interface WikiPage {
   title: string;
@@ -268,46 +271,6 @@ export async function fetchDayData(month: number, day: number, signal?: AbortSig
   };
   memSet(cacheKey, data);
   return data;
-}
-
-/* ---------------- sınıflandırma ---------------- */
-
-const trLower = (s: string) => s.toLocaleLowerCase("tr-TR");
-
-const RULES: [CategoryId, RegExp][] = [
-  ["felaket", /deprem|tsunami|yangın|fırtına|kasırga|sel( |i)|volkan|kıtlık|salgın|pandemi|facia|faciası|bat(tı|an)|çök(tü|en)|kazas|felaket|çığ|patlama/],
-  ["savas", /savaş|istila|işgal|saldırı|saldır|çarpış|kuşat|fetih|fethet|ordu(su)? |zafer|barış antlaş|cephede|isyan/],
-  ["bilim", /aşı|deney|formül|teori|bilim|fizik|kimya|matematik|tıp|ameliyat|genom|dna|atom|nükleer|radyoaktif|kuantum|evrim|hücre|laboratuvar|makale/],
-  ["kesif", /keşif|keşfett|keşfedil|icat|patent|uzay|nasa|ay'|ay yüzey|mars|teleskop|uydu|roket|uçuş|kıta|kutup|expedition|ilk (insan|yolculuk)|yörünge/],
-  ["spor", /olimpiyat|şampiyon|futbol|maç|turnuva|fifa|tenis|yarış|rekor kır/],
-  ["kultur", /opera|senfoni|film|roman|kitap|tiyatro|resim|albüm|konser|müze|edebiyat|besteci|yazar|şair|tablo|heykel/],
-  ["siyaset", /seçil|seçim|başkan|cumhurbaşkan|bakan|parlamento|meclis|anayasa|devlet|cumhuriyet|antlaşma|devrim|istifa|krallık|kral |papa|imparator|bağımsızlık/],
-];
-
-export function classifyItem(text: string): CategoryId {
-  const t = trLower(text);
-  for (const [cat, re] of RULES) {
-    if (re.test(t)) return cat;
-  }
-  return "genel";
-}
-
-/* ---------------- karanlık arşiv taraması ---------------- */
-
-export const DARK_THEMES: [string, RegExp][] = [
-  ["Suikast", /suikast|sui̇kast|öldürüldü|suikaste/],
-  ["İnfaz & İdam", /idam|asılarak|kurşuna dizil|infaz/],
-  ["Kayıp & Gizem", /kayboldu|kaybolan|ortadan kaybol|sırra kadem/],
-  ["Felaket", /facia|kazas|bat(tı|an)|çök(tü|en)|deprem|yangın|sel( |i)|patlama/],
-  ["Şiddet", /katliam|katledil|linç|bombal|saldırı/],
-];
-
-export function detectDarkItem(text: string): string | null {
-  const t = trLower(text);
-  for (const [label, re] of DARK_THEMES) {
-    if (re.test(t)) return label;
-  }
-  return null;
 }
 
 /* ---------------- otomatik sohbet kartları ---------------- */

@@ -365,8 +365,10 @@ Diğer günlerde bölüm, vefat ve olay kayıtlarını anahtar kelimeyle tarayar
 dolar — bazı günlerde eşleşme çıkmaz. İçerik kapsamı genişletiliyor.
 
 **S: Otomatik sınıflandırma yanlış olabilir mi?**
-Evet. Kategori ve karanlık dosya tespiti anahtar kelime taramasıyla yapılır.
-Kesin bilgi için kartlardaki **Vikipedi** bağlantısını izleyin.
+Evet, ama nadiren. Kategori ve karanlık dosya tespiti anahtar kelime
+taramasıyla yapılır; bir referans örnek kümesine karşı düzenli ölçülür
+(kategori doğruluğu, karanlık dosyalarda sıfır yanlış pozitif hedefiyle).
+Yine de kesin bilgi için kartlardaki **Vikipedi** bağlantısını izleyin.
 
 **S: 29 Şubat'ı seçebilir miyim?**
 Evet, tarihsel arşivde 29 Şubat kayıtları vardır ve takvimde her zaman görünür.

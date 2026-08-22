@@ -3,8 +3,8 @@
 | Alan | Değer |
 |---|---|
 | **Oluşturulma** | 2026-08-21 |
-| **Durum** | 🟡 Aktif — 10 / 14 tamamlandı |
-| **Son hareket** | 2026-08-22 · T-10 tamamlandı |
+| **Durum** | 🟡 Aktif — 11 / 14 tamamlandı |
+| **Son hareket** | 2026-08-22 · T-11 tamamlandı |
 | **Talimat sayısı** | 14 (T-01 … T-14) |
 | **Faz sayısı** | 5 |
 | **Dayanak** | [`../Dokumanlar/ANALIZ-RAPORU.md`](../Dokumanlar/ANALIZ-RAPORU.md) |
@@ -73,7 +73,7 @@ Plan bittiğinde:
 | # | Talimat | Öncelik | Bulgu | Süre |
 |---|---|---|---|---|
 | ~~T-10~~ ✅ | [İçerik mimarisi ve kapsam genişletme](Tamamland%C4%B1/T-10-icerik-mimarisi-ve-kapsam.md) | 🟠 Yüksek | U-2 | ~6 sa+ |
-| T-11 | [Sınıflandırma doğruluğu](T-11-siniflandirma-dogrulugu.md) | 🟡 Orta | U-3 | ~4 sa |
+| ~~T-11~~ ✅ | [Sınıflandırma doğruluğu](Tamamland%C4%B1/T-11-siniflandirma-dogrulugu.md) | 🟡 Orta | U-3 | ~4 sa |
 
 ### FAZ 4 — Kalite Güvencesi
 *Buraya kadar yapılan her şeyi koruyan çit.*
@@ -252,6 +252,35 @@ T-01 ──┬─► T-02
   bileşen mantığı değişikliği gerektiriyor) — ayrıntı → `ANALIZ-RAPORU.md` §9.
   K-5'e T-10 da dokunmadı (`leaf.tsx`'e hiç dokunulmadı). T-11 hâlâ açık, T-10'un
   tamamlanması onu etkilemedi (bağımlılığı yalnızca T-01'di).
+- ~~**T-11.**~~ ✅ **2026-08-22'de tamamlandı.** `classifyItem`/`detectDarkItem`
+  `wiki.ts`'ten bağımsız bir modüle (`src/lib/classification.ts`) taşındı;
+  "ilk eşleşen kazanır" yerine puanlama geldi (kural başına 1-3 puan, kategori
+  bazında toplanır, eşitlikte dosya başında belgelenen sabit bir öncelik
+  sırası devreye girer); `detectDarkItem` aynı yöntemle yeniden yazıldı, puan
+  eşiği (≥3) kazandı. Sorun 2 tablosundaki 7 kalıbın hepsi (kazas, ay', ordu,
+  patlama, sel, makale, bat-) düzeltildi. **Kritik yan bulgu:** JS'in `\b`/`\w`'ı
+  Türkçe harfleri (ç/ğ/ı/ö/ş/ü) kelime karakteri saymıyor — bu yüzden birkaç
+  kural (`çığ`, `şampiyon`, `öldürüldü` gibi) gerçek veride **hiç eşleşmiyordu**;
+  elle yazılmış bir Türkçe-farkında sınırla düzeltildi (ayrıntı → T-11
+  Tamamlanma Kaydı). `src/lib/__fixtures__/siniflandirma-ornekleri.ts` (66
+  örnek, gerçek Vikipedi verisinden + talimatın kendi örnekleri, 16 yanlış
+  pozitif tuzağı) ve `scripts/siniflandirma-raporu.mjs` (`npm run
+  siniflandirma`) eklendi — altın kümede kategori doğruluğu **%100** (hedef
+  ≥%85), karanlık yanlış pozitif **0**, kesinlik **%100** (hedef ≥%90). U-3
+  çözüldü. **Sapma:** ölçüm betiği TypeScript kodunu (`classification.ts` ve
+  fixtures) çalışma zamanında derlemek için `esbuild`'i (öncesinde yalnızca
+  `vite` üzerinden dolaylı bir bağımlılıktı) `package.json`'a açık bir
+  `devDependency` olarak ekledi — yeni bir paket **inmedi** (zaten kuruluydu),
+  yalnızca zaten var olan bir bağımlılık dürüstçe beyan edildi. **Bilinçli
+  olarak kapsam dışı bırakılan iki bulgu:** `genel` oranı bazı günlerde
+  talimatın önerdiği %40 eşiğinin üstünde (ortalama ~%45, resmî ölçütlerin
+  hiçbiri etkilenmiyor); anahtar kelime taraması bir felaket sözcüğünün
+  cümlenin konusu mu yoksa yalnızca bir tarihleme ifadesi mi olduğunu
+  ayıramıyor (nadir görülen bir örnek, en yaygın biçim düzeltildi) — ikisi de
+  regex'in doğal sınırı, embedding gerektirir, T-11'in kendi *Kapsam Dışı*
+  tablosunda dışarıda bırakılmış. O-12 (Bilim & Keşif mükerrer kaydı) canlı
+  olarak yeniden doğrulandı, hâlâ düzeltilmedi (T-11'in kapsamı dışında).
+  T-12 hâlâ açıktı (bağımlılığı T-01'di), T-11'in tamamlanması onu etkilemedi.
 - **T-14 en sonda.** Belgeler ancak her şey bitince gerçeğe eşitlenebilir.
 - ~~**T-06 → T-08 sırası zorunlu.**~~ SEO meta etiketleri gün bazlı URL'lere
   bağlıydı — T-06 tamamlandı, URL şeması (`/gun-ay`) sabitlendi, T-08 bu şema
@@ -279,12 +308,12 @@ T-01 ──┬─► T-02
 | T-08 | Site kimliği: favicon, SEO, PWA | ✅ Tamamlandı | 2026-08-21 | 7 marka görseli `ui.tsx`'teki `IconLeafMark`'tan üretildi (`scripts/generate-brand-assets.mjs`) · `index.html`'e favicon/manifest/`og:*`/`twitter:*`/canonical/JSON-LD eklendi · `App.tsx`'te gün bazlı dinamik başlık/canonical `useEffect`'i (canlı doğrulandı) · `scripts/sitemap.mjs` 366 adresi `build`'e bağlı üretiyor · `vite-plugin-pwa` ile service worker kuruldu · Lighthouse SEO **100/100** (yol boyunca `robots.txt`'teki göreli `Sitemap:` satırı düzeltildi) · U-4 çözüldü · Service worker'ın canlı kaydı Browser pane sandbox kısıtı yüzünden doğrulanamadı, sonraki oturumda gerçek tarayıcıda kontrol edilmeli |
 | T-09 | Hata sınırı ve durum ekranları | ✅ Tamamlandı | 2026-08-22 | `ErrorBoundary.tsx` eklendi (kökte + 6 bölümde) · **Sapma:** `main.tsx`'teki kök sarmalayıcı tek başına yetersizdi (react-router kendi dahili hata sınırını kullanıyor) → her rotaya `errorElement`/`RouteErrorFallback` eklendi, canlı doğrulandı · `data.error.kind`'a göre 5 başlık · arama sonuç sayacı + boş durum ekranı · "Bugünün anlamı" şeridi (`holidays`) · Karanlık Dosyalar/Bilim & Keşif'te "N daha göster" · 4 sn gecikme uyarısı · O-5, O-9, m-3, m-6 çözüldü · Yeni bulgu O-11 (`holidays`'te şablon artığı çöp kayıt) kapsam dışı bırakıldı |
 | T-10 | İçerik mimarisi ve kapsam genişletme | ✅ Tamamlandı | 2026-08-22 | `curated.ts` (1.001 satır) silindi → `types.ts` + `gunler/` (12 ay dosyası) + `index.ts`; mevcut 10 gün birebir taşındı (sed ile) · editör içeriği 10→60 gün (%2,7→%16,4) · **Sapma:** "AI toplu üretim yasak" notuna rağmen kullanıcı bu oturum için açık onay verdi, 4 parti web araştırmasıyla kaynak doğrulanarak yazıldı · `ICERIK-SABLONU.md` eklendi · paket boyutu +64,64 kB gzip (<100 kB eşiği altında, tembel yükleme gerekmedi) · Yeni bulgu O-12 (Bilim & Keşif'te editör/Vikipedi mükerrer ayıklaması yok) kapsam dışı bırakıldı |
-| T-11 | Sınıflandırma doğruluğu | ⬜ Bekliyor | | |
+| T-11 | Sınıflandırma doğruluğu | ✅ Tamamlandı | 2026-08-22 | `wiki.ts`'ten ayrılan `classification.ts` · "ilk eşleşen kazanır" → puanlama + sabit öncelik sırası · `detectDarkItem` puan eşiği (≥3) · Sorun 2'deki 7 kalıp düzeltildi · **kritik yan bulgu:** JS `\b`/`\w` Türkçe harfleri (ç/ğ/ı/ö/ş/ü) kelime saymıyor, birkaç kural gerçek veride hiç eşleşmiyordu, elle sınırla düzeltildi · 66 örneklik altın küme + `npm run siniflandirma` · kategori doğruluğu %100 (≥%85 hedef), karanlık yanlış pozitif 0, kesinlik %100 (≥%90 hedef) · U-3 çözüldü · `genel` oranı bazı günlerde %40 hedefinin üstünde ve "felaket kelimesi tarihleme amaçlı" örnekler bilinçli kapsam dışı bırakıldı (regex sınırı) |
 | T-12 | Test, lint ve biçimlendirme altyapısı | ⬜ Bekliyor | | |
 | T-13 | Performans ve derleme iyileştirmesi | ⬜ Bekliyor | | |
 | T-14 | Dokümantasyon güncelleme ve yayın | ⬜ Bekliyor | | |
 
-**İlerleme:** 10 / 14 · `██████████████░░░░░░` %71
+**İlerleme:** 11 / 14 · `████████████████░░░░` %79
 
 ---
 
@@ -316,7 +345,7 @@ Plan ancak aşağıdakilerin tamamı doğruysa kapatılabilir:
 ### İçerik
 - [x] Editör içeriği en az 60 günde mevcut (T-10 — tam 60/366)
 - [x] İçerik dosya yapısı 366 güne ölçekleniyor (T-10 — 12 ay dosyası, her biri bağımsız düzenlenebilir)
-- [ ] Sınıflandırma doğruluğu test edilmiş ve ölçülü
+- [x] Sınıflandırma doğruluğu test edilmiş ve ölçülü (T-11 — altın kümede kategori %100, karanlık yanlış pozitif 0)
 
 ### Kalite
 - [ ] `npm run typecheck` yeşil

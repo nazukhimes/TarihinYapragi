@@ -7,7 +7,7 @@
 | **Tahmini süre** | ~4 saat |
 | **Bağımlılık** | T-05 · **T-12'nin test altyapısı önce kurulursa çok daha güvenli** |
 | **İlgili bulgu** | U-3 |
-| **Durum** | ⬜ Bekliyor |
+| **Durum** | ✅ Tamamlandı (2026-08-22) |
 
 ---
 
@@ -288,16 +288,16 @@ HATALI ÖRNEKLER
 
 ## ☑️ Kabul Kriterleri
 
-- [ ] `src/lib/__fixtures__/siniflandirma-ornekleri.ts` var, **≥ 60 örnek** içeriyor
-- [ ] En az **15 örnek** yanlış pozitif tuzağı (Bursa kazası, Saray'a, Ordu ili, nüfus patlaması, Selanik…)
-- [ ] `classifyItem` skorlama kullanıyor; "ilk eşleşen kazanır" kaldırıldı
-- [ ] `detectDarkItem` puan eşiği (≥3) uyguluyor
-- [ ] Sorun 2 tablosundaki 7 kalıbın hepsi düzeltildi
-- [ ] `npm run siniflandirma` rapor basıyor
-- [ ] Kategori doğruluğu **≥ %85**
-- [ ] Karanlık yanlış pozitif sayısı **0**
-- [ ] Öncelik sırası kod içinde belgelendi
-- [ ] `npm run typecheck` ve `npm run build` hatasız
+- [x] `src/lib/__fixtures__/siniflandirma-ornekleri.ts` var, **≥ 60 örnek** içeriyor (66)
+- [x] En az **15 örnek** yanlış pozitif tuzağı (Bursa kazası, Saray'a, Ordu ili, nüfus patlaması, Selanik…) (16)
+- [x] `classifyItem` skorlama kullanıyor; "ilk eşleşen kazanır" kaldırıldı
+- [x] `detectDarkItem` puan eşiği (≥3) uyguluyor
+- [x] Sorun 2 tablosundaki 7 kalıbın hepsi düzeltildi
+- [x] `npm run siniflandirma` rapor basıyor
+- [x] Kategori doğruluğu **≥ %85** (%100)
+- [x] Karanlık yanlış pozitif sayısı **0**
+- [x] Öncelik sırası kod içinde belgelendi
+- [x] `npm run typecheck` ve `npm run build` hatasız
 
 ---
 
@@ -356,10 +356,125 @@ console.timeEnd("sınıflandırma");
 
 ## 📝 Tamamlanma Kaydı
 
-- **Tamamlanma tarihi:**
-- **Örnek sayısı:**
-- **Kategori doğruluğu:**
-- **Karanlık kesinlik / duyarlılık:**
+- **Tamamlanma tarihi:** 2026-08-22
+
+- **Örnek sayısı:** 66 (hedef ≥60) — 16'sı bilinçli yanlış pozitif tuzağı (hedef ≥15).
+  Kaynak: gerçek Vikipedi TR "bugün tarihte" verisi (16 farklı gün, Wikimedia REST
+  API'sinden çekildi) + talimatın Adım 1/Doğrulama §2'de verdiği örnekler.
+
+- **Kategori doğruluğu:** %100 (65/65 — bir örnek `karanlık` alanı için
+  `null`/tema testi olduğundan kategori sayımına girmedi) — hedef ≥%85.
+
+- **Karanlık kesinlik / duyarlılık:** Kesinlik %100, duyarlılık %100, yanlış
+  pozitif 0 (hedef: 0) — altın kümede. Ayrıca ~1.600 gerçek kayıt üzerinde
+  elle tur atıldı (aşağıya bakın).
+
 - **Değişen dosyalar:**
+  - `src/lib/classification.ts` (yeni) — `classifyItem`/`detectDarkItem`, puanlı
+    kural motoru (`KURALLAR`/`KARANLIK`), sabit öncelik sırası (`PRIORITY`/
+    `DARK_PRIORITY`), karanlık eşiği (`DARK_ESIK = 3`)
+  - `src/lib/__fixtures__/siniflandirma-ornekleri.ts` (yeni) — 66 örneklik altın küme
+  - `scripts/siniflandirma-raporu.mjs` (yeni) — `npm run siniflandirma` betiği
+  - `src/lib/wiki.ts` — sınıflandırma mantığı çıkarıldı, `classification.ts`'ten
+    içe aktarılıp yeniden dışa aktarılıyor (çağıranlar için API değişmedi)
+  - `package.json` / `package-lock.json` — `"siniflandirma"` betiği eklendi;
+    `esbuild` açık `devDependency` oldu (bkz. Sapmalar)
+
 - **Sapmalar / notlar:**
-- **Sonraki talimata not:**
+
+  1. **`wiki.ts`'ten ayrı modül.** Talimat `wiki.ts` içinde kalınacağını
+     varsayıyordu; sınıflandırma mantığı `src/lib/classification.ts`'e
+     taşındı. Sebep: ölçüm betiğinin gerçek kodu (bir kopyasını değil)
+     çalışma zamanında ölçebilmesi için `react`/ağ katmanından tamamen
+     arınmış, bağımsız bir dosya gerekiyordu (bkz. aşağıdaki esbuild notu).
+     `wiki.ts`'in dışa aktardığı public API (`classifyItem`, `detectDarkItem`)
+     değişmedi — `App.tsx`/`sections.tsx` hiç dokunulmadı.
+
+  2. **`esbuild` `package.json`'a açık bağımlılık olarak eklendi.**
+     `classification.ts` ve fixtures dosyası TypeScript; ölçüm betiğinin
+     bunları `tsx`/`ts-node` gibi yeni bir çalışma zamanı bağımlılığı
+     kurmadan çalıştırabilmesi için, Vite'ın derlemede zaten kullandığı
+     `esbuild` (öncesinde yalnızca `vite` üzerinden **dolaylı** bir
+     bağımlılıktı) kendisi çağrıldı: `esbuild.transformSync` ile TS'i JS'e
+     çevirip geçici bir dosyaya yazıp `import()` ile yüklüyor. `npm install`
+     çalıştırıldığında **yeni bir paket inmedi** (zaten kuruluydu, `0.25.12`
+     sürümü zaten `package-lock.json`'daydı) — yalnızca zaten var olan bir
+     bağımlılık dürüstçe `package.json`'da beyan edildi.
+
+  3. **Kritik, talimatta öngörülmeyen bir bulgu: JS'in `\b`/`\w`'ı Türkçe
+     harfleri kelime karakteri saymıyor.** Gerçek Vikipedi cümleleriyle
+     test ederken ortaya çıktı: ç/ğ/ı/ö/ş/ü ASCII `\w` kapsamı dışında
+     olduğu için `\bçığ\b` gibi bir kalıp hem "çığır"a hatalı eşleşebiliyor
+     HEM DE (çok daha ciddisi) sıradan bir cümlede "çığ " biçiminde **hiç
+     eşleşmiyordu** — boşluk da "ğ" de kelime dışı sayıldığından aralarında
+     `\b` hiç oluşmuyor. Aynı sorun `\böldürüldü` (suikast tespiti!),
+     `\bşampiyon`, `\bşair`, `\bçarpış`, `\bçök` ve birkaç kuralın sonundaki
+     Türkçe ek gruplarında (`facia(sı)?\b`, `yan(dı)?\b`, `yazar(ı)?\b`…)
+     bulundu. Düzeltme: bu kalıplarda `\b` yerine elle yazılmış
+     `(?<![a-zçğıöşü])`/`(?![a-zçğıöşü])` sınırı kullanıldı (bkz.
+     `classification.ts` başındaki yorum). Bu, ilk yazımda regex'i yalnızca
+     zihinsel/sentetik örneklerle test edip gerçek veriyle doğrulamamış
+     olsaydım fark edilmeyecek türde bir hataydı — talimatın "gerçek veri
+     turu" adımının neden zorunlu olduğunu somut biçimde doğruladı.
+
+  4. **Talimatın örnek regex'lerinden birkaçı, gerçek veriyle test edilince
+     kendi verdiği Doğrulama örneklerini bile geçmiyordu** — düzeltildi,
+     talimatın *niyeti* korunarak: `/\b(gemi|vapur|feribot) bat/` tam
+     bitişiklik istiyordu, ama "Gemi fırtınada battı" (talimatın kendi
+     Doğrulama §2 örneği) gemi ile battı arasına bir kelime giriyor — kalıp
+     0-2 ara kelimeye izin verecek şekilde gevşetildi. `/\bilk (insan|
+     yolculuk|uçuş)/` "ilk başarılı uçuşu" (talimatın kendi Adım 1 örneği,
+     Semiorka/R7) ile eşleşmiyordu — "ilk" ile hedef sözcük arasına bir
+     sıfat girebilecek şekilde genişletildi.
+
+  5. **Karanlık dosya kesinliği için bir ek kural: felaket "majör" kalıpları
+     (deprem/tsunami/kasırga/salgın/pandemi) artık yakınında can kaybı/
+     yaralanma sözcüğü şart koşuyor.** Gerçek veri turunda somut bir yanlış
+     pozitif yakalandı: "Eurovision Şarkı Yarışması koronavirüs pandemisi
+     **nedeniyle** 2021'e ertelendi" cümlesi (felaket sözcüğü yalnızca
+     nedensellik belirteci, cümlenin konusu değil) `Karanlık Dosyalar`da
+     "FELAKET" olarak beliriyordu — talimatın kendi endişesiyle birebir
+     örtüşen türden bir hata ("Bursa kazası kadılığı" örneğiyle aynı ruhta).
+     Düzeltme canlı olarak doğrulandı (Browser pane, `#karanlik` DOM
+     sorgusu).
+
+  6. **Bilinçli olarak kapsam dışı bırakılan iki bulgu** (talimatın Kapsam
+     Dışı tablosundaki "embedding tabanlı sınıflandırma kapsam dışı" ilkesiyle
+     tutarlı):
+     - `genel` oranı taranan 16 günün bazılarında talimatın önerdiği %40
+       eşiğinin üstünde kalıyor (ortalama ~%45). Bu, Kabul Kriterleri'nde bir
+       sayı olarak yok (yalnızca Doğrulama'da bir sağlık kontrolü önerisi);
+       üç ayrı gerçek-veri turunda toplam ~20 yeni kural eklendi, her turda
+       kazanım küçüldü — daha fazla genişletmek kesinlik riskini artırmadan
+       sürdürülemez hâle geliyordu, bu yüzden durduruldu.
+     - Anahtar kelime taraması bir felaket sözcüğünün cümlenin **konusu** mu
+       yoksa yalnızca bir **tarihleme/isim** ifadesi mi olduğunu genel
+       olarak ayıramıyor — ör. "Çernobil Faciası'nın yıl dönümünde bir
+       bilgisayar virüsü yayıldı" hâlâ `facia` kalıbına takılıp karanlık
+       sayılabiliyor (en yaygın somut biçim — "X nedeniyle ertelendi/iptal
+       edildi" — madde 5'te düzeltildi; bu daha nadir "X'in yıl dönümünde"
+       biçimi düzeltilmeden bırakıldı). Gerçek bir çözüm anlam analizi
+       gerektirir, regex'in doğal sınırı.
+
+  7. **O-12 (Bilim & Keşif mükerrer kaydı, T-10'da keşfedilmişti) canlı
+     olarak 18 Mart'ta yeniden doğrulandı, hâlâ düzeltilmedi** — T-11'in
+     kapsamı yalnızca `classifyItem`/`detectDarkItem`'dı, `ScienceMilestone`/
+     `matchKeys` şemasına dokunmadı (talimatın kendi Kapsam Dışı tablosuyla
+     tutarlı).
+
+  8. **Doğrulama:** `npm run typecheck` ve `npm run build` yeşil (59 modül,
+     537,90 kB JS / 174,35 kB gzip — T-10 sonrasına göre +5,76 kB/+0,93 kB
+     gzip, yeni modül). Canlı doğrulama (Browser pane, 18 Mart): kategori
+     çipleri (`Genel · 13/40 = %32,5`), Karanlık Dosyalar ve Bilim & Keşif
+     bölümleri konsol hatasız render edildi; "Selanik'te", "Ordu ilinde",
+     "Kral" gibi tuzak kelimeler canlı veride doğru sınıflandı.
+
+- **Sonraki talimata not:** T-12 (test altyapısı) kurulunca
+  `src/lib/__fixtures__/siniflandirma-ornekleri.ts` + `npm run siniflandirma`
+  mantığı kalıcı bir Vitest/Jest testine dönüştürülebilir (talimatın kendi
+  bağımlılık notu — "T-12'nin test altyapısı önce kurulursa çok daha
+  güvenli" — tersine, T-11 T-12'den önce bitti; `npm run siniflandirma`
+  şimdilik CI'a bağlı değil, yalnızca elle çalıştırılıyor, bu yüzden regresyon
+  koruması **otomatik değil**). Madde 6'daki iki kapsam-dışı bulgu (genel
+  oranı, tarihleme-amaçlı felaket sözcüğü) ileride bir T-15 adayı olabilir —
+  ama küçük/düşük öncelikli, resmî hiçbir ölçütü etkilemiyor.

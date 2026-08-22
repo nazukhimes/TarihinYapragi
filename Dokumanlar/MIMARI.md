@@ -3,7 +3,7 @@
 > Teknik derinlik belgesi. Projenin "ne olduğu" için önce
 > [`BAGLAM.md`](BAGLAM.md)'yi okuyun; burası **nasıl çalıştığını** anlatır.
 >
-> **Son güncelleme:** 2026-08-22
+> **Son güncelleme:** 2026-08-22 (T-11)
 
 ---
 
@@ -102,22 +102,53 @@ FIFO ile bellek üzerinde uygular, sınır **40 kayıt**.
 `VITE_WIKI_API_BASE` ortam değişkenini okur, yoksa üretim Wikimedia adresine düşer.
 Taban adresi değiştirecekseniz `config.ts`'e bakın.
 
-### 2.2 Sınıflandırma — `classifyItem()`
+### 2.2 Sınıflandırma — `classifyItem()` (`src/lib/classification.ts`, T-11)
+
+`classifyItem`/`detectDarkItem` artık `wiki.ts` içinde tanımlı değil —
+`src/lib/classification.ts`'e taşındı (`wiki.ts` yalnızca içe aktarıp yeniden
+dışa aktarır, çağıranlar için hiçbir şey değişmedi). Ayrımın sebebi:
+`scripts/siniflandirma-raporu.mjs`'in gerçek sınıflandırıcıyı (bir kopyasını
+değil) ölçebilmesi için bağımsız, `react`/ağ katmanından tamamen arınmış bir
+modül gerekiyordu (bkz. §9.5).
 
 ```ts
-const RULES: [CategoryId, RegExp][] = [ ... ];  // SIRA ÖNEMLİ
+interface Kural { kategori: CategoryId; desen: RegExp; puan: number }
+const KURALLAR: Kural[] = [ ... ];  // SIRA ÖNEMLİ DEĞİL
 ```
 
-Kurallar dizideki **sırayla** denenir, **ilk eşleşen kazanır**. Sıra:
-`felaket → savas → bilim → kesif → spor → kultur → siyaset → genel`
+Eskiden kurallar dizi sırasıyla denenip **ilk eşleşen kazanırdı** — hem yanlış
+pozitif hem de öngörülemez öncelik hataları üretiyordu (bkz. `ANALIZ-RAPORU.md`
+U-3, ✅ T-11). Artık **tüm kurallar** denenir, her kuralın bir `puan`ı
+(3=güçlü, 2=orta, 1=zayıf) kategori bazında toplanır, en yüksek toplamı alan
+kategori kazanır. Eşit puanda **sabit bir öncelik sırası** devreye girer
+(dosyanın başında belgeli):
 
-Bu sıralama bir önceliktir: "deprem sırasında çıkan savaş" metni `felaket` sayılır.
-Kural eklerken/sırasını değiştirirken bunun bilinçli bir tercih olduğunu unutmayın.
+```
+felaket > savas > siyaset > bilim > kesif > kultur > spor > genel
+```
+
+**Türkçe ek toleransı:** Kalıplar genelde kelime köküne `\b` ile demirlenir,
+sonuna serbest ek bırakılır. **Dikkat:** JS'in `\b`/`\w`'ı yalnızca ASCII
+harfleri kelime karakteri sayar — ç/ğ/ı/ö/ş/ü bunun dışında kalır. Bir kalıp
+bu harflerden biriyle başlıyor/bitiyorsa (`çığ`, `şampiyon`, `öldürüldü` gibi)
+`\b` yerine dosyanın başındaki `(?<![a-zçğıöşü])`/`(?![a-zçğıöşü])` sınırı
+kullanılır — aksi hâlde kalıp normal bir cümlede (boşluktan önce/sonra) **hiç
+eşleşmez** (bu, T-11 sırasında gerçek veriyle doğrulanan, kritik bir bulguydu).
+Yanlış pozitif riski yüksek kısa kalıplar (`kaza`, `ay'`, `ordu`, `patlama`,
+`sel`, `bat-`) bağlamla birlikte yazılır — örn. `/\b(uçak|tren|maden|trafik|
+otobüs) kaza/`, `/\bay['’](a|ın|da|dan)\b/` (bu ikisi artık sırasıyla "Bursa
+kazası" ve "Saray'a" gibi kelimeleri yakalamıyor).
+
+Altın küme doğruluğu ölçmek için: `npm run siniflandirma` (bkz. §9.5).
 
 ### 2.3 Karanlık arşiv taraması — `detectDarkItem()`
 
-`DARK_THEMES` üzerinde aynı "ilk eşleşen kazanır" mantığı.
-Dönen etiket `App.tsx` içinde `CaseType`'a haritalanır:
+`KARANLIK` üzerinde aynı puanlama mantığı, ek olarak bir **eşik**: toplam puan
+**3'ün altındaysa** `null` döner (karanlık dosya sayılmaz) — tek bir zayıf
+eşleşme (ör. bağlamsız `saldır`, puan 2) artık tek başına yetmiyor; güçlü
+kanıtlar (`suikast`, `katliam`, `idam edil`, can kaybı belirtilen `deprem`…)
+tek başına yeterli (puan 3). Dönen etiket `App.tsx` içinde `CaseType`'a
+haritalanır:
 
 | Tema etiketi | `CaseType` |
 |---|---|
@@ -443,7 +474,7 @@ Hepsi dosya sonundaki `@media (prefers-reduced-motion: reduce)` bloğuyla 0.01ms
 | Yapmak istediğiniz | Adımlar |
 |---|---|
 | **Yeni bölüm** | 1) `App.tsx` → `NAV` dizisine `{id, label}` ekle · 2) `SectionShell` + `SectionHead` ile blok yaz · 3) veri için yeni `useMemo` · 4) `SkeletonCards` yükleme durumu |
-| **Yeni kategori** | 1) `data/types.ts` → `CategoryId` birleşimine ekle · 2) `CATEGORIES`'e `{label, color}` · 3) `wiki.ts` → `RULES`'a regex (sırayı düşün) |
+| **Yeni kategori** | 1) `data/types.ts` → `CategoryId` birleşimine ekle · 2) `CATEGORIES`'e `{label, color}` · 3) `classification.ts` → `KURALLAR`'a puanlı kural(lar) + `PRIORITY`'ye ekle · 4) `npm run siniflandirma` ile doğrula |
 | **Yeni dosya türü** | 1) `data/types.ts` → `CaseType` birleşimi · 2) `CASE_LABELS` · 3) `App.tsx` tema→tür haritası |
 | **Yeni gün içeriği** | İlgili ay dosyasına (`data/gunler/MM-ad.ts`) `"MM-DD": { spotlight?, events?, cases, science, talk }` ekle — şablon ve kalite ölçütleri için [`ICERIK-SABLONU.md`](ICERIK-SABLONU.md) |
 | **Yeni dil** | `wiki.ts` → `load()` çağrılarını ve `pick()` mantığını genişlet; `sources` tipini güncelle |
@@ -452,14 +483,17 @@ Hepsi dosya sonundaki `@media (prefers-reduced-motion: reduce)` bloğuyla 0.01ms
 
 ## 7. Performans Notları
 
-**Mevcut derleme (T-10 sonrası, 60 gün):** 532,14 kB JS (173,42 kB gzip),
-54,97 kB CSS (10,44 kB gzip), 58 modül, + `registerSW.js` (0,13 kB, T-08 —
-service worker kaydı, ana pakete girmez). T-10 öncesi (10 gün): 328,74 kB JS
-(107,19 kB gzip) — 50 yeni günün verisi paket boyutuna **+64,64 kB gzip**
-ekledi (T-10'un kendi eşiği <100 kB gzip idi, tembel yükleme uygulanmadan
-geçildi — bkz. 3.3). Vite artık ana JS parçasının 500 kB'yi aştığını
-uyarıyor (`chunkSizeWarningLimit`); bu bir hata değil, T-13'e (performans ve
-derleme iyileştirmesi) not.
+**Mevcut derleme (T-11 sonrası, 60 gün):** 537,90 kB JS (174,35 kB gzip),
+54,97 kB CSS (10,44 kB gzip), 59 modül, + `registerSW.js` (0,13 kB, T-08 —
+service worker kaydı, ana pakete girmez). T-10 sonrası/T-11 öncesi: 532,14 kB
+JS (173,42 kB gzip), 58 modül — sınıflandırma kurallarının `RULES`/
+`DARK_THEMES`'ten `classification.ts`'e ayrılması ve puanlama mantığı
+paket boyutuna **+5,76 kB** (+0,93 kB gzip) ekledi, modül sayısı 58→59
+(yeni dosya). T-10 öncesi (10 gün): 328,74 kB JS (107,19 kB gzip) — 50 yeni
+günün verisi paket boyutuna **+64,64 kB gzip** ekledi (T-10'un kendi eşiği
+<100 kB gzip idi, tembel yükleme uygulanmadan geçildi — bkz. 3.3). Vite artık
+ana JS parçasının 500 kB'yi aştığını uyarıyor (`chunkSizeWarningLimit`); bu
+bir hata değil, T-13'e (performans ve derleme iyileştirmesi) not.
 
 Bilinen maliyet kalemleri:
 
@@ -500,6 +534,7 @@ Tam liste ve kanıtlar → [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md)
 | O-12 | `allScience`, editör kaydını Vikipedi'nin aynı olayına karşı ayıklamıyor (`ScienceMilestone`'da `matchKeys` yok) — T-10 sırasında keşfedildi, bkz. `ANALIZ-RAPORU.md` §9 | Henüz atanmadı |
 | ~~U-1~~ | ~~Yönlendirme / paylaşılabilir URL yok~~ **✅ çözüldü** (`createBrowserRouter` + `src/lib/slug.ts`, URL tek doğruluk kaynağı) | T-06 · 2026-08-21 |
 | ~~U-2~~ | ~~İçerik 10/366 gün~~ **✅ çözüldü** (60/366 güne çıkarıldı, `curated.ts` 12 ay dosyasına bölündü, bkz. 3) | T-10 · 2026-08-22 |
+| ~~U-3~~ | ~~Otomatik sınıflandırma "ilk eşleşen kazanır", ölçülmemiş, yanlış pozitif tuzakları var~~ **✅ çözüldü** (puanlama + öncelik sırası + karanlık eşiği + altın küme, bkz. 2.2/2.3) | T-11 · 2026-08-22 |
 | ~~U-4~~ | ~~Favicon, PWA, SEO, paylaşım kartı eksik~~ **✅ çözüldü** (favicon/manifest/`og:*`/`twitter:*`/JSON-LD/sitemap/service worker, bkz. 9) | T-08 · 2026-08-21 |
 | U-5 | Test/lint altyapısı yok | T-12 |
 
@@ -601,3 +636,45 @@ kapsamında değil — mevcut mimari (backend'siz statik SPA, bkz. `BAGLAM.md` �
 bilinçli olarak korunuyor. Sonucu: paylaşılan bağlantılar WhatsApp/Twitter gibi
 JS çalıştırmayan önizleyicilerde her zaman **aynı genel** kart+açıklamayı
 gösterir, seçili günün başlığını değil (bkz. 2.9'daki sınır notu).
+
+---
+
+## 10. Sınıflandırma Ölçümü — `scripts/siniflandirma-raporu.mjs` (T-11)
+
+Elle çalıştırılan bir ölçüm aracı (`npm run siniflandirma`), `build`'e
+**bağlı değil**. `src/lib/__fixtures__/siniflandirma-ornekleri.ts` içindeki
+altın kümeye (66 örnek, gerçek Vikipedi verisinden ve talimatın kendi
+örneklerinden derlenmiş, ≥15'i bilinçli yanlış-pozitif tuzağı) karşı
+`classifyItem`/`detectDarkItem`'ı çalıştırır; kategori doğruluğu (hedef ≥%85),
+karanlık kesinlik/duyarlılık (hedef: yanlış pozitif 0, kesinlik ≥%90) ve
+performans (100 öğe <5 ms) raporlar. Hedeflerden biri tutmazsa `process.exitCode`
+1 döner (CI'a bağlanabilir — henüz bağlanmadı, bkz. T-12).
+
+**Neden esbuild var (`package.json` → `devDependencies`):** `classification.ts`
+ve fixtures dosyası TypeScript. Script'in bunları `tsx`/`ts-node` gibi ek bir
+çalışma zamanı bağımlılığı kurmadan çalıştırabilmesi için, Vite'ın derlemede
+zaten kullandığı `esbuild`'i (öncesinde yalnızca `vite` üzerinden **dolaylı**
+bir bağımlılıktı, artık `package.json`'da açık) kendisi çağırır:
+`esbuild.transformSync` ile TS'i JS'e çevirir, geçici bir `.mjs` dosyasına
+yazar, `import()` ile yükler, sonra siler. Bu iki dosyanın **hiçbir** çalışma
+zamanı `import`'u olmadığı için (yalnızca `import type`, derlemede tamamen
+silinir) bu basit tek-dosya çeviri yeterli — `wiki.ts`'in geri kalanı gibi
+`react`/ağ bağımlılığı olan bir dosya için bu yöntem yetmez (bkz. §2.2).
+
+**Türkçe sınır bulgusu:** Bu talimat sırasında, JS'in `\b`/`\w`'ının Türkçe
+harfleri (ç/ğ/ı/ö/ş/ü) kelime karakteri saymadığı — ve bu yüzden `\bçığ\b`
+gibi kalıpların normal cümlelerde **hiç eşleşmediği** — gerçek veriyle
+doğrulanan kritik bir bulgu oldu. Ayrıntı ve düzeltme yöntemi → §2.2 ve
+`classification.ts`'in başındaki yorum bloğu.
+
+**Bilinen sınır (bilinçli kabul edildi):** Anahtar kelime tabanlı tarama,
+bir felaket kelimesinin cümlenin **konusu** mu yoksa yalnızca bir **zaman
+belirteci/isim** mi olduğunu ayıramaz — ör. "X, Çernobil faciasının yıl
+dönümünde gerçekleşti" gibi bir cümle, felaketin kendisiyle ilgili olmasa
+bile `facia` kalıbına takılabilir. "X pandemi/deprem/tsunami **nedeniyle**
+ertelendi" biçimindeki en yaygın örnek için can kaybı/yaralanma sözcüğü
+yakınlığı şartı eklenerek düzeltildi (bkz. `classification.ts` → `KARANLIK`
+"Felaket" majör kural); daha nadir örnekler (ör. "X faciası" bir olayı
+tarihlemek için kullanılıyor) çözülmeden bırakıldı — gömme (embedding)
+tabanlı bir yaklaşım gerektirir, T-11'in kendi *Kapsam Dışı* tablosunda
+bilinçli olarak dışarıda bırakılmış.

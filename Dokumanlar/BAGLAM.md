@@ -4,7 +4,7 @@
 > **ilk okuyacağı** dosyadır. Kodu okumadan önce projenin ne olduğunu, nasıl çalıştığını
 > ve hangi kurallara uyulduğunu buradan öğren.
 >
-> **Son güncelleme:** 2026-08-22 · **Sürüm:** 0.1.0 (geliştirme aşaması)
+> **Son güncelleme:** 2026-08-22 (T-11) · **Sürüm:** 0.1.0 (geliştirme aşaması)
 
 ---
 
@@ -102,10 +102,13 @@ değişkeniyle geçersiz kılınabilir (bkz. `.env.example`). Koda gömülü URL
 | Tür | Kaynak | Rozet | Dosya |
 |---|---|---|---|
 | **Editör içeriği** | Elle yazılır, güvenilir | `Editör notu` / `Editör` | `src/data/gunler/*.ts` (T-10'dan önce tek dosya: `curated.ts`) |
-| **Otomatik içerik** | Vikipedi + regex sınıflandırma | rozet yok | `src/lib/wiki.ts` |
+| **Otomatik içerik** | Vikipedi + regex sınıflandırma | rozet yok | `src/lib/classification.ts` |
 
 Otomatik sınıflandırma anahtar kelime tabanlıdır ve **yanılabilir**. Bu yüzden
 alt bilgide bir uyarı notu vardır ve her karta Vikipedi bağlantısı konur.
+Puanlama tabanlı, ölçülen bir doğruluğu var (altın kümede %100 kategori
+doğruluğu, karanlık dosyalarda 0 yanlış pozitif — `npm run siniflandirma`,
+T-11); yine de kesin bilgi için okuyucu Vikipedi bağlantısını izlemeli.
 
 ---
 
@@ -129,7 +132,8 @@ TarihinYapragi/
 │
 ├── scripts/
 │   ├── generate-brand-assets.mjs ← favicon/PWA simgeleri + og-image.png üretir (npm run icons, T-08)
-│   └── sitemap.mjs         ← 366 adresi public/sitemap.xml'e yazar (npm run build'a bağlı, T-08)
+│   ├── sitemap.mjs         ← 366 adresi public/sitemap.xml'e yazar (npm run build'a bağlı, T-08)
+│   └── siniflandirma-raporu.mjs ← sınıflandırma doğruluğu ölçer (npm run siniflandirma, T-11)
 │
 ├── public/
 │   ├── _redirects          ← Netlify / Cloudflare Pages SPA yönlendirmesi (T-06)
@@ -150,11 +154,14 @@ TarihinYapragi/
 │   │   └── gunler/         ← 12 ay dosyası (01-ocak.ts … 12-aralik.ts), şu an 60 gün (T-10)
 │   │
 │   ├── lib/
+│   │   ├── __fixtures__/
+│   │   │   └── siniflandirma-ornekleri.ts ← sınıflandırma altın kümesi, 66 örnek (T-11)
+│   │   ├── classification.ts ← classifyItem / detectDarkItem — puanlı kural motoru (T-11)
 │   │   ├── config.ts       ← WIKI_API_BASE (ortam değişkeninden, varsayılanlı)
 │   │   ├── date.ts         ← Artık yıl / gün sayısı / haftanın günü — saf fonksiyonlar
 │   │   ├── slug.ts         ← toDaySlug / parseDaySlug — gün ↔ URL çevrimi (T-06)
 │   │   ├── useInView.ts    ← Paylaşılan IntersectionObserver + setTimeout güvenlik ağı (T-04)
-│   │   └── wiki.ts         ← API çağrısı, önbellek, sınıflandırma, otomatik kart üretimi
+│   │   └── wiki.ts         ← API çağrısı, önbellek, otomatik kart üretimi (sınıflandırmayı classification.ts'ten alır)
 │   │
 │   └── components/
 │       ├── leaf.tsx        ← Takvim yaprağı, mini takvim, canlı saat, haber bandı
@@ -174,8 +181,8 @@ TarihinYapragi/
 │
 └── Talimatlar/             ← İŞ AKIŞI klasörü
     ├── PLAN-01-*.md        ← aktif plan
-    ├── T-11-*.md ...       ← aktif talimatlar
-    ├── Tamamlandı/         ← biten talimatlar buraya taşınır (T-01…T-10)
+    ├── T-12-*.md ...       ← aktif talimatlar
+    ├── Tamamlandı/         ← biten talimatlar buraya taşınır (T-01…T-11)
     └── Plan/               ← tamamen biten planlar buraya taşınır
 ```
 
@@ -186,7 +193,7 @@ TarihinYapragi/
 | Yeni bir güne özel dosya eklemek | İlgili ay dosyası, `src/data/gunler/MM-ad.ts` → şablon: [`ICERIK-SABLONU.md`](ICERIK-SABLONU.md) |
 | Yeni renk / font eklemek | `src/index.css` → `@theme` bloğu |
 | Yeni bölüm eklemek | `src/App.tsx` → `NAV` dizisi + `SectionShell` |
-| Sınıflandırma kuralı değiştirmek | `src/lib/wiki.ts` → `RULES` / `DARK_THEMES` |
+| Sınıflandırma kuralı değiştirmek | `src/lib/classification.ts` → `KURALLAR` / `KARANLIK`, sonra `npm run siniflandirma` ile doğrula |
 | Yeni ikon eklemek | `src/components/ui.tsx` → `IconXxx` fonksiyonu |
 | Yayın modunu değiştirmek | `src/components/talk.tsx` → `BroadcastMode` |
 | API tabanını değiştirmek | `.env` içine `VITE_WIKI_API_BASE=...` (örnek: `.env.example`) |
@@ -240,6 +247,14 @@ npm run typecheck
 Windows'ta bunların hepsi `başlat.bat` menüsünden de yapılabilir (çift tık → 1-4 seç).
 macOS/Linux'ta aynı menü `./baslat.sh` ile gelir.
 
+```bash
+npm run siniflandirma
+```
+
+Sınıflandırma (kategori + karanlık dosya tespiti) doğruluğunu altın kümeye
+karşı ölçer (T-11); başlatıcı menüsünde değil, yalnızca `classification.ts`
+üzerinde çalışırken elle çalıştırılır.
+
 > Port 3000 meşgulse Vite hata vermeden bir sonraki boş porta geçer
 > (`strictPort: false`) ve HMR o portu izler.
 
@@ -252,7 +267,7 @@ macOS/Linux'ta aynı menü `./baslat.sh` ile gelir.
 
 ## 7. Mevcut Durum — Dürüst Özet
 
-> **Plan ilerlemesi:** PLAN-01 · 10 / 14 talimat tamamlandı (T-01, T-02, T-03, T-04, T-05, T-06, T-07, T-08 · 2026-08-21; T-09, T-10 · 2026-08-22).
+> **Plan ilerlemesi:** PLAN-01 · 11 / 14 talimat tamamlandı (T-01, T-02, T-03, T-04, T-05, T-06, T-07, T-08 · 2026-08-21; T-09, T-10, T-11 · 2026-08-22).
 > Ayrıntı → [`../Talimatlar/PLAN-01-temel-duzeltme-ve-tamamlama.md`](../Talimatlar/PLAN-01-temel-duzeltme-ve-tamamlama.md)
 
 **Çalışan:** Takvim yaprağı ve gün geçişi, Vikipedi entegrasyonu (TR→EN yedeği),
@@ -306,7 +321,11 @@ tek `curated.ts` dosyası silinip yerine bir tip dosyası (`src/data/types.ts`) 
 12 ay dosyasından (`src/data/gunler/`) oluşan, `src/data/index.ts` üzerinden
 birleşen bir yapı kuruldu; mevcut 10 günün içeriği birebir korundu, 50 yeni gün
 (Türkiye tarihi, dünya dönüm noktaları, bilim & keşif, kültür & karanlık arşiv)
-kaynak doğrulamasıyla eklendi (T-10).
+kaynak doğrulamasıyla eklendi (T-10). Otomatik sınıflandırma (`classifyItem`/
+`detectDarkItem`) artık bağımsız bir modülde (`src/lib/classification.ts`) ve
+"ilk eşleşen kazanır" yerine puanlama kullanıyor; en az %85 hedefine karşı
+altın kümede **%100** kategori doğruluğu, karanlık dosyalarda **0 yanlış
+pozitif** ölçüldü (`npm run siniflandirma`, T-11).
 
 **Eksik / hatalı:** Ayrıntılı liste ve kanıtlar için → [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md)
 Özet başlıklar:
@@ -355,6 +374,19 @@ kaynak doğrulamasıyla eklendi (T-10).
   benzeri bir alan eklemeyi gerektirdiği için T-10 bilinçli olarak dokunmadı
   (kapsamı "yalnızca veri") — O-12, henüz bir talimata atanmadı →
   [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md#9-t-10-sırasında-keşfedilen-yeni-bulgu-2026-08-22)
+  (T-11 sırasında canlı olarak yeniden doğrulandı, hâlâ düzeltilmedi — T-11'in
+  kapsamı yalnızca `classifyItem`/`detectDarkItem`'dı, `ScienceMilestone`'a dokunmadı)
+- ~~Otomatik sınıflandırma "ilk eşleşen kazanır", ölçülmemiş, bilinen yanlış
+  pozitif tuzakları vardı~~ ✅ **T-11 ile çözüldü** (puanlama + öncelik sırası +
+  karanlık eşiği; altın kümede %100 kategori doğruluğu, 0 yanlış pozitif) —
+  ayrıntı [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md#u-3-otomatik-sınıflandırma-kalitesi-ölçülmemiş--✅-çözüldü-t-11).
+  **Bilinçli olarak kapsam dışı bırakılan iki bulgu:** `genel` oranı bazı
+  günlerde talimatın önerdiği %40 eşiğinin üstünde kalıyor (ortalama ~%45,
+  resmî ölçütlerin hiçbiri bundan etkilenmiyor); anahtar kelime taraması bir
+  felaket sözcüğünün cümlenin konusu mu yoksa yalnızca bir tarihleme ifadesi mi
+  olduğunu ayıramıyor (ör. "X faciasının yıl dönümünde Y oldu" hâlâ karanlık
+  sayılabiliyor — en yaygın biçim, "... nedeniyle ertelendi", düzeltildi) →
+  ayrıntı T-11 Tamamlanma Kaydı
 - Test, lint, format altyapısı yok
 
 **Çalışma planı:** [`../Talimatlar/`](../Talimatlar/) klasöründe. İş akışı için
