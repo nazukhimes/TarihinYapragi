@@ -18,8 +18,7 @@ jobs:
           for i in 1 2 3 4 5; do
             echo "=== deneme $i ==="
             if ! npm run test > /tmp/test-$i.log 2>&1; then
-              echo "::error::Deneme $i BASARISIZ. Son 200 satir:"
-              tail -n 200 /tmp/test-$i.log | while IFS= read -r line; do echo "::error::[$i] $line"; done
+              node scripts/ci-teshis.mjs /tmp/test-$i.log "deneme $i"
               exit 1
             fi
           done
