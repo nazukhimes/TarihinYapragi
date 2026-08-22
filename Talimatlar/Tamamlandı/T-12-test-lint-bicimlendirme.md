@@ -433,7 +433,7 @@ jobs:
 - [x] `npm run format:check` temiz
 - [x] `.prettierignore` içinde `*.bat` var
 - [x] `npm run kontrol` tek komutta hepsini çalıştırıyor
-- [x] CI iş akışı var (`.github/workflows/kontrol.yml`) — **canlı yeşillik bu oturumda doğrulanamadı** (push gerektirir, bkz. Tamamlanma Kaydı)
+- [x] CI iş akışı var (`.github/workflows/kontrol.yml`) — **canlı olarak doğrulandı ve yeşil** (bir `undici`/jsdom kararsızlığı bulunup düzeltildikten sonra, bkz. Tamamlanma Kaydı madde 11)
 
 ---
 
@@ -594,36 +594,76 @@ Bir PR aç, iş akışının çalıştığını ve yeşil olduğunu doğrula.
       çekiliyor) ve `scripts/siniflandirma-raporu.mjs`'teki kullanılmayan
       `dTN` sayacı (T-11'den kalma) — ikisi de `npm run lint`'i hatasız
       kılmak için silindi, davranış etkilenmedi (rapor çıktısı aynı).
-  11. **CI'da bir kere kırmızı, bir kere yeşil çıkan gerçek bir kararsızlık
-      (flaky test) yakalandı ve kalıcı olarak düzeltildi.** İlk push'ta
-      `npm run test` adımı GitHub Actions'ta (Ubuntu, aynı `package-lock.json`,
-      Node 20 istendi ama runner Node 24'e yükseltti) **başarısız** oldu; yerel
-      makinede (Windows) `npm ci` ile temiz kurulum dâhil hep yeşildi. Ham
-      loglar bu depoda repo-admin yetkisi gerektirdiğinden okunamadı; iş
-      akışına geçici bir `::error::` teşhis adımı eklenip push'landı — o
-      ikinci çalıştırma **tesadüfen yeşil** geldi (teşhis adımı hiç tetiklenmedi).
-      Aynı kod/kilit dosyasının bir kere kızarıp bir kere geçmesi gerçek bir
-      mantık hatası değil, **zamanlamaya bağlı kararsızlık** olduğunu gösterdi
-      — tek şüpheli, `ui.test.tsx`'teki `CountUp` testiydi (tek gerçek zaman
-      kısıtlı/async test). Kök neden: kuklamız (`requestAnimationFrame` →
-      gerçek `setTimeout(…,0)` + gerçek `performance.now()`) paylaşımlı/yavaş
-      bir çalıştırıcıda duvar-saati hızına bağımlıydı. Kalıcı çözüm: test
-      `vi.useFakeTimers()`'a geçirildi — bu, `performance.now()` VE
-      `requestAnimationFrame`'i TEK bir sahte saate bağlıyor, gerçek zamana
-      hiçbir bağımlılık kalmıyor (hem orijinal jsdom saat-tutarsızlığı hem de
-      bu zamanlama kararsızlığı kökten ortadan kalktı). 15 arka arkaya yerel
-      çalıştırmayla deterministik olduğu doğrulandı. CI iş akışındaki geçici
-      teşhis adımı temizlendi (dosya artık talimatın önerdiği sade hâliyle
-      aynı).
-- **Sonraki talimata not:** CI iş akışı `.github/workflows/kontrol.yml` artık
-  T-12'nin önerdiği sade dört adımlı hâliyle çalışıyor (madde 11'deki
-  düzeltmeden sonra); bu düzeltmeyle birlikte yapılan push'un sonucu bu kaydın
-  yazıldığı anda henüz kesinleşmemişti — canlı doğrulama tamamlanınca bu satır
-  güncellenecek/silinecek. T-13 (performans/
-  derleme), build çıktısındaki mevcut uyarıyı devralıyor: tek JS paketi
-  537,97 kB (174,38 kB gzip) — Rollup "500 kB" eşiğini aşıyor, kod bölme
-  (code-splitting) T-13'ün kapsamına aday. **Ayrıca T-13'e not:** bundan
-  sonra jsdom'da gerçek zaman/`requestAnimationFrame` içeren herhangi bir
-  yeni test yazılırsa `vi.useFakeTimers()` varsayılan yaklaşım olsun —
-  gerçek `setTimeout`'a dayanan kuklalar CI'da kararsız çıkabiliyor (bkz.
-  madde 11).
+  11. **CI'da gerçek, ciddi bir kararsızlık (flaky CI) yakalandı; kök nedeni
+      bulundu ve kalıcı olarak çözüldü — hiçbir uygulama/test kodu bundan
+      sorumlu değildi.** İlk push'ta `npm run test` adımı GitHub Actions'ta
+      (Ubuntu, Node 20 istendi ama runner Node 24'e yükseltti) **başarısız**
+      oldu; yerel makinede (Windows, `npm ci` ile temiz kurulum dâhil) hep
+      yeşildi. Ham loglar bu depoda repo-admin yetkisi gerektirdiğinden
+      (`403 Must have admin rights`) okunamadı ve `gh` CLI ortamda yoktu; iş
+      akışına geçici bir teşhis adımı eklendi (önce satır-satır `::error::`,
+      sonra tek, çok-satırlı, `%0A`-kodlu bir `::error::` — GitHub'ın
+      annotation-sayısı sınırını aşan ilk deneme gerçek hatayı gösteremedi).
+      Aynı kodun art arda kızarıp geçmesi (5 çalıştırmada 3 geçti/2 kızardı,
+      **hem eski hem yeni `CountUp` uygulamasıyla aynı oranda**) gerçek nedenin
+      `CountUp`/`vi.useFakeTimers()` ile **ilgisiz** olduğunu gösterdi — bu ilk
+      şüphe (aşağıdaki fake-timer değişikliği) yanlış çıktı, ayrıntı aşağıda.
+      Testi CI'da 5 kez art arda çalıştıran bir teşhis adımıyla gerçek hata
+      yakalandı:
+      ```
+      TypeError: webidl.util.markAsUncloneable is not a function
+       ❯ new CacheStorage node_modules/undici/lib/web/cache/cachestorage.js:20:17
+       ❯ Object.<anonymous> node_modules/jsdom/lib/api.js:12:33
+      ```
+      Web araştırmasıyla doğrulanan kök neden ([nodejs/undici#5024](https://github.com/nodejs/undici/issues/5024),
+      [oven-sh/bun#29423](https://github.com/oven-sh/bun/issues/29423)):
+      `undici` 8.0.3'te `markAsUncloneable` için sahip olduğu çalışma-zamanı
+      güvenlik kontrolünü kaldırdı, 8.1.0'dan itibaren
+      `require("node:worker_threads").markAsUncloneable`'ı **koşulsuz**
+      çağırıyor — bu fonksiyon CI'nın çalıştırıcısındaki Node sürümünde
+      (bazen) mevcut değil, jsdom'un `api.js`'i modül yükleme anında
+      `undici`'yi require ettiği anda **modül seviyesinde** çöküyor. Bu,
+      Vitest'in worker/fork havuzlama sırasına, dosya yükleme zamanlamasına
+      bağlı olarak **kararsız** biçimde tetikleniyordu — kodun kendisi hiç
+      değişmese bile. `pool: "forks"` denendi (worker_threads yerine ayrı
+      süreçler), **fark etmedi** (hata worker_threads'e özgü değil, doğrudan
+      Node sürümünün eksik fonksiyonuyla ilgili). Kalıcı çözüm: `package.json`'a
+      `"overrides": { "undici": "7.29.0" }` eklendi — 7.x hattı bu koşulsuz
+      çağrıyı (8.x'e özgü bir yeniden yazımla gelen) hiç içermiyor. `undici`
+      8.0.0-8.8.0 aralığının kendi bilinen güvenlik açıkları da vardı (yüksek
+      önem dereceli, `npm audit` ile görüldü) — 7.29.0'a sabitlemek CI
+      çökmesini **ve** o açıkları aynı anda çözdü (aralıklar örtüşmüyordu:
+      8.x'te "çökmeden önce" ile "açıklar yamalı" birbirini dışlıyordu).
+      Kanıt: aynı kod üzerinde CI'da testi 5 kez art arda çalıştıran bir
+      teşhis adımıyla **5/5 geçti** (düzeltmeden önce 5 çalıştırmanın 2'si
+      kırmızıydı). Bu tamamen `devDependencies` kapsamında, üretime giden
+      `dist/` paketini hiç etkilemiyor (uygulama kodu `undici`'yi hiç
+      import etmiyor, yalnızca `jsdom`'un test ortamı içinde dolaylı olarak
+      kullanılıyor). **Şüpheli ama sonuçta gereksiz çıkan yan değişiklik:**
+      `ui.test.tsx`'teki `CountUp` testi, ilk şüphe sırasında gerçek
+      `setTimeout`-tabanlı bir rAF kuklasından `vi.useFakeTimers()`'a
+      geçirildi — bu, CI çökmesinin gerçek nedenini **çözmedi** ama yine de
+      **tutulan, gerçek bir iyileştirme**: jsdom'un `requestAnimationFrame`'i
+      gerçek tarayıcılarla tutarsız bir saat kullanıyor (geri çağrıya pencere
+      oluşturma anına göre sıfırlanmış bir zaman damgası veriyor, ama doğrudan
+      `performance.now()` çağrıları bu sıfırlamayı görmüyor) — `vi.useFakeTimers()`
+      ikisini de TEK bir sahte saate bağlayarak bunu da ortadan kaldırıyor,
+      gerçek zamana hiç bağımlı olmayan, tamamen deterministik bir test
+      veriyor (15 arka arkaya yerel çalıştırmayla doğrulandı). CI iş
+      akışındaki tüm geçici teşhis adımları ve `scripts/ci-teshis.mjs`
+      temizlendi; dosya artık talimatın önerdiği sade dört adımlı hâliyle
+      aynı.
+- **Sonraki talimata not:** CI iş akışı `.github/workflows/kontrol.yml`
+  **canlı olarak doğrulandı ve yeşil** (madde 11'deki `undici` düzeltmesinden
+  sonra, temiz/sade haliyle bir kez daha, artı öncesindeki 5x-tekrar
+  teşhisinde 5/5). T-13 (performans/derleme), build çıktısındaki mevcut
+  uyarıyı devralıyor: tek JS paketi 537,97 kB (174,38 kB gzip) — Rollup
+  "500 kB" eşiğini aşıyor, kod bölme (code-splitting) T-13'ün kapsamına
+  aday. **Ayrıca T-13'e (ve sonraki her talimata) not:** `package.json`'daki
+  `overrides.undici` pini, `jsdom`'un kendi `undici` sürümünü ileride
+  yükseltip bu sorunu üstünde düzeltmesi durumunda gereksiz kalabilir —
+  `npm outdated`/jsdom'un changelog'u zaman zaman kontrol edilip pin
+  kaldırılabilir mi diye bakılmalı. jsdom'da gerçek zaman/
+  `requestAnimationFrame` içeren yeni bir test yazılırsa `vi.useFakeTimers()`
+  varsayılan yaklaşım olsun (bkz. madde 11 — gerçek `setTimeout`'a dayanan
+  kuklalar gereksiz karmaşıklık taşıyor, tamamen deterministik değil).

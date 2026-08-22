@@ -289,17 +289,26 @@ T-01 ──┬─► T-02
   `data.test.ts` (CURATED bütünlüğü), `ui.test.tsx` (`CountUp` K-2 regresyonu).
   ESLint (flat config, `rules-of-hooks`+`exhaustive-deps`) ve Prettier kuruldu;
   `npm run kontrol` (typecheck+lint+test+build) tek komut. `src/lib` satır
-  kapsamı **%78,78** (hedef ≥%70). **Üç önemli sapma:** (1) jsdom'un
-  `requestAnimationFrame`'i gerçek tarayıcılarla tutarsız bir saat veriyor —
-  `CountUp` testi bunu bir kukla saatle atladı, bileşen değişmedi; (2) bugün
-  kurulan güncel `vitest`/`@vitest/coverage-v8` (4.1.11) gerçek bir kapsam-
-  raporlama hatası içeriyordu (yoğun test edilen dosyalar raporda tamamen
-  kayboluyordu) — köklü **3.2.7** hattına sabitlenerek çözüldü; (3) güncel
-  `eslint-plugin-react-hooks` (7.x) React Compiler'a yönelik kurallar
-  taşıyordu (bu proje derleyici kullanmıyor), yalnızca klasik iki kurala
-  daraltıldı. Ayrıntı → T-12 Tamamlanma Kaydı. CI iş akışı (`.github/
-  workflows/kontrol.yml`) eklendi, canlı yeşilliği bu oturumda doğrulanmadı
-  (push gerektiriyor). Artık T-13 açık.
+  kapsamı **%78,78** (hedef ≥%70). **Dört önemli sapma, hepsi bugün kurulan
+  güncel paket sürümlerinden kaynaklandı:** (1) `vitest`/`@vitest/coverage-v8`
+  (4.1.11) gerçek bir kapsam-raporlama hatası içeriyordu (yoğun test edilen
+  dosyalar raporda tamamen kayboluyordu) — köklü **3.2.7** hattına
+  sabitlenerek çözüldü; (2) `eslint-plugin-react-hooks` (7.x) React
+  Compiler'a yönelik kurallar taşıyordu (bu proje derleyici kullanmıyor),
+  yalnızca klasik iki kurala daraltıldı; (3) jsdom'un `requestAnimationFrame`'i
+  gerçek tarayıcılarla tutarsız bir saat veriyor — `CountUp` testi
+  `vi.useFakeTimers()`'a geçirilerek düzeltildi; (4) **CI'da gerçek bir
+  kararsızlık (flaky) yakalandı** — kök neden `undici`'nin (jsdom'un
+  bağımlılığı) 8.0.3+ sürümlerinin `node:worker_threads.markAsUncloneable`'ı
+  koşulsuz çağırması, CI çalıştırıcısının Node sürümünde bu fonksiyon ara sıra
+  bulunmuyor (`TypeError: webidl.util.markAsUncloneable is not a function`,
+  bilinen bir üst akış hatası — [nodejs/undici#5024](https://github.com/nodejs/undici/issues/5024));
+  `package.json`'a `overrides: { undici: "7.29.0" }` eklenerek kalıcı çözüldü
+  (aynı zamanda undici 8.0.0-8.8.0'ın kendi bilinen güvenlik açıklarını da
+  giderdi). CI'da testi 5 kez art arda çalıştıran bir teşhis adımıyla
+  düzeltme sonrası **5/5** doğrulandı. Ayrıntı → T-12 Tamamlanma Kaydı madde
+  11. CI iş akışı (`.github/workflows/kontrol.yml`) **canlı olarak doğrulandı
+  ve yeşil**. Artık T-13 açık.
 - **T-14 en sonda.** Belgeler ancak her şey bitince gerçeğe eşitlenebilir.
 - ~~**T-06 → T-08 sırası zorunlu.**~~ SEO meta etiketleri gün bazlı URL'lere
   bağlıydı — T-06 tamamlandı, URL şeması (`/gun-ay`) sabitlendi, T-08 bu şema
@@ -328,7 +337,7 @@ T-01 ──┬─► T-02
 | T-09 | Hata sınırı ve durum ekranları | ✅ Tamamlandı | 2026-08-22 | `ErrorBoundary.tsx` eklendi (kökte + 6 bölümde) · **Sapma:** `main.tsx`'teki kök sarmalayıcı tek başına yetersizdi (react-router kendi dahili hata sınırını kullanıyor) → her rotaya `errorElement`/`RouteErrorFallback` eklendi, canlı doğrulandı · `data.error.kind`'a göre 5 başlık · arama sonuç sayacı + boş durum ekranı · "Bugünün anlamı" şeridi (`holidays`) · Karanlık Dosyalar/Bilim & Keşif'te "N daha göster" · 4 sn gecikme uyarısı · O-5, O-9, m-3, m-6 çözüldü · Yeni bulgu O-11 (`holidays`'te şablon artığı çöp kayıt) kapsam dışı bırakıldı |
 | T-10 | İçerik mimarisi ve kapsam genişletme | ✅ Tamamlandı | 2026-08-22 | `curated.ts` (1.001 satır) silindi → `types.ts` + `gunler/` (12 ay dosyası) + `index.ts`; mevcut 10 gün birebir taşındı (sed ile) · editör içeriği 10→60 gün (%2,7→%16,4) · **Sapma:** "AI toplu üretim yasak" notuna rağmen kullanıcı bu oturum için açık onay verdi, 4 parti web araştırmasıyla kaynak doğrulanarak yazıldı · `ICERIK-SABLONU.md` eklendi · paket boyutu +64,64 kB gzip (<100 kB eşiği altında, tembel yükleme gerekmedi) · Yeni bulgu O-12 (Bilim & Keşif'te editör/Vikipedi mükerrer ayıklaması yok) kapsam dışı bırakıldı |
 | T-11 | Sınıflandırma doğruluğu | ✅ Tamamlandı | 2026-08-22 | `wiki.ts`'ten ayrılan `classification.ts` · "ilk eşleşen kazanır" → puanlama + sabit öncelik sırası · `detectDarkItem` puan eşiği (≥3) · Sorun 2'deki 7 kalıp düzeltildi · **kritik yan bulgu:** JS `\b`/`\w` Türkçe harfleri (ç/ğ/ı/ö/ş/ü) kelime saymıyor, birkaç kural gerçek veride hiç eşleşmiyordu, elle sınırla düzeltildi · 66 örneklik altın küme + `npm run siniflandirma` · kategori doğruluğu %100 (≥%85 hedef), karanlık yanlış pozitif 0, kesinlik %100 (≥%90 hedef) · U-3 çözüldü · `genel` oranı bazı günlerde %40 hedefinin üstünde ve "felaket kelimesi tarihleme amaçlı" örnekler bilinçli kapsam dışı bırakıldı (regex sınırı) |
-| T-12 | Test, lint ve biçimlendirme altyapısı | ✅ Tamamlandı | 2026-08-22 | Vitest (jsdom+v8) · 203 test/7 dosya · ESLint (flat, rules-of-hooks+exhaustive-deps) + Prettier · `npm run kontrol` tek komut · `src/lib` satır kapsamı %78,78 (≥%70 hedef) · **3 sapma:** jsdom `requestAnimationFrame` saat tutarsızlığı (CountUp testinde kukla saatle atlandı) · güncel `vitest`/`@vitest/coverage-v8` 4.1.11'de gerçek kapsam-raporlama hatası → 3.2.7'ye sabitlendi · güncel `eslint-plugin-react-hooks` 7.x React Compiler kuralları taşıyor → klasik iki kurala daraltıldı · CI eklendi (`kontrol.yml`), canlı yeşilliği bu oturumda doğrulanmadı |
+| T-12 | Test, lint ve biçimlendirme altyapısı | ✅ Tamamlandı | 2026-08-22 | Vitest (jsdom+v8) · 203 test/7 dosya · ESLint (flat, rules-of-hooks+exhaustive-deps) + Prettier · `npm run kontrol` tek komut · `src/lib` satır kapsamı %78,78 (≥%70 hedef) · **4 sapma:** güncel `vitest`/`@vitest/coverage-v8` 4.1.11'de gerçek kapsam-raporlama hatası → 3.2.7'ye sabitlendi · güncel `eslint-plugin-react-hooks` 7.x React Compiler kuralları taşıyor → klasik iki kurala daraltıldı · jsdom `requestAnimationFrame` saat tutarsızlığı → CountUp testi `vi.useFakeTimers()`'a geçirildi · **CI'da gerçek bir kararsızlık** (`undici` 8.0.3+'ın CI'nın Node sürümünde bazen eksik olan `markAsUncloneable`'ı koşulsuz çağırması) → `overrides: {undici: "7.29.0"}` ile kalıcı çözüldü (aynı zamanda undici'nin bilinen güvenlik açıklarını da giderdi), 5x tekrar testiyle 5/5 doğrulandı · CI canlı olarak doğrulandı ve yeşil |
 | T-13 | Performans ve derleme iyileştirmesi | ⬜ Bekliyor | | |
 | T-14 | Dokümantasyon güncelleme ve yayın | ⬜ Bekliyor | | |
 

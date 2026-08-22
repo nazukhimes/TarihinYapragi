@@ -13,13 +13,5 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm run lint
-      - name: test (5x tekrar, kararsizlik avi - gecici)
-        run: |
-          for i in 1 2 3 4 5; do
-            echo "=== deneme $i ==="
-            if ! npm run test > /tmp/test-$i.log 2>&1; then
-              node scripts/ci-teshis.mjs /tmp/test-$i.log "deneme $i"
-              exit 1
-            fi
-          done
+      - run: npm run test
       - run: npm run build
