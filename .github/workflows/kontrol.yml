@@ -13,13 +13,5 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm run lint
-      - name: test
-        id: test
-        run: npm run test 2>&1 | tee /tmp/test.log
-        continue-on-error: true
-      - name: teshis (gecici)
-        if: steps.test.outcome == 'failure'
-        run: |
-          tail -n 150 /tmp/test.log | while IFS= read -r line; do echo "::error::$line"; done
-          exit 1
+      - run: npm run test
       - run: npm run build

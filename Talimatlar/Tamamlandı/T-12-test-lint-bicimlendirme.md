@@ -594,10 +594,36 @@ Bir PR aç, iş akışının çalıştığını ve yeşil olduğunu doğrula.
       çekiliyor) ve `scripts/siniflandirma-raporu.mjs`'teki kullanılmayan
       `dTN` sayacı (T-11'den kalma) — ikisi de `npm run lint`'i hatasız
       kılmak için silindi, davranış etkilenmedi (rapor çıktısı aynı).
-- **Sonraki talimata not:** CI iş akışı (`.github/workflows/kontrol.yml`)
-  eklendi ama **canlı olarak yeşil olduğu doğrulanmadı** — bu, `main`'e bir
-  push gerektiriyordu ve bu oturumda henüz push yapılmadı (kullanıcı onayı
-  bekleniyor). Push edilince `gh run list`/Actions sekmesinden kontrol
-  edilmeli. T-13 (performans/derleme), build çıktısındaki mevcut uyarıyı
-  devralıyor: tek JS paketi 537,97 kB (174,38 kB gzip) — Rollup "500 kB"
-  eşiğini aşıyor, kod bölme (code-splitting) T-13'ün kapsamına aday.
+  11. **CI'da bir kere kırmızı, bir kere yeşil çıkan gerçek bir kararsızlık
+      (flaky test) yakalandı ve kalıcı olarak düzeltildi.** İlk push'ta
+      `npm run test` adımı GitHub Actions'ta (Ubuntu, aynı `package-lock.json`,
+      Node 20 istendi ama runner Node 24'e yükseltti) **başarısız** oldu; yerel
+      makinede (Windows) `npm ci` ile temiz kurulum dâhil hep yeşildi. Ham
+      loglar bu depoda repo-admin yetkisi gerektirdiğinden okunamadı; iş
+      akışına geçici bir `::error::` teşhis adımı eklenip push'landı — o
+      ikinci çalıştırma **tesadüfen yeşil** geldi (teşhis adımı hiç tetiklenmedi).
+      Aynı kod/kilit dosyasının bir kere kızarıp bir kere geçmesi gerçek bir
+      mantık hatası değil, **zamanlamaya bağlı kararsızlık** olduğunu gösterdi
+      — tek şüpheli, `ui.test.tsx`'teki `CountUp` testiydi (tek gerçek zaman
+      kısıtlı/async test). Kök neden: kuklamız (`requestAnimationFrame` →
+      gerçek `setTimeout(…,0)` + gerçek `performance.now()`) paylaşımlı/yavaş
+      bir çalıştırıcıda duvar-saati hızına bağımlıydı. Kalıcı çözüm: test
+      `vi.useFakeTimers()`'a geçirildi — bu, `performance.now()` VE
+      `requestAnimationFrame`'i TEK bir sahte saate bağlıyor, gerçek zamana
+      hiçbir bağımlılık kalmıyor (hem orijinal jsdom saat-tutarsızlığı hem de
+      bu zamanlama kararsızlığı kökten ortadan kalktı). 15 arka arkaya yerel
+      çalıştırmayla deterministik olduğu doğrulandı. CI iş akışındaki geçici
+      teşhis adımı temizlendi (dosya artık talimatın önerdiği sade hâliyle
+      aynı).
+- **Sonraki talimata not:** CI iş akışı `.github/workflows/kontrol.yml` artık
+  T-12'nin önerdiği sade dört adımlı hâliyle çalışıyor (madde 11'deki
+  düzeltmeden sonra); bu düzeltmeyle birlikte yapılan push'un sonucu bu kaydın
+  yazıldığı anda henüz kesinleşmemişti — canlı doğrulama tamamlanınca bu satır
+  güncellenecek/silinecek. T-13 (performans/
+  derleme), build çıktısındaki mevcut uyarıyı devralıyor: tek JS paketi
+  537,97 kB (174,38 kB gzip) — Rollup "500 kB" eşiğini aşıyor, kod bölme
+  (code-splitting) T-13'ün kapsamına aday. **Ayrıca T-13'e not:** bundan
+  sonra jsdom'da gerçek zaman/`requestAnimationFrame` içeren herhangi bir
+  yeni test yazılırsa `vi.useFakeTimers()` varsayılan yaklaşım olsun —
+  gerçek `setTimeout`'a dayanan kuklalar CI'da kararsız çıkabiliyor (bkz.
+  madde 11).

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import { CountUp } from "./ui";
 
 /**
@@ -9,26 +9,37 @@ import { CountUp } from "./ui";
  * ikisi farklı saatlerde akar (gerçek tarayıcılarda ikisi HER ZAMAN aynı
  * saattir, spesifikasyon gereği). Sonuç: ilk `tick`te `t - t0` devasa negatif
  * bir sayı oluyor (gözlemlendi: -948188758289), kübik yumuşatma patlıyor —
- * bileşen hatası değil, jsdom'a özgü bir ortam kısıtı. rAF'ı tek bir saate
- * (performance.now, doğrudan) bağlayan senkron bir kukla ile bu atlanıyor.
+ * bileşen hatası değil, jsdom'a özgü bir ortam kısıtı.
+ *
+ * İlk düzeltme (gerçek `setTimeout` ile senkronize edilmiş bir rAF kuklası)
+ * CI'da ara sıra kırmızı veriyordu (gerçek duvar-saati zamanlamasına bağlıydı,
+ * paylaşımlı/yavaş bir çalıştırıcıda tekrar denemeden geçti) — kök neden aynı
+ * kaldığı için giderilmedi, yalnızca belirsizlik kaynağı taşındı. Kalıcı çözüm:
+ * `vi.useFakeTimers()` — bu, `performance.now()` VE `requestAnimationFrame`'i
+ * TEK bir sahte saate bağlar (gerçek zamana hiç bağımlı değil), hem orijinal
+ * jsdom saat tutarsızlığını hem de olası zamanlama kararsızlığını kökten
+ * ortadan kaldırır.
  */
 beforeEach(() => {
-  vi.stubGlobal("requestAnimationFrame", (cb: FrameRequestCallback): number => {
-    return setTimeout(() => cb(performance.now()), 0) as unknown as number;
-  });
-  vi.stubGlobal("cancelAnimationFrame", (id: number) => clearTimeout(id));
+  vi.useFakeTimers();
 });
 
 afterEach(() => {
-  vi.unstubAllGlobals();
+  vi.useRealTimers();
 });
 
 describe("CountUp — K-2 regresyonu", () => {
-  it("to değişince yeni değere geçer", async () => {
+  it("to değişince yeni değere geçer", () => {
     const { rerender } = render(<CountUp to={23} duration={10} />);
-    await waitFor(() => expect(screen.getByText("23")).toBeInTheDocument());
+    act(() => {
+      vi.advanceTimersByTime(200);
+    });
+    expect(screen.getByText("23")).toBeInTheDocument();
 
     rerender(<CountUp to={18} duration={10} />);
-    await waitFor(() => expect(screen.getByText("18")).toBeInTheDocument());
+    act(() => {
+      vi.advanceTimersByTime(200);
+    });
+    expect(screen.getByText("18")).toBeInTheDocument();
   });
 });
