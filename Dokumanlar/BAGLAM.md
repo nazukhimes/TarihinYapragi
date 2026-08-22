@@ -4,7 +4,7 @@
 > **ilk okuyacağı** dosyadır. Kodu okumadan önce projenin ne olduğunu, nasıl çalıştığını
 > ve hangi kurallara uyulduğunu buradan öğren.
 >
-> **Son güncelleme:** 2026-08-22 (T-11) · **Sürüm:** 0.1.0 (geliştirme aşaması)
+> **Son güncelleme:** 2026-08-22 (T-12) · **Sürüm:** 0.1.0 (geliştirme aşaması)
 
 ---
 
@@ -48,6 +48,7 @@ bu amaca hizmet eder.
 | Durum yönetimi | React `useState` / `useMemo` | Redux/Zustand yok, gerek de yok |
 | Veri | Wikimedia REST "On this day" API | Sunucu/backend **yok**, tamamen istemci taraflı |
 | Kalıcılık | `localStorage` (çevrimdışı yedek) + bellek içi `Map` | Veritabanı yok |
+| Kalite | Vitest (`jsdom`) + Testing Library, ESLint (flat config), Prettier | `npm run test` / `lint` / `format` / `kontrol` (T-12) · CI: `.github/workflows/kontrol.yml` |
 
 > **Önemli:** Bu proje **backend'siz, statik bir SPA**'dır. Derleme çıktısı (`dist/`)
 > herhangi bir statik sunucuya konulabilir. Gizli anahtar gerektiren bir `.env` yoktur;
@@ -387,7 +388,10 @@ pozitif** ölçüldü (`npm run siniflandirma`, T-11).
   olduğunu ayıramıyor (ör. "X faciasının yıl dönümünde Y oldu" hâlâ karanlık
   sayılabiliyor — en yaygın biçim, "... nedeniyle ertelendi", düzeltildi) →
   ayrıntı T-11 Tamamlanma Kaydı
-- Test, lint, format altyapısı yok
+- ~~Test, lint, format altyapısı yok~~ ✅ **T-12 ile çözüldü** (Vitest ·
+  203 test · `src/lib` %78,78 satır kapsamı · ESLint + Prettier ·
+  `npm run kontrol` · CI) — ayrıntı
+  [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md#u-5-kalite-güvencesi-altyapısı-hiç-yok--✅-çözüldü-t-12)
 
 **Çalışma planı:** [`../Talimatlar/`](../Talimatlar/) klasöründe. İş akışı için
 → [`CALISMA-SISTEMI.md`](CALISMA-SISTEMI.md)
@@ -404,6 +408,6 @@ Bu projede çalışırken:
 3. Bitirince talimat dosyasını `Talimatlar/Tamamlandı/` klasörüne taşı ve dosyanın
    sonundaki *Tamamlanma Kaydı* bölümünü doldur.
 4. Türkçe karakterleri bozma. Dosyaları UTF-8 (BOM'suz) yaz. `.bat` dosyaları CRLF olmalı.
-5. `npm run typecheck` ve `npm run build` yeşil kalmadan hiçbir talimatı kapatma.
+5. `npm run kontrol` (typecheck+lint+test+build, T-12) yeşil kalmadan hiçbir talimatı kapatma.
 6. Bir talimat başka bir talimatın işine giriyorsa **girme** — kapsamı koru, notu
    ilgili talimata düş.

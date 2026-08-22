@@ -81,8 +81,16 @@ export const ORNEKLER: Ornek[] = [
     beklenen: "savas",
     karanlik: null,
   },
-  { text: "Amerika Birleşik Devletleri Deniz Kuvvetleri, Haiti'yi işgal etti.", beklenen: "savas", karanlik: null },
-  { text: "II. Viyana Kuşatması ile sonuçlanacak savaş ilan edildi.", beklenen: "savas", karanlik: null },
+  {
+    text: "Amerika Birleşik Devletleri Deniz Kuvvetleri, Haiti'yi işgal etti.",
+    beklenen: "savas",
+    karanlik: null,
+  },
+  {
+    text: "II. Viyana Kuşatması ile sonuçlanacak savaş ilan edildi.",
+    beklenen: "savas",
+    karanlik: null,
+  },
   {
     text: "Mastaba Meydan Muharebesi: Canberdi Gazali İsyanı bastırıldı.",
     beklenen: "savas",
@@ -103,7 +111,11 @@ export const ORNEKLER: Ornek[] = [
   },
 
   // ==================== siyaset ====================
-  { text: "Ebu'l-Hasan Beni Sadr, İran'ın ilk Cumhurbaşkanı oldu.", beklenen: "siyaset", karanlik: null },
+  {
+    text: "Ebu'l-Hasan Beni Sadr, İran'ın ilk Cumhurbaşkanı oldu.",
+    beklenen: "siyaset",
+    karanlik: null,
+  },
   {
     text: "Fransa'da Camille Chautemps istifa etti. Yeni hükûmeti, Édouard Daladier kurdu.",
     beklenen: "siyaset",
@@ -160,7 +172,11 @@ export const ORNEKLER: Ornek[] = [
     karanlik: null,
     not: "'nükleer' (bilim, güçlü) ile 'romanını' (kultur) eşit ağırlıkta değil — bilim önde, eşitlikte de PRIORITY sırasında önde",
   },
-  { text: "Charles Townes, Amerikalı fizikçi ve Nobel Fizik Ödülü sahibi oldu.", beklenen: "bilim", karanlik: null },
+  {
+    text: "Charles Townes, Amerikalı fizikçi ve Nobel Fizik Ödülü sahibi oldu.",
+    beklenen: "bilim",
+    karanlik: null,
+  },
   {
     text: "Bilim tarihinde çığır açan bir buluş olarak nitelendirildi.",
     beklenen: "bilim",
@@ -229,7 +245,11 @@ export const ORNEKLER: Ornek[] = [
   },
 
   // ==================== spor ====================
-  { text: "Kış Olimpiyat Oyunları Innsbruck'ta (Avusturya) başladı.", beklenen: "spor", karanlik: null },
+  {
+    text: "Kış Olimpiyat Oyunları Innsbruck'ta (Avusturya) başladı.",
+    beklenen: "spor",
+    karanlik: null,
+  },
   {
     text: "İstanbul Çavuşoğlu Lisesi, Dünya Liselerarası Basketbol Şampiyonu oldu.",
     beklenen: "spor",
@@ -237,8 +257,16 @@ export const ORNEKLER: Ornek[] = [
   },
 
   // ==================== genel ====================
-  { text: "55. Eurovision Şarkı Yarışması finali Oslo'da yapıldı.", beklenen: "genel", karanlik: null },
-  { text: "Kanada, aynı cinsler arasında evliliğe izin veren dördüncü ülke oldu.", beklenen: "genel", karanlik: null },
+  {
+    text: "55. Eurovision Şarkı Yarışması finali Oslo'da yapıldı.",
+    beklenen: "genel",
+    karanlik: null,
+  },
+  {
+    text: "Kanada, aynı cinsler arasında evliliğe izin veren dördüncü ülke oldu.",
+    beklenen: "genel",
+    karanlik: null,
+  },
   { text: "Londra Borsası halka açıldı.", beklenen: "genel", karanlik: null },
   {
     text:
@@ -248,7 +276,11 @@ export const ORNEKLER: Ornek[] = [
     karanlik: null,
   },
   { text: "Ford ilk arabasını üretti.", beklenen: "genel", karanlik: null },
-  { text: "Britanya Kolumbiyası, Kanada Federasyonu'na katıldı.", beklenen: "genel", karanlik: null },
+  {
+    text: "Britanya Kolumbiyası, Kanada Federasyonu'na katıldı.",
+    beklenen: "genel",
+    karanlik: null,
+  },
   {
     text: "Casus balon krizi. ABD ordusu, Çin'e ait olan casus balonu füzeyle vurarak düşürdü.",
     beklenen: "genel",

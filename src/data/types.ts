@@ -1,12 +1,5 @@
 export type CategoryId =
-  | "savas"
-  | "siyaset"
-  | "bilim"
-  | "kesif"
-  | "kultur"
-  | "spor"
-  | "felaket"
-  | "genel";
+  "savas" | "siyaset" | "bilim" | "kesif" | "kultur" | "spor" | "felaket" | "genel";
 
 export const CATEGORIES: Record<CategoryId, { label: string; color: string }> = {
   savas: { label: "Savaş & İşgal", color: "#e05b4b" },
@@ -19,14 +12,7 @@ export const CATEGORIES: Record<CategoryId, { label: string; color: string }> = 
   genel: { label: "Genel", color: "#8e99ab" },
 };
 
-export type CaseType =
-  | "suikast"
-  | "cinayet"
-  | "katliam"
-  | "kayıp"
-  | "felaket"
-  | "idam"
-  | "skandal";
+export type CaseType = "suikast" | "cinayet" | "katliam" | "kayıp" | "felaket" | "idam" | "skandal";
 
 export const CASE_LABELS: Record<CaseType, string> = {
   suikast: "SUİKAST",

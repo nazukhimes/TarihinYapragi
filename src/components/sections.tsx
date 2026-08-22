@@ -62,7 +62,12 @@ export function TimelineSection({ events, query }: { events: MergedEvent[]; quer
     <div>
       {/* kategori filtresi */}
       <div className="flex flex-wrap gap-2 mb-8">
-        <CatChip active={cat === "all"} color="#e8b04b" label={`Tümü · ${events.length}`} onClick={() => setCat("all")} />
+        <CatChip
+          active={cat === "all"}
+          color="#e8b04b"
+          label={`Tümü · ${events.length}`}
+          onClick={() => setCat("all")}
+        />
         {presentCats.map((c) => {
           const n = events.filter((e) => e.category === c).length;
           return (
@@ -101,12 +106,19 @@ export function TimelineSection({ events, query }: { events: MergedEvent[]; quer
                     style={{ background: catInfo.color }}
                   />
                   <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                    <span className="font-mono font-bold text-lg tabular-nums" style={{ color: catInfo.color }}>
+                    <span
+                      className="font-mono font-bold text-lg tabular-nums"
+                      style={{ color: catInfo.color }}
+                    >
                       {formatYear(e.year)}
                     </span>
                     <span
                       className="font-mono text-[10px] tracking-[0.18em] uppercase px-2 py-0.5 rounded-sm"
-                      style={{ color: catInfo.color, background: `${catInfo.color}1f`, border: `1px solid ${catInfo.color}44` }}
+                      style={{
+                        color: catInfo.color,
+                        background: `${catInfo.color}1f`,
+                        border: `1px solid ${catInfo.color}44`,
+                      }}
                     >
                       {catInfo.label}
                     </span>
@@ -126,7 +138,9 @@ export function TimelineSection({ events, query }: { events: MergedEvent[]; quer
                         onClick={() => setOpenId(open ? null : e.id)}
                         className="inline-flex items-center gap-1.5 font-mono text-[12px] tracking-wider uppercase text-gold transition-colors duration-200 hover:text-paper cursor-pointer"
                       >
-                        <span className="underline decoration-gold/40 underline-offset-4 hover:decoration-paper">{open ? "Gizle" : "Detayı aç"}</span>
+                        <span className="underline decoration-gold/40 underline-offset-4 hover:decoration-paper">
+                          {open ? "Gizle" : "Detayı aç"}
+                        </span>
                         <IconArrow dir={open ? "up" : "down"} className="w-3 h-3" />
                       </button>
                       {e.page?.url && (
@@ -143,7 +157,10 @@ export function TimelineSection({ events, query }: { events: MergedEvent[]; quer
                   )}
 
                   {open && (
-                    <div className="rise-in mt-3 max-w-3xl border-l-2 pl-4 py-1 text-[14.5px] leading-relaxed text-ink-dim" style={{ borderColor: catInfo.color }}>
+                    <div
+                      className="rise-in mt-3 max-w-3xl border-l-2 pl-4 py-1 text-[14.5px] leading-relaxed text-ink-dim"
+                      style={{ borderColor: catInfo.color }}
+                    >
                       {e.detail || e.page?.excerpt}
                     </div>
                   )}
@@ -157,7 +174,17 @@ export function TimelineSection({ events, query }: { events: MergedEvent[]; quer
   );
 }
 
-function CatChip({ active, color, label, onClick }: { active: boolean; color: string; label: string; onClick: () => void }) {
+function CatChip({
+  active,
+  color,
+  label,
+  onClick,
+}: {
+  active: boolean;
+  color: string;
+  label: string;
+  onClick: () => void;
+}) {
   return (
     <button
       onClick={onClick}
@@ -165,14 +192,19 @@ function CatChip({ active, color, label, onClick }: { active: boolean; color: st
       className="px-3.5 py-1.5 rounded-sm font-mono text-[12px] tracking-wide transition-all duration-200 cursor-pointer border"
       style={
         active
-          ? { background: color, color: "#12161d", borderColor: color, boxShadow: `0 6px 16px ${color}44` }
+          ? {
+              background: color,
+              color: "#12161d",
+              borderColor: color,
+              boxShadow: `0 6px 16px ${color}44`,
+            }
           : { color: "#a8a99f", borderColor: "#28303f", background: "transparent" }
       }
       onMouseEnter={(e) => {
-        if (!active) (e.currentTarget.style.borderColor = `${color}88`);
+        if (!active) e.currentTarget.style.borderColor = `${color}88`;
       }}
       onMouseLeave={(e) => {
-        if (!active) (e.currentTarget.style.borderColor = "#28303f");
+        if (!active) e.currentTarget.style.borderColor = "#28303f";
       }}
     >
       {label}
@@ -263,7 +295,12 @@ export function PeopleRow({
   return (
     <div>
       <div className="flex flex-wrap gap-2 mb-5">
-        <CatChip active={cat === "all"} color={accentColor} label={`Tümü · ${people.length}`} onClick={() => setCat("all")} />
+        <CatChip
+          active={cat === "all"}
+          color={accentColor}
+          label={`Tümü · ${people.length}`}
+          onClick={() => setCat("all")}
+        />
         {presentCats.map((c) => (
           <CatChip
             key={c}
@@ -304,9 +341,18 @@ export function PeopleRow({
                         className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-108"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center" style={{ background: `${monoColor}22` }}>
-                        <span className="font-display font-black text-5xl" style={{ color: monoColor }}>
-                          {p.name.replace(/[.*_"”“]/g, "").charAt(0).toUpperCase()}
+                      <div
+                        className="w-full h-full flex items-center justify-center"
+                        style={{ background: `${monoColor}22` }}
+                      >
+                        <span
+                          className="font-display font-black text-5xl"
+                          style={{ color: monoColor }}
+                        >
+                          {p.name
+                            .replace(/[.*_"”“]/g, "")
+                            .charAt(0)
+                            .toUpperCase()}
                         </span>
                       </div>
                     )}
@@ -319,8 +365,14 @@ export function PeopleRow({
                   </div>
                   <div className="p-4">
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="w-1.5 h-1.5 rounded-full" style={{ background: catInfo.color }} />
-                      <span className="font-mono text-[10px] tracking-[0.16em] uppercase" style={{ color: catInfo.color }}>
+                      <span
+                        className="w-1.5 h-1.5 rounded-full"
+                        style={{ background: catInfo.color }}
+                      />
+                      <span
+                        className="font-mono text-[10px] tracking-[0.16em] uppercase"
+                        style={{ color: catInfo.color }}
+                      >
                         {catInfo.label}
                       </span>
                     </div>
@@ -347,7 +399,10 @@ export function PeopleRow({
         <Modal onClose={() => setModal(null)} titleId={`person-modal-${modal.id}`}>
           <div className="p-6 sm:p-8">
             <div className="flex items-center justify-between gap-4 mb-5">
-              <span className="font-mono text-[11px] tracking-[0.24em] uppercase" style={{ color: accentColor }}>
+              <span
+                className="font-mono text-[11px] tracking-[0.24em] uppercase"
+                style={{ color: accentColor }}
+              >
                 {accentLabel} · {formatYear(modal.year)}
               </span>
               <button
@@ -369,7 +424,12 @@ export function PeopleRow({
                 />
               )}
               <div>
-                <h3 id={`person-modal-${modal.id}`} className="font-display font-bold text-2xl md:text-3xl leading-tight text-ink">{modal.name}</h3>
+                <h3
+                  id={`person-modal-${modal.id}`}
+                  className="font-display font-bold text-2xl md:text-3xl leading-tight text-ink"
+                >
+                  {modal.name}
+                </h3>
                 <span
                   className="mt-2 inline-block font-mono text-[10.5px] tracking-[0.16em] uppercase px-2 py-1 rounded-sm"
                   style={{
@@ -418,7 +478,16 @@ export function CasesSection({ cases, query }: { cases: CaseFile[]; query: strin
     setHepsi(false);
   }, [cases]);
   const visible = cases.filter((c) =>
-    matchQuery(query, c.title, c.summary, c.detail, c.location, formatYear(c.year), c.tags.join(" "), CASE_LABELS[c.type])
+    matchQuery(
+      query,
+      c.title,
+      c.summary,
+      c.detail,
+      c.location,
+      formatYear(c.year),
+      c.tags.join(" "),
+      CASE_LABELS[c.type]
+    )
   );
   const gosterilecek = hepsi ? visible : visible.slice(0, CASES_LIMIT);
 
@@ -427,10 +496,13 @@ export function CasesSection({ cases, query }: { cases: CaseFile[]; query: strin
       <div className="flex items-start gap-4 border border-dashed border-line rounded-sm px-6 py-8">
         <IconSkull className="w-6 h-6 text-ink-faint mt-1" />
         <div>
-          <p className="font-display italic text-lg text-ink-dim">Bu gün için arşivde karanlık dosya yok.</p>
+          <p className="font-display italic text-lg text-ink-dim">
+            Bu gün için arşivde karanlık dosya yok.
+          </p>
           <p className="mt-1.5 text-[13.5px] text-ink-faint leading-relaxed max-w-xl">
-            Her gün karanlık değil — ama ölümler bölümündeki suikast, infaz ve felaket kayıtları otomatik olarak burada listelenir.
-            Editörün özel dosyaları ise işaretli tarihlerde açılır.
+            Her gün karanlık değil — ama ölümler bölümündeki suikast, infaz ve felaket kayıtları
+            otomatik olarak burada listelenir. Editörün özel dosyaları ise işaretli tarihlerde
+            açılır.
           </p>
         </div>
       </div>
@@ -439,14 +511,20 @@ export function CasesSection({ cases, query }: { cases: CaseFile[]; query: strin
 
   return (
     <div className="grid md:grid-cols-2 gap-5">
-      {visible.length === 0 && <div className="md:col-span-2"><EmptyNote text="Aramanla eşleşen dosya yok." /></div>}
+      {visible.length === 0 && (
+        <div className="md:col-span-2">
+          <EmptyNote text="Aramanla eşleşen dosya yok." />
+        </div>
+      )}
       {gosterilecek.map((c, i) => {
         const open = openId === c.id;
         return (
           <Reveal key={c.id} delay={Math.min(i * 70, 280)}>
             <article
               className={`relative h-full rounded-sm border transition-all duration-300 overflow-hidden group ${
-                open ? "border-brand/70 bg-[#1c1318]" : "border-line bg-panel hover:border-brand/50 hover:-translate-y-1"
+                open
+                  ? "border-brand/70 bg-[#1c1318]"
+                  : "border-line bg-panel hover:border-brand/50 hover:-translate-y-1"
               }`}
             >
               {/* dosya üst bandı */}
@@ -457,7 +535,9 @@ export function CasesSection({ cases, query }: { cases: CaseFile[]; query: strin
                     {CASE_LABELS[c.type]}
                   </span>
                 </div>
-                <span className="font-mono text-[12px] tabular-nums text-ink-faint">DOSYA {formatYear(c.year)}</span>
+                <span className="font-mono text-[12px] tabular-nums text-ink-faint">
+                  DOSYA {formatYear(c.year)}
+                </span>
               </div>
 
               <div className="p-5 relative">
@@ -478,7 +558,9 @@ export function CasesSection({ cases, query }: { cases: CaseFile[]; query: strin
                 <h3 className="font-display font-bold text-[21px] leading-snug text-ink pr-24 group-hover:text-gold/95 transition-colors duration-200">
                   {c.title}
                 </h3>
-                <p className="mt-1 font-mono text-[11.5px] tracking-wide text-copper">{c.location}</p>
+                <p className="mt-1 font-mono text-[11.5px] tracking-wide text-copper">
+                  {c.location}
+                </p>
                 <p className="mt-3 text-[14.5px] leading-relaxed text-ink-dim">{c.summary}</p>
 
                 {open && (
@@ -490,7 +572,10 @@ export function CasesSection({ cases, query }: { cases: CaseFile[]; query: strin
                 <div className="mt-4 flex items-center justify-between flex-wrap gap-3">
                   <div className="flex flex-wrap gap-1.5">
                     {c.tags.map((t) => (
-                      <span key={t} className="font-mono text-[10.5px] px-2 py-0.5 rounded-sm bg-night/60 border border-line text-ink-faint">
+                      <span
+                        key={t}
+                        className="font-mono text-[10.5px] px-2 py-0.5 rounded-sm bg-night/60 border border-line text-ink-faint"
+                      >
                         #{t}
                       </span>
                     ))}
@@ -526,9 +611,17 @@ export function CasesSection({ cases, query }: { cases: CaseFile[]; query: strin
 
 const SCIENCE_LIMIT = 3;
 
-export function ScienceSection({ items, query }: { items: (ScienceMilestone & { curated?: boolean })[]; query: string }) {
+export function ScienceSection({
+  items,
+  query,
+}: {
+  items: (ScienceMilestone & { curated?: boolean })[];
+  query: string;
+}) {
   const [hepsi, setHepsi] = useState(false);
-  const visible = items.filter((s) => matchQuery(query, s.title, s.summary, s.field, formatYear(s.year)));
+  const visible = items.filter((s) =>
+    matchQuery(query, s.title, s.summary, s.field, formatYear(s.year))
+  );
   const gosterilecek = hepsi ? visible : visible.slice(0, SCIENCE_LIMIT);
 
   useEffect(() => {
@@ -536,7 +629,9 @@ export function ScienceSection({ items, query }: { items: (ScienceMilestone & { 
   }, [items]);
 
   if (visible.length === 0) {
-    return <EmptyNote text="Bu gün için bilim kaydına rastlanmadı — takvimi çevir, evren bir yerde konuşuyor." />;
+    return (
+      <EmptyNote text="Bu gün için bilim kaydına rastlanmadı — takvimi çevir, evren bir yerde konuşuyor." />
+    );
   }
 
   return (
@@ -552,14 +647,18 @@ export function ScienceSection({ items, query }: { items: (ScienceMilestone & { 
                 <span className="w-8 h-8 grid place-items-center rounded-sm border border-teal/50 text-teal">
                   <AtomMini />
                 </span>
-                <span className="font-mono text-[10.5px] tracking-[0.2em] uppercase text-teal">{s.field}</span>
+                <span className="font-mono text-[10.5px] tracking-[0.2em] uppercase text-teal">
+                  {s.field}
+                </span>
                 {s.curated && (
                   <span className="ml-auto font-mono text-[9.5px] tracking-[0.18em] uppercase px-1.5 py-0.5 rounded-sm bg-gold/15 text-gold border border-gold/40">
                     Editör
                   </span>
                 )}
               </div>
-              <p className="font-mono font-bold text-lg text-gold tabular-nums">{formatYear(s.year)}</p>
+              <p className="font-mono font-bold text-lg text-gold tabular-nums">
+                {formatYear(s.year)}
+              </p>
               <h3 className="mt-1.5 font-display font-semibold text-[19px] leading-snug text-ink group-hover:text-teal transition-colors duration-200">
                 {s.title}
               </h3>
@@ -587,8 +686,24 @@ function AtomMini() {
     <svg viewBox="0 0 24 24" className="w-4.5 h-4.5" fill="none" aria-hidden>
       <circle cx="12" cy="12" r="1.6" fill="currentColor" />
       <ellipse cx="12" cy="12" rx="8.5" ry="3.4" stroke="currentColor" strokeWidth="1.4" />
-      <ellipse cx="12" cy="12" rx="8.5" ry="3.4" stroke="currentColor" strokeWidth="1.4" transform="rotate(60 12 12)" />
-      <ellipse cx="12" cy="12" rx="8.5" ry="3.4" stroke="currentColor" strokeWidth="1.4" transform="rotate(-60 12 12)" />
+      <ellipse
+        cx="12"
+        cy="12"
+        rx="8.5"
+        ry="3.4"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        transform="rotate(60 12 12)"
+      />
+      <ellipse
+        cx="12"
+        cy="12"
+        rx="8.5"
+        ry="3.4"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        transform="rotate(-60 12 12)"
+      />
     </svg>
   );
 }

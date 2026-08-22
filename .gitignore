@@ -9,6 +9,9 @@ build/
 .vite/
 *.local
 
+# test kapsamı
+coverage/
+
 # günlükler
 *.log
 npm-debug.log*

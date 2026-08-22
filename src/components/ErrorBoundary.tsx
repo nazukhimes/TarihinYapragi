@@ -12,9 +12,7 @@ function ErrorCard({ hata, tamSayfa }: { hata: Error; tamSayfa: boolean }) {
         Arşivde bir sorun çıktı
       </p>
       <h1
-        className={`font-display font-bold text-inkpaper mt-4 ${
-          tamSayfa ? "text-3xl" : "text-xl"
-        }`}
+        className={`font-display font-bold text-inkpaper mt-4 ${tamSayfa ? "text-3xl" : "text-xl"}`}
       >
         Yaprak yırtıldı
       </h1>
@@ -47,8 +45,10 @@ function ErrorCard({ hata, tamSayfa }: { hata: Error; tamSayfa: boolean }) {
       </div>
 
       {import.meta.env.DEV && (
-        <pre className="mt-6 text-left text-[11px] text-brand-deep overflow-auto
-                        max-h-40 p-3 bg-paper-2 rounded-sm">
+        <pre
+          className="mt-6 text-left text-[11px] text-brand-deep overflow-auto
+                        max-h-40 p-3 bg-paper-2 rounded-sm"
+        >
           {hata.stack}
         </pre>
       )}
@@ -92,11 +92,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
     if (!tamSayfa) return kart;
 
-    return (
-      <div className="glowfield min-h-screen grid place-items-center px-6">
-        {kart}
-      </div>
-    );
+    return <div className="glowfield min-h-screen grid place-items-center px-6">{kart}</div>;
   }
 }
 

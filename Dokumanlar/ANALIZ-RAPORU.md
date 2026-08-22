@@ -32,8 +32,8 @@
 | Uygulama açılıyor mu | ✅ Evet | Veri geliyor, 23 kayıt listelendi |
 | Kritik hata | ⚠️ 5 adet · **4 çözüldü** | K-1…K-5 · K-1 ✅ T-03, K-2 ✅ T-04, K-3 ✅ T-04, K-4 ✅ T-01 · K-5 T-03 sırasında keşfedildi, henüz atanmadı |
 | Orta seviye eksik | ⚠️ 12 adet · **9 çözüldü** | O-1…O-12 · O-1, O-2, O-3 ✅ T-01 · O-4, O-8 ✅ T-05 · O-5, O-9 ✅ T-09 · O-6, O-7 ✅ T-07 · O-10 T-07 sırasında keşfedildi, henüz atanmadı · O-11 T-09 sırasında keşfedildi, henüz atanmadı · O-12 T-10 sırasında keşfedildi, henüz atanmadı |
-| Ürün/içerik boşluğu | ⚠️ 5 adet · **4 çözüldü** | U-1…U-5 · U-1 ✅ T-06 · U-4 ✅ T-08 · U-2 ✅ T-10 · U-3 ✅ T-11 |
-| Küçük not | ⚠️ 7 adet · **4 çözüldü** | m-1…m-7 · m-2 ✅ T-01 · m-3, m-6 ✅ T-09 · m-5 ✅ T-07 |
+| Ürün/içerik boşluğu | ⚠️ 5 adet · **5 çözüldü** | U-1…U-5 · U-1 ✅ T-06 · U-4 ✅ T-08 · U-2 ✅ T-10 · U-3 ✅ T-11 · U-5 ✅ T-12 |
+| Küçük not | ⚠️ 8 adet · **4 çözüldü** | m-1…m-8 · m-2 ✅ T-01 · m-3, m-6 ✅ T-09 · m-5 ✅ T-07 · m-8 T-12 sırasında keşfedildi, henüz atanmadı (zararsız) |
 
 **Kısa hüküm:** Uygulama sağlam bir iskelete ve gerçekten güzel bir tasarım diline sahip.
 Kod temiz, tipli ve tutarlı. Sorun "bozuk olması" değil, **yarım kalmış olması**:
@@ -643,7 +643,7 @@ Bir doğruluk testi yoktu; kural değiştirildiğinde neyin bozulduğu görülem
 > service worker kaydını genel olarak engellediğinin kanıtı, kod kusuru değil. Ayrıntı →
 > T-08 Tamamlanma Kaydı.
 
-### U-5 · Kalite güvencesi altyapısı hiç yok
+### U-5 · Kalite güvencesi altyapısı hiç yok — ✅ ÇÖZÜLDÜ (T-12)
 
 - Test yok (birim, bileşen, uçtan uca — hiçbiri)
 - ESLint yapılandırması yok
@@ -653,6 +653,47 @@ Bir doğruluk testi yoktu; kural değiştirildiğinde neyin bozulduğu görülem
 
 Kritik saf fonksiyonlar (`dayOfYear`, `classifyItem`, `formatYear`, `firstSentence`,
 `normalize`) test edilmeye çok uygun ve şu an hiçbiri korunmuyor.
+
+> **✅ Çözüm — T-12 (2026-08-22)**
+>
+> Vitest (`jsdom` ortamı + v8 kapsam sağlayıcısı) kuruldu; 7 yeni test dosyası,
+> **203 test**: `date.test.ts` (K-1 regresyonu — 2026→233), `slug.test.ts`
+> (366 gün çift yönlü tutarlılık), `classification.test.ts` (66 örneklik altın
+> küme — T-11'in ölçtüğü %100 kategori doğruluğu/0 yanlış pozitif burada
+> kalıcı hâle geldi), `wiki.test.ts` (`normalize`, `classifyStatus`,
+> `buildAutoTalk`), `sections.test.ts` (Türkçe `matchQuery`), `data.test.ts`
+> (`CURATED` bütünlüğü), `ui.test.tsx` (`CountUp` K-2 regresyonu). `src/lib`
+> satır kapsamı **%78,78** (746/947, hedef ≥%70). ESLint (flat config,
+> `rules-of-hooks`+`exhaustive-deps`) ve Prettier kuruldu, `npm run kontrol`
+> (typecheck+lint+test+build) tek komut hâline getirildi; `.github/workflows/
+> kontrol.yml` eklendi.
+>
+> **Üç önemli, bu oturumda gerçek çalıştırmayla keşfedilen sapma** (hiçbiri
+> uygulama davranışını değiştirmedi — hepsi test/araç seviyesinde çözüldü):
+> 1. **jsdom'un `requestAnimationFrame`'i gerçek tarayıcılarla tutarsız bir
+>    saat veriyor** — geri çağrıya *pencere oluşturma anına göre sıfırlanmış*
+>    bir zaman damgası verirken, doğrudan `performance.now()` çağrıları bu
+>    sıfırlamayı görmüyor (gerçek tarayıcılarda ikisi her zaman aynı saattir).
+>    `CountUp`'ın tamamen standart `t0 = performance.now()` mantığı bu yüzden
+>    jsdom'da devasa bir sapmaya düşüyordu; bileşen dokunulmadı, test rAF'ı tek
+>    bir saate bağlayan bir kuklayla yazıldı.
+> 2. **Bugün kurulan güncel `vitest`/`@vitest/coverage-v8` (4.1.11) gerçek bir
+>    kapsam-raporlama hatası içeriyordu** — yoğun test edilen bazı dosyalar
+>    (`date.ts`, `classification.ts`, `config.ts`, `data/gunler/*.ts`) kapsam
+>    raporunda tamamen kayboluyordu (istanbul sağlayıcısı ve `all:true` da
+>    denendi, sorun sürdü). Köklü **3.2.7** hattına sabitlenerek tamamen
+>    çözüldü.
+> 3. **Bugün kurulan güncel `eslint-plugin-react-hooks` (7.x)** `recommended`
+>    setinde React Compiler'a yönelik ~16 kural taşıyor — bu proje React
+>    18'de, derleyici olmadan çalıştığı için o kurallar idiomatik kodu hatalı
+>    "hata" sayıyordu; yalnızca klasik `rules-of-hooks`+`exhaustive-deps`'e
+>    daraltıldı.
+>
+> **Doğrulama:** mutasyon denemeleri gerçek koruma sağladığını doğruladı —
+> `dayOfYear`'ın gövdesinde `year` parametresi görmezden gelindiğinde 3 test
+> kırmızı oldu; `slug.ts`'in Türkçe harf eşlemesi bozulduğunda 2 test kırmızı
+> oldu (ikisi de denemeden sonra geri alındı). `başlat.bat` `npm run format`
+> sonrası hâlâ CRLF. Ayrıntı → T-12 Tamamlanma Kaydı.
 
 ---
 
@@ -667,6 +708,7 @@ Kritik saf fonksiyonlar (`dayOfYear`, `classifyItem`, `formatYear`, `firstSenten
 | m-5 | ~~Kişi kartlarında görseller `loading="lazy"` var ama `width/height` yok → düzen kayması~~ **✅ ÇÖZÜLDÜ (T-07)** — kart küçük resmi `248×132`, modal küçük resmi `96×112` | `sections.tsx` PeopleRow |
 | m-6 | ~~Arama sonucu global sayacı yok; kullanıcı hangi bölümde kaç sonuç olduğunu göremiyor~~ **✅ ÇÖZÜLDÜ (T-09)** — toplam + bölüm bazlı sayaç şeridi, `aria-live` duyurusu, sonuç yoksa tek boş durum ekranı | `App.tsx` |
 | m-7 | Yazdırma (print) stil sayfası yok — kart çıktısı alınamıyor | `index.css` |
+| m-8 | `estimateMinutes`'ın "3 dakika" eşiği (`n ≥ 460`) `buildAutoTalk`'ın hiçbir çağrı noktasından tetiklenemez — her girdi ona ulaşmadan önce `firstSentence(…, 420)` ile ≤420 karaktere kırpılıyor (420 < 460). Yalnızca bir okuma-süresi rozetini etkiler, T-12 testleri yazılırken keşfedildi, zararsız kabul edilip düzeltilmedi | `lib/wiki.ts` buildAutoTalk/estimateMinutes |
 
 ---
 
@@ -679,7 +721,7 @@ SONRA  →  K-3✅ O-5✅ O-6✅       (sağlamlık ve erişilebilirlik)  [O-5 T
 SONRA  →  U-1✅ U-4✅           (paylaşım + kabuk — ürünü "yayınlanabilir" yapar)  [U-1 T-06, U-4 T-08 ile bitti]
 SONRA  →  O-4✅ O-7✅ O-8✅ O-9✅   (ağ, klavye, önbellek, içerik zenginliği)  [O-4/O-8 T-05, O-7 T-07, O-9 T-09 ile bitti]
 SONRA  →  U-2✅ U-3✅            (içerik hacmi ve doğruluğu — sürekli iş)  [U-2 T-10, U-3 T-11 ile bitti]
-SON    →  U-5                  (test/lint — sonraki tüm işleri korur)
+SON    →  U-5✅                 (test/lint — sonraki tüm işleri korur)  [T-12 ile bitti]
 ```
 
 Bu sıralama `../Talimatlar/PLAN-01-temel-duzeltme-ve-tamamlama.md` dosyasında

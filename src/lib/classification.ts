@@ -58,7 +58,11 @@ const KURALLAR: Kural[] = [
   { kategori: "felaket", desen: /\b(uçak|helikopter)\w* düş/, puan: 2 },
   { kategori: "felaket", desen: /raydan çık/, puan: 2 },
   { kategori: "felaket", desen: /toprak kayması/, puan: 2 },
-  { kategori: "felaket", desen: /\b(gemi|vapur|feribot|transatlantik)\w*(?:\s+\S+){0,2}\s+bat(tı|an|ıyor)/, puan: 2 },
+  {
+    kategori: "felaket",
+    desen: /\b(gemi|vapur|feribot|transatlantik)\w*(?:\s+\S+){0,2}\s+bat(tı|an|ıyor)/,
+    puan: 2,
+  },
   { kategori: "felaket", desen: /(gaz|bomba|maden|fabrika) patlama/, puan: 2 },
   { kategori: "felaket", desen: /\bsel felaketi|\bsel bask[ıi]n/, puan: 2 },
   { kategori: "felaket", desen: /(?<![a-zçğıöşü])çök(tü|en|müş)/, puan: 2 },
@@ -72,7 +76,12 @@ const KURALLAR: Kural[] = [
   { kategori: "savas", desen: /\bfetih\b|\bfethet/, puan: 3 },
   { kategori: "savas", desen: /\bistila/, puan: 3 },
   { kategori: "savas", desen: /\bharekât/, puan: 2 },
-  { kategori: "savas", desen: /\b(osmanlı|türk|kızıl|alman|rus|sovyet|amerikan|ingiliz|fransız|japon|italyan|yunan) ordu/, puan: 2 },
+  {
+    kategori: "savas",
+    desen:
+      /\b(osmanlı|türk|kızıl|alman|rus|sovyet|amerikan|ingiliz|fransız|japon|italyan|yunan) ordu/,
+    puan: 2,
+  },
   { kategori: "savas", desen: /\bisyan|\bayaklanma/, puan: 2 },
   { kategori: "savas", desen: /\bateşkes/, puan: 2 },
   { kategori: "savas", desen: /\bzafer kazan/, puan: 2 },
@@ -202,26 +211,47 @@ const DARK_ESIK = 3;
 
 const KARANLIK: KaranlikKurali[] = [
   { tema: "Suikast", desen: /\bsuikast|(?<![a-zçğıöşü])öldürüldü/, puan: 3 },
-  { tema: "İnfaz & İdam", desen: /\bidam edil|\basılarak idam|\bkurşuna dizil|\binfaz edil/, puan: 3 },
-  { tema: "Kayıp & Gizem", desen: /\besrarengiz( şekilde)? kayb|\bortadan kayboldu|\bsırra kadem/, puan: 3 },
+  {
+    tema: "İnfaz & İdam",
+    desen: /\bidam edil|\basılarak idam|\bkurşuna dizil|\binfaz edil/,
+    puan: 3,
+  },
+  {
+    tema: "Kayıp & Gizem",
+    desen: /\besrarengiz( şekilde)? kayb|\bortadan kayboldu|\bsırra kadem/,
+    puan: 3,
+  },
   {
     // can kaybı/yaralanma sözcüğü yakınlarda geçmeli — yoksa "X salgını sırasında/
     // nedeniyle ertelendi" gibi felaketin yalnızca zaman belirteci olarak kullanıldığı
     // cümleler de (gerçek veride görülen bir durum, ör. "Eurovision ... pandemi
     // nedeniyle ertelendi") karanlık sayılır (bkz. T-11 Tamamlanma Kaydı).
     tema: "Felaket",
-    desen: /(deprem|tsunami|kasırga|salgın|pandemi|kıtlık).{0,80}(öl|yaraland|kayıp|hayatını kaybet|can kaybı)/,
+    desen:
+      /(deprem|tsunami|kasırga|salgın|pandemi|kıtlık).{0,80}(öl|yaraland|kayıp|hayatını kaybet|can kaybı)/,
     puan: 3,
   },
-  { tema: "Felaket", desen: /\bfacia|\byangın|\byan(dı|ıyor|arak)|(?<![a-zçğıöşü])çığ(?![a-zçğıöşü])/, puan: 3 },
+  {
+    tema: "Felaket",
+    desen: /\bfacia|\byangın|\byan(dı|ıyor|arak)|(?<![a-zçğıöşü])çığ(?![a-zçğıöşü])/,
+    puan: 3,
+  },
   { tema: "Felaket", desen: /\b(uçak|tren|maden|trafik|otobüs) kaza/, puan: 3 },
   { tema: "Felaket", desen: /\b(uçak|helikopter)\w* düş/, puan: 3 },
   { tema: "Felaket", desen: /raydan çık/, puan: 3 },
   { tema: "Felaket", desen: /toprak kayması/, puan: 3 },
-  { tema: "Felaket", desen: /\b(gemi|vapur|feribot|transatlantik)\w*(?:\s+\S+){0,2}\s+bat(tı|an|ıyor)/, puan: 3 },
+  {
+    tema: "Felaket",
+    desen: /\b(gemi|vapur|feribot|transatlantik)\w*(?:\s+\S+){0,2}\s+bat(tı|an|ıyor)/,
+    puan: 3,
+  },
   { tema: "Felaket", desen: /(gaz|bomba|maden|fabrika) patlama/, puan: 3 },
   { tema: "Felaket", desen: /\bsel felaketi|\bsel bask[ıi]n/, puan: 3 },
-  { tema: "Şiddet", desen: /\bkatliam|\bkatledil|\blinç edil|\bbombalı( intihar)? saldır|\bsilahlı saldır/, puan: 3 },
+  {
+    tema: "Şiddet",
+    desen: /\bkatliam|\bkatledil|\blinç edil|\bbombalı( intihar)? saldır|\bsilahlı saldır/,
+    puan: 3,
+  },
   { tema: "Şiddet", desen: /\bsaldır/, puan: 2 },
 ];
 

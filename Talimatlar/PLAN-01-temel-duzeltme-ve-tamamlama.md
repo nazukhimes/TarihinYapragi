@@ -3,8 +3,8 @@
 | Alan | Değer |
 |---|---|
 | **Oluşturulma** | 2026-08-21 |
-| **Durum** | 🟡 Aktif — 11 / 14 tamamlandı |
-| **Son hareket** | 2026-08-22 · T-11 tamamlandı |
+| **Durum** | 🟡 Aktif — 12 / 14 tamamlandı |
+| **Son hareket** | 2026-08-22 · T-12 tamamlandı |
 | **Talimat sayısı** | 14 (T-01 … T-14) |
 | **Faz sayısı** | 5 |
 | **Dayanak** | [`../Dokumanlar/ANALIZ-RAPORU.md`](../Dokumanlar/ANALIZ-RAPORU.md) |
@@ -80,7 +80,7 @@ Plan bittiğinde:
 
 | # | Talimat | Öncelik | Bulgu | Süre |
 |---|---|---|---|---|
-| T-12 | [Test, lint ve biçimlendirme altyapısı](T-12-test-lint-bicimlendirme.md) | 🟠 Yüksek | U-5 | ~4 sa |
+| ~~T-12~~ ✅ | [Test, lint ve biçimlendirme altyapısı](Tamamland%C4%B1/T-12-test-lint-bicimlendirme.md) | 🟠 Yüksek | U-5 | ~4 sa |
 | T-13 | [Performans ve derleme iyileştirmesi](T-13-performans-ve-derleme.md) | 🟡 Orta | m-4, m-5, perf | ~3 sa |
 
 ### FAZ 5 — Kapanış
@@ -281,6 +281,25 @@ T-01 ──┬─► T-02
   tablosunda dışarıda bırakılmış. O-12 (Bilim & Keşif mükerrer kaydı) canlı
   olarak yeniden doğrulandı, hâlâ düzeltilmedi (T-11'in kapsamı dışında).
   T-12 hâlâ açıktı (bağımlılığı T-01'di), T-11'in tamamlanması onu etkilemedi.
+- ~~**T-12.**~~ ✅ **2026-08-22'de tamamlandı.** Vitest kuruldu (`jsdom` + v8
+  kapsam sağlayıcısı); 7 yeni test dosyası, 203 test — `date.test.ts` (K-1
+  regresyonu), `slug.test.ts` (366 gün çift yönlü), `classification.test.ts`
+  (66 örneklik altın küme + karanlık kesinlik), `wiki.test.ts` (`normalize`,
+  `classifyStatus`, `buildAutoTalk`), `sections.test.ts` (Türkçe `matchQuery`),
+  `data.test.ts` (CURATED bütünlüğü), `ui.test.tsx` (`CountUp` K-2 regresyonu).
+  ESLint (flat config, `rules-of-hooks`+`exhaustive-deps`) ve Prettier kuruldu;
+  `npm run kontrol` (typecheck+lint+test+build) tek komut. `src/lib` satır
+  kapsamı **%78,78** (hedef ≥%70). **Üç önemli sapma:** (1) jsdom'un
+  `requestAnimationFrame`'i gerçek tarayıcılarla tutarsız bir saat veriyor —
+  `CountUp` testi bunu bir kukla saatle atladı, bileşen değişmedi; (2) bugün
+  kurulan güncel `vitest`/`@vitest/coverage-v8` (4.1.11) gerçek bir kapsam-
+  raporlama hatası içeriyordu (yoğun test edilen dosyalar raporda tamamen
+  kayboluyordu) — köklü **3.2.7** hattına sabitlenerek çözüldü; (3) güncel
+  `eslint-plugin-react-hooks` (7.x) React Compiler'a yönelik kurallar
+  taşıyordu (bu proje derleyici kullanmıyor), yalnızca klasik iki kurala
+  daraltıldı. Ayrıntı → T-12 Tamamlanma Kaydı. CI iş akışı (`.github/
+  workflows/kontrol.yml`) eklendi, canlı yeşilliği bu oturumda doğrulanmadı
+  (push gerektiriyor). Artık T-13 açık.
 - **T-14 en sonda.** Belgeler ancak her şey bitince gerçeğe eşitlenebilir.
 - ~~**T-06 → T-08 sırası zorunlu.**~~ SEO meta etiketleri gün bazlı URL'lere
   bağlıydı — T-06 tamamlandı, URL şeması (`/gun-ay`) sabitlendi, T-08 bu şema
@@ -309,11 +328,11 @@ T-01 ──┬─► T-02
 | T-09 | Hata sınırı ve durum ekranları | ✅ Tamamlandı | 2026-08-22 | `ErrorBoundary.tsx` eklendi (kökte + 6 bölümde) · **Sapma:** `main.tsx`'teki kök sarmalayıcı tek başına yetersizdi (react-router kendi dahili hata sınırını kullanıyor) → her rotaya `errorElement`/`RouteErrorFallback` eklendi, canlı doğrulandı · `data.error.kind`'a göre 5 başlık · arama sonuç sayacı + boş durum ekranı · "Bugünün anlamı" şeridi (`holidays`) · Karanlık Dosyalar/Bilim & Keşif'te "N daha göster" · 4 sn gecikme uyarısı · O-5, O-9, m-3, m-6 çözüldü · Yeni bulgu O-11 (`holidays`'te şablon artığı çöp kayıt) kapsam dışı bırakıldı |
 | T-10 | İçerik mimarisi ve kapsam genişletme | ✅ Tamamlandı | 2026-08-22 | `curated.ts` (1.001 satır) silindi → `types.ts` + `gunler/` (12 ay dosyası) + `index.ts`; mevcut 10 gün birebir taşındı (sed ile) · editör içeriği 10→60 gün (%2,7→%16,4) · **Sapma:** "AI toplu üretim yasak" notuna rağmen kullanıcı bu oturum için açık onay verdi, 4 parti web araştırmasıyla kaynak doğrulanarak yazıldı · `ICERIK-SABLONU.md` eklendi · paket boyutu +64,64 kB gzip (<100 kB eşiği altında, tembel yükleme gerekmedi) · Yeni bulgu O-12 (Bilim & Keşif'te editör/Vikipedi mükerrer ayıklaması yok) kapsam dışı bırakıldı |
 | T-11 | Sınıflandırma doğruluğu | ✅ Tamamlandı | 2026-08-22 | `wiki.ts`'ten ayrılan `classification.ts` · "ilk eşleşen kazanır" → puanlama + sabit öncelik sırası · `detectDarkItem` puan eşiği (≥3) · Sorun 2'deki 7 kalıp düzeltildi · **kritik yan bulgu:** JS `\b`/`\w` Türkçe harfleri (ç/ğ/ı/ö/ş/ü) kelime saymıyor, birkaç kural gerçek veride hiç eşleşmiyordu, elle sınırla düzeltildi · 66 örneklik altın küme + `npm run siniflandirma` · kategori doğruluğu %100 (≥%85 hedef), karanlık yanlış pozitif 0, kesinlik %100 (≥%90 hedef) · U-3 çözüldü · `genel` oranı bazı günlerde %40 hedefinin üstünde ve "felaket kelimesi tarihleme amaçlı" örnekler bilinçli kapsam dışı bırakıldı (regex sınırı) |
-| T-12 | Test, lint ve biçimlendirme altyapısı | ⬜ Bekliyor | | |
+| T-12 | Test, lint ve biçimlendirme altyapısı | ✅ Tamamlandı | 2026-08-22 | Vitest (jsdom+v8) · 203 test/7 dosya · ESLint (flat, rules-of-hooks+exhaustive-deps) + Prettier · `npm run kontrol` tek komut · `src/lib` satır kapsamı %78,78 (≥%70 hedef) · **3 sapma:** jsdom `requestAnimationFrame` saat tutarsızlığı (CountUp testinde kukla saatle atlandı) · güncel `vitest`/`@vitest/coverage-v8` 4.1.11'de gerçek kapsam-raporlama hatası → 3.2.7'ye sabitlendi · güncel `eslint-plugin-react-hooks` 7.x React Compiler kuralları taşıyor → klasik iki kurala daraltıldı · CI eklendi (`kontrol.yml`), canlı yeşilliği bu oturumda doğrulanmadı |
 | T-13 | Performans ve derleme iyileştirmesi | ⬜ Bekliyor | | |
 | T-14 | Dokümantasyon güncelleme ve yayın | ⬜ Bekliyor | | |
 
-**İlerleme:** 11 / 14 · `████████████████░░░░` %79
+**İlerleme:** 12 / 14 · `█████████████████░░░` %86
 
 ---
 
@@ -348,11 +367,11 @@ Plan ancak aşağıdakilerin tamamı doğruysa kapatılabilir:
 - [x] Sınıflandırma doğruluğu test edilmiş ve ölçülü (T-11 — altın kümede kategori %100, karanlık yanlış pozitif 0)
 
 ### Kalite
-- [ ] `npm run typecheck` yeşil
-- [ ] `npm run build` yeşil
-- [ ] `npm run lint` yeşil
-- [ ] `npm test` yeşil, kritik saf fonksiyonlar kapsanmış
-- [ ] Lighthouse: Performans ≥ 90, Erişilebilirlik ≥ 95, SEO ≥ 95
+- [x] `npm run typecheck` yeşil
+- [x] `npm run build` yeşil
+- [x] `npm run lint` yeşil (T-12 — 0 hata, 8 uyarı)
+- [x] `npm test` yeşil, kritik saf fonksiyonlar kapsanmış (T-12 — 203 test, `src/lib` %78,78 satır kapsamı)
+- [ ] Lighthouse: Performans ≥ 90, Erişilebilirlik ≥ 95, SEO ≥ 95 (Erişilebilirlik 96/T-07 ve SEO 100/T-08 ayrı ayrı doğrulandı; Performans ve üçünün birlikte tek denetimi T-13'e kalıyor)
 
 ### Belge
 - [ ] `BAGLAM.md` gerçeği yansıtıyor

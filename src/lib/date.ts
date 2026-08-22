@@ -24,7 +24,11 @@ export function dayOfYear(month: number, day: number, year = new Date().getFullY
  * Haftanın günü indeksi (0 = Pazar).
  * 29 Şubat, verilen yıl artık yıl değilse gerçekte var olmadığı için `null` döner.
  */
-export function weekdayIndex(month: number, day: number, year = new Date().getFullYear()): number | null {
+export function weekdayIndex(
+  month: number,
+  day: number,
+  year = new Date().getFullYear()
+): number | null {
   if (month === 2 && day === 29 && !isLeapYear(year)) return null;
   return new Date(year, month - 1, day).getDay();
 }

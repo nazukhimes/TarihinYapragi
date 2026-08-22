@@ -85,7 +85,10 @@ export function SectionHead({
               {kicker}
             </span>
           </div>
-          <h2 id={`baslik-${index}`} className="font-display font-semibold text-3xl md:text-[2.6rem] leading-[1.05] text-ink">
+          <h2
+            id={`baslik-${index}`}
+            className="font-display font-semibold text-3xl md:text-[2.6rem] leading-[1.05] text-ink"
+          >
             {title}
           </h2>
           {desc && <p className="mt-3 text-ink-dim max-w-xl text-[15px] leading-relaxed">{desc}</p>}
@@ -114,7 +117,10 @@ export function Modal({
     panelRef.current?.focus();
 
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") { onClose(); return; }
+      if (e.key === "Escape") {
+        onClose();
+        return;
+      }
       if (e.key !== "Tab") return;
 
       const odaklanabilir = panelRef.current?.querySelectorAll<HTMLElement>(
@@ -125,8 +131,13 @@ export function Modal({
       const ilk = odaklanabilir[0];
       const son = odaklanabilir[odaklanabilir.length - 1];
 
-      if (e.shiftKey && document.activeElement === ilk) { e.preventDefault(); son.focus(); }
-      else if (!e.shiftKey && document.activeElement === son) { e.preventDefault(); ilk.focus(); }
+      if (e.shiftKey && document.activeElement === ilk) {
+        e.preventDefault();
+        son.focus();
+      } else if (!e.shiftKey && document.activeElement === son) {
+        e.preventDefault();
+        ilk.focus();
+      }
     };
 
     window.addEventListener("keydown", onKey);
@@ -230,23 +241,42 @@ const ic = "inline-block shrink-0";
 export function IconLeafMark({ className = "w-5 h-5" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={`${ic} ${className}`} fill="none" aria-hidden>
-      <path
-        d="M4 4h16v12H4z"
-        fill="currentColor"
-        opacity="0.16"
-      />
+      <path d="M4 4h16v12H4z" fill="currentColor" opacity="0.16" />
       <path d="M4 4h16v5H4z" fill="currentColor" />
-      <path d="M4 9v11l2-1.4 2 1.4 2-1.4 2 1.4 2-1.4 2 1.4 2-1.4 2 1.4V9" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+      <path
+        d="M4 9v11l2-1.4 2 1.4 2-1.4 2 1.4 2-1.4 2 1.4 2-1.4 2 1.4V9"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
       <path d="M8 6.5h.01M12 6.5h.01" stroke="#f2ead9" strokeWidth="2" strokeLinecap="round" />
     </svg>
   );
 }
 
-export function IconArrow({ dir = "right", className = "w-4 h-4" }: { dir?: "left" | "right" | "up" | "down"; className?: string }) {
+export function IconArrow({
+  dir = "right",
+  className = "w-4 h-4",
+}: {
+  dir?: "left" | "right" | "up" | "down";
+  className?: string;
+}) {
   const rot = { right: 0, down: 90, left: 180, up: 270 }[dir];
   return (
-    <svg viewBox="0 0 24 24" className={`${ic} ${className}`} fill="none" style={{ transform: `rotate(${rot}deg)` }} aria-hidden>
-      <path d="M4 12h15M13 5.5 19.5 12 13 18.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    <svg
+      viewBox="0 0 24 24"
+      className={`${ic} ${className}`}
+      fill="none"
+      style={{ transform: `rotate(${rot}deg)` }}
+      aria-hidden
+    >
+      <path
+        d="M4 12h15M13 5.5 19.5 12 13 18.5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -254,8 +284,18 @@ export function IconArrow({ dir = "right", className = "w-4 h-4" }: { dir?: "lef
 export function IconQuill({ className = "w-5 h-5" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={`${ic} ${className}`} fill="none" aria-hidden>
-      <path d="M20 4c-6.5.6-11 3.5-13.2 8.8L5 20l7.2-1.8C17.5 16 19.4 11.5 20 4Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
-      <path d="M5 20C8.5 13.5 13 9.5 18 6.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+      <path
+        d="M20 4c-6.5.6-11 3.5-13.2 8.8L5 20l7.2-1.8C17.5 16 19.4 11.5 20 4Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M5 20C8.5 13.5 13 9.5 18 6.5"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -276,8 +316,24 @@ export function IconAtom({ className = "w-5 h-5" }: { className?: string }) {
     <svg viewBox="0 0 24 24" className={`${ic} ${className}`} fill="none" aria-hidden>
       <circle cx="12" cy="12" r="1.6" fill="currentColor" />
       <ellipse cx="12" cy="12" rx="9" ry="3.6" stroke="currentColor" strokeWidth="1.4" />
-      <ellipse cx="12" cy="12" rx="9" ry="3.6" stroke="currentColor" strokeWidth="1.4" transform="rotate(60 12 12)" />
-      <ellipse cx="12" cy="12" rx="9" ry="3.6" stroke="currentColor" strokeWidth="1.4" transform="rotate(-60 12 12)" />
+      <ellipse
+        cx="12"
+        cy="12"
+        rx="9"
+        ry="3.6"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        transform="rotate(60 12 12)"
+      />
+      <ellipse
+        cx="12"
+        cy="12"
+        rx="9"
+        ry="3.6"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        transform="rotate(-60 12 12)"
+      />
     </svg>
   );
 }
@@ -286,7 +342,12 @@ export function IconMic({ className = "w-5 h-5" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={`${ic} ${className}`} fill="none" aria-hidden>
       <rect x="9" y="3" width="6" height="11" rx="3" stroke="currentColor" strokeWidth="1.6" />
-      <path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3M8.5 21h7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      <path
+        d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3M8.5 21h7"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -302,8 +363,20 @@ export function IconPlay({ className = "w-4 h-4" }: { className?: string }) {
 export function IconCopy({ className = "w-4 h-4" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={`${ic} ${className}`} fill="none" aria-hidden>
-      <rect x="8.5" y="8.5" width="11" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.6" />
-      <path d="M15.5 5.5v-1a1.5 1.5 0 0 0-1.5-1.5H5.5A1.5 1.5 0 0 0 4 4.5V13a1.5 1.5 0 0 0 1.5 1.5h1" stroke="currentColor" strokeWidth="1.6" />
+      <rect
+        x="8.5"
+        y="8.5"
+        width="11"
+        height="11"
+        rx="1.5"
+        stroke="currentColor"
+        strokeWidth="1.6"
+      />
+      <path
+        d="M15.5 5.5v-1a1.5 1.5 0 0 0-1.5-1.5H5.5A1.5 1.5 0 0 0 4 4.5V13a1.5 1.5 0 0 0 1.5 1.5h1"
+        stroke="currentColor"
+        strokeWidth="1.6"
+      />
     </svg>
   );
 }
@@ -323,7 +396,12 @@ export function IconShare({ className = "w-4 h-4" }: { className?: string }) {
       <circle cx="18" cy="5.5" r="2.5" stroke="currentColor" strokeWidth="1.6" />
       <circle cx="6" cy="12" r="2.5" stroke="currentColor" strokeWidth="1.6" />
       <circle cx="18" cy="18.5" r="2.5" stroke="currentColor" strokeWidth="1.6" />
-      <path d="M8.2 10.7 15.8 6.8M8.2 13.3l7.6 3.9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      <path
+        d="M8.2 10.7 15.8 6.8M8.2 13.3l7.6 3.9"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -331,8 +409,19 @@ export function IconShare({ className = "w-4 h-4" }: { className?: string }) {
 export function IconExternal({ className = "w-4 h-4" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={`${ic} ${className}`} fill="none" aria-hidden>
-      <path d="M10 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-      <path d="M13.5 4.5H19.5V10.5M19 5l-8.5 8.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M10 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-4"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+      <path
+        d="M13.5 4.5H19.5V10.5M19 5l-8.5 8.5"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -341,7 +430,13 @@ export function IconClock({ className = "w-4 h-4" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={`${ic} ${className}`} fill="none" aria-hidden>
       <circle cx="12" cy="12" r="8.5" stroke="currentColor" strokeWidth="1.6" />
-      <path d="M12 7v5.2l3.4 2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M12 7v5.2l3.4 2"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -349,10 +444,20 @@ export function IconClock({ className = "w-4 h-4" }: { className?: string }) {
 export function IconSkull({ className = "w-5 h-5" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={`${ic} ${className}`} fill="none" aria-hidden>
-      <path d="M12 3.5c-4.4 0-7.5 3.2-7.5 7.4 0 2.5 1.2 4.4 2.9 5.7v3.4a1.5 1.5 0 0 0 1.5 1.5h6.2a1.5 1.5 0 0 0 1.5-1.5v-3.4c1.7-1.3 2.9-3.2 2.9-5.7 0-4.2-3.1-7.4-7.5-7.4Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+      <path
+        d="M12 3.5c-4.4 0-7.5 3.2-7.5 7.4 0 2.5 1.2 4.4 2.9 5.7v3.4a1.5 1.5 0 0 0 1.5 1.5h6.2a1.5 1.5 0 0 0 1.5-1.5v-3.4c1.7-1.3 2.9-3.2 2.9-5.7 0-4.2-3.1-7.4-7.5-7.4Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
       <circle cx="9" cy="11.5" r="1.7" fill="currentColor" />
       <circle cx="15" cy="11.5" r="1.7" fill="currentColor" />
-      <path d="M12 14.5v1.6M10 21.5v-1.8M14 21.5v-1.8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path
+        d="M12 14.5v1.6M10 21.5v-1.8M14 21.5v-1.8"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }

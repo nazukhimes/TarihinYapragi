@@ -104,17 +104,6 @@ async function fetchFont(url, filename) {
   return dest;
 }
 
-// Google Fonts CSS2 API'sinden gerçek dosya adreslerini al (sürüm/hash zamanla değişebilir)
-async function resolveGoogleFontUrl(cssUrl) {
-  const res = await fetch(cssUrl, {
-    headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120 Safari/537.36" },
-  });
-  const css = await res.text();
-  const match = css.match(/url\((https:\/\/fonts\.gstatic\.com\/[^)]+\.ttf)\)/) || css.match(/url\((https:\/\/fonts\.gstatic\.com\/[^)]+)\)/);
-  if (!match) throw new Error(`Yazı tipi adresi bulunamadı: ${cssUrl}`);
-  return match[1];
-}
-
 console.log("… og-image için yazı tipleri indiriliyor (Fraunces, IBM Plex Mono)");
 
 // Fraunces ve IBM Plex Mono, google/fonts deposundaki tam (alt kümesiz) statik dosyalar —

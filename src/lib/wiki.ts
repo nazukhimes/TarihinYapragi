@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { TalkCard } from "../data";
 import { WIKI_API_BASE as API } from "./config";
-import { classifyItem, detectDarkItem } from "./classification";
+import { detectDarkItem } from "./classification";
 
 export { classifyItem, detectDarkItem } from "./classification";
 
@@ -80,7 +80,7 @@ interface CachedDay {
   data: RawDay;
 }
 
-function normalize(raw: RawOtd[] | undefined, lang: "tr" | "en", prefix: string): OtdItem[] {
+export function normalize(raw: RawOtd[] | undefined, lang: "tr" | "en", prefix: string): OtdItem[] {
   if (!raw) return [];
   return raw
     .filter((r) => r && typeof r.year === "number" && typeof r.text === "string" && r.text.trim())
@@ -97,12 +97,20 @@ function isAbortError(e: unknown): e is DOMException {
   return e instanceof DOMException && e.name === "AbortError";
 }
 
-function classifyStatus(status: number): DayError {
+export function classifyStatus(status: number): DayError {
   if (status === 404) {
-    return { kind: "notfound", message: "Bu gün için Vikipedi'de kayıt bulunamadı.", retryable: false };
+    return {
+      kind: "notfound",
+      message: "Bu gün için Vikipedi'de kayıt bulunamadı.",
+      retryable: false,
+    };
   }
   if (status === 429) {
-    return { kind: "ratelimit", message: "Arşiv çok yoğun. Biraz sonra tekrar deneyin.", retryable: true };
+    return {
+      kind: "ratelimit",
+      message: "Arşiv çok yoğun. Biraz sonra tekrar deneyin.",
+      retryable: true,
+    };
   }
   if (status >= 500) {
     return { kind: "server", message: "Vikipedi sunucusu yanıt vermiyor.", retryable: true };
@@ -180,7 +188,11 @@ function memSet(key: string, data: DayData) {
   memCache.set(key, data);
 }
 
-export async function fetchDayData(month: number, day: number, signal?: AbortSignal): Promise<DayData> {
+export async function fetchDayData(
+  month: number,
+  day: number,
+  signal?: AbortSignal
+): Promise<DayData> {
   const cacheKey = `day-${month}-${day}`;
   const hit = memCache.get(cacheKey);
   if (hit) return hit;
@@ -204,7 +216,11 @@ export async function fetchDayData(month: number, day: number, signal?: AbortSig
       if (isAbortError(e)) throw e; // beklenen iptal, yukarı ilet
       const cached = lsGet(lsKey);
       if (cached) return { raw: cached.data, stale: cached.stale, error: null };
-      return { raw: null, stale: false, error: { kind: "network", message: "İnternet bağlantısı kurulamadı.", retryable: true } };
+      return {
+        raw: null,
+        stale: false,
+        error: { kind: "network", message: "İnternet bağlantısı kurulamadı.", retryable: true },
+      };
     }
   };
 
@@ -359,7 +375,10 @@ export function buildAutoTalk(day: DayData): TalkCard[] {
       id: "auto-holiday",
       category: "Bugünün Anlamı",
       hook: "Bugünün bir adı var",
-      body: day.holidays.map((h) => h.text).slice(0, 3).join(" • "),
+      body: day.holidays
+        .map((h) => h.text)
+        .slice(0, 3)
+        .join(" • "),
       minutes: 1,
     });
   }

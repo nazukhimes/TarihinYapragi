@@ -3,10 +3,28 @@ import { IconArrow } from "./ui";
 import { dayOfYear, daysInMonth, isLeapYear, weekdayIndex } from "../lib/date";
 
 export const MONTHS_TR = [
-  "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
-  "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık",
+  "Ocak",
+  "Şubat",
+  "Mart",
+  "Nisan",
+  "Mayıs",
+  "Haziran",
+  "Temmuz",
+  "Ağustos",
+  "Eylül",
+  "Ekim",
+  "Kasım",
+  "Aralık",
 ];
-export const WEEKDAYS_TR = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
+export const WEEKDAYS_TR = [
+  "Pazar",
+  "Pazartesi",
+  "Salı",
+  "Çarşamba",
+  "Perşembe",
+  "Cuma",
+  "Cumartesi",
+];
 export const WEEKDAYS_SHORT = ["Pt", "Sa", "Ça", "Pe", "Cu", "Ct", "Pz"];
 
 /* ---------- canlı saat ---------- */
@@ -21,7 +39,8 @@ export function LiveClock() {
     <div className="hidden md:flex items-center gap-2.5 font-mono text-[13px] text-ink-dim">
       <span className="live-dot w-2 h-2 rounded-full bg-brand" />
       <span className="tabular-nums">
-        {pad(now.getHours())}:{pad(now.getMinutes())}:<span className="text-gold">{pad(now.getSeconds())}</span>
+        {pad(now.getHours())}:{pad(now.getMinutes())}:
+        <span className="text-gold">{pad(now.getSeconds())}</span>
       </span>
     </div>
   );
@@ -80,7 +99,9 @@ export function CalendarLeaf({
         <div className="bg-brand text-paper pt-7 pb-3 px-6 text-center relative">
           <div className="flex items-center justify-center gap-3">
             <span className="h-px w-8 bg-paper/50" />
-            <p className="font-mono text-[11px] tracking-[0.32em] uppercase">Tarih Yaprağı · {year}</p>
+            <p className="font-mono text-[11px] tracking-[0.32em] uppercase">
+              Tarih Yaprağı · {year}
+            </p>
             <span className="h-px w-8 bg-paper/50" />
           </div>
         </div>
@@ -91,7 +112,10 @@ export function CalendarLeaf({
           <p className="font-mono text-[12px] tracking-[0.3em] uppercase text-brand font-semibold">
             {weekday ?? "Artık gün"}
           </p>
-          <p className="font-display font-black leading-none mt-1 text-inkpaper" style={{ fontSize: "clamp(6.5rem, 18vw, 11rem)" }}>
+          <p
+            className="font-display font-black leading-none mt-1 text-inkpaper"
+            style={{ fontSize: "clamp(6.5rem, 18vw, 11rem)" }}
+          >
             {day}
           </p>
           <p className="font-display italic font-medium text-2xl md:text-3xl text-inkpaper/85 -mt-1">
@@ -118,7 +142,9 @@ export function CalendarLeaf({
                 : "border-inkpaper-dim/50 text-inkpaper hover:border-brand hover:text-brand hover:shadow-[0_6px_18px_rgba(210,59,46,0.18)]"
             }`}
           >
-            <span className="font-mono text-[12px] tracking-[0.18em] uppercase">{MONTHS_TR[month - 1]} takvimi</span>
+            <span className="font-mono text-[12px] tracking-[0.18em] uppercase">
+              {MONTHS_TR[month - 1]} takvimi
+            </span>
             <IconArrow dir={pickerOpen ? "up" : "down"} className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -159,13 +185,7 @@ export function CalendarLeaf({
         </button>
       </div>
 
-      <MiniCalendar
-        open={pickerOpen}
-        day={day}
-        month={month}
-        year={year}
-        onPick={onChangeDay}
-      />
+      <MiniCalendar open={pickerOpen} day={day} month={month} year={year} onPick={onChangeDay} />
     </div>
   );
 }
@@ -205,7 +225,9 @@ function MiniCalendar({
         >
           <IconArrow dir="left" className="w-4 h-4" />
         </button>
-        <span className="font-display font-semibold text-xl text-inkpaper">{MONTHS_TR[viewMonth - 1]}</span>
+        <span className="font-display font-semibold text-xl text-inkpaper">
+          {MONTHS_TR[viewMonth - 1]}
+        </span>
         <button
           onClick={() => setViewMonth((m) => (m === 12 ? 1 : m + 1))}
           className="p-2 rounded-sm text-inkpaper-dim hover:text-brand hover:bg-brand/10 transition-colors cursor-pointer"
@@ -217,7 +239,10 @@ function MiniCalendar({
 
       <div className="grid grid-cols-7 gap-1 mb-2">
         {WEEKDAYS_SHORT.map((w) => (
-          <span key={w} className="text-center font-mono text-[10px] tracking-widest text-inkpaper-dim uppercase py-1">
+          <span
+            key={w}
+            className="text-center font-mono text-[10px] tracking-widest text-inkpaper-dim uppercase py-1"
+          >
             {w}
           </span>
         ))}
@@ -229,8 +254,7 @@ function MiniCalendar({
         {Array.from({ length: total }).map((_, i) => {
           const d = i + 1;
           const selected = d === day && viewMonth === month;
-          const isTodayCell =
-            d === today.getDate() && viewMonth === today.getMonth() + 1;
+          const isTodayCell = d === today.getDate() && viewMonth === today.getMonth() + 1;
           const isLeapDay = viewMonth === 2 && d === 29 && !isLeapYear(year);
           return (
             <button

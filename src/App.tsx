@@ -149,12 +149,29 @@ export default function App() {
       if (document.querySelector('[aria-modal="true"]')) return; // açık bir Modal varken odak tuzağını atlama
 
       switch (e.key) {
-        case "ArrowLeft": e.preventDefault(); gunKaydir(-1); break;
-        case "ArrowRight": e.preventDefault(); gunKaydir(1); break;
-        case "t": case "T": e.preventDefault(); bugüneDön(); break;
-        case "/": e.preventDefault(); (aramaRef.current?.offsetParent ? aramaRef.current : aramaMobilRef.current)?.focus(); break;
-        case "?": setKisayolYardimi(true); break;
-        case "Escape": setKisayolYardimi(false); break;
+        case "ArrowLeft":
+          e.preventDefault();
+          gunKaydir(-1);
+          break;
+        case "ArrowRight":
+          e.preventDefault();
+          gunKaydir(1);
+          break;
+        case "t":
+        case "T":
+          e.preventDefault();
+          bugüneDön();
+          break;
+        case "/":
+          e.preventDefault();
+          (aramaRef.current?.offsetParent ? aramaRef.current : aramaMobilRef.current)?.focus();
+          break;
+        case "?":
+          setKisayolYardimi(true);
+          break;
+        case "Escape":
+          setKisayolYardimi(false);
+          break;
       }
     };
     window.addEventListener("keydown", onKey);
@@ -237,11 +254,15 @@ export default function App() {
       if (seen.has(dedupe)) return;
       seen.add(dedupe);
       const type: CaseType =
-        theme === "Suikast" ? "suikast"
-        : theme === "İnfaz & İdam" ? "idam"
-        : theme === "Kayıp & Gizem" ? "kayıp"
-        : theme === "Felaket" ? "felaket"
-        : "katliam";
+        theme === "Suikast"
+          ? "suikast"
+          : theme === "İnfaz & İdam"
+            ? "idam"
+            : theme === "Kayıp & Gizem"
+              ? "kayıp"
+              : theme === "Felaket"
+                ? "felaket"
+                : "katliam";
       auto.push({
         id: `auto-${item.id}`,
         year: item.year,
@@ -288,7 +309,8 @@ export default function App() {
     if (curated?.spotlight) return { ...curated.spotlight, curated: true };
     const featured = data?.selected?.[0] || mergedEvents[Math.floor(mergedEvents.length / 2)];
     if (!featured) return null;
-    const excerpt = "pages" in featured && featured.pages?.[0]?.excerpt ? featured.pages[0].excerpt : undefined;
+    const excerpt =
+      "pages" in featured && featured.pages?.[0]?.excerpt ? featured.pages[0].excerpt : undefined;
     return {
       kicker: "Arşivden öne çıkan",
       title: truncate(featured.text, 90),
@@ -301,13 +323,20 @@ export default function App() {
   const tickerItems = useMemo(() => {
     if (mergedEvents.length === 0) return [];
     const step = Math.max(1, Math.floor(mergedEvents.length / 14));
-    return mergedEvents.filter((_, i) => i % step === 0).slice(0, 14).map((e) => ({ year: e.year, text: e.text }));
+    return mergedEvents
+      .filter((_, i) => i % step === 0)
+      .slice(0, 14)
+      .map((e) => ({ year: e.year, text: e.text }));
   }, [mergedEvents]);
 
   /* ---------- ambiyans yılları ---------- */
   const ambientYears = useMemo(() => {
     if (mergedEvents.length === 0) return [];
-    const ys = [mergedEvents[0]?.year, mergedEvents[Math.floor(mergedEvents.length / 2)]?.year, mergedEvents[mergedEvents.length - 1]?.year].filter(Boolean) as number[];
+    const ys = [
+      mergedEvents[0]?.year,
+      mergedEvents[Math.floor(mergedEvents.length / 2)]?.year,
+      mergedEvents[mergedEvents.length - 1]?.year,
+    ].filter(Boolean) as number[];
     return [...new Set(ys)].slice(0, 3);
   }, [mergedEvents]);
 
@@ -317,17 +346,19 @@ export default function App() {
   const aramaSonuclari = useMemo(() => {
     if (!query.trim()) return null;
     return {
-      olay: mergedEvents.filter((e) => matchQuery(query, e.text, e.detail, e.page?.excerpt, formatYear(e.year))).length,
+      olay: mergedEvents.filter((e) =>
+        matchQuery(query, e.text, e.detail, e.page?.excerpt, formatYear(e.year))
+      ).length,
       dogum: births.filter((p) => matchQuery(query, p.name, p.excerpt)).length,
       vefat: deaths.filter((p) => matchQuery(query, p.name, p.excerpt)).length,
-      dosya: allCases.filter((c) => matchQuery(query, c.title, c.summary, c.detail, c.tags.join(" "))).length,
+      dosya: allCases.filter((c) =>
+        matchQuery(query, c.title, c.summary, c.detail, c.tags.join(" "))
+      ).length,
       bilim: allScience.filter((s) => matchQuery(query, s.title, s.summary, s.field)).length,
     };
   }, [query, mergedEvents, births, deaths, allCases, allScience]);
 
-  const toplamSonuc = aramaSonuclari
-    ? Object.values(aramaSonuclari).reduce((a, b) => a + b, 0)
-    : 0;
+  const toplamSonuc = aramaSonuclari ? Object.values(aramaSonuclari).reduce((a, b) => a + b, 0) : 0;
 
   // gün bazlı dinamik başlık + meta (statik index.html her günde aynı etiketi verir,
   // burada JS çalıştıktan sonra günün gerçek başlığına güncellenir — bkz. T-08 sınırı:
@@ -359,10 +390,30 @@ export default function App() {
   const searching = query.trim().length > 0;
   const noSearchResults = searching && toplamSonuc === 0;
   const stats = [
-    { label: "Tarihî olay", value: mergedEvents.length, color: "#e8b04b", icon: <IconQuill className="w-4.5 h-4.5" /> },
-    { label: "Bugün doğan", value: births.length, color: "#8fbf6a", icon: <IconLeafMark className="w-4.5 h-4.5" /> },
-    { label: "Kaybettiklerimiz", value: deaths.length, color: "#6f9fd8", icon: <IconSkull className="w-4.5 h-4.5" /> },
-    { label: "Karanlık dosya", value: allCases.length, color: "#e05b4b", icon: <IconDossier className="w-4.5 h-4.5" /> },
+    {
+      label: "Tarihî olay",
+      value: mergedEvents.length,
+      color: "#e8b04b",
+      icon: <IconQuill className="w-4.5 h-4.5" />,
+    },
+    {
+      label: "Bugün doğan",
+      value: births.length,
+      color: "#8fbf6a",
+      icon: <IconLeafMark className="w-4.5 h-4.5" />,
+    },
+    {
+      label: "Kaybettiklerimiz",
+      value: deaths.length,
+      color: "#6f9fd8",
+      icon: <IconSkull className="w-4.5 h-4.5" />,
+    },
+    {
+      label: "Karanlık dosya",
+      value: allCases.length,
+      color: "#e05b4b",
+      icon: <IconDossier className="w-4.5 h-4.5" />,
+    },
   ];
 
   return (
@@ -370,7 +421,9 @@ export default function App() {
       <div className="gridlines fixed inset-0 pointer-events-none" />
       <div className="noise" />
       <Toaster />
-      <a href="#top" className="skip-link">Ana içeriğe atla</a>
+      <a href="#top" className="skip-link">
+        Ana içeriğe atla
+      </a>
 
       {/* ======== ÜST BAR ======== */}
       <header className="sm:sticky sm:top-0 z-[60] border-b border-line/80 bg-night/85 backdrop-blur-md">
@@ -451,17 +504,18 @@ export default function App() {
       </p>
 
       {searching && (
-        <div className="max-w-7xl mx-auto px-4 md:px-8 py-2.5 flex items-center gap-3 flex-wrap
-                        border-b border-line/60 font-mono text-[12px]">
+        <div
+          className="max-w-7xl mx-auto px-4 md:px-8 py-2.5 flex items-center gap-3 flex-wrap
+                        border-b border-line/60 font-mono text-[12px]"
+        >
           <span className="text-gold">&quot;{query}&quot;</span>
           <span className="text-ink-dim">
             {toplamSonuc > 0 ? `${toplamSonuc} sonuç` : "sonuç yok"}
           </span>
           {toplamSonuc > 0 && aramaSonuclari && (
             <span className="text-ink-faint">
-              {aramaSonuclari.olay} olay · {aramaSonuclari.dogum} doğum ·{" "}
-              {aramaSonuclari.vefat} vefat · {aramaSonuclari.dosya} dosya ·{" "}
-              {aramaSonuclari.bilim} bilim
+              {aramaSonuclari.olay} olay · {aramaSonuclari.dogum} doğum · {aramaSonuclari.vefat}{" "}
+              vefat · {aramaSonuclari.dosya} dosya · {aramaSonuclari.bilim} bilim
             </span>
           )}
           <button
@@ -525,7 +579,9 @@ export default function App() {
                   </span>
                   <span className="h-px flex-1 bg-line" />
                   {data && !loading && (
-                    <span className={`font-mono text-[11px] ${data.stale ? "text-copper" : "text-ink-faint"}`}>
+                    <span
+                      className={`font-mono text-[11px] ${data.stale ? "text-copper" : "text-ink-faint"}`}
+                    >
                       {data.offline
                         ? "çevrimdışı önbellek"
                         : data.stale
@@ -555,7 +611,9 @@ export default function App() {
                 </div>
               ) : data?.error && mergedEvents.length === 0 ? (
                 <div className="py-8">
-                  <p className="font-display italic text-2xl text-ink">{HATA_BASLIK[data.error.kind]}</p>
+                  <p className="font-display italic text-2xl text-ink">
+                    {HATA_BASLIK[data.error.kind]}
+                  </p>
                   <p className="mt-3 text-ink-dim max-w-xl text-[15px] leading-relaxed">
                     {data.error.message}
                   </p>
@@ -593,7 +651,10 @@ export default function App() {
                   </Reveal>
 
                   {/* sayaçlar */}
-                  <Reveal delay={160} className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl">
+                  <Reveal
+                    delay={160}
+                    className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl"
+                  >
                     {stats.map((s) => (
                       <a
                         key={s.label}
@@ -603,7 +664,10 @@ export default function App() {
                         onMouseEnter={(e) => (e.currentTarget.style.borderColor = `${s.color}77`)}
                         onMouseLeave={(e) => (e.currentTarget.style.borderColor = "")}
                       >
-                        <div className="flex items-center justify-between" style={{ color: s.color }}>
+                        <div
+                          className="flex items-center justify-between"
+                          style={{ color: s.color }}
+                        >
                           <span className="font-display font-black text-3xl tabular-nums text-ink group-hover:text-gold transition-colors">
                             <CountUp to={s.value} />
                           </span>
@@ -619,10 +683,11 @@ export default function App() {
                   {mergedEvents.length > 1 && (
                     <Reveal delay={240} className="mt-8 max-w-2xl">
                       <p className="font-mono text-[12px] text-ink-faint leading-relaxed">
-                        <span className="text-gold">Zaman aralığı:</span> {formatYear(mergedEvents[0].year)} —{" "}
+                        <span className="text-gold">Zaman aralığı:</span>{" "}
+                        {formatYear(mergedEvents[0].year)} —{" "}
                         {formatYear(mergedEvents[mergedEvents.length - 1].year)} ·{" "}
-                        {mergedEvents[mergedEvents.length - 1].year - mergedEvents[0].year} yıla yayılan{" "}
-                        {mergedEvents.length} kayıt
+                        {mergedEvents[mergedEvents.length - 1].year - mergedEvents[0].year} yıla
+                        yayılan {mergedEvents.length} kayıt
                       </p>
                     </Reveal>
                   )}
@@ -673,7 +738,10 @@ export default function App() {
 
         {/* ======== BÖLÜM NAVİGASYONU ======== */}
         {!noSearchResults && (
-          <nav aria-label="Bölümler" className="sticky top-0 sm:top-16 z-[55] border-b border-line/80 bg-night/85 backdrop-blur-md">
+          <nav
+            aria-label="Bölümler"
+            className="sticky top-0 sm:top-16 z-[55] border-b border-line/80 bg-night/85 backdrop-blur-md"
+          >
             <div className="max-w-7xl mx-auto px-4 md:px-8 flex gap-1 overflow-x-auto row-scroll">
               {NAV.map((n, i) => (
                 <a
@@ -723,7 +791,10 @@ export default function App() {
                     </p>
                     <ul className="space-y-1.5">
                       {data.holidays.map((h) => (
-                        <li key={h.id} className="text-[14.5px] text-ink-dim leading-relaxed flex gap-2.5">
+                        <li
+                          key={h.id}
+                          className="text-[14.5px] text-ink-dim leading-relaxed flex gap-2.5"
+                        >
                           <span className="text-gold shrink-0">◆</span>
                           <span>{h.text}</span>
                         </li>
@@ -867,7 +938,11 @@ export default function App() {
                     <SkeletonCards />
                   ) : (
                     <ErrorBoundary variant="section">
-                      <TalkSection cards={talkCards} dayLabel={dayLabel} onBroadcast={() => setBroadcast(true)} />
+                      <TalkSection
+                        cards={talkCards}
+                        dayLabel={dayLabel}
+                        onBroadcast={() => setBroadcast(true)}
+                      />
                     </ErrorBoundary>
                   )}
                 </div>
@@ -882,33 +957,53 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-12 grid md:grid-cols-3 gap-10">
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <span className="text-brand"><IconLeafMark className="w-6 h-6" /></span>
+              <span className="text-brand">
+                <IconLeafMark className="w-6 h-6" />
+              </span>
               <span className="font-display font-bold text-lg text-ink">TARİH YAPRAĞI</span>
             </div>
             <p className="text-[13.5px] leading-relaxed text-ink-dim max-w-xs">
-              Her gün koparılacak bir yaprak, her yaprakta bir arşiv. Duvar takvimlerinden yayın stüdyolarına:
-              bugünün tarihi, konuşmaya hazır.
+              Her gün koparılacak bir yaprak, her yaprakta bir arşiv. Duvar takvimlerinden yayın
+              stüdyolarına: bugünün tarihi, konuşmaya hazır.
             </p>
           </div>
           <div>
-            <p className="font-mono text-[11px] tracking-[0.24em] uppercase text-ink-faint mb-4">Kaynaklar</p>
+            <p className="font-mono text-[11px] tracking-[0.24em] uppercase text-ink-faint mb-4">
+              Kaynaklar
+            </p>
             <ul className="space-y-2.5 text-[13.5px] text-ink-dim">
-              <li>· Tarihî olaylar, doğum ve vefatlar: <span className="text-sky">Wikimedia REST API</span> (TR + EN Vikipedi)</li>
-              <li>· Karanlık dosyalar ve bilim seçkisi: <span className="text-gold">editör derlemesi</span></li>
-              <li>· Sohbet kartları: derleme + <span className="text-teal">arşiv özetlerinden otomatik üretim</span></li>
+              <li>
+                · Tarihî olaylar, doğum ve vefatlar:{" "}
+                <span className="text-sky">Wikimedia REST API</span> (TR + EN Vikipedi)
+              </li>
+              <li>
+                · Karanlık dosyalar ve bilim seçkisi:{" "}
+                <span className="text-gold">editör derlemesi</span>
+              </li>
+              <li>
+                · Sohbet kartları: derleme +{" "}
+                <span className="text-teal">arşiv özetlerinden otomatik üretim</span>
+              </li>
             </ul>
           </div>
           <div>
-            <p className="font-mono text-[11px] tracking-[0.24em] uppercase text-ink-faint mb-4">Not</p>
+            <p className="font-mono text-[11px] tracking-[0.24em] uppercase text-ink-faint mb-4">
+              Not
+            </p>
             <p className="text-[13.5px] leading-relaxed text-ink-dim">
               Otomatik sınıflandırmalar anahtar kelime taramasıyla yapılır; nadiren yanılabilir.
-              Kesin bilgi için kartlardaki Vikipedi bağlantılarını izleyin. Takvim, Miladi takvim esas alır.
+              Kesin bilgi için kartlardaki Vikipedi bağlantılarını izleyin. Takvim, Miladi takvim
+              esas alır.
             </p>
             <p className="mt-6 font-mono text-[11px] text-ink-faint">
               © {today.getFullYear()} Tarih Yaprağı · 366 gün, tek arşiv
             </p>
             <p className="mt-2 font-mono text-[11px] text-ink-faint">
-              Kısayollar için <kbd className="px-1.5 py-0.5 rounded-sm border border-line bg-panel-2 text-gold">?</kbd> tuşuna basın
+              Kısayollar için{" "}
+              <kbd className="px-1.5 py-0.5 rounded-sm border border-line bg-panel-2 text-gold">
+                ?
+              </kbd>{" "}
+              tuşuna basın
             </p>
           </div>
         </div>
@@ -934,7 +1029,9 @@ export default function App() {
               </button>
             </div>
 
-            <p className="font-mono text-[11px] tracking-[0.24em] uppercase text-gold mb-3">Ana sayfa</p>
+            <p className="font-mono text-[11px] tracking-[0.24em] uppercase text-gold mb-3">
+              Ana sayfa
+            </p>
             <dl className="space-y-2.5 mb-7">
               {[
                 ["←", "Önceki gün"],
@@ -955,7 +1052,9 @@ export default function App() {
               ))}
             </dl>
 
-            <p className="font-mono text-[11px] tracking-[0.24em] uppercase text-gold mb-3">Yayın Modu</p>
+            <p className="font-mono text-[11px] tracking-[0.24em] uppercase text-gold mb-3">
+              Yayın Modu
+            </p>
             <dl className="space-y-2.5">
               {[
                 ["←", "Önceki kart"],

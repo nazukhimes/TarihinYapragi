@@ -15,6 +15,16 @@ import type { CuratedDay } from "./types";
 export * from "./types";
 
 export const CURATED: Record<string, CuratedDay> = {
-  ...OCAK, ...SUBAT, ...MART, ...NISAN, ...MAYIS, ...HAZIRAN,
-  ...TEMMUZ, ...AGUSTOS, ...EYLUL, ...EKIM, ...KASIM, ...ARALIK,
+  ...OCAK,
+  ...SUBAT,
+  ...MART,
+  ...NISAN,
+  ...MAYIS,
+  ...HAZIRAN,
+  ...TEMMUZ,
+  ...AGUSTOS,
+  ...EYLUL,
+  ...EKIM,
+  ...KASIM,
+  ...ARALIK,
 };

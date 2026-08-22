@@ -8,8 +8,8 @@ const CAT_COLOR: Record<string, string> = {
   Bilim: "#43a08f",
   Teknoloji: "#43a08f",
   Uzay: "#e8b04b",
-  "Keşif": "#e8b04b",
-  "Gökyüzü": "#e8b04b",
+  Keşif: "#e8b04b",
+  Gökyüzü: "#e8b04b",
   Kültür: "#c08bc9",
   Edebiyat: "#c08bc9",
   Tarih: "#6f9fd8",
@@ -47,7 +47,8 @@ export function TalkSection({
           <div className="flex-1 min-w-[240px]">
             <p className="font-display font-semibold text-xl text-ink">Yayıncı kiti hazır</p>
             <p className="mt-0.5 text-[13.5px] text-ink-dim">
-              {cards.length} kart · {cards.reduce((a, c) => a + c.minutes, 0)} dakikalık konuşma malzemesi · {dayLabel}
+              {cards.length} kart · {cards.reduce((a, c) => a + c.minutes, 0)} dakikalık konuşma
+              malzemesi · {dayLabel}
             </p>
           </div>
           <button
@@ -71,12 +72,22 @@ export function TalkSection({
   );
 }
 
-function TalkCardView({ card, index, dayLabel }: { card: TalkCard; index: number; dayLabel: string }) {
+function TalkCardView({
+  card,
+  index,
+  dayLabel,
+}: {
+  card: TalkCard;
+  index: number;
+  dayLabel: string;
+}) {
   const [copied, setCopied] = useState(false);
   const color = catColor(card.category);
 
   const doCopy = async () => {
-    const ok = await copyText(`${card.hook}\n\n${card.body}\n\n— Tarih Yaprağı arşivi · ${dayLabel}`);
+    const ok = await copyText(
+      `${card.hook}\n\n${card.body}\n\n— Tarih Yaprağı arşivi · ${dayLabel}`
+    );
     if (ok) {
       setCopied(true);
       toast("Kart panoya kopyalandı — yayına hazır");
@@ -92,20 +103,29 @@ function TalkCardView({ card, index, dayLabel }: { card: TalkCard; index: number
       <span className="absolute left-9 top-0 bottom-0 w-px bg-brand/45" />
       <div className="relative pl-13 pr-5 pt-5 pb-4">
         <div className="flex items-center justify-between mb-3">
-          <span className="font-mono text-[10px] tracking-[0.22em] uppercase font-semibold px-2 py-0.5 rounded-sm" style={{ color, background: `${color}1f`, border: `1px solid ${color}55` }}>
+          <span
+            className="font-mono text-[10px] tracking-[0.22em] uppercase font-semibold px-2 py-0.5 rounded-sm"
+            style={{ color, background: `${color}1f`, border: `1px solid ${color}55` }}
+          >
             {card.category}
           </span>
-          <span className="font-mono text-[10.5px] text-inkpaper-dim">KART {String(index).padStart(2, "0")}</span>
+          <span className="font-mono text-[10.5px] text-inkpaper-dim">
+            KART {String(index).padStart(2, "0")}
+          </span>
         </div>
 
-        <h3 className="font-display font-bold text-[19px] leading-snug text-inkpaper">{card.hook}</h3>
+        <h3 className="font-display font-bold text-[19px] leading-snug text-inkpaper">
+          {card.hook}
+        </h3>
 
         <div className="ruled mt-3">
           <p className="text-[13.5px] leading-[28px] text-inkpaper/85 min-h-[84px]">{card.body}</p>
         </div>
 
         <div className="mt-4 pt-3 border-t border-dashed border-inkpaper-dim/40 flex items-center justify-between">
-          <span className="font-mono text-[11px] text-inkpaper-dim">≈ {card.minutes} dk konuşma</span>
+          <span className="font-mono text-[11px] text-inkpaper-dim">
+            ≈ {card.minutes} dk konuşma
+          </span>
           <button
             onClick={doCopy}
             className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm font-mono text-[11px] tracking-widest uppercase transition-all duration-200 cursor-pointer ${
@@ -168,8 +188,12 @@ export function BroadcastMode({
       <header className="relative flex items-center justify-between px-5 md:px-10 py-4 border-b border-line/70 bg-night/70 backdrop-blur-sm">
         <div className="flex items-center gap-3">
           <span className="live-dot w-2.5 h-2.5 rounded-full bg-brand" />
-          <span className="font-mono text-[12px] tracking-[0.26em] uppercase text-ink">Yayın Modu</span>
-          <span className="font-mono text-[12px] text-ink-faint hidden sm:inline">· {dayLabel}</span>
+          <span className="font-mono text-[12px] tracking-[0.26em] uppercase text-ink">
+            Yayın Modu
+          </span>
+          <span className="font-mono text-[12px] text-ink-faint hidden sm:inline">
+            · {dayLabel}
+          </span>
         </div>
         <div className="flex items-center gap-3 md:gap-5">
           <span className="font-mono text-[13px] text-gold tabular-nums">
@@ -198,7 +222,11 @@ export function BroadcastMode({
           <div className="flex items-center gap-4 mb-7">
             <span
               className="font-mono text-[11px] tracking-[0.24em] uppercase font-semibold px-3 py-1 rounded-sm border"
-              style={{ color: catColor(card.category), borderColor: `${catColor(card.category)}66`, background: `${catColor(card.category)}14` }}
+              style={{
+                color: catColor(card.category),
+                borderColor: `${catColor(card.category)}66`,
+                background: `${catColor(card.category)}14`,
+              }}
             >
               {card.category}
             </span>
@@ -209,7 +237,9 @@ export function BroadcastMode({
           <h2 className="font-display font-bold text-3xl sm:text-4xl md:text-[3.4rem] leading-[1.12] text-ink">
             {card.hook}
           </h2>
-          <p className="mt-8 text-lg sm:text-xl md:text-[1.45rem] leading-[1.75] text-ink-dim">{card.body}</p>
+          <p className="mt-8 text-lg sm:text-xl md:text-[1.45rem] leading-[1.75] text-ink-dim">
+            {card.body}
+          </p>
         </div>
       </main>
 

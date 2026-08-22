@@ -57,8 +57,7 @@ const toplamOrnek = ORNEKLER.length;
 
 let dTP = 0,
   dFP = 0,
-  dFN = 0,
-  dTN = 0;
+  dFN = 0;
 const karanlikHatali = [];
 
 for (const o of ORNEKLER) {
@@ -73,7 +72,7 @@ for (const o of ORNEKLER) {
   } else if (beklenenKaranlik && !bulunanKaranlik) {
     dFN++;
     karanlikHatali.push({ text: o.text, tur: "YANLIŞ NEGATİF", beklenen: o.karanlik, bulunan });
-  } else dTN++;
+  }
 }
 
 const kesinlik = dTP + dFP > 0 ? dTP / (dTP + dFP) : 1;

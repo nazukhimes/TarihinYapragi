@@ -3,7 +3,13 @@ import { daysInMonth } from "./date";
 
 /** "Ağustos" → "agustos" (URL güvenli) */
 const TR_MAP: Record<string, string> = {
-  ç: "c", ğ: "g", ı: "i", i: "i", ö: "o", ş: "s", ü: "u",
+  ç: "c",
+  ğ: "g",
+  ı: "i",
+  i: "i",
+  ö: "o",
+  ş: "s",
+  ü: "u",
 };
 
 function asciify(s: string): string {

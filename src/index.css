@@ -116,19 +116,33 @@ body {
 
 /* ---------- motion ---------- */
 @keyframes tickerSlide {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 .ticker-track {
   animation: tickerSlide 55s linear infinite;
   will-change: transform;
 }
-.ticker-track:hover { animation-play-state: paused; }
+.ticker-track:hover {
+  animation-play-state: paused;
+}
 
 @keyframes leafFlip {
-  0% { transform: rotateX(-78deg); opacity: 0; }
-  55% { opacity: 1; }
-  100% { transform: rotateX(0deg); opacity: 1; }
+  0% {
+    transform: rotateX(-78deg);
+    opacity: 0;
+  }
+  55% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotateX(0deg);
+    opacity: 1;
+  }
 }
 .leaf-flip {
   transform-origin: top center;
@@ -136,40 +150,84 @@ body {
 }
 
 @keyframes riseIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-.rise-in { animation: riseIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.rise-in {
+  animation: riseIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
 
 @keyframes driftSlow {
-  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
-  50% { transform: translate3d(2.5rem, -1.6rem, 0) rotate(2deg); }
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(2.5rem, -1.6rem, 0) rotate(2deg);
+  }
 }
-.drift-slow { animation: driftSlow 22s ease-in-out infinite; }
-.drift-slower { animation: driftSlow 34s ease-in-out infinite reverse; }
+.drift-slow {
+  animation: driftSlow 22s ease-in-out infinite;
+}
+.drift-slower {
+  animation: driftSlow 34s ease-in-out infinite reverse;
+}
 
 @keyframes blinkDot {
-  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(210, 59, 46, 0.5); }
-  50% { opacity: 0.55; box-shadow: 0 0 0 7px rgba(210, 59, 46, 0); }
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(210, 59, 46, 0.5);
+  }
+  50% {
+    opacity: 0.55;
+    box-shadow: 0 0 0 7px rgba(210, 59, 46, 0);
+  }
 }
-.live-dot { animation: blinkDot 1.8s ease-in-out infinite; }
+.live-dot {
+  animation: blinkDot 1.8s ease-in-out infinite;
+}
 
 @keyframes stampIn {
-  0% { opacity: 0; transform: rotate(-14deg) scale(1.7); }
-  100% { opacity: 1; transform: rotate(-8deg) scale(1); }
+  0% {
+    opacity: 0;
+    transform: rotate(-14deg) scale(1.7);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(-8deg) scale(1);
+  }
 }
-.stamp-in { animation: stampIn 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) 0.35s both; }
+.stamp-in {
+  animation: stampIn 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) 0.35s both;
+}
 
 @keyframes modalIn {
-  from { opacity: 0; transform: translateY(26px) scale(0.97); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(26px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
-.modal-in { animation: modalIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.modal-in {
+  animation: modalIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
 
 .reveal {
   opacity: 0;
   transform: translateY(26px);
-  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .reveal.in-view {
   opacity: 1;
@@ -186,10 +244,19 @@ body {
   scrollbar-width: thin;
   scrollbar-color: #333c4d transparent;
 }
-.row-scroll::-webkit-scrollbar { height: 8px; }
-.row-scroll::-webkit-scrollbar-track { background: transparent; }
-.row-scroll::-webkit-scrollbar-thumb { background: #333c4d; border-radius: 99px; }
-.row-scroll::-webkit-scrollbar-thumb:hover { background: #46536a; }
+.row-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+.row-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.row-scroll::-webkit-scrollbar-thumb {
+  background: #333c4d;
+  border-radius: 99px;
+}
+.row-scroll::-webkit-scrollbar-thumb:hover {
+  background: #46536a;
+}
 
 /* ---------- broadcast ---------- */
 .scanlines {
@@ -203,12 +270,16 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  html { scroll-behavior: auto; }
+  html {
+    scroll-behavior: auto;
+  }
   .reveal {
     opacity: 1 !important;
     transform: none !important;
@@ -216,9 +287,20 @@ body {
 }
 
 @media print {
-  .reveal { opacity: 1 !important; transform: none !important; }
-  .noise, .gridlines, .ticker-track, .scanlines { display: none !important; }
-  header, nav { position: static !important; }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .noise,
+  .gridlines,
+  .ticker-track,
+  .scanlines {
+    display: none !important;
+  }
+  header,
+  nav {
+    position: static !important;
+  }
 }
 
 /* ---------- erişilebilirlik ---------- */
@@ -240,8 +322,10 @@ body {
 
 .sr-only {
   position: absolute;
-  width: 1px; height: 1px;
-  padding: 0; margin: -1px;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
