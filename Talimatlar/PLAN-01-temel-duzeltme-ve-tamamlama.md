@@ -3,8 +3,8 @@
 | Alan | Değer |
 |---|---|
 | **Oluşturulma** | 2026-08-21 |
-| **Durum** | 🟡 Aktif — 8 / 14 tamamlandı |
-| **Son hareket** | 2026-08-21 · T-08 tamamlandı |
+| **Durum** | 🟡 Aktif — 9 / 14 tamamlandı |
+| **Son hareket** | 2026-08-22 · T-09 tamamlandı |
 | **Talimat sayısı** | 14 (T-01 … T-14) |
 | **Faz sayısı** | 5 |
 | **Dayanak** | [`../Dokumanlar/ANALIZ-RAPORU.md`](../Dokumanlar/ANALIZ-RAPORU.md) |
@@ -65,7 +65,7 @@ Plan bittiğinde:
 | ~~T-06~~ ✅ | [Yönlendirme ve paylaşılabilir bağlantı](Tamamland%C4%B1/T-06-yonlendirme-ve-paylasilabilir-baglanti.md) | 🔴 Kritik | U-1 | ~4 sa |
 | ~~T-07~~ ✅ | [Erişilebilirlik ve klavye](Tamamland%C4%B1/T-07-erisilebilirlik-ve-klavye.md) | 🟠 Yüksek | O-6, O-7 | ~3,5 sa |
 | ~~T-08~~ ✅ | [Site kimliği: favicon, SEO, PWA](Tamamland%C4%B1/T-08-site-kimligi-favicon-seo-pwa.md) | 🟠 Yüksek | U-4 | ~3 sa |
-| T-09 | [Hata sınırı ve durum ekranları](T-09-hata-siniri-ve-durum-ekranlari.md) | 🟠 Yüksek | O-5, O-9, m-3, m-6 | ~3 sa |
+| ~~T-09~~ ✅ | [Hata sınırı ve durum ekranları](Tamamland%C4%B1/T-09-hata-siniri-ve-durum-ekranlari.md) | 🟠 Yüksek | O-5, O-9, m-3, m-6 | ~3 sa |
 
 ### FAZ 3 — İçerik
 *Uygulamanın asıl değeri. En uzun soluklu faz.*
@@ -206,6 +206,32 @@ T-01 ──┬─► T-02
   kendisi doğrulandı. Bir sonraki oturumda gerçek bir tarayıcıda elle
   doğrulanmalı. K-5'e T-08 de dokunmadı (yalnızca `index.html`, `App.tsx`'in
   sonu, `vite.config.ts`, `public/`, `scripts/`).
+- ~~**T-09.**~~ ✅ **2026-08-22'de tamamlandı.** Yeni `src/components/ErrorBoundary.tsx`
+  (projenin tek sınıf bileşeni): `main.tsx`'te kökte, `App.tsx`'te altı bölümün
+  her birinde ayrı örnek — bir bölüm çökerse yalnızca o bölüm bir hata kartı
+  gösterir, diğerleri etkilenmez (canlı doğrulandı: `CasesSection`'a geçici bir
+  `throw` eklenip diğer beş bölümün normal çalıştığı görüldü). **Sapma/düzeltme:**
+  talimatın taslağı yalnızca `main.tsx`'te `<ErrorBoundary><RouterProvider/></ErrorBoundary>`
+  öneriyordu; canlı doğrulamada bunun **etkisiz** olduğu ortaya çıktı —
+  `createBrowserRouter`'ın kendi dahili hata sınırı, rota elemanının (`App`)
+  render'ında oluşan bir hatayı kök `ErrorBoundary`'ye hiç ulaştırmadan kendi
+  jenerik İngilizce ekranını gösteriyor (React en yakın hata sınırını kullanır).
+  Düzeltme: her rotaya `errorElement={<RouteErrorFallback />}` eklendi (yeni,
+  `useRouteError` kullanan bir fonksiyon bileşeni, aynı görsel kimliği taşıyor);
+  kök `ErrorBoundary` yalnızca react-router'ın kendisinin dışında kalan bir hata
+  için son bir güvenlik ağı olarak kaldı. `data.error.kind`'a göre beş ayrı
+  başlık/mesaj (T-05'in `DayError`'ı **yalnızca gösterildi**, üretim mantığına
+  dokunulmadı); arama sonuç sayacı (toplam + bölüm bazlı) ve sonuç yoksa altı
+  bölüm yerine tek bir boş durum ekranı; `holidays` verisi artık bir "Bugünün
+  anlamı" şeridi (bölüm değil); Karanlık Dosyalar'da (`allCases` `slice(0,6)`
+  kaldırıldı) ve Bilim & Keşif'te (`slice(0,3)` kaldırıldı, talimatın
+  "uygulanabilir" notu izlenerek) "N … daha göster" düğmesi; 4 saniyeyi geçen
+  yüklemede uyarı satırı. O-5, O-9, m-3, m-6 çözüldü. **Yeni bulgu O-11**
+  (Vikipedi TR `holidays` alanında şablon artığı tek harfli çöp kayıtlar, ör.
+  29 Ekim'de "g"/"t"/"d") keşfedildi, bilinçli olarak kapsam dışı bırakıldı —
+  ayrıntı → `ANALIZ-RAPORU.md`. K-5'e T-09 da dokunmadı (`leaf.tsx`'e hiç
+  dokunulmadı). Artık T-10 ve T-11 açık (zaten T-01 sonrası açıktı, bağımlılıkları
+  T-09'a değil).
 - **T-14 en sonda.** Belgeler ancak her şey bitince gerçeğe eşitlenebilir.
 - ~~**T-06 → T-08 sırası zorunlu.**~~ SEO meta etiketleri gün bazlı URL'lere
   bağlıydı — T-06 tamamlandı, URL şeması (`/gun-ay`) sabitlendi, T-08 bu şema
@@ -231,14 +257,14 @@ T-01 ──┬─► T-02
 | T-06 | Yönlendirme ve paylaşılabilir bağlantı | ✅ Tamamlandı | 2026-08-21 | `src/lib/slug.ts` eklendi (366 gün çift yönlü test edildi) · `createBrowserRouter` (`/`, `/:daySlug`, `*`) · `App.tsx`'te `day`/`month` `useState`'i kalktı, URL tek kaynak · `/08-21`→`/21-agustos` kanonikleşiyor · `NotFound.tsx` eklendi · Paylaş düğmesi (native share / panoya kopyalama) · `public/_redirects` + `vercel.json` · U-1 çözüldü · K-5 canlı yeniden doğrulandı, hâlâ atanmadı → T-07'ye önerilir |
 | T-07 | Erişilebilirlik ve klavye | ✅ Tamamlandı | 2026-08-21 | `Modal` odak tuzağı + odak iadesi + `aria-labelledby` · `Toaster` `aria-live` · "Ana içeriğe atla" · arama `aria-label`/`type=search` · `ink-faint` kontrastı 3,98→5,82:1 · `aria-pressed` çipler · `←/→/T//? Esc` klavye kısayolları + Kısayol Yardımı modalı (Modal açıkken de devre dışı) · kişi görsellerine `width/height` · altı bölüme `aria-labelledby` · O-6, O-7 çözüldü · Lighthouse Erişilebilirlik 89→96 (yol boyunca 2 bonus hata da düzeltildi) · **Yeni bulgu O-10** (text-brand kontrastı) kapsam dışı bırakıldı · K-5'e T-07 de dokunmadı (leaf.tsx'e hiç dokunmadı, hâlâ atanmadı) |
 | T-08 | Site kimliği: favicon, SEO, PWA | ✅ Tamamlandı | 2026-08-21 | 7 marka görseli `ui.tsx`'teki `IconLeafMark`'tan üretildi (`scripts/generate-brand-assets.mjs`) · `index.html`'e favicon/manifest/`og:*`/`twitter:*`/canonical/JSON-LD eklendi · `App.tsx`'te gün bazlı dinamik başlık/canonical `useEffect`'i (canlı doğrulandı) · `scripts/sitemap.mjs` 366 adresi `build`'e bağlı üretiyor · `vite-plugin-pwa` ile service worker kuruldu · Lighthouse SEO **100/100** (yol boyunca `robots.txt`'teki göreli `Sitemap:` satırı düzeltildi) · U-4 çözüldü · Service worker'ın canlı kaydı Browser pane sandbox kısıtı yüzünden doğrulanamadı, sonraki oturumda gerçek tarayıcıda kontrol edilmeli |
-| T-09 | Hata sınırı ve durum ekranları | ⬜ Bekliyor | | |
+| T-09 | Hata sınırı ve durum ekranları | ✅ Tamamlandı | 2026-08-22 | `ErrorBoundary.tsx` eklendi (kökte + 6 bölümde) · **Sapma:** `main.tsx`'teki kök sarmalayıcı tek başına yetersizdi (react-router kendi dahili hata sınırını kullanıyor) → her rotaya `errorElement`/`RouteErrorFallback` eklendi, canlı doğrulandı · `data.error.kind`'a göre 5 başlık · arama sonuç sayacı + boş durum ekranı · "Bugünün anlamı" şeridi (`holidays`) · Karanlık Dosyalar/Bilim & Keşif'te "N daha göster" · 4 sn gecikme uyarısı · O-5, O-9, m-3, m-6 çözüldü · Yeni bulgu O-11 (`holidays`'te şablon artığı çöp kayıt) kapsam dışı bırakıldı |
 | T-10 | İçerik mimarisi ve kapsam genişletme | ⬜ Bekliyor | | |
 | T-11 | Sınıflandırma doğruluğu | ⬜ Bekliyor | | |
 | T-12 | Test, lint ve biçimlendirme altyapısı | ⬜ Bekliyor | | |
 | T-13 | Performans ve derleme iyileştirmesi | ⬜ Bekliyor | | |
 | T-14 | Dokümantasyon güncelleme ve yayın | ⬜ Bekliyor | | |
 
-**İlerleme:** 8 / 14 · `████████████░░░░░░░░░` %57
+**İlerleme:** 9 / 14 · `█████████████░░░░░░░` %64
 
 ---
 
@@ -253,7 +279,7 @@ Plan ancak aşağıdakilerin tamamı doğruysa kapatılabilir:
 
 ### Sağlamlık
 - [x] Sekme arka planda açılsa bile içerik görünüyor
-- [ ] Bir bileşen hata verse bile sayfa çökmüyor, kullanıcı mesaj görüyor
+- [x] Bir bileşen hata verse bile sayfa çökmüyor, kullanıcı mesaj görüyor (T-09)
 - [x] Hızlı gün değiştirmede eski istekler iptal ediliyor
 - [x] Çevrimdışı yedek TTL'li çalışıyor
 

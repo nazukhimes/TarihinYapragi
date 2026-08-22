@@ -2,7 +2,7 @@
 
 > Uygulamayı **kullanacak** kişiler için. Kod bilgisi gerekmez.
 >
-> **Sürüm:** 0.1.0 · **Son güncelleme:** 2026-08-21
+> **Sürüm:** 0.1.0 · **Son güncelleme:** 2026-08-22
 
 ---
 
@@ -170,6 +170,17 @@ değil, sizin baktığınız güne bakar.
 
 ## 4. Bölümler
 
+### Bugünün anlamı (bazı günlerde)
+
+Zaman Tüneli'nin hemen üstünde, altın çerçeveli kısa bir şerit çıkabilir:
+seçili günün resmî bir anlamı varsa (bayram, anma günü, haftası…) burada
+listelenir. Bu **ayrı bir bölüm değildir** — her günde çıkmaz, veri yoksa
+hiç görünmez.
+
+> Bu bilgi doğrudan Vikipedi'den geldiği için bazı günlerde şablon kaynaklı
+> anlamsız kısa bir madde de görülebilir; bu bilinen bir veri kalitesi
+> sorunudur, uygulamanın hatası değildir.
+
 ### 01 · Zaman Tüneli
 
 O güne düşen **tüm** tarihî kayıtlar, en eskiden en yeniye dikey bir çizgide.
@@ -209,10 +220,14 @@ Her kartta:
 > anahtar kelimeyle bulunmuştur ve **yanılabilir.** Editör dosyaları yer bilgisi
 > ve ayrıntılı anlatım taşır.
 
+Bir günde 6'dan fazla dosya varsa yalnızca ilk 6'sı gösterilir; altındaki
+**`N dosya daha göster`** düğmesine tıklayınca kalanı da açılır.
+
 ### 05 · Bilim & Keşif
 
 O güne denk gelen bilimsel dönüm noktaları. Kartın arka planında dev, içi boş
-yıl rakamı vardır. `Editör` rozeti taşıyanlar elle derlenmiştir.
+yıl rakamı vardır. `Editör` rozeti taşıyanlar elle derlenmiştir. Bir günde
+3'ten fazla kayıt varsa aynı şekilde **`N kayıt daha göster`** düğmesi çıkar.
 
 ### 06 · Sohbet Kartları
 
@@ -278,6 +293,12 @@ Zaman Tüneli · Doğanlar · Kaybettiklerimiz · Karanlık Dosyalar · Bilim & 
 - **Kategori adı arayabilirsiniz:** `Savaş` yazın.
 - Temizlemek için kutunun sağındaki **`✕ temizle`**.
 - Telefonda arama kutusu üst barın altında ayrı bir satırdadır.
+
+Yazdığınız anda üst barın altında bir şerit çıkar: aradığınız kelime, **toplam
+kaç sonuç** bulunduğu ve bölüm bazlı dağılım (`4 olay · 0 doğum · 0 vefat · 0
+dosya · 0 bilim` gibi). Hiçbir bölümde eşleşme yoksa altı boş bölümü tek tek
+görmek yerine tek bir ekran çıkar: *"… için bu günde sonuç yok"* + aramayı
+temizleme ve bugüne dönme düğmeleri.
 
 ---
 
@@ -367,10 +388,12 @@ tarayıcı hafızasına kaydedilir ve internet kesildiğinde bu yedekten okunur.
 Bu yedek 24 saatten eskiyse (ör. bir haftadır internetsizseniz) atılmaz, yine
 gösterilir — ama kaynak etiketi **"önbellekten · 24 saatten eski"** yazar ve
 bakır renge döner, böylece gördüğünüz bilginin güncel olmayabileceğini
-anlarsınız. Hiç açmadığınız bir gün için *"Arşive şu an ulaşılamıyor"* uyarısı
-ve **`YENİDEN DENE`** düğmesi çıkar. Arşiv sunucusu yoğunsa (çok sık istek)
-uygulama birkaç saniye içinde otomatik olarak bir kez daha dener; siz bir şey
-yapmanıza gerek kalmaz.
+anlarsınız. Hiç açmadığınız bir gün için, sorunun türüne göre ayrı bir başlık
+çıkar — *"İnternet bağlantısı yok."*, *"Arşiv şu an çok yoğun."*, *"Arşiv
+sunucusu yanıt vermiyor."* gibi — ve mümkünse yanında bir **`YENİDEN DENE`**
+düğmesi olur (kalıcı bir hatada, ör. o gün için hiç kayıt yoksa, bu düğme hiç
+çıkmaz). Arşiv sunucusu yoğunsa (çok sık istek) uygulama birkaç saniye içinde
+otomatik olarak bir kez daha dener; siz bir şey yapmanıza gerek kalmaz.
 
 **S: Uygulamayı telefonuma veya bilgisayarıma yükleyebilir miyim?**
 Evet. Tarih Yaprağı bir PWA (Progressive Web App) olarak kurulabilir:
@@ -400,7 +423,8 @@ Evet, arayüz mobil uyumludur. Kart şeritleri dokunmatik kaydırılır.
 | `[HATA] npm install basarisiz oldu` | Ağ / izin sorunu | İnterneti kontrol edin; `node_modules` klasörünü silip tekrar deneyin |
 | `./baslat.sh` çalışmıyor: `Permission denied` | Çalıştırma izni yok | `chmod +x baslat.sh` çalıştırıp tekrar deneyin |
 | Sayfa açılıyor ama boş | Tarayıcı çok eski | Güncel Chrome, Edge veya Firefox kullanın |
-| *"Arşive şu an ulaşılamıyor"* | Vikipedi'ye erişilemiyor | İnterneti kontrol edip `YENİDEN DENE`'ye basın |
+| *"İnternet bağlantısı yok." / "Arşiv şu an çok yoğun." / "Arşiv sunucusu yanıt vermiyor."* | Vikipedi'ye erişilemiyor, sorunun türü ekranda ayrı başlıkla belirtiliyor | Varsa `YENİDEN DENE`'ye basın; yoksa (ör. o gün için kayıt yok) internet sorunu değildir |
+| Bir bölüm "Arşivde bir sorun çıktı / Yaprak yırtıldı" kartı gösteriyor | O bölümde beklenmeyen bir hata oldu (T-09) | Diğer bölümler etkilenmez, normal kullanmaya devam edebilirsiniz. Düzelmezse `SAYFAYI YENİLE`, olmazsa `ÖNBELLEĞİ TEMİZLE`'ye basın |
 | Bölümler görünmüyor, sayfa boş kalıyor | Sekme arka planda açıldı | *(K-3 · T-04 ile düzeltildi — sekme arka planda bile içerik en geç ~1,2 saniyede kendiliğinden görünür olur.)* Eskisi gibi sayfayı yenilemenize gerek yok |
 | Sayaçlar gün değişince güncellenmiyor | Bilinen hataydı | *(K-2 · T-04 ile düzeltildi — sayaçlar artık her gün değişiminde önceki değerden yeni değere doğru güncelleniyor.)* |
 | Kod değişikliği tarayıcıya yansımıyor | HMR bağlantısı koptu | *(K-4 · T-01 ile düzeltildi — hangi portta çalışırsanız çalışın HMR bağlanır.)* Yine de olursa sayfayı yenileyin |

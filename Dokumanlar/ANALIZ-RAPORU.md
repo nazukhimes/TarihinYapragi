@@ -14,6 +14,7 @@
 > | 2026-08-21 | [T-06](../Talimatlar/Tamamland%C4%B1/T-06-yonlendirme-ve-paylasilabilir-baglanti.md) | U-1 |
 > | 2026-08-21 | [T-07](../Talimatlar/Tamamland%C4%B1/T-07-erisilebilirlik-ve-klavye.md) | O-6, O-7 |
 > | 2026-08-21 | [T-08](../Talimatlar/Tamamland%C4%B1/T-08-site-kimligi-favicon-seo-pwa.md) | U-4 |
+> | 2026-08-22 | [T-09](../Talimatlar/Tamamland%C4%B1/T-09-hata-siniri-ve-durum-ekranlari.md) | O-5, O-9, m-3, m-6 |
 >
 > Bu rapor **ilk analiz anının** fotoğrafıdır; metin korunur, çözülen bulguların
 > başlığına `✅ ÇÖZÜLDÜ` işareti ve bir *Çözüm* bloğu eklenir.
@@ -28,9 +29,9 @@
 | `npm run build` | ✅ Geçiyor | 2.90 s · 253 kB JS (82 kB gzip) · 51 kB CSS |
 | Uygulama açılıyor mu | ✅ Evet | Veri geliyor, 23 kayıt listelendi |
 | Kritik hata | ⚠️ 5 adet · **4 çözüldü** | K-1…K-5 · K-1 ✅ T-03, K-2 ✅ T-04, K-3 ✅ T-04, K-4 ✅ T-01 · K-5 T-03 sırasında keşfedildi, henüz atanmadı |
-| Orta seviye eksik | ⚠️ 10 adet · **7 çözüldü** | O-1…O-10 · O-1, O-2, O-3 ✅ T-01 · O-4, O-8 ✅ T-05 · O-6, O-7 ✅ T-07 · O-10 T-07 sırasında keşfedildi, henüz atanmadı |
+| Orta seviye eksik | ⚠️ 11 adet · **9 çözüldü** | O-1…O-11 · O-1, O-2, O-3 ✅ T-01 · O-4, O-8 ✅ T-05 · O-5, O-9 ✅ T-09 · O-6, O-7 ✅ T-07 · O-10 T-07 sırasında keşfedildi, henüz atanmadı · O-11 T-09 sırasında keşfedildi, henüz atanmadı |
 | Ürün/içerik boşluğu | ⚠️ 5 adet · **2 çözüldü** | U-1…U-5 · U-1 ✅ T-06 · U-4 ✅ T-08 |
-| Küçük not | ⚠️ 7 adet · **2 çözüldü** | m-1…m-7 · m-2 ✅ T-01 · m-5 ✅ T-07 |
+| Küçük not | ⚠️ 7 adet · **4 çözüldü** | m-1…m-7 · m-2 ✅ T-01 · m-3, m-6 ✅ T-09 · m-5 ✅ T-07 |
 
 **Kısa hüküm:** Uygulama sağlam bir iskelete ve gerçekten güzel bir tasarım diline sahip.
 Kod temiz, tipli ve tutarlı. Sorun "bozuk olması" değil, **yarım kalmış olması**:
@@ -299,10 +300,46 @@ EN yalnızca TR boşsa kullanılıyor. İsteklerin yaklaşık yarısı boşa gid
 > konsola hiçbir hata düşürmüyor. 404 için her dilde 1 çağrı (deneme yok); 429/5xx
 > için her dilde 2 çağrı (toplam 4). Ayrıntı → T-05 Tamamlanma Kaydı.
 
-### O-5 · Hata sınırı (ErrorBoundary) yok
+### O-5 · Hata sınırı (ErrorBoundary) yok — ✅ ÇÖZÜLDÜ (T-09)
 
 `src/main.tsx` doğrudan `<App />` render ediyor. Herhangi bir bileşende oluşan bir
 runtime hatası **tüm sayfayı beyaz ekrana** çevirir; kullanıcıya hiçbir mesaj gösterilmez.
+
+> **✅ Çözüm — T-09 (2026-08-22)**
+>
+> Yeni `src/components/ErrorBoundary.tsx` — projenin tek sınıf bileşeni (React'te
+> hata sınırı yalnızca sınıf bileşeniyle yazılabilir). `main.tsx`'te kökte,
+> `App.tsx`'te altı bölümün her birinde ayrı bir örnek var; bir bölüm çökerse
+> yalnızca o bölüm bir "Yaprak yırtıldı" hata kartı gösterir, diğer beşi normal
+> çalışmaya devam eder. "Sayfayı yenile" ve "Önbelleği temizle" (`localStorage.clear()`)
+> düğmeleri var; hata yığını (`stack`) yalnızca `import.meta.env.DEV`'de görünür.
+>
+> **Sapma/düzeltme (canlı doğrulamada keşfedildi):** Talimatın taslak kodu yalnızca
+> `main.tsx`'te `<ErrorBoundary><RouterProvider/></ErrorBoundary>` öneriyordu — bu,
+> O-5'in ilk analiz anındaki `ReactDOM.createRoot(...).render(<App />)` koduna göre
+> yazılmıştı. Ancak T-06'dan beri uygulama `createBrowserRouter` kullanıyor ve
+> react-router'ın veri yönlendiricileri (v6.4+) her rota elemanını **kendi dahili
+> hata sınırıyla** sarıyor; bu, `App`'in kendi render'ında oluşan bir hatayı kök
+> `ErrorBoundary`'ye hiç ulaştırmadan react-router'ın kendi jenerik İngilizce
+> "Unexpected Application Error" ekranını gösteriyor (React en yakın hata sınırını
+> kullanır — react-router'ınki `RouterProvider`'ın *içinde*, kök `ErrorBoundary`
+> *dışında* kalıyor). Canlı testte (`App.tsx`'in başına geçici `throw new Error("kök
+> test")` eklenerek) doğrulandı: konsolda `"Error handled by React Router default
+> ErrorBoundary"` görüldü, kök `ErrorBoundary` hiç devreye girmedi. Düzeltme: her
+> rotaya (`main.tsx`) `errorElement={<RouteErrorFallback />}` eklendi — yeni,
+> `useRouteError()` kullanan bir fonksiyon bileşeni, aynı "torn-paper" görsel
+> kimliğini taşıyor. Kök `ErrorBoundary` artık yalnızca react-router'ın kendisinin
+> dışında kalan bir hata için son bir güvenlik ağı.
+>
+> **Doğrulama:** Canlı ortamda üç senaryo test edildi: (1) `CasesSection`'ın başına
+> geçici `throw new Error("test hatası")` eklendi → yalnızca Karanlık Dosyalar
+> bölümünde hata kartı çıktı, diğer beş bölüm (Zaman Tüneli, Doğanlar,
+> Kaybettiklerimiz, Bilim & Keşif, Sohbet Kartları) normal render edildi, konsolda
+> `[Tarih Yaprağı] beklenmeyen hata:` kaydı görüldü; (2) `App.tsx`'in başına geçici
+> kök hata eklendi → `errorElement` düzeltmesinden ÖNCE react-router'ın jenerik
+> ekranı çıktı, düzeltmeden SONRA projenin kendi Türkçe hata ekranı ("Sayfayı
+> yenile"/"Önbelleği temizle" düğmeleriyle) çıktı; (3) her iki geçici `throw`
+> testten sonra kaldırıldı, `npm run typecheck`/`npm run build` tekrar temiz.
 
 ### O-6 · Erişilebilirlik boşlukları — ✅ ÇÖZÜLDÜ (T-07)
 
@@ -380,11 +417,25 @@ ana sayfada gün değiştirmek için klavye kısayolu yok. Gün geçişi bu ür�
 > ile atıldığı), en yenisinin ise hâlâ bellekte olduğu (yeni istek tetiklemediği)
 > canlı olarak kanıtlandı. Ayrıntı → T-05 Tamamlanma Kaydı.
 
-### O-9 · `holidays` verisi çekiliyor ama neredeyse kullanılmıyor
+### O-9 · `holidays` verisi çekiliyor ama neredeyse kullanılmıyor — ✅ ÇÖZÜLDÜ (T-09)
 
 `wiki.ts` `holidays` alanını dolduruyor; ekranda yalnızca otomatik sohbet kartlarından
 biri olarak (`buildAutoTalk` → `auto-holiday`) dolaylı görünüyor. "Bugünün anlamı"
 başlı başına bir bölüm olmayı hak ediyor.
+
+> **✅ Çözüm — T-09 (2026-08-22)**
+>
+> `App.tsx`'e, Zaman Tüneli'nin **üstünde** (kendi bölümü değil, altın çerçeveli
+> kısa bir şerit — `NAV` dizisine eklenmedi, altı bölümlü yapı korundu) `data.holidays`
+> listesini gösteren bir blok eklendi; veri yoksa hiç render edilmiyor.
+>
+> **Doğrulama:** Canlı ortamda 29 Ekim ("Türkiye'de Cumhuriyet Bayramı", "Kızılay
+> Haftası…") ve 7 Mart'ta şerit doğru göründü; veri olmayan günlerde (ör. arama
+> sonucu boş durumunda) hiç render edilmediği doğrulandı. **Yan bulgu:** 29 Ekim'de
+> gerçek Wikimedia yanıtında `holidays` dizisinin 5 öğesinden üçü tek harflik
+> çöp metin ("g", "t", "d") — bu, T-09'un ürettiği bir veri değil, Vikipedi TR
+> şablonunun kendisinden geliyor (`curl` ile doğrudan API'ye karşı doğrulandı) →
+> yeni bulgu O-11, bkz. bölüm 8.
 
 ---
 
@@ -521,10 +572,10 @@ Kritik saf fonksiyonlar (`dayOfYear`, `classifyItem`, `formatYear`, `firstSenten
 |---|---|---|
 | m-1 | `NAV[stats.indexOf(s)]` — dizi sırasına gizli bağımlılık, kırılgan | `App.tsx` istatistik bağlantıları |
 | m-2 | ~~`vite.config.js` — proje TS olduğu hâlde config JS~~ **✅ ÇÖZÜLDÜ (T-01)** — `vite.config.ts` | kök |
-| m-3 | `CasesSection` otomatik dosyaları `slice(0, 6)` ile kesiyor, "daha fazla" yok | `App.tsx` allCases |
+| m-3 | ~~`CasesSection` otomatik dosyaları `slice(0, 6)` ile kesiyor, "daha fazla" yok~~ **✅ ÇÖZÜLDÜ (T-09)** — sınır kaldırıldı, "N dosya daha göster" düğmesi eklendi (aynı desen `ScienceSection`'daki `slice(0,3)`'e de uygulandı) | `App.tsx` allCases, `sections.tsx` |
 | m-4 | Ticker `55s` sabit; 3 öğede de 14 öğede de aynı hız | `index.css:127` |
 | m-5 | ~~Kişi kartlarında görseller `loading="lazy"` var ama `width/height` yok → düzen kayması~~ **✅ ÇÖZÜLDÜ (T-07)** — kart küçük resmi `248×132`, modal küçük resmi `96×112` | `sections.tsx` PeopleRow |
-| m-6 | Arama sonucu global sayacı yok; kullanıcı hangi bölümde kaç sonuç olduğunu göremiyor | `App.tsx` |
+| m-6 | ~~Arama sonucu global sayacı yok; kullanıcı hangi bölümde kaç sonuç olduğunu göremiyor~~ **✅ ÇÖZÜLDÜ (T-09)** — toplam + bölüm bazlı sayaç şeridi, `aria-live` duyurusu, sonuç yoksa tek boş durum ekranı | `App.tsx` |
 | m-7 | Yazdırma (print) stil sayfası yok — kart çıktısı alınamıyor | `index.css` |
 
 ---
@@ -534,9 +585,9 @@ Kritik saf fonksiyonlar (`dayOfYear`, `classifyItem`, `formatYear`, `firstSenten
 ```
 ÖNCE   →  K-1✅ K-2✅ K-4✅  K-5   (görünür yanlış bilgi + bozuk geliştirme deneyimi + kırık birincil gezinme)
 SONRA  →  O-1✅ O-2✅ O-3✅     (temizlik — sonraki her iş bundan faydalanır)  [T-01 ile bitti]
-SONRA  →  K-3✅ O-5  O-6✅       (sağlamlık ve erişilebilirlik)  [O-6 T-07 ile bitti]
+SONRA  →  K-3✅ O-5✅ O-6✅       (sağlamlık ve erişilebilirlik)  [O-5 T-09, O-6 T-07 ile bitti]
 SONRA  →  U-1✅ U-4✅           (paylaşım + kabuk — ürünü "yayınlanabilir" yapar)  [U-1 T-06, U-4 T-08 ile bitti]
-SONRA  →  O-4✅ O-7✅ O-8✅ O-9   (ağ, klavye, önbellek, içerik zenginliği)  [O-4/O-8 T-05, O-7 T-07 ile bitti]
+SONRA  →  O-4✅ O-7✅ O-8✅ O-9✅   (ağ, klavye, önbellek, içerik zenginliği)  [O-4/O-8 T-05, O-7 T-07, O-9 T-09 ile bitti]
 SONRA  →  U-2  U-3             (içerik hacmi ve doğruluğu — sürekli iş)
 SON    →  U-5                  (test/lint — sonraki tüm işleri korur)
 ```
@@ -545,7 +596,8 @@ Bu sıralama `../Talimatlar/PLAN-01-temel-duzeltme-ve-tamamlama.md` dosyasında
 T-01…T-14 talimatlarına dönüştürülmüştür. K-5, T-03 sırasında keşfedilmiş yeni
 bir bulgudur ve henüz bir talimata atanmamıştır — bkz. bölüm 6. O-10, T-07
 sırasında (gerçek bir Lighthouse denetimiyle) keşfedilmiş yeni bir bulgudur ve
-henüz bir talimata atanmamıştır — bkz. bölüm 7.
+henüz bir talimata atanmamıştır — bkz. bölüm 7. O-11, T-09 sırasında keşfedilmiş
+yeni bir bulgudur ve henüz bir talimata atanmamıştır — bkz. bölüm 8.
 
 ---
 
@@ -695,3 +747,57 @@ dokunacak bir talimat (T-11 sınıflandırma doğruluğu, ya da T-13 performans/
 iyi bir aday olabilir; ayrı bir küçük talimat da (`--color-brand`'ın metin
 kullanımı için daha açık bir varyantını tanımlamak, örn. `--color-brand-light`)
 mümkün — nihai karar plan sahibine aittir.
+
+---
+
+## 8. T-09 Sırasında Keşfedilen Yeni Bulgu (2026-08-22)
+
+> Bu bölüm ilk analiz anının parçası değildir. T-09 (hata sınırı ve durum
+> ekranları) talimatının canlı doğrulaması sırasında keşfedilmiş, ilk analizde
+> yakalanmamış bir bulgudur.
+
+### O-11 · `holidays` alanında Vikipedi şablon artığı çöp kayıtlar
+
+**Dosya:** `src/lib/wiki.ts:252-255` (`holidays` üretimi — dokunulmadı, yalnızca kanıtlandı)
+
+T-09, O-9'u çözerken (`data.holidays`'i bir "Bugünün anlamı" şeridinde gösterme)
+29 Ekim'de şeridin üç anlamsız tek harfli madde gösterdiği görüldü: `g`, `t`, `d`.
+Gerçek Wikimedia API'sine doğrudan `curl` ile bakıldığında bunun uygulamanın bir
+hatası olmadığı, **Vikipedi TR'nin kendi "bugün tarihte" şablonundan** geldiği
+doğrulandı:
+
+```bash
+curl -s "https://api.wikimedia.org/feed/v1/wikipedia/tr/onthisday/all/10/29"
+```
+
+`holidays` dizisinin 5 öğesinden üçü şunlar (API yanıtından, kısaltılmış):
+
+```json
+{ "text": "g", "pages": [{ "title": "Şablon:Aylar", "namespace": { "id": 10, "text": "Şablon" }, ... }] }
+{ "text": "t", "pages": [{ "title": "Şablon_tartışma:Aylar", "namespace": { "id": 11, "text": "Şablon tartışma" }, ... }] }
+{ "text": "d", "pages": [] }
+```
+
+Bu üç kaydın ortak noktası: bağlı oldukları sayfa (varsa) `Şablon:` / `Şablon
+tartışma:` ad alanında (Vikipedi'nin "ay şablonu" navigasyon kalıbının bir
+artığı olduğu görülüyor — muhtemelen "gün/tarih/devam" gibi gezinme
+bağlantılarının kısaltmaları), gerçek bir ansiklopedi maddesi değil.
+
+**Etki:** "Bugünün anlamı" şeridi (T-09) bazı günlerde ciddi iki-üç satırın
+yanına anlamsız tek harfler ekliyor — küçük ama görünür bir kalite sorunu, tam
+da T-09'un "kullanıcıya boş/anlamsız bir şeyle karşılaştırmama" amacına ters.
+
+**Kapsam notu:** `holidays`'in **üretimi** (`wiki.ts`, T-05'in kapsamı) T-09'un
+*Kapsam Dışı* tablosunda "burada yalnızca gösteriliyor" diye işaretliydi; T-09
+veriyi olduğu gibi gösterdi, filtrelemedi. Bu bilinçli bir seçimdi (talimatın
+kendi kod parçası da filtresizdi) — ama bulgu gerçek ve gösterilebilir bir
+düzeltmesi var.
+
+**Önerilen düzeltme (küçük):** `wiki.ts`'teki `holidays` üretiminde, sayfası
+`Şablon` / `Şablon tartışma` ad alanında olan (veya metni belirli bir uzunluğun
+altında kalan, ör. 3 karakterden kısa) kayıtları süzmek — bu, gerçek tatil/anma
+günü metinlerini etkilemez, yalnızca şablon navigasyon artıklarını eler.
+
+**Önerilen talimat:** Henüz hiçbir talimata atanmadı. `wiki.ts`'e zaten dokunacak
+bir talimat (T-11 sınıflandırma doğruluğu) iyi bir aday olabilir; ayrı bir küçük
+talimat da mümkün — nihai karar plan sahibine aittir.

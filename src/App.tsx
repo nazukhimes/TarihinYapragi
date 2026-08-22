@@ -14,14 +14,17 @@ import {
   classifyItem,
   detectDarkItem,
   useDayData,
+  type DayErrorKind,
 } from "./lib/wiki";
 import { daysInMonth } from "./lib/date";
 import { CalendarLeaf, LiveClock, MONTHS_TR, Ticker } from "./components/leaf";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 import { NotFound } from "./components/NotFound";
 import {
   CasesSection,
   formatYear,
   itemToPeople,
+  matchQuery,
   PeopleRow,
   ScienceSection,
   SectionShell,
@@ -71,6 +74,14 @@ const NAV = [
   { id: "sohbet", label: "Sohbet Kartları" },
 ];
 
+const HATA_BASLIK: Record<DayErrorKind, string> = {
+  network: "İnternet bağlantısı yok.",
+  notfound: "Bu gün için kayıt bulunamadı.",
+  ratelimit: "Arşiv şu an çok yoğun.",
+  server: "Arşiv sunucusu yanıt vermiyor.",
+  unknown: "Beklenmeyen bir sorun oluştu.",
+};
+
 export default function App() {
   const { daySlug } = useParams<{ daySlug: string }>();
   const navigate = useNavigate();
@@ -87,10 +98,19 @@ export default function App() {
   const [query, setQuery] = useState("");
   const [broadcast, setBroadcast] = useState(false);
   const [kisayolYardimi, setKisayolYardimi] = useState(false);
+  const [gecikti, setGecikti] = useState(false);
   const aramaRef = useRef<HTMLInputElement>(null);
   const aramaMobilRef = useRef<HTMLInputElement>(null);
 
   const { data, loading, reload } = useDayData(month, day);
+
+  // 4 saniyeyi geçen yüklemede kullanıcıya ek bilgi göster (O-9/T-09 Adım 7)
+  useEffect(() => {
+    setGecikti(false);
+    if (!loading) return;
+    const t = setTimeout(() => setGecikti(true), 4000);
+    return () => clearTimeout(t);
+  }, [loading, month, day]);
 
   const setDate = useCallback(
     (d: number, m: number) => navigate(`/${toDaySlug(m, d)}`),
@@ -234,7 +254,7 @@ export default function App() {
         tags: [theme.toLocaleLowerCase("tr-TR"), formatYear(item.year)],
       });
     });
-    return [...base, ...auto.slice(0, 6)];
+    return [...base, ...auto];
   }, [data, curated]);
 
   /* ---------- bilim ---------- */
@@ -245,7 +265,6 @@ export default function App() {
         const c = classifyItem(e.text);
         return c === "bilim" || c === "kesif";
       })
-      .slice(0, 3)
       .map((e) => ({
         id: `sci-${e.id}`,
         year: e.year,
@@ -292,6 +311,24 @@ export default function App() {
     return [...new Set(ys)].slice(0, 3);
   }, [mergedEvents]);
 
+  /* ---------- arama sonuç sayacı (m-6) ---------- */
+  // Not: bölümlerin kendi içindeki matchQuery süzmesini tekrarlıyor — bilinçli;
+  // bölüm bileşenlerinin arayüzünü değiştirmemek için kabul edildi (T-13'e refaktör notu düşüldü).
+  const aramaSonuclari = useMemo(() => {
+    if (!query.trim()) return null;
+    return {
+      olay: mergedEvents.filter((e) => matchQuery(query, e.text, e.detail, e.page?.excerpt, formatYear(e.year))).length,
+      dogum: births.filter((p) => matchQuery(query, p.name, p.excerpt)).length,
+      vefat: deaths.filter((p) => matchQuery(query, p.name, p.excerpt)).length,
+      dosya: allCases.filter((c) => matchQuery(query, c.title, c.summary, c.detail, c.tags.join(" "))).length,
+      bilim: allScience.filter((s) => matchQuery(query, s.title, s.summary, s.field)).length,
+    };
+  }, [query, mergedEvents, births, deaths, allCases, allScience]);
+
+  const toplamSonuc = aramaSonuclari
+    ? Object.values(aramaSonuclari).reduce((a, b) => a + b, 0)
+    : 0;
+
   // gün bazlı dinamik başlık + meta (statik index.html her günde aynı etiketi verir,
   // burada JS çalıştıktan sonra günün gerçek başlığına güncellenir — bkz. T-08 sınırı:
   // WhatsApp/Twitter gibi JS çalıştırmayan önizleyiciler statik etiketleri görmeye devam eder)
@@ -320,6 +357,7 @@ export default function App() {
   if (!parsed) return <NotFound />;
 
   const searching = query.trim().length > 0;
+  const noSearchResults = searching && toplamSonuc === 0;
   const stats = [
     { label: "Tarihî olay", value: mergedEvents.length, color: "#e8b04b", icon: <IconQuill className="w-4.5 h-4.5" /> },
     { label: "Bugün doğan", value: births.length, color: "#8fbf6a", icon: <IconLeafMark className="w-4.5 h-4.5" /> },
@@ -408,7 +446,32 @@ export default function App() {
           </label>
         </div>
       </header>
-      <p className="sr-only" role="status" aria-live="polite" />
+      <p className="sr-only" role="status" aria-live="polite">
+        {searching ? (toplamSonuc > 0 ? `${toplamSonuc} sonuç bulundu` : "sonuç yok") : ""}
+      </p>
+
+      {searching && (
+        <div className="max-w-7xl mx-auto px-4 md:px-8 py-2.5 flex items-center gap-3 flex-wrap
+                        border-b border-line/60 font-mono text-[12px]">
+          <span className="text-gold">&quot;{query}&quot;</span>
+          <span className="text-ink-dim">
+            {toplamSonuc > 0 ? `${toplamSonuc} sonuç` : "sonuç yok"}
+          </span>
+          {toplamSonuc > 0 && aramaSonuclari && (
+            <span className="text-ink-faint">
+              {aramaSonuclari.olay} olay · {aramaSonuclari.dogum} doğum ·{" "}
+              {aramaSonuclari.vefat} vefat · {aramaSonuclari.dosya} dosya ·{" "}
+              {aramaSonuclari.bilim} bilim
+            </span>
+          )}
+          <button
+            onClick={() => setQuery("")}
+            className="ml-auto font-mono text-[11px] text-brand hover:text-paper cursor-pointer"
+          >
+            ✕ temizle
+          </button>
+        </div>
+      )}
 
       <main id="top" className="relative">
         {/* ======== AÇILIŞ: TAKVİM YAPRAĞI ======== */}
@@ -484,20 +547,34 @@ export default function App() {
                   <p className="mt-6 font-mono text-[13px] text-ink-faint">
                     Arşiv taranıyor · {dayLabel} için kayıtlar getiriliyor…
                   </p>
+                  {gecikti && (
+                    <p className="mt-3 font-mono text-[12px] text-copper">
+                      Arşiv beklenenden yavaş yanıt veriyor…
+                    </p>
+                  )}
                 </div>
-              ) : data?.offline && mergedEvents.length === 0 ? (
+              ) : data?.error && mergedEvents.length === 0 ? (
                 <div className="py-8">
-                  <p className="font-display italic text-2xl text-ink">Arşive şu an ulaşılamıyor.</p>
+                  <p className="font-display italic text-2xl text-ink">{HATA_BASLIK[data.error.kind]}</p>
                   <p className="mt-3 text-ink-dim max-w-xl text-[15px] leading-relaxed">
-                    Vikipedi arşiv bağlantısı yanıt vermedi ve bu gün için yerel önbellek de yok.
-                    Bağlantını kontrol edip tekrar dene — takvim yaprağı yerinde duruyor.
+                    {data.error.message}
                   </p>
-                  <button
-                    onClick={reload}
-                    className="mt-6 px-5 py-3 rounded-sm bg-gold text-night font-mono text-[12px] tracking-[0.2em] uppercase font-semibold hover:bg-paper transition-colors cursor-pointer"
-                  >
-                    Yeniden dene
-                  </button>
+                  <div className="mt-6 flex gap-3 flex-wrap">
+                    {data.error.retryable && (
+                      <button
+                        onClick={reload}
+                        className="px-5 py-3 rounded-sm bg-gold text-night font-mono text-[12px] tracking-[0.2em] uppercase font-semibold hover:bg-paper transition-colors cursor-pointer"
+                      >
+                        Yeniden dene
+                      </button>
+                    )}
+                    <button
+                      onClick={bugüneDön}
+                      className="px-5 py-3 rounded-sm border border-line text-ink-dim hover:text-gold hover:border-gold/60 font-mono text-[12px] tracking-[0.2em] uppercase transition-colors cursor-pointer"
+                    >
+                      Bugüne dön
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <>
@@ -595,141 +672,208 @@ export default function App() {
         </section>
 
         {/* ======== BÖLÜM NAVİGASYONU ======== */}
-        <nav aria-label="Bölümler" className="sticky top-0 sm:top-16 z-[55] border-b border-line/80 bg-night/85 backdrop-blur-md">
-          <div className="max-w-7xl mx-auto px-4 md:px-8 flex gap-1 overflow-x-auto row-scroll">
-            {NAV.map((n, i) => (
-              <a
-                key={n.id}
-                href={`#${n.id}`}
-                className="shrink-0 px-4 py-3.5 font-mono text-[12px] tracking-[0.14em] uppercase text-ink-faint hover:text-gold border-b-2 border-transparent hover:border-gold transition-all duration-200"
-              >
-                <span className="text-brand mr-1.5">{String(i + 1).padStart(2, "0")}</span>
-                {n.label}
-              </a>
-            ))}
-          </div>
-        </nav>
+        {!noSearchResults && (
+          <nav aria-label="Bölümler" className="sticky top-0 sm:top-16 z-[55] border-b border-line/80 bg-night/85 backdrop-blur-md">
+            <div className="max-w-7xl mx-auto px-4 md:px-8 flex gap-1 overflow-x-auto row-scroll">
+              {NAV.map((n, i) => (
+                <a
+                  key={n.id}
+                  href={`#${n.id}`}
+                  className="shrink-0 px-4 py-3.5 font-mono text-[12px] tracking-[0.14em] uppercase text-ink-faint hover:text-gold border-b-2 border-transparent hover:border-gold transition-all duration-200"
+                >
+                  <span className="text-brand mr-1.5">{String(i + 1).padStart(2, "0")}</span>
+                  {n.label}
+                </a>
+              ))}
+            </div>
+          </nav>
+        )}
 
         <div className="max-w-7xl mx-auto px-4 md:px-8">
-          {/* ======== 01 ZAMAN TÜNELİ ======== */}
-          <SectionShell id="tunel" labelledBy="baslik-01">
-            <div className="pt-16">
-              <SectionHead
-                index="01"
-                kicker="Kronoloji"
-                title="Zaman Tüneli"
-                desc={`${dayLabel} gününe düşen tüm tarihî kayıtlar — en eskiden en yeniye. Noktalara dokun, yüzyıllar arasında gezin.`}
-                accent="#e8b04b"
-              />
-              {loading ? (
-                <SkeletonLines />
-              ) : (
-                <TimelineSection events={mergedEvents} query={query} />
+          {noSearchResults ? (
+            <div className="py-24 text-center">
+              <p className="font-display italic text-2xl text-ink">
+                &quot;{query}&quot; için bu günde sonuç yok.
+              </p>
+              <p className="mt-3 text-ink-dim max-w-md mx-auto text-[15px] leading-relaxed">
+                Başka bir gün deneyin ya da aramayı temizleyin.
+              </p>
+              <div className="mt-6 flex gap-3 justify-center flex-wrap">
+                <button
+                  onClick={() => setQuery("")}
+                  className="px-5 py-3 rounded-sm bg-gold text-night font-mono text-[12px] tracking-[0.2em] uppercase font-semibold hover:bg-paper transition-colors cursor-pointer"
+                >
+                  Aramayı temizle
+                </button>
+                <button
+                  onClick={bugüneDön}
+                  className="px-5 py-3 rounded-sm border border-line text-ink-dim hover:text-gold hover:border-gold/60 font-mono text-[12px] tracking-[0.2em] uppercase transition-colors cursor-pointer"
+                >
+                  Bugüne dön
+                </button>
+              </div>
+            </div>
+          ) : (
+            <>
+              {data && data.holidays.length > 0 && (
+                <Reveal className="mt-8">
+                  <div className="rounded-sm border border-gold/40 bg-gold/[0.06] px-5 py-4">
+                    <p className="font-mono text-[11px] tracking-[0.24em] uppercase text-gold mb-2">
+                      Bugünün anlamı
+                    </p>
+                    <ul className="space-y-1.5">
+                      {data.holidays.map((h) => (
+                        <li key={h.id} className="text-[14.5px] text-ink-dim leading-relaxed flex gap-2.5">
+                          <span className="text-gold shrink-0">◆</span>
+                          <span>{h.text}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </Reveal>
               )}
-            </div>
-          </SectionShell>
 
-          {/* ======== 02 DOĞANLAR ======== */}
-          <SectionShell id="doganlar" labelledBy="baslik-02">
-            <div className="pt-20">
-              <SectionHead
-                index="02"
-                kicker="Portreler"
-                title="Bugün Doğanlar"
-                desc="Siyasetçiler, sanatçılar, bilim insanları, sporcular… Bu tarihte dünyaya gelenler. Karta dokun, portreyi aç."
-                accent="#8fbf6a"
-              />
-              {loading ? (
-                <SkeletonCards />
-              ) : (
-                <PeopleRow
-                  people={births}
-                  query={query}
-                  accentLabel="Doğum"
-                  accentColor="#8fbf6a"
-                  emptyText="Bu tarih için arşivde doğum kaydı bulunamadı — başka bir güne bak."
-                />
-              )}
-            </div>
-          </SectionShell>
+              {/* ======== 01 ZAMAN TÜNELİ ======== */}
+              <SectionShell id="tunel" labelledBy="baslik-01">
+                <div className="pt-16">
+                  <SectionHead
+                    index="01"
+                    kicker="Kronoloji"
+                    title="Zaman Tüneli"
+                    desc={`${dayLabel} gününe düşen tüm tarihî kayıtlar — en eskiden en yeniye. Noktalara dokun, yüzyıllar arasında gezin.`}
+                    accent="#e8b04b"
+                  />
+                  {loading ? (
+                    <SkeletonLines />
+                  ) : (
+                    <ErrorBoundary variant="section">
+                      <TimelineSection events={mergedEvents} query={query} />
+                    </ErrorBoundary>
+                  )}
+                </div>
+              </SectionShell>
 
-          {/* ======== 03 KAYBETTİKLERİMİZ ======== */}
-          <SectionShell id="kaybettiklerimiz" labelledBy="baslik-03">
-            <div className="pt-20">
-              <SectionHead
-                index="03"
-                kicker="Vedalar"
-                title="Kaybettiklerimiz"
-                desc="Bu tarihte aramızdan ayrılanlar. Arşiv, her vedanın ardındaki hikâyeyi kartlara işler."
-                accent="#6f9fd8"
-              />
-              {loading ? (
-                <SkeletonCards />
-              ) : (
-                <PeopleRow
-                  people={deaths}
-                  query={query}
-                  accentLabel="Vefat"
-                  accentColor="#6f9fd8"
-                  emptyText="Bu tarih için arşivde vefat kaydı bulunamadı."
-                />
-              )}
-            </div>
-          </SectionShell>
+              {/* ======== 02 DOĞANLAR ======== */}
+              <SectionShell id="doganlar" labelledBy="baslik-02">
+                <div className="pt-20">
+                  <SectionHead
+                    index="02"
+                    kicker="Portreler"
+                    title="Bugün Doğanlar"
+                    desc="Siyasetçiler, sanatçılar, bilim insanları, sporcular… Bu tarihte dünyaya gelenler. Karta dokun, portreyi aç."
+                    accent="#8fbf6a"
+                  />
+                  {loading ? (
+                    <SkeletonCards />
+                  ) : (
+                    <ErrorBoundary variant="section">
+                      <PeopleRow
+                        people={births}
+                        query={query}
+                        accentLabel="Doğum"
+                        accentColor="#8fbf6a"
+                        emptyText="Bu tarih için arşivde doğum kaydı bulunamadı — başka bir güne bak."
+                      />
+                    </ErrorBoundary>
+                  )}
+                </div>
+              </SectionShell>
 
-          {/* ======== 04 KARANLIK DOSYALAR ======== */}
-          <SectionShell id="karanlik" labelledBy="baslik-04">
-            <div className="pt-20">
-              <SectionHead
-                index="04"
-                kicker="Adli arşiv"
-                title="Karanlık Dosyalar"
-                desc="Suikastlar, katliamlar, kayıplar ve felaketler. Editör dosyaları elle derlenir; arşiv taraması, günün kayıtlarını otomatik tarar."
-                accent="#e05b4b"
-              />
-              {loading ? <SkeletonCards /> : <CasesSection cases={allCases} query={query} />}
-            </div>
-          </SectionShell>
+              {/* ======== 03 KAYBETTİKLERİMİZ ======== */}
+              <SectionShell id="kaybettiklerimiz" labelledBy="baslik-03">
+                <div className="pt-20">
+                  <SectionHead
+                    index="03"
+                    kicker="Vedalar"
+                    title="Kaybettiklerimiz"
+                    desc="Bu tarihte aramızdan ayrılanlar. Arşiv, her vedanın ardındaki hikâyeyi kartlara işler."
+                    accent="#6f9fd8"
+                  />
+                  {loading ? (
+                    <SkeletonCards />
+                  ) : (
+                    <ErrorBoundary variant="section">
+                      <PeopleRow
+                        people={deaths}
+                        query={query}
+                        accentLabel="Vefat"
+                        accentColor="#6f9fd8"
+                        emptyText="Bu tarih için arşivde vefat kaydı bulunamadı."
+                      />
+                    </ErrorBoundary>
+                  )}
+                </div>
+              </SectionShell>
 
-          {/* ======== 05 BİLİM & KEŞİF ======== */}
-          <SectionShell id="bilim" labelledBy="baslik-05">
-            <div className="pt-20">
-              <SectionHead
-                index="05"
-                kicker="Dönüm noktaları"
-                title="Bilim & Keşif"
-                desc="DNA'dan Mars'a, ilk bilgisayarlardan ilk pilotlara… Bu güne denk gelen büyük sıçramalar."
-                accent="#43a08f"
-              />
-              {loading ? <SkeletonCards /> : <ScienceSection items={allScience} query={query} />}
-            </div>
-          </SectionShell>
+              {/* ======== 04 KARANLIK DOSYALAR ======== */}
+              <SectionShell id="karanlik" labelledBy="baslik-04">
+                <div className="pt-20">
+                  <SectionHead
+                    index="04"
+                    kicker="Adli arşiv"
+                    title="Karanlık Dosyalar"
+                    desc="Suikastlar, katliamlar, kayıplar ve felaketler. Editör dosyaları elle derlenir; arşiv taraması, günün kayıtlarını otomatik tarar."
+                    accent="#e05b4b"
+                  />
+                  {loading ? (
+                    <SkeletonCards />
+                  ) : (
+                    <ErrorBoundary variant="section">
+                      <CasesSection cases={allCases} query={query} />
+                    </ErrorBoundary>
+                  )}
+                </div>
+              </SectionShell>
 
-          {/* ======== 06 SOHBET KARTLARI ======== */}
-          <SectionShell id="sohbet" labelledBy="baslik-06">
-            <div className="pt-20 pb-24">
-              <SectionHead
-                index="06"
-                kicker="Yayıncılar için"
-                title="Sohbet Kartları"
-                desc="Canlı yayında okunmaya hazır, kanca cümleli bilgi kartları. Kopyala ve paylaş ya da Yayın Modu ile teleprompter gibi kullan."
-                accent="#d23b2e"
-                right={
-                  talkCards.length > 0 && (
-                    <span className="flex items-center gap-2 font-mono text-[12px] text-ink-faint">
-                      <IconAtom className="w-4 h-4 text-teal" />
-                      {talkCards.reduce((a, c) => a + c.minutes, 0)} dk malzeme
-                    </span>
-                  )
-                }
-              />
-              {loading ? (
-                <SkeletonCards />
-              ) : (
-                <TalkSection cards={talkCards} dayLabel={dayLabel} onBroadcast={() => setBroadcast(true)} />
-              )}
-            </div>
-          </SectionShell>
+              {/* ======== 05 BİLİM & KEŞİF ======== */}
+              <SectionShell id="bilim" labelledBy="baslik-05">
+                <div className="pt-20">
+                  <SectionHead
+                    index="05"
+                    kicker="Dönüm noktaları"
+                    title="Bilim & Keşif"
+                    desc="DNA'dan Mars'a, ilk bilgisayarlardan ilk pilotlara… Bu güne denk gelen büyük sıçramalar."
+                    accent="#43a08f"
+                  />
+                  {loading ? (
+                    <SkeletonCards />
+                  ) : (
+                    <ErrorBoundary variant="section">
+                      <ScienceSection items={allScience} query={query} />
+                    </ErrorBoundary>
+                  )}
+                </div>
+              </SectionShell>
+
+              {/* ======== 06 SOHBET KARTLARI ======== */}
+              <SectionShell id="sohbet" labelledBy="baslik-06">
+                <div className="pt-20 pb-24">
+                  <SectionHead
+                    index="06"
+                    kicker="Yayıncılar için"
+                    title="Sohbet Kartları"
+                    desc="Canlı yayında okunmaya hazır, kanca cümleli bilgi kartları. Kopyala ve paylaş ya da Yayın Modu ile teleprompter gibi kullan."
+                    accent="#d23b2e"
+                    right={
+                      talkCards.length > 0 && (
+                        <span className="flex items-center gap-2 font-mono text-[12px] text-ink-faint">
+                          <IconAtom className="w-4 h-4 text-teal" />
+                          {talkCards.reduce((a, c) => a + c.minutes, 0)} dk malzeme
+                        </span>
+                      )
+                    }
+                  />
+                  {loading ? (
+                    <SkeletonCards />
+                  ) : (
+                    <ErrorBoundary variant="section">
+                      <TalkSection cards={talkCards} dayLabel={dayLabel} onBroadcast={() => setBroadcast(true)} />
+                    </ErrorBoundary>
+                  )}
+                </div>
+              </SectionShell>
+            </>
+          )}
         </div>
       </main>
 

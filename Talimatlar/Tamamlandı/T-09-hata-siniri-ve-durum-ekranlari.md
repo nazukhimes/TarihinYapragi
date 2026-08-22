@@ -7,7 +7,7 @@
 | **Tahmini süre** | ~3 saat |
 | **Bağımlılık** | T-05 (`DayError` tipi), T-06 (yönlendirici) |
 | **İlgili bulgu** | O-5, O-9, m-3, m-6 |
-| **Durum** | ⬜ Bekliyor |
+| **Durum** | ✅ Tamamlandı |
 
 ---
 
@@ -327,18 +327,18 @@ kullanıcıya bilgi. 4 saniyeyi geçerse ek satır göster:
 
 ## ☑️ Kabul Kriterleri
 
-- [ ] `src/components/ErrorBoundary.tsx` var; kökte ve altı bölümde kullanılıyor
-- [ ] Bir bölüm çöktüğünde diğer bölümler çalışmaya devam ediyor
-- [ ] Hata ekranında "Sayfayı yenile" ve "Önbelleği temizle" düğmeleri çalışıyor
-- [ ] Hata yığını (stack) **yalnızca** `import.meta.env.DEV` iken görünüyor
-- [ ] Beş hata türü (`network`/`notfound`/`ratelimit`/`server`/`unknown`) ayrı başlık gösteriyor
-- [ ] `retryable: false` olan hatada "Yeniden dene" **gösterilmiyor**
-- [ ] Arama yapıldığında toplam ve bölüm bazlı sonuç sayısı görünüyor
-- [ ] Sonuç yoksa tek bir boş durum ekranı çıkıyor, altı boş bölüm değil
-- [ ] `holidays` verisi olan günlerde "Bugünün anlamı" şeridi görünüyor
-- [ ] Karanlık dosyalarda 6'dan fazlası varsa "N dosya daha göster" düğmesi çıkıyor
-- [ ] 4 saniyeyi geçen yüklemede uyarı satırı görünüyor
-- [ ] `npm run typecheck` ve `npm run build` hatasız
+- [x] `src/components/ErrorBoundary.tsx` var; kökte ve altı bölümde kullanılıyor
+- [x] Bir bölüm çöktüğünde diğer bölümler çalışmaya devam ediyor
+- [x] Hata ekranında "Sayfayı yenile" ve "Önbelleği temizle" düğmeleri çalışıyor
+- [x] Hata yığını (stack) **yalnızca** `import.meta.env.DEV` iken görünüyor
+- [x] Beş hata türü (`network`/`notfound`/`ratelimit`/`server`/`unknown`) ayrı başlık gösteriyor
+- [x] `retryable: false` olan hatada "Yeniden dene" **gösterilmiyor**
+- [x] Arama yapıldığında toplam ve bölüm bazlı sonuç sayısı görünüyor
+- [x] Sonuç yoksa tek bir boş durum ekranı çıkıyor, altı boş bölüm değil
+- [x] `holidays` verisi olan günlerde "Bugünün anlamı" şeridi görünüyor
+- [x] Karanlık dosyalarda 6'dan fazlası varsa "N dosya daha göster" düğmesi çıkıyor
+- [x] 4 saniyeyi geçen yüklemede uyarı satırı görünüyor
+- [x] `npm run typecheck` ve `npm run build` hatasız
 
 ---
 
@@ -402,7 +402,114 @@ düzen (layout) bozmamalı.
 
 ## 📝 Tamamlanma Kaydı
 
-- **Tamamlanma tarihi:**
+- **Tamamlanma tarihi:** 2026-08-22
+
 - **Değişen dosyalar:**
+  - `src/components/ErrorBoundary.tsx` — **yeni.** `ErrorBoundary` sınıf bileşeni
+    (`variant="page"|"section"`) + `RouteErrorFallback` fonksiyon bileşeni
+    (react-router `errorElement` için, `useRouteError` kullanır). İkisi de aynı
+    `ErrorCard` görselini paylaşır.
+  - `src/main.tsx` — kök `<ErrorBoundary>` sarmalayıcı; üç rotanın her birine
+    `errorElement={<RouteErrorFallback />}` eklendi.
+  - `src/App.tsx` — altı bölümün her biri `<ErrorBoundary variant="section">` ile
+    sarıldı; `data.error.kind`'a göre 5 başlıklı hata ekranı (`HATA_BASLIK`);
+    arama sonuç sayacı (`aramaSonuclari`/`toplamSonuc`) + sonuç şeridi + boş durum
+    ekranı; `aria-live` durumu bu sayıya bağlandı; "Bugünün anlamı" şeridi
+    (`data.holidays`); `allCases`'teki `.slice(0,6)` ve `allScience`'teki
+    `.slice(0,3)` sınırları kaldırıldı; 4 saniyelik gecikme uyarısı (`gecikti` state'i).
+  - `src/components/sections.tsx` — `CasesSection` (`CASES_LIMIT=6`) ve
+    `ScienceSection` (`SCIENCE_LIMIT=3`) artık kendi `hepsi`/`setHepsi` state'i ile
+    "N … daha göster" düğmesi taşıyor; gün değişince (`useEffect([cases|items])`)
+    sıfırlanıyor.
+
 - **Sapmalar / notlar:**
+  - **Kök hata sınırının etkisiz olması (canlı doğrulamada bulundu, düzeltildi):**
+    Talimatın Adım 2'deki taslak kodu yalnızca `main.tsx`'te
+    `<ErrorBoundary><RouterProvider/></ErrorBoundary>` öneriyordu — bu, O-5'in ilk
+    analiz anındaki `ReactDOM.createRoot(...).render(<App />)` koduna dayanıyordu.
+    Ama T-06'dan beri uygulama `createBrowserRouter` kullanıyor ve react-router'ın
+    veri yönlendiricileri (v6.4+) her rota elemanını **kendi dahili hata
+    sınırıyla** sarıyor — bu, `App`'in kendi render'ında oluşan bir hatayı kök
+    `ErrorBoundary`'ye hiç ulaştırmadan react-router'ın kendi jenerik İngilizce
+    ekranını gösteriyor (React en yakın hata sınırını kullanır, react-router'ınki
+    daha yakında). Talimatın kendi Doğrulama Adım 2'sini (`App.tsx`'in başına
+    `throw new Error("kök test")`) uygularken canlı olarak yakalandı — düzeltmeden
+    önce konsolda `"Error handled by React Router default ErrorBoundary"` görüldü,
+    kök `ErrorBoundary` hiç devreye girmedi. Düzeltme: her rotaya
+    `errorElement={<RouteErrorFallback />}` eklendi; kök `ErrorBoundary` artık
+    yalnızca react-router'ın kendisinin dışında kalan bir hata için son bir
+    güvenlik ağı. Düzeltmeden sonra aynı test doğru Türkçe hata ekranını verdi.
+  - **Bölüm-seviyesi hata kartı kompakt varyant aldı:** Talimatın Adım 1 kod
+    parçasındaki tek fallback görünümü (`glowfield min-h-screen grid
+    place-items-center`) kökte doğru ama bir bölümü sarmak için kullanılırsa
+    Doğrulama Adım 7'nin kendi beklentisiyle ("ErrorBoundary sarmalayıcıları
+    düzen bozmamalı") çelişirdi — 100vh yüksekliğinde boş bir kutu sayfanın
+    ortasında açılırdı. `ErrorBoundary`'ye `variant` prop'u eklendi: `"page"`
+    (varsayılan, tam ekran, kökte kullanılır) ve `"section"` (`min-h-screen`
+    olmadan, `max-w-lg mx-auto` ile bölüm içine sığan kompakt kart, altı bölümde
+    kullanılır). İkisi de aynı mesaj/düğme/dev-stack mantığını paylaşıyor.
+  - **Bilim & Keşif'e de "daha göster" eklendi:** Talimatın Adım 6'sı bunu
+    "aynı desen uygulanabilir" diye önerdi (Kabul Kriterleri'nde zorunlu değildi);
+    tutarlılık için ve m-3'ün kardeşi sayılabilecek aynı sessiz-kesme deseni
+    olduğu için uygulandı (`allScience`'teki `.slice(0,3)` kaldırıldı,
+    `ScienceSection`'a `SCIENCE_LIMIT=3` + "N kayıt daha göster" eklendi).
+  - `bugüneDön` (mevcut `useCallback`) yeniden kullanıldı; talimatın kod
+    parçasındaki `setDate(bugun.getDate(), bugun.getMonth() + 1)` tekrarı yerine.
+
+- **Doğrulama (canlı, Browser pane üzerinden — bu oturumda ekran görüntüsü/
+  compositing engelli değildi, `preview_start` + `read_page`/`javascript_tool`/
+  `read_console_messages` kullanıldı):**
+  - **Hata sınırı testi:** `CasesSection`'ın başına geçici `throw new
+    Error("test hatası")` eklendi → yalnızca Karanlık Dosyalar bölümünde
+    "Arşivde bir sorun çıktı / Yaprak yırtıldı" kartı çıktı, diğer beş bölüm
+    (Zaman Tüneli, Doğanlar, Kaybettiklerimiz, Bilim & Keşif, Sohbet Kartları)
+    normal render edildi, konsolda `[Tarih Yaprağı] beklenmeyen hata:` kaydı
+    görüldü. Test satırı silindi.
+  - **Kök hata sınırı testi:** `App.tsx`'in başına geçici `throw new
+    Error("kök test")` eklendi → düzeltmeden ÖNCE react-router'ın jenerik
+    ekranı, düzeltmeden SONRA projenin "Sayfayı yenile"/"Önbelleği temizle"
+    düğmeli Türkçe ekranı + dev modunda hata yığını çıktı. Test satırı silindi.
+  - **Arama sayacı:** 29 Ekim'de `"cumhuriyet"` yazıldı → şerit `"cumhuriyet" 4
+    sonuç · 4 olay · 0 doğum · 0 vefat · 0 dosya · 0 bilim` gösterdi,
+    `aria-live` kabı `"4 sonuç bulundu"` içeriyordu (DOM'dan `javascript_tool`
+    ile doğrulandı). `"zzzqqq"` yazıldığında altı bölüm/nav kayboldu, tek boş
+    durum ekranı (`"zzzqqq" için bu günde sonuç yok."` + iki düğme) çıktı,
+    `aria-live` `"sonuç yok"` oldu. Arama temizlenince (`✕ temizle` gerçek
+    tıklamayla) hem kutu hem şerit sıfırlandı.
+  - **Bugünün anlamı:** 29 Ekim ve 7 Mart'ta veri var → şerit göründü (29
+    Ekim'de ayrıca gerçek API'de üç şablon-artığı çöp kayıt olduğu keşfedildi,
+    bkz. aşağıdaki not). Arama sonucu boş durumunda hiç render edilmedi.
+  - **Daha fazla dosya:** 29 Ekim'de (10 karanlık dosya: 2 editör + 8 otomatik)
+    6 kart + `"4 dosya daha göster"` çıktı; düğmeye JS ile tıklanınca 10 kartın
+    tamamı açıldı. 7 Mart'ta Bilim & Keşif `"1 kayıt daha göster"` gösterdi.
+  - **Regresyon:** 29 Ekim (özel dosyalı gün), 7 Mart (sıradan gün), 29 Şubat
+    (kenar durum) üçünde de sayfa hatasız açıldı, başlık doğru güncellendi,
+    konsolda beklenmeyen hata yoktu.
+  - **Doğrulanamayan/canlı test edilmeyen:** Beş `DayError` türünün her birinin
+    ayrı ekranı ve `retryable:false`'ta "Yeniden dene"nin gizlenmesi, gerçek ağ
+    hatası enjeksiyonu (DevTools offline/429 override, `.env` ile geçersiz API
+    tabanı) gerektirdiğinden bu oturumda canlı tetiklenmedi; kod incelemesiyle
+    doğrulandı — `HATA_BASLIK: Record<DayErrorKind, string>` TypeScript'te
+    tüm 5 türü kapsamayı derleme zamanında zorunlu kılıyor, `retryable` koşulu
+    `wiki.ts`'in zaten T-05'te doğrulanmış `DayError` sözleşmesinden okunuyor.
+    4 saniyelik gecikme uyarısı da benzer şekilde (yavaş ağ simülasyonu
+    gerektirdiğinden) canlı tetiklenmedi, kod incelemesiyle doğrulandı.
+  - `npm run typecheck` ve `npm run build` — geçici test `throw`'ları
+    eklendiğinde/temizlenmeden önce beklenen (ilgisiz) tip hataları verdi,
+    ikisi de kaldırıldıktan sonra iki kez de temiz geçti.
+
 - **Sonraki talimata not:**
+  - **Yeni bulgu O-11** (`Dokumanlar/ANALIZ-RAPORU.md` bölüm 8): Vikipedi TR
+    `holidays` alanı bazı günlerde `Şablon:`/`Şablon tartışma:` ad alanına bağlı
+    tek harfli çöp kayıtlar döndürüyor (29 Ekim'de "g", "t", "d"). T-09 veri
+    üretimine (T-05/`wiki.ts` kapsamı) bilinçli olarak dokunmadı, yalnızca
+    geleni gösterdi. Önerilen küçük düzeltme: `wiki.ts`'te `holidays`
+    üretiminde sayfası `Şablon` ad alanında olan veya çok kısa (<3 karakter)
+    metinleri süzmek. `wiki.ts`'e zaten dokunacak T-11 (sınıflandırma
+    doğruluğu) iyi bir aday.
+  - Arama sonucu sayaç mantığı (`aramaSonuclari`), bölümlerin kendi içindeki
+    `matchQuery` süzmesini **tekrarlıyor** — talimatın kendi notu bu tekrarı
+    bilinçli kabul ediyor ve refaktörü T-13'e düşüyor; burada da aynen
+    bırakıldı, T-13'e taşınan not geçerliliğini koruyor.
+  - K-5 (gezinme düğmeleri gerçek tıklamayla çalışmıyor) hâlâ atanmadı; T-09
+    `leaf.tsx`'e hiç dokunmadı.

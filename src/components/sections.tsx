@@ -407,15 +407,20 @@ export function PeopleRow({
 
 /* ================= KARANLIK DOSYALAR ================= */
 
+const CASES_LIMIT = 6;
+
 export function CasesSection({ cases, query }: { cases: CaseFile[]; query: string }) {
   const [openId, setOpenId] = useState<string | null>(cases[0]?.id ?? null);
+  const [hepsi, setHepsi] = useState(false);
 
   useEffect(() => {
     setOpenId(cases[0]?.id ?? null);
+    setHepsi(false);
   }, [cases]);
   const visible = cases.filter((c) =>
     matchQuery(query, c.title, c.summary, c.detail, c.location, formatYear(c.year), c.tags.join(" "), CASE_LABELS[c.type])
   );
+  const gosterilecek = hepsi ? visible : visible.slice(0, CASES_LIMIT);
 
   if (cases.length === 0) {
     return (
@@ -435,7 +440,7 @@ export function CasesSection({ cases, query }: { cases: CaseFile[]; query: strin
   return (
     <div className="grid md:grid-cols-2 gap-5">
       {visible.length === 0 && <div className="md:col-span-2"><EmptyNote text="Aramanla eşleşen dosya yok." /></div>}
-      {visible.map((c, i) => {
+      {gosterilecek.map((c, i) => {
         const open = openId === c.id;
         return (
           <Reveal key={c.id} delay={Math.min(i * 70, 280)}>
@@ -503,14 +508,32 @@ export function CasesSection({ cases, query }: { cases: CaseFile[]; query: strin
           </Reveal>
         );
       })}
+      {!hepsi && visible.length > CASES_LIMIT && (
+        <button
+          onClick={() => setHepsi(true)}
+          className="md:col-span-2 border border-dashed border-line rounded-sm py-4
+                     font-mono text-[12px] tracking-widest uppercase text-ink-faint
+                     hover:text-brand hover:border-brand/60 transition-colors cursor-pointer"
+        >
+          {visible.length - CASES_LIMIT} dosya daha göster
+        </button>
+      )}
     </div>
   );
 }
 
 /* ================= BİLİM & KEŞİF ================= */
 
+const SCIENCE_LIMIT = 3;
+
 export function ScienceSection({ items, query }: { items: (ScienceMilestone & { curated?: boolean })[]; query: string }) {
+  const [hepsi, setHepsi] = useState(false);
   const visible = items.filter((s) => matchQuery(query, s.title, s.summary, s.field, formatYear(s.year)));
+  const gosterilecek = hepsi ? visible : visible.slice(0, SCIENCE_LIMIT);
+
+  useEffect(() => {
+    setHepsi(false);
+  }, [items]);
 
   if (visible.length === 0) {
     return <EmptyNote text="Bu gün için bilim kaydına rastlanmadı — takvimi çevir, evren bir yerde konuşuyor." />;
@@ -518,7 +541,7 @@ export function ScienceSection({ items, query }: { items: (ScienceMilestone & { 
 
   return (
     <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
-      {visible.map((s, i) => (
+      {gosterilecek.map((s, i) => (
         <Reveal key={s.id} delay={Math.min(i * 70, 280)}>
           <article className="group h-full rounded-sm border border-line bg-panel p-5 hover:border-teal/60 hover:-translate-y-1 hover:shadow-[0_20px_44px_rgba(0,0,0,0.4)] transition-all duration-300 relative overflow-hidden">
             <div className="absolute -top-6 -right-4 font-display font-black text-[86px] leading-none outline-num select-none">
@@ -545,6 +568,16 @@ export function ScienceSection({ items, query }: { items: (ScienceMilestone & { 
           </article>
         </Reveal>
       ))}
+      {!hepsi && visible.length > SCIENCE_LIMIT && (
+        <button
+          onClick={() => setHepsi(true)}
+          className="md:col-span-2 xl:col-span-3 border border-dashed border-line rounded-sm py-4
+                     font-mono text-[12px] tracking-widest uppercase text-ink-faint
+                     hover:text-teal hover:border-teal/60 transition-colors cursor-pointer"
+        >
+          {visible.length - SCIENCE_LIMIT} kayıt daha göster
+        </button>
+      )}
     </div>
   );
 }

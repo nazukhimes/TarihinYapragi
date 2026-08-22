@@ -4,7 +4,7 @@
 > **ilk okuyacağı** dosyadır. Kodu okumadan önce projenin ne olduğunu, nasıl çalıştığını
 > ve hangi kurallara uyulduğunu buradan öğren.
 >
-> **Son güncelleme:** 2026-08-21 · **Sürüm:** 0.1.0 (geliştirme aşaması)
+> **Son güncelleme:** 2026-08-22 · **Sürüm:** 0.1.0 (geliştirme aşaması)
 
 ---
 
@@ -156,6 +156,7 @@ TarihinYapragi/
 │   │
 │   └── components/
 │       ├── leaf.tsx        ← Takvim yaprağı, mini takvim, canlı saat, haber bandı
+│       ├── ErrorBoundary.tsx ← Hata sınırı (kök + bölüm) ve rota hata ekranı (T-09)
 │       ├── NotFound.tsx    ← 404 sayfası — geçersiz gün adresi (T-06)
 │       ├── sections.tsx    ← Zaman tüneli, kişi kartları, karanlık dosyalar, bilim
 │       ├── talk.tsx        ← Sohbet kartları + Yayın Modu (teleprompter)
@@ -248,7 +249,7 @@ macOS/Linux'ta aynı menü `./baslat.sh` ile gelir.
 
 ## 7. Mevcut Durum — Dürüst Özet
 
-> **Plan ilerlemesi:** PLAN-01 · 8 / 14 talimat tamamlandı (T-01, T-02, T-03, T-04, T-05, T-06, T-07, T-08 · 2026-08-21).
+> **Plan ilerlemesi:** PLAN-01 · 9 / 14 talimat tamamlandı (T-01, T-02, T-03, T-04, T-05, T-06, T-07, T-08 · 2026-08-21; T-09 · 2026-08-22).
 > Ayrıntı → [`../Talimatlar/PLAN-01-temel-duzeltme-ve-tamamlama.md`](../Talimatlar/PLAN-01-temel-duzeltme-ve-tamamlama.md)
 
 **Çalışan:** Takvim yaprağı ve gün geçişi, Vikipedi entegrasyonu (TR→EN yedeği),
@@ -280,7 +281,23 @@ tarayıcı sekmesinde takvim yaprağı favikonu, sosyal medyada başlık+görsel
 (`manifest.webmanifest`, service worker) ve arama motorları için `robots.txt` +
 366 adresi kapsayan `sitemap.xml` (T-08). Gün değişince sekme başlığı ve
 `canonical` bağlantısı otomatik güncelleniyor. Gerçek bir Lighthouse denetimi
-SEO puanını 100/100 verdi.
+SEO puanını 100/100 verdi. Uygulama artık bir bileşen çökse bile beyaz ekran
+vermiyor: kökte (`main.tsx`) ve altı bölümün her birinde ayrı bir
+`ErrorBoundary` (`src/components/ErrorBoundary.tsx`) var; bir bölüm çökerse
+yalnızca o bölüm bir hata kartı gösterir, diğer beşi normal çalışmaya devam
+eder — hata yığını yalnızca geliştirme modunda görünür. `createBrowserRouter`
+rotalarına da ayrı bir `errorElement` bağlandı (canlı doğrulamada, react-router'ın
+kendi dahili hata sınırının rota bileşenlerindeki hatayı kök `ErrorBoundary`'ye
+hiç ulaştırmadığı ortaya çıktı — bkz. T-09 Tamamlanma Kaydı). Ağ hatası artık
+tek bir genel mesaj yerine türüne göre ayrı başlık gösteriyor (bağlantı yok /
+kayıt yok / arşiv yoğun / sunucu yanıtsız / bilinmeyen), yeniden denenebilir
+olmayan hatalarda "Yeniden dene" düğmesi hiç çıkmıyor (T-09). Arama artık
+toplam ve bölüm bazlı sonuç sayısını gösteriyor, sonuç yoksa altı boş bölüm
+yerine tek bir açıklayıcı ekran çıkıyor (T-09). Daha önce sessizce çekilip
+gösterilmeyen `holidays` verisi artık Zaman Tüneli'nin üstünde bir "Bugünün
+anlamı" şeridi olarak görünüyor; Karanlık Dosyalar ve Bilim & Keşif'te altıdan
+(sırasıyla üçten) fazla kayıt varsa "N … daha göster" düğmesiyle tamamı
+açılabiliyor; 4 saniyeyi geçen yüklemelerde ek bir uyarı satırı beliriyor (T-09).
 
 **Eksik / hatalı:** Ayrıntılı liste ve kanıtlar için → [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md)
 Özet başlıklar:
@@ -309,6 +326,16 @@ SEO puanını 100/100 verdi.
   [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md#7-t-07-sırasında-keşfedilen-yeni-bulgular-2026-08-21)
 - ~~Favicon, PWA, SEO meta eksik~~ ✅ **T-08 ile çözüldü** (service worker'ın canlı
   kaydı bir sonraki oturumda gerçek tarayıcıda doğrulanmalı — bkz. T-08 Tamamlanma Kaydı)
+- ~~Hata sınırı (ErrorBoundary) yoktu, `holidays` verisi gösterilmiyordu, karanlık
+  dosyalar/bilim 6-3 sınırında sessizce kesiliyordu, arama sonuç sayacı yoktu~~
+  ✅ **T-09 ile çözüldü** (O-5, O-9, m-3, m-6) — canlı doğrulama sırasında
+  react-router'ın kendi dahili hata sınırının kök `ErrorBoundary`'yi etkisiz
+  kıldığı ortaya çıktı ve `errorElement` ile düzeltildi, bkz. T-09 Tamamlanma Kaydı
+- **Bulgu (T-09 sırasında keşfedildi, hâlâ açık):** Vikipedi TR "bugün tarihte"
+  şablonunun `holidays` alanı bazı günlerde şablon/navigasyon artığı tek harfli
+  çöp kayıtlar döndürüyor (ör. 29 Ekim'de "g", "t", "d") — veri üretimi `wiki.ts`
+  (T-05) kapsamında olduğu için T-09 bilinçli olarak dokunmadı, yalnızca geleni
+  gösterdi → ayrıntı [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md#8-t-09-sırasında-keşfedilen-yeni-bulgu-2026-08-22) (O-11)
 - Editör içeriği 366 günün yalnızca 10'unda
 - Test, lint, format altyapısı yok
 
