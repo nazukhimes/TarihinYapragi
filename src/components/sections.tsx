@@ -5,7 +5,7 @@ import {
   type CategoryId,
   type CaseFile,
   type ScienceMilestone,
-} from "../data/curated";
+} from "../data";
 import { classifyItem, type OtdItem } from "../lib/wiki";
 import { IconArrow, IconExternal, IconSkull, Modal, Reveal } from "./ui";
 

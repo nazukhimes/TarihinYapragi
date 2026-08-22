@@ -101,7 +101,7 @@ değişkeniyle geçersiz kılınabilir (bkz. `.env.example`). Koda gömülü URL
 
 | Tür | Kaynak | Rozet | Dosya |
 |---|---|---|---|
-| **Editör içeriği** | Elle yazılır, güvenilir | `Editör notu` / `Editör` | `src/data/curated.ts` |
+| **Editör içeriği** | Elle yazılır, güvenilir | `Editör notu` / `Editör` | `src/data/gunler/*.ts` (T-10'dan önce tek dosya: `curated.ts`) |
 | **Otomatik içerik** | Vikipedi + regex sınıflandırma | rozet yok | `src/lib/wiki.ts` |
 
 Otomatik sınıflandırma anahtar kelime tabanlıdır ve **yanılabilir**. Bu yüzden
@@ -145,7 +145,9 @@ TarihinYapragi/
 │   ├── vite-env.d.ts       ← `ImportMetaEnv` tipi (VITE_WIKI_API_BASE)
 │   │
 │   ├── data/
-│   │   └── curated.ts      ← Tip tanımları + CURATED sözlüğü (şu an 10 gün)
+│   │   ├── types.ts        ← Tip tanımları + curatedKey() (T-10)
+│   │   ├── index.ts        ← 12 ay dosyasını birleştirip CURATED'ı dışa aktarır (T-10)
+│   │   └── gunler/         ← 12 ay dosyası (01-ocak.ts … 12-aralik.ts), şu an 60 gün (T-10)
 │   │
 │   ├── lib/
 │   │   ├── config.ts       ← WIKI_API_BASE (ortam değişkeninden, varsayılanlı)
@@ -167,12 +169,13 @@ TarihinYapragi/
 │   ├── MIMARI.md           ← teknik mimari, modül sorumlulukları
 │   ├── KULLANIM-KILAVUZU.md← son kullanıcı kılavuzu
 │   ├── ANALIZ-RAPORU.md    ← mevcut durum eksik/hata analizi
+│   ├── ICERIK-SABLONU.md   ← yeni gün ekleme şablonu ve kalite ölçütleri (T-10)
 │   └── CALISMA-SISTEMI.md  ← plan → talimat → tamamlandı iş akışı
 │
 └── Talimatlar/             ← İŞ AKIŞI klasörü
     ├── PLAN-01-*.md        ← aktif plan
-    ├── T-09-*.md ...       ← aktif talimatlar
-    ├── Tamamlandı/         ← biten talimatlar buraya taşınır (T-01…T-08)
+    ├── T-11-*.md ...       ← aktif talimatlar
+    ├── Tamamlandı/         ← biten talimatlar buraya taşınır (T-01…T-10)
     └── Plan/               ← tamamen biten planlar buraya taşınır
 ```
 
@@ -180,7 +183,7 @@ TarihinYapragi/
 
 | Ne yapmak istiyorum | Hangi dosya |
 |---|---|
-| Yeni bir güne özel dosya eklemek | `src/data/curated.ts` → `CURATED["MM-DD"]` |
+| Yeni bir güne özel dosya eklemek | İlgili ay dosyası, `src/data/gunler/MM-ad.ts` → şablon: [`ICERIK-SABLONU.md`](ICERIK-SABLONU.md) |
 | Yeni renk / font eklemek | `src/index.css` → `@theme` bloğu |
 | Yeni bölüm eklemek | `src/App.tsx` → `NAV` dizisi + `SectionShell` |
 | Sınıflandırma kuralı değiştirmek | `src/lib/wiki.ts` → `RULES` / `DARK_THEMES` |
@@ -249,7 +252,7 @@ macOS/Linux'ta aynı menü `./baslat.sh` ile gelir.
 
 ## 7. Mevcut Durum — Dürüst Özet
 
-> **Plan ilerlemesi:** PLAN-01 · 9 / 14 talimat tamamlandı (T-01, T-02, T-03, T-04, T-05, T-06, T-07, T-08 · 2026-08-21; T-09 · 2026-08-22).
+> **Plan ilerlemesi:** PLAN-01 · 10 / 14 talimat tamamlandı (T-01, T-02, T-03, T-04, T-05, T-06, T-07, T-08 · 2026-08-21; T-09, T-10 · 2026-08-22).
 > Ayrıntı → [`../Talimatlar/PLAN-01-temel-duzeltme-ve-tamamlama.md`](../Talimatlar/PLAN-01-temel-duzeltme-ve-tamamlama.md)
 
 **Çalışan:** Takvim yaprağı ve gün geçişi, Vikipedi entegrasyonu (TR→EN yedeği),
@@ -298,6 +301,12 @@ gösterilmeyen `holidays` verisi artık Zaman Tüneli'nin üstünde bir "Bugün�
 anlamı" şeridi olarak görünüyor; Karanlık Dosyalar ve Bilim & Keşif'te altıdan
 (sırasıyla üçten) fazla kayıt varsa "N … daha göster" düğmesiyle tamamı
 açılabiliyor; 4 saniyeyi geçen yüklemelerde ek bir uyarı satırı beliriyor (T-09).
+Editör içeriği artık 366 günün 10'u değil **60'ında** (%16,4) — 1.001 satırlık
+tek `curated.ts` dosyası silinip yerine bir tip dosyası (`src/data/types.ts`) ve
+12 ay dosyasından (`src/data/gunler/`) oluşan, `src/data/index.ts` üzerinden
+birleşen bir yapı kuruldu; mevcut 10 günün içeriği birebir korundu, 50 yeni gün
+(Türkiye tarihi, dünya dönüm noktaları, bilim & keşif, kültür & karanlık arşiv)
+kaynak doğrulamasıyla eklendi (T-10).
 
 **Eksik / hatalı:** Ayrıntılı liste ve kanıtlar için → [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md)
 Özet başlıklar:
@@ -336,7 +345,16 @@ açılabiliyor; 4 saniyeyi geçen yüklemelerde ek bir uyarı satırı beliriyor
   çöp kayıtlar döndürüyor (ör. 29 Ekim'de "g", "t", "d") — veri üretimi `wiki.ts`
   (T-05) kapsamında olduğu için T-09 bilinçli olarak dokunmadı, yalnızca geleni
   gösterdi → ayrıntı [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md#8-t-09-sırasında-keşfedilen-yeni-bulgu-2026-08-22) (O-11)
-- Editör içeriği 366 günün yalnızca 10'unda
+- ~~Editör içeriği 366 günün yalnızca 10'unda~~ ✅ **T-10 ile çözüldü** (60'a çıkarıldı,
+  veri 12 ay dosyasına bölündü)
+- **Bulgu (T-10 sırasında keşfedildi, hâlâ açık):** Bilim & Keşif bölümündeki
+  (`allScience`) editör kayıtları, Zaman Tüneli'nin aksine, Vikipedi'nin aynı
+  olayına karşı ayıklanmıyor — bir bilim dönüm noktası hem editör kaydı hem
+  Vikipedi'nin otomatik akışında geçiyorsa iki kez görünebiliyor (canlı olarak
+  18 Mart'ta doğrulandı). Düzeltmesi `ScienceMilestone` tipine `matchKeys`
+  benzeri bir alan eklemeyi gerektirdiği için T-10 bilinçli olarak dokunmadı
+  (kapsamı "yalnızca veri") — O-12, henüz bir talimata atanmadı →
+  [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md#9-t-10-sırasında-keşfedilen-yeni-bulgu-2026-08-22)
 - Test, lint, format altyapısı yok
 
 **Çalışma planı:** [`../Talimatlar/`](../Talimatlar/) klasöründe. İş akışı için

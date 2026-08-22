@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import type { TalkCard } from "../data/curated";
+import type { TalkCard } from "../data";
 import { copyText, IconArrow, IconCopy, IconMic, IconPlay, Reveal, toast } from "./ui";
 
 const CAT_COLOR: Record<string, string> = {

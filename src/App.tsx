@@ -8,7 +8,7 @@ import {
   type CaseType,
   type ScienceMilestone,
   type TalkCard,
-} from "./data/curated";
+} from "./data";
 import {
   buildAutoTalk,
   classifyItem,

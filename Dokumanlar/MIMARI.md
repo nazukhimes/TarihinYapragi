@@ -3,7 +3,7 @@
 > Teknik derinlik belgesi. Projenin "ne olduğu" için önce
 > [`BAGLAM.md`](BAGLAM.md)'yi okuyun; burası **nasıl çalıştığını** anlatır.
 >
-> **Son güncelleme:** 2026-08-21
+> **Son güncelleme:** 2026-08-22
 
 ---
 
@@ -248,9 +248,29 @@ aynı genel (gün-bağımsız) önizlemeyi gösterir. Gün bazlı sosyal önizle
 
 ---
 
-## 3. Veri Modeli — `src/data/curated.ts`
+## 3. Veri Modeli — `src/data/`
 
-### 3.1 Tipler
+**T-10 (2026-08-22) öncesi** tüm veri tek dosyadaydı: `src/data/curated.ts`,
+1.001 satır. **T-10 ile** dosya 12 ay dosyasına + bir tip dosyasına bölündü —
+neden ve nasıl için bkz. 3.3.
+
+```
+src/data/
+├── types.ts          ← tipler + sabitler + curatedKey()
+├── index.ts           ← birleştirici: 12 ay nesnesini CURATED'ta toplar, types.ts'i yeniden dışa aktarır
+└── gunler/
+    ├── 01-ocak.ts      → export const OCAK: Record<string, CuratedDay>
+    ├── 02-subat.ts     → export const SUBAT: ...
+    ├── ...
+    └── 12-aralik.ts    → export const ARALIK: ...
+```
+
+**Çağıran koddan bakınca hiçbir şey değişmedi:** her yerde `from "./data"` /
+`from "../data"` içe aktarılır (`App.tsx`, `wiki.ts`, `sections.tsx`, `talk.tsx`);
+`index.ts` tek giriş noktası olduğu için ay dosyalarının kendisi dışarıya hiç
+sızmaz.
+
+### 3.1 Tipler — `src/data/types.ts`
 
 ```
 CategoryId   = savas | siyaset | bilim | kesif | kultur | spor | felaket | genel
@@ -267,8 +287,11 @@ CuratedDay {
   spotlight?: { kicker, title, text }
 }
 
-CURATED : Record<"MM-DD", CuratedDay>
+curatedKey(month, day) → "MM-DD"   // tip dosyasında yaşıyor, veri değil
 ```
+
+`src/data/index.ts` içindeki `CURATED : Record<"MM-DD", CuratedDay>`, 12 ay
+nesnesinin spread'iyle (`{ ...OCAK, ...SUBAT, ..., ...ARALIK }`) kurulur.
 
 ### 3.2 `matchKeys` mekanizması — mükerrer ayıklama
 
@@ -288,8 +311,18 @@ bir kelimeyi içeriyorsa **atlanır**. Yani editör sürümü kazanır.
 
 ### 3.3 Şu anki kapsam
 
-10 gün: `02-14`, `03-08`, `04-23`, `04-25`, `05-19`, `07-20`, `08-20`, `10-29`, `11-10`, `12-31`
-Dosya boyutu: 1.001 satır. **Ölçeklenmiyor** — T-10 talimatı bunu aylık dosyalara böler.
+**60 gün** (366 günün %16,4'ü) — 10 gün T-01 öncesinden, 50 gün T-10 ile eklendi
+(46'sı planlanan 4 parti, 4'ü editörün seçtiği ek gün). Tam liste `src/data/dizin.ts`
+diye ayrı bir dosyada **tutulmuyor** — T-10, tembel yükleme (aşağıya bakın) devreye
+girmediği için ayrı bir dizin dosyasına gerek görmedi; "Özel dosyalı günler" şeridi
+(`App.tsx`) hâlâ doğrudan `Object.keys(CURATED)` okuyor.
+
+12 ay dosyasının toplam boyutu ~3.850 satır (eski tek dosyanın ~%385'i, 6 kat
+içerikle orantılı büyüme). **Tembel yükleme (T-10'un A3 adımı) uygulanmadı** —
+talimatın kendi kararı gereği ("60 günü geçtikten sonra yapılabilir") bilinçli
+olarak ertelendi; paket boyutu artışı (+64,64 kB gzip) talimatın kendi eşiğinin
+(<100 kB) altında kaldığı için gerek de kalmadı. 366 günün tamamı doldurulursa
+(PLAN-02+) bu karar yeniden değerlendirilmeli.
 
 ---
 
@@ -410,20 +443,23 @@ Hepsi dosya sonundaki `@media (prefers-reduced-motion: reduce)` bloğuyla 0.01ms
 | Yapmak istediğiniz | Adımlar |
 |---|---|
 | **Yeni bölüm** | 1) `App.tsx` → `NAV` dizisine `{id, label}` ekle · 2) `SectionShell` + `SectionHead` ile blok yaz · 3) veri için yeni `useMemo` · 4) `SkeletonCards` yükleme durumu |
-| **Yeni kategori** | 1) `curated.ts` → `CategoryId` birleşimine ekle · 2) `CATEGORIES`'e `{label, color}` · 3) `wiki.ts` → `RULES`'a regex (sırayı düşün) |
-| **Yeni dosya türü** | 1) `CaseType` birleşimi · 2) `CASE_LABELS` · 3) `App.tsx` tema→tür haritası |
-| **Yeni gün içeriği** | `curated.ts` → `CURATED["MM-DD"] = { spotlight?, events?, cases, science, talk }` |
+| **Yeni kategori** | 1) `data/types.ts` → `CategoryId` birleşimine ekle · 2) `CATEGORIES`'e `{label, color}` · 3) `wiki.ts` → `RULES`'a regex (sırayı düşün) |
+| **Yeni dosya türü** | 1) `data/types.ts` → `CaseType` birleşimi · 2) `CASE_LABELS` · 3) `App.tsx` tema→tür haritası |
+| **Yeni gün içeriği** | İlgili ay dosyasına (`data/gunler/MM-ad.ts`) `"MM-DD": { spotlight?, events?, cases, science, talk }` ekle — şablon ve kalite ölçütleri için [`ICERIK-SABLONU.md`](ICERIK-SABLONU.md) |
 | **Yeni dil** | `wiki.ts` → `load()` çağrılarını ve `pick()` mantığını genişlet; `sources` tipini güncelle |
 
 ---
 
 ## 7. Performans Notları
 
-**Mevcut derleme:** 328,74 kB JS (107,19 kB gzip), 54,93 kB CSS (10,44 kB gzip), 44 modül,
-+ `registerSW.js` (0,13 kB, T-08 — service worker kaydı, ana pakete girmez). Artış
-`react-router-dom`'un artık gerçekten paketlenmesinden (T-06 öncesi kurulu ama
-kullanılmadığı için tree-shaking ile tamamen düşüyordu) ve T-08'in gün bazlı meta
-`useEffect`'inden geliyor.
+**Mevcut derleme (T-10 sonrası, 60 gün):** 532,14 kB JS (173,42 kB gzip),
+54,97 kB CSS (10,44 kB gzip), 58 modül, + `registerSW.js` (0,13 kB, T-08 —
+service worker kaydı, ana pakete girmez). T-10 öncesi (10 gün): 328,74 kB JS
+(107,19 kB gzip) — 50 yeni günün verisi paket boyutuna **+64,64 kB gzip**
+ekledi (T-10'un kendi eşiği <100 kB gzip idi, tembel yükleme uygulanmadan
+geçildi — bkz. 3.3). Vite artık ana JS parçasının 500 kB'yi aştığını
+uyarıyor (`chunkSizeWarningLimit`); bu bir hata değil, T-13'e (performans ve
+derleme iyileştirmesi) not.
 
 Bilinen maliyet kalemleri:
 
@@ -431,6 +467,11 @@ Bilinen maliyet kalemleri:
   artık tek paylaşılan gözlemci kullanıyor (181 → 1); bkz. 2.7.
 - **Kod bölme yok** — `BroadcastMode` ilk yüklemede geliyor, oysa yalnızca butona
   basılınca gerekiyor. `React.lazy` adayı.
+- **`data/gunler/*.ts` hiç tembel yüklenmiyor** — 60 günün tamamı (T-10) ana
+  pakete giriyor; kullanıcı tek bir günü görüyor. T-10'un kendi A3 adımı bu
+  amaçla ay bazlı `import()` tasarladı ama uygulamadı: karar, 60 gün eşiğinden
+  sonra (bu talimatla) yeniden değerlendirilsin diye bilinçli olarak
+  ertelendi (bkz. 3.3) — içerik 100+ güne çıkarsa T-13 için güçlü bir aday.
 - **Görsellerde `width`/`height` yok** — Vikipedi küçük resimleri yüklenirken düzen kayar.
 - **Google Fonts** `display=swap` ile geliyor (doğru), ancak 3 aile × çok ağırlık
   yükleniyor; alt küme daraltılabilir.
@@ -456,8 +497,9 @@ Tam liste ve kanıtlar → [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md)
 | ~~O-7~~ | ~~Klavye kısayolları yalnızca Yayın Modu'nda~~ **✅ çözüldü** (`←`/`→`/`T`/`/`/`?`/`Esc` + Kısayol Yardımı) | T-07 · 2026-08-21 |
 | O-5 | ErrorBoundary yok | T-09 |
 | O-10 | `text-brand` koyu zeminde metin/simge olarak yetersiz kontrast (Ticker başlığı, Karanlık Dosyalar rozeti/düğmesi) — T-07 sırasında gerçek bir Lighthouse denetimiyle keşfedildi | Henüz atanmadı |
+| O-12 | `allScience`, editör kaydını Vikipedi'nin aynı olayına karşı ayıklamıyor (`ScienceMilestone`'da `matchKeys` yok) — T-10 sırasında keşfedildi, bkz. `ANALIZ-RAPORU.md` §9 | Henüz atanmadı |
 | ~~U-1~~ | ~~Yönlendirme / paylaşılabilir URL yok~~ **✅ çözüldü** (`createBrowserRouter` + `src/lib/slug.ts`, URL tek doğruluk kaynağı) | T-06 · 2026-08-21 |
-| U-2 | İçerik 10/366 gün | T-10 |
+| ~~U-2~~ | ~~İçerik 10/366 gün~~ **✅ çözüldü** (60/366 güne çıkarıldı, `curated.ts` 12 ay dosyasına bölündü, bkz. 3) | T-10 · 2026-08-22 |
 | ~~U-4~~ | ~~Favicon, PWA, SEO, paylaşım kartı eksik~~ **✅ çözüldü** (favicon/manifest/`og:*`/`twitter:*`/JSON-LD/sitemap/service worker, bkz. 9) | T-08 · 2026-08-21 |
 | U-5 | Test/lint altyapısı yok | T-12 |
 

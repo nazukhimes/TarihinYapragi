@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { CategoryId, TalkCard } from "../data/curated";
+import type { CategoryId, TalkCard } from "../data";
 import { WIKI_API_BASE as API } from "./config";
 
 export interface WikiPage {

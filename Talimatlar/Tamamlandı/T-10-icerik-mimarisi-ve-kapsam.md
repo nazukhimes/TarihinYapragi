@@ -347,28 +347,32 @@ Kalan 4 gün, editörün seçtiği "kişisel favori" günler olsun → **60**.
 
 ### Mimari
 
-- [ ] `src/data/types.ts` var; tüm tipler ve sabitler orada
-- [ ] `src/data/gunler/` altında 12 ay dosyası var
-- [ ] `src/data/index.ts` hepsini birleştirip `CURATED` olarak dışa aktarıyor
-- [ ] Eski `src/data/curated.ts` **silindi**
-- [ ] `grep -rn "data/curated" src/` boş çıktı veriyor
-- [ ] Mevcut 10 günün içeriği **kaybolmadı**, birebir taşındı
+- [x] `src/data/types.ts` var; tüm tipler ve sabitler orada
+- [x] `src/data/gunler/` altında 12 ay dosyası var
+- [x] `src/data/index.ts` hepsini birleştirip `CURATED` olarak dışa aktarıyor
+- [x] Eski `src/data/curated.ts` **silindi**
+- [x] `grep -rn "data/curated" src/` boş çıktı veriyor
+- [x] Mevcut 10 günün içeriği **kaybolmadı**, birebir taşındı
 
 ### İçerik
 
-- [ ] `Dokumanlar/ICERIK-SABLONU.md` var
-- [ ] En az **60 gün** kapsanıyor
-- [ ] Her günde `spotlight` + en az 1 `cases` + 1 `science` + 2 `talk` var
-- [ ] Her `events` girdisinde en az 2 `matchKeys` var ve mükerrer ayıklama çalışıyor
-- [ ] Hiçbir `id` tekrar etmiyor
-- [ ] Tüm `CaseType` ve `CategoryId` değerleri geçerli
-- [ ] `src/data/dizin.ts` gerçek veriyle uyumlu
+- [x] `Dokumanlar/ICERIK-SABLONU.md` var
+- [x] En az **60 gün** kapsanıyor (tam 60)
+- [x] Her günde `spotlight` + en az 1 `cases` + 1 `science` + 2 `talk` var
+- [x] Her `events` girdisinde en az 2 `matchKeys` var ve mükerrer ayıklama çalışıyor
+- [x] Hiçbir `id` tekrar etmiyor
+- [x] Tüm `CaseType` ve `CategoryId` değerleri geçerli
+- [ ] `src/data/dizin.ts` gerçek veriyle uyumlu — **oluşturulmadı, bilinçli.** Bu
+      dosya yalnızca A3'ün (tembel yükleme) "Özel dosyalı günler" şeridinin tüm
+      anahtarları bilmesi için tasarlanmıştı; A3 uygulanmadığı için (bkz. Genel
+      madde 3 ve *Sapmalar*) ihtiyaç doğmadı — şerit hâlâ doğrudan
+      `Object.keys(CURATED)` okuyor, canlı doğrulandı.
 
 ### Genel
 
-- [ ] `npm run typecheck` hatasız
-- [ ] `npm run build` hatasız
-- [ ] Paket boyutu artışı kabul edilebilir (< 100 kB gzip) ya da tembel yükleme devrede
+- [x] `npm run typecheck` hatasız
+- [x] `npm run build` hatasız
+- [x] Paket boyutu artışı kabul edilebilir (< 100 kB gzip) ya da tembel yükleme devrede (+64,64 kB gzip)
 
 ---
 
@@ -454,10 +458,87 @@ artmışsa A3 (tembel yükleme) adımını uygula.
 
 ## 📝 Tamamlanma Kaydı
 
-- **Tamamlanma tarihi:**
-- **Kapsanan gün sayısı:**
-- **Tembel yükleme uygulandı mı:**
-- **Paket boyutu (önce / sonra):**
+- **Tamamlanma tarihi:** 2026-08-22
+
+- **Kapsanan gün sayısı:** 60 / 366 (%16,4) — 10'u T-01 öncesinden (birebir
+  taşındı), 46'sı talimatın kendi parti planından (Parti 1: Türkiye günleri 8,
+  Parti 2: dünya tarihi 13, Parti 3: bilim & keşif 13, Parti 4: kültür &
+  karanlık arşiv 12), 4'ü editör seçimi (Jül Sezar suikastı 15 Mart, John Glenn
+  20 Şubat, Hindenburg faciası 6 Mayıs, Bastille baskını 14 Temmuz).
+
+- **Tembel yükleme uygulandı mı:** Hayır — talimatın kendi kararına uygun
+  ("60 günü geçtikten sonra yapılabilir... B bölümü bitince yeniden
+  değerlendirilsin"). Paket boyutu artışı (+64,64 kB gzip) 100 kB eşiğinin
+  altında kaldığı için gerek doğmadı; karar 3.3 nolu not olarak `MIMARI.md`'ye
+  işlendi, içerik 100+ güne çıkarsa T-13 için yeniden değerlendirme önerisiyle.
+
+- **Paket boyutu (önce / sonra):** 108,78 kB → 173,42 kB gzip (JS), +64,64 kB.
+  (Mimari bölüm bitince, içerik eklenmeden önce ölçülen ara değer 108,78 kB —
+  yalnızca dosya bölünmesinin paket boyutuna sıfıra yakın etkisi olduğunu
+  doğrular.)
+
 - **Değişen dosyalar:**
+  - **Silindi:** `src/data/curated.ts`
+  - **Yeni:** `src/data/types.ts`, `src/data/index.ts`, `src/data/gunler/*.ts`
+    (12 dosya), `Dokumanlar/ICERIK-SABLONU.md`
+  - **Güncellendi (yalnızca içe aktarma yolu):** `src/App.tsx`, `src/lib/wiki.ts`,
+    `src/components/sections.tsx`, `src/components/talk.tsx`
+  - **Belgeler:** `Dokumanlar/BAGLAM.md`, `Dokumanlar/MIMARI.md`,
+    `Dokumanlar/KULLANIM-KILAVUZU.md`, `Dokumanlar/ANALIZ-RAPORU.md`,
+    `Talimatlar/PLAN-01-temel-duzeltme-ve-tamamlama.md`
+
 - **Sapmalar / notlar:**
+  1. **En önemli sapma — "yapay zekâ ile toplu içerik üretimi yasak" notu.**
+     Bölüm A (mimari) bitirildikten sonra, Bölüm B'nin (60 güne çıkarma) bu
+     talimatın kendi *Kapsam Dışı* tablosundaki açık yasakla çeliştiği fark
+     edildi. Durum kullanıcıya doğrudan soruldu (üç seçenek: küçük pilot parti,
+     4 partinin tamamı, yalnızca mimariyle dur); kullanıcı **4 partinin
+     tamamının bu oturumda yazılmasına açıkça onay verdi.** Bunun karşılığında:
+     her gün için gerçek web araştırması (WebSearch/WebFetch) yapıldı, tarih/
+     sayı/isim gibi olgular Türkçe Vikipedi'nin kendi `Şablon:Tarihte bugün/…`
+     sayfaları ve bağımsız kaynaklarla çapraz doğrulandı, planın kendi tarih
+     önerilerinden ikisi olgusal olarak yanlış çıktığı için değiştirildi
+     (`01-01` için "Türk Dil Kurumu" — TDK'nin kuruluşu 12 Temmuz'dur, 1 Ocak
+     değil; onun yerine 1926'da Miladi takvime geçiş kullanıldı. `06-28` için
+     "İnsan Genom Projesi taslağı" — gerçek duyuru 26 Haziran 2000'dir, 28
+     Haziran değil; onun yerine aynı gün gerçekleşen Saraybosna Suikastı
+     (1914) kullanıldı, taslak genom haberi düşürüldü). Bu, editör kalitesini
+     korumak için elle doğrulanan bir süreçti, ama yine de bir AI'ın 46+ gün
+     tarihî içerik üretmesi — talimatın kendi bilinçli riski ve kullanıcının
+     açık onayıyla gerçekleşti. Sonraki bir oturumda insan editör tarafından
+     örneklem gözden geçirmesi önerilir.
+  2. **`04-23` boş `cases` alanı dolduruldu.** Mevcut 10 günden `04-23`'ün
+     `cases: []` olduğu (T-10 öncesinden, dokunulmaması gerekiyordu) şema
+     doğrulamasında görüldü. Bu, Bölüm A'nın "birebir taşı" kuralının değil,
+     Bölüm B'nin "her günde en az 1 cases" kabul kriterinin kapsamındaydı —
+     04-23 (23 Nisan) plan dahilindeki 60 günden biri olduğu için, tek bir
+     `case` kaydı (Soyuz 1 / Komarov, 1967 — aynı gün fırlatılan, tarihin ilk
+     ölümlü uzay görevi) eklendi, mevcut `spotlight`/`events`/`science`/`talk`
+     içeriğine dokunulmadı, yalnızca bir `talk` kartı eklendi.
+  3. **Yeni bulgu O-12** (Bilim & Keşif bölümü, editör kaydını Vikipedi'nin
+     aynı olayına karşı ayıklamıyor — `ScienceMilestone`'da `matchKeys` yok)
+     canlı doğrulama sırasında (18 Mart, Leonov uzay yürüyüşü hem editör hem
+     otomatik kart olarak iki kez göründü) keşfedildi. Kapsam dışı bırakıldı —
+     ayrıntı → `ANALIZ-RAPORU.md` §9, `BAGLAM.md` §7.
+  4. K-5'e (gün gezinme düğmeleri) T-10 dokunmadı — `leaf.tsx`'e hiç
+     dokunulmadı, veriyle sınırlı kaldı.
+  5. Görsel doğrulama tüm 60 gün için değil, temsilî iki gün (30 Eylül, 25
+     Aralık — biri hassas kültürel içerik/Mevlana, biri yoğun çok-konulu bir
+     gün) için tarayıcıda canlı yapıldı; kalan günler yalnızca otomatik şema
+     betiğiyle (spotlight/cases/science/talk/matchKeys/CaseType/CategoryId)
+     doğrulandı, sayfada tek tek açılmadı.
+
 - **Sonraki talimata not:**
+  - **T-11** için: O-12'yi (bkz. yukarı) düzeltmek doğal bir uzantı —
+    `ScienceMilestone`'a `matchKeys?: string[]` eklemek ve `App.tsx`'teki
+    `allScience`'ı `mergedEvents`'teki gibi ayıklamak.
+  - **T-12** için: Bu talimatta kullanılan geçici Node doğrulama betiği (gün
+    sayısı, tekrarsız `id`, asgari sözleşme şeması) kalıcı bir teste
+    dönüştürülmeli — talimatın kendi 3 no'lu Doğrulama adımının notu.
+  - **T-13** için: İçerik 60'ın üzerine, özellikle 100+ güne çıkarsa A3
+    (tembel yükleme, `src/data/gunler/*.ts` için ay bazlı `import()`) yeniden
+    değerlendirilmeli — tasarımı bu talimatta yazılıydı (bkz. talimatın A3
+    bölümü), yalnızca uygulanmadı.
+  - **Editör içeriği yazan bir sonraki kişi/oturum için:** `Dokumanlar/ICERIK-SABLONU.md`
+    artık kaynak doğrulama kuralını da içeriyor (bkz. §6) — yeni gün eklerken
+    oradaki adımları izleyin.

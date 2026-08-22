@@ -3,8 +3,8 @@
 | Alan | Değer |
 |---|---|
 | **Oluşturulma** | 2026-08-21 |
-| **Durum** | 🟡 Aktif — 9 / 14 tamamlandı |
-| **Son hareket** | 2026-08-22 · T-09 tamamlandı |
+| **Durum** | 🟡 Aktif — 10 / 14 tamamlandı |
+| **Son hareket** | 2026-08-22 · T-10 tamamlandı |
 | **Talimat sayısı** | 14 (T-01 … T-14) |
 | **Faz sayısı** | 5 |
 | **Dayanak** | [`../Dokumanlar/ANALIZ-RAPORU.md`](../Dokumanlar/ANALIZ-RAPORU.md) |
@@ -72,7 +72,7 @@ Plan bittiğinde:
 
 | # | Talimat | Öncelik | Bulgu | Süre |
 |---|---|---|---|---|
-| T-10 | [İçerik mimarisi ve kapsam genişletme](T-10-icerik-mimarisi-ve-kapsam.md) | 🟠 Yüksek | U-2 | ~6 sa+ |
+| ~~T-10~~ ✅ | [İçerik mimarisi ve kapsam genişletme](Tamamland%C4%B1/T-10-icerik-mimarisi-ve-kapsam.md) | 🟠 Yüksek | U-2 | ~6 sa+ |
 | T-11 | [Sınıflandırma doğruluğu](T-11-siniflandirma-dogrulugu.md) | 🟡 Orta | U-3 | ~4 sa |
 
 ### FAZ 4 — Kalite Güvencesi
@@ -232,6 +232,26 @@ T-01 ──┬─► T-02
   ayrıntı → `ANALIZ-RAPORU.md`. K-5'e T-09 da dokunmadı (`leaf.tsx`'e hiç
   dokunulmadı). Artık T-10 ve T-11 açık (zaten T-01 sonrası açıktı, bağımlılıkları
   T-09'a değil).
+- ~~**T-10.**~~ ✅ **2026-08-22'de tamamlandı.** İki bölüm: **(A) Mimari** —
+  1.001 satırlık tek `src/data/curated.ts` silindi; yerine `src/data/types.ts`
+  (tipler + `curatedKey()`), `src/data/gunler/` altında 12 ay dosyası ve hepsini
+  birleştiren `src/data/index.ts` geldi. Mevcut 10 günün içeriği `sed` ile satır
+  aralığı bazında taşındı (elle yeniden yazılmadı) — taşıma öncesi/sonrası gün
+  sayısı ve anahtarları Node'da doğrulandı, hiçbir gün kaybolmadı. Tembel yükleme
+  (A3 adımı) talimatın kendi kararıyla bilinçli olarak ertelendi (paket boyutu
+  eşiği altında kalındığı için gerek kalmadı). **(B) İçerik** — editör içeriği
+  10 günden **60 güne** çıkarıldı (4 parti + 4 editör seçimi). **Sapma:**
+  talimatın *Kapsam Dışı* tablosu "yapay zekâ ile toplu içerik üretimi"ni
+  **yasak** olarak işaretliyordu; Bölüm A bitirildikten sonra bu çelişki
+  kullanıcıya açıkça sorulmuş, kullanıcı bu oturum için 4 partinin tamamının
+  web araştırmasıyla kaynak doğrulanarak yazılmasına **açıkça onay vermiştir**
+  (bkz. T-10 Tamamlanma Kaydı). `Dokumanlar/ICERIK-SABLONU.md` (yeni) şablonu
+  belgeliyor. **Yeni bulgu O-12** (Bilim & Keşif bölümü editör kayıtlarını
+  Vikipedi'nin aynı olayına karşı ayıklamıyor, `ScienceMilestone`'da `matchKeys`
+  yok) keşfedildi, bilinçli olarak kapsam dışı bırakıldı (veri şeması **ve**
+  bileşen mantığı değişikliği gerektiriyor) — ayrıntı → `ANALIZ-RAPORU.md` §9.
+  K-5'e T-10 da dokunmadı (`leaf.tsx`'e hiç dokunulmadı). T-11 hâlâ açık, T-10'un
+  tamamlanması onu etkilemedi (bağımlılığı yalnızca T-01'di).
 - **T-14 en sonda.** Belgeler ancak her şey bitince gerçeğe eşitlenebilir.
 - ~~**T-06 → T-08 sırası zorunlu.**~~ SEO meta etiketleri gün bazlı URL'lere
   bağlıydı — T-06 tamamlandı, URL şeması (`/gun-ay`) sabitlendi, T-08 bu şema
@@ -258,13 +278,13 @@ T-01 ──┬─► T-02
 | T-07 | Erişilebilirlik ve klavye | ✅ Tamamlandı | 2026-08-21 | `Modal` odak tuzağı + odak iadesi + `aria-labelledby` · `Toaster` `aria-live` · "Ana içeriğe atla" · arama `aria-label`/`type=search` · `ink-faint` kontrastı 3,98→5,82:1 · `aria-pressed` çipler · `←/→/T//? Esc` klavye kısayolları + Kısayol Yardımı modalı (Modal açıkken de devre dışı) · kişi görsellerine `width/height` · altı bölüme `aria-labelledby` · O-6, O-7 çözüldü · Lighthouse Erişilebilirlik 89→96 (yol boyunca 2 bonus hata da düzeltildi) · **Yeni bulgu O-10** (text-brand kontrastı) kapsam dışı bırakıldı · K-5'e T-07 de dokunmadı (leaf.tsx'e hiç dokunmadı, hâlâ atanmadı) |
 | T-08 | Site kimliği: favicon, SEO, PWA | ✅ Tamamlandı | 2026-08-21 | 7 marka görseli `ui.tsx`'teki `IconLeafMark`'tan üretildi (`scripts/generate-brand-assets.mjs`) · `index.html`'e favicon/manifest/`og:*`/`twitter:*`/canonical/JSON-LD eklendi · `App.tsx`'te gün bazlı dinamik başlık/canonical `useEffect`'i (canlı doğrulandı) · `scripts/sitemap.mjs` 366 adresi `build`'e bağlı üretiyor · `vite-plugin-pwa` ile service worker kuruldu · Lighthouse SEO **100/100** (yol boyunca `robots.txt`'teki göreli `Sitemap:` satırı düzeltildi) · U-4 çözüldü · Service worker'ın canlı kaydı Browser pane sandbox kısıtı yüzünden doğrulanamadı, sonraki oturumda gerçek tarayıcıda kontrol edilmeli |
 | T-09 | Hata sınırı ve durum ekranları | ✅ Tamamlandı | 2026-08-22 | `ErrorBoundary.tsx` eklendi (kökte + 6 bölümde) · **Sapma:** `main.tsx`'teki kök sarmalayıcı tek başına yetersizdi (react-router kendi dahili hata sınırını kullanıyor) → her rotaya `errorElement`/`RouteErrorFallback` eklendi, canlı doğrulandı · `data.error.kind`'a göre 5 başlık · arama sonuç sayacı + boş durum ekranı · "Bugünün anlamı" şeridi (`holidays`) · Karanlık Dosyalar/Bilim & Keşif'te "N daha göster" · 4 sn gecikme uyarısı · O-5, O-9, m-3, m-6 çözüldü · Yeni bulgu O-11 (`holidays`'te şablon artığı çöp kayıt) kapsam dışı bırakıldı |
-| T-10 | İçerik mimarisi ve kapsam genişletme | ⬜ Bekliyor | | |
+| T-10 | İçerik mimarisi ve kapsam genişletme | ✅ Tamamlandı | 2026-08-22 | `curated.ts` (1.001 satır) silindi → `types.ts` + `gunler/` (12 ay dosyası) + `index.ts`; mevcut 10 gün birebir taşındı (sed ile) · editör içeriği 10→60 gün (%2,7→%16,4) · **Sapma:** "AI toplu üretim yasak" notuna rağmen kullanıcı bu oturum için açık onay verdi, 4 parti web araştırmasıyla kaynak doğrulanarak yazıldı · `ICERIK-SABLONU.md` eklendi · paket boyutu +64,64 kB gzip (<100 kB eşiği altında, tembel yükleme gerekmedi) · Yeni bulgu O-12 (Bilim & Keşif'te editör/Vikipedi mükerrer ayıklaması yok) kapsam dışı bırakıldı |
 | T-11 | Sınıflandırma doğruluğu | ⬜ Bekliyor | | |
 | T-12 | Test, lint ve biçimlendirme altyapısı | ⬜ Bekliyor | | |
 | T-13 | Performans ve derleme iyileştirmesi | ⬜ Bekliyor | | |
 | T-14 | Dokümantasyon güncelleme ve yayın | ⬜ Bekliyor | | |
 
-**İlerleme:** 9 / 14 · `█████████████░░░░░░░` %64
+**İlerleme:** 10 / 14 · `██████████████░░░░░░` %71
 
 ---
 
@@ -294,8 +314,8 @@ Plan ancak aşağıdakilerin tamamı doğruysa kapatılabilir:
       talimatta işaretlenmemiş kalmıştı, burada düzeltildi)
 
 ### İçerik
-- [ ] Editör içeriği en az 60 günde mevcut
-- [ ] İçerik dosya yapısı 366 güne ölçekleniyor
+- [x] Editör içeriği en az 60 günde mevcut (T-10 — tam 60/366)
+- [x] İçerik dosya yapısı 366 güne ölçekleniyor (T-10 — 12 ay dosyası, her biri bağımsız düzenlenebilir)
 - [ ] Sınıflandırma doğruluğu test edilmiş ve ölçülü
 
 ### Kalite

@@ -360,9 +360,9 @@ verisi; Türkçe'de kayıt yoksa İngilizce Vikipedi'ye düşer. (2) **Editör d
 elle yazılmış özel dosyalar. Editör içeriği `Editör notu` / `Editör` rozetiyle işaretlidir.
 
 **S: Neden bazı günlerde Karanlık Dosyalar bölümü boş?**
-Editörün özel dosya hazırladığı günler şimdilik 10 tanedir. Diğer günlerde bölüm,
-vefat ve olay kayıtlarını anahtar kelimeyle tarayarak dolar — bazı günlerde
-eşleşme çıkmaz. İçerik kapsamı genişletiliyor.
+Editörün özel dosya hazırladığı günler şimdilik 60 tanedir (366 günün %16,4'ü).
+Diğer günlerde bölüm, vefat ve olay kayıtlarını anahtar kelimeyle tarayarak
+dolar — bazı günlerde eşleşme çıkmaz. İçerik kapsamı genişletiliyor.
 
 **S: Otomatik sınıflandırma yanlış olabilir mi?**
 Evet. Kategori ve karanlık dosya tespiti anahtar kelime taramasıyla yapılır.

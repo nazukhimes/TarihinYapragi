@@ -29,8 +29,8 @@
 | `npm run build` | ✅ Geçiyor | 2.90 s · 253 kB JS (82 kB gzip) · 51 kB CSS |
 | Uygulama açılıyor mu | ✅ Evet | Veri geliyor, 23 kayıt listelendi |
 | Kritik hata | ⚠️ 5 adet · **4 çözüldü** | K-1…K-5 · K-1 ✅ T-03, K-2 ✅ T-04, K-3 ✅ T-04, K-4 ✅ T-01 · K-5 T-03 sırasında keşfedildi, henüz atanmadı |
-| Orta seviye eksik | ⚠️ 11 adet · **9 çözüldü** | O-1…O-11 · O-1, O-2, O-3 ✅ T-01 · O-4, O-8 ✅ T-05 · O-5, O-9 ✅ T-09 · O-6, O-7 ✅ T-07 · O-10 T-07 sırasında keşfedildi, henüz atanmadı · O-11 T-09 sırasında keşfedildi, henüz atanmadı |
-| Ürün/içerik boşluğu | ⚠️ 5 adet · **2 çözüldü** | U-1…U-5 · U-1 ✅ T-06 · U-4 ✅ T-08 |
+| Orta seviye eksik | ⚠️ 12 adet · **9 çözüldü** | O-1…O-12 · O-1, O-2, O-3 ✅ T-01 · O-4, O-8 ✅ T-05 · O-5, O-9 ✅ T-09 · O-6, O-7 ✅ T-07 · O-10 T-07 sırasında keşfedildi, henüz atanmadı · O-11 T-09 sırasında keşfedildi, henüz atanmadı · O-12 T-10 sırasında keşfedildi, henüz atanmadı |
+| Ürün/içerik boşluğu | ⚠️ 5 adet · **3 çözüldü** | U-1…U-5 · U-1 ✅ T-06 · U-4 ✅ T-08 · U-2 ✅ T-10 |
 | Küçük not | ⚠️ 7 adet · **4 çözüldü** | m-1…m-7 · m-2 ✅ T-01 · m-3, m-6 ✅ T-09 · m-5 ✅ T-07 |
 
 **Kısa hüküm:** Uygulama sağlam bir iskelete ve gerçekten güzel bir tasarım diline sahip.
@@ -481,7 +481,7 @@ günü **paylaşamıyor**, **yer imine ekleyemiyor**, tarayıcı **geri tuşu ç
 > Paylaş düğmesi bu yüzden `CalendarLeaf`'in içine değil, `App.tsx`'te ona komşu
 > eklendi (K-5'in etki alanı dışında).
 
-### U-2 · Editör içeriği 366 günün 10'unda (%2,7)
+### U-2 · Editör içeriği 366 günün 10'unda (%2,7) — ✅ ÇÖZÜLDÜ (T-10)
 
 `src/data/curated.ts` içinde yalnızca: `02-14`, `03-08`, `04-23`, `04-25`, `05-19`,
 `07-20`, `08-20`, `10-29`, `11-10`, `12-31`.
@@ -491,6 +491,32 @@ ya da yalnızca regex taramasının ürettiği zayıf içerikle dolu. Uygulaman�
 iki bölümü çoğu gün sönük kalıyor.
 
 Ayrıca 1.001 satırlık tek dosya, içerik büyüdükçe yönetilemez hâle gelecek.
+
+> **✅ Çözüm — T-10 (2026-08-22)**
+>
+> **Mimari:** `src/data/curated.ts` silindi; yerine `src/data/types.ts` (tipler +
+> `curatedKey()`), `src/data/gunler/` altında 12 ay dosyası (`01-ocak.ts` …
+> `12-aralik.ts`, her biri kendi ayının günlerini `Record<string, CuratedDay>`
+> olarak dışa aktarır) ve hepsini birleştirip `CURATED`'ı yeniden dışa aktaran
+> `src/data/index.ts` geldi. Tüm içe aktarmalar `"./data"` / `"../data"` üzerinden
+> — dosya yapısı değişse de çağıran kod etkilenmiyor.
+>
+> **İçerik:** Editör içeriği 10 günden **60 güne** çıkarıldı (%2,7 → %16,4).
+> Mevcut 10 günün içeriği birebir korundu (`sed` ile satır aralığı bazında
+> taşındı, elle yeniden yazılmadı — bkz. T-10 Tamamlanma Kaydı'ndaki doğrulama).
+> Yeni 50 gün, T-10'un kendi partileme planına göre (Türkiye günleri, dünya
+> tarihi, bilim/keşif, kültür/karanlık arşiv + 4 editör seçimi) web
+> araştırmasıyla kaynak doğrulanarak yazıldı — talimatın "yapay zekâ ile toplu
+> içerik üretimi yasak" notuna rağmen, kullanıcının bu oturum için açık onayıyla
+> (bkz. T-10 Tamamlanma Kaydı'ndaki sapma notu). İçerik şablonu artık
+> [`ICERIK-SABLONU.md`](ICERIK-SABLONU.md)'da belgeli.
+>
+> **Doğrulama:** `npm run typecheck` + `npm run build` yeşil; 60/60 gün asgari
+> sözleşmeyi (spotlight + ≥1 cases + ≥1 science + ≥2 talk) sağlıyor (geçici bir
+> Node betiğiyle taranıp T-12'de kalıcı teste dönüştürülmesi önerilir); tekrarsız
+> `id` doğrulandı (`grep -rhoE 'id: "[^"]+"' src/data/gunler/ | sort | uniq -d` boş
+> çıktı verdi); paket boyutu artışı +64,64 kB gzip (< 100 kB eşiği, tembel yükleme
+> gerekmedi); iki örnek gün (30 Eylül, 25 Aralık) tarayıcıda canlı doğrulandı.
 
 ### U-3 · Otomatik sınıflandırma kalitesi ölçülmemiş
 
@@ -588,7 +614,7 @@ SONRA  →  O-1✅ O-2✅ O-3✅     (temizlik — sonraki her iş bundan faydal
 SONRA  →  K-3✅ O-5✅ O-6✅       (sağlamlık ve erişilebilirlik)  [O-5 T-09, O-6 T-07 ile bitti]
 SONRA  →  U-1✅ U-4✅           (paylaşım + kabuk — ürünü "yayınlanabilir" yapar)  [U-1 T-06, U-4 T-08 ile bitti]
 SONRA  →  O-4✅ O-7✅ O-8✅ O-9✅   (ağ, klavye, önbellek, içerik zenginliği)  [O-4/O-8 T-05, O-7 T-07, O-9 T-09 ile bitti]
-SONRA  →  U-2  U-3             (içerik hacmi ve doğruluğu — sürekli iş)
+SONRA  →  U-2✅ U-3             (içerik hacmi ve doğruluğu — sürekli iş)  [U-2 T-10 ile bitti]
 SON    →  U-5                  (test/lint — sonraki tüm işleri korur)
 ```
 
@@ -597,7 +623,9 @@ T-01…T-14 talimatlarına dönüştürülmüştür. K-5, T-03 sırasında keşf
 bir bulgudur ve henüz bir talimata atanmamıştır — bkz. bölüm 6. O-10, T-07
 sırasında (gerçek bir Lighthouse denetimiyle) keşfedilmiş yeni bir bulgudur ve
 henüz bir talimata atanmamıştır — bkz. bölüm 7. O-11, T-09 sırasında keşfedilmiş
-yeni bir bulgudur ve henüz bir talimata atanmamıştır — bkz. bölüm 8.
+yeni bir bulgudur ve henüz bir talimata atanmamıştır — bkz. bölüm 8. O-12, T-10
+sırasında keşfedilmiş yeni bir bulgudur ve henüz bir talimata atanmamıştır —
+bkz. bölüm 9.
 
 ---
 
@@ -801,3 +829,62 @@ günü metinlerini etkilemez, yalnızca şablon navigasyon artıklarını eler.
 **Önerilen talimat:** Henüz hiçbir talimata atanmadı. `wiki.ts`'e zaten dokunacak
 bir talimat (T-11 sınıflandırma doğruluğu) iyi bir aday olabilir; ayrı bir küçük
 talimat da mümkün — nihai karar plan sahibine aittir.
+
+---
+
+## 9. T-10 Sırasında Keşfedilen Yeni Bulgu (2026-08-22)
+
+> Bu bölüm ilk analiz anının parçası değildir. T-10 (içerik mimarisi ve kapsam
+> genişletme) talimatının canlı doğrulaması sırasında keşfedilmiş, ilk analizde
+> yakalanmamış bir bulgudur.
+
+### O-12 · `allScience` (Bilim & Keşif), editör kaydını Vikipedi'nin aynı olayına karşı ayıklamıyor
+
+**Dosya:** `src/App.tsx:261-277` (`allScience` useMemo'su)
+
+`mergedEvents` (Zaman Tüneli), editör olaylarını `matchKeys` ile Vikipedi'nin
+otomatik olaylarına karşı ayıklıyor (bkz. `ANALIZ-RAPORU.md` §... / `MIMARI.md`
+§3.2). `allScience` aynı korumaya sahip değil:
+
+```ts
+const allScience = useMemo(() => {
+  const base = (curated?.science || []).map((s) => ({ ...s, curated: true as const }));
+  const auto = (data?.events || [])
+    .filter((e) => classifyItem(e.text) === "bilim" || classifyItem(e.text) === "kesif")
+    .map((e) => ({ ... , curated: false }));
+  return [...base, ...auto].sort((a, b) => b.year - a.year);   // ← ayıklama yok
+}, [data, curated]);
+```
+
+**Kanıt (canlı, 18 Mart):** T-10'da eklenen `sci-0318-leonov` (Editör rozetli,
+Leonov'un uzay yürüyüşünü anlatan curated kayıt) ile Vikipedi'nin kendi
+`onthisday` akışındaki aynı olay ("İnsanoğlu ilk kez uzayda yürüdü. Sovyet
+kozmonot Aleksey Leonov...") **Bilim & Keşif bölümünde art arda iki ayrı kart**
+olarak göründü — biri "EDİTÖR" rozetli, diğeri rozetsiz, ikisi de aynı 1965
+olayını anlatıyor.
+
+**Etki:** Bir curated `science` kaydının anlattığı olay Vikipedi'nin günlük
+`events` akışında da geçiyorsa (yaygın bir durum — bilinen bilim dönüm
+noktalarının çoğu zaten Vikipedi'nin kendi "tarihte bugün" listesinde), Bilim &
+Keşif bölümü aynı bilgiyi iki kez gösteriyor. Bu, T-10'dan önce de var olan bir
+mimari boşluktu (`ScienceMilestone` tipinde hiç `matchKeys` alanı yok); T-10
+yalnızca veri eklediği için bulguyu **görünür kıldı**, kendisi üretmedi —
+örneğin mevcut 10 günden `07-20`'nin (Apollo 11) science kaydının da aynı
+şekilde çakıştığı büyük olasılıkla.
+
+**Kapsam notu:** T-10'un kapsamı açıkça "yalnızca veri" ve "sınıflandırma
+regex'leri T-11'e ait" diye sınırlıydı (bkz. T-10 *Kapsam Dışı* tablosu); bu
+bulgunun düzeltmesi `ScienceMilestone`'a `matchKeys` benzeri bir alan eklemeyi
+ve `App.tsx`'teki `allScience`'a `mergedEvents`'inkine benzer bir ayıklama
+mantığı yazmayı gerektiriyor — bu, veri şemasını **ve** bileşen mantığını
+değiştiren bir iş, T-10'un veri-yalnızca sınırının açıkça dışında.
+
+**Önerilen düzeltme (orta boy):** `CuratedEvent.matchKeys`'e benzer bir
+`ScienceMilestone.matchKeys?: string[]` alanı eklemek, `allScience`'ı
+`mergedEvents`'teki gibi ayıklamak. Geriye dönük uyumluluk için alan **isteğe
+bağlı** olmalı (mevcut ve yeni science kayıtlarının çoğunda henüz yok).
+
+**Önerilen talimat:** Henüz hiçbir talimata atanmadı. T-11 (sınıflandırma
+doğruluğu) hem `wiki.ts` hem `App.tsx`'in ayıklama/eşleştirme mantığına zaten
+dokunacağı için uygun bir aday olabilir; ayrı bir küçük talimat da mümkün —
+nihai karar plan sahibine aittir.
