@@ -46,6 +46,13 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: ["./src/test/setup.ts"],
+    // "threads" havuzu (varsayılan), jsdom'un bağımlılığı undici@8.0.3+'ın
+    // gerektirdiği `node:worker_threads.markAsUncloneable`'ın worker_threads
+    // içinde ara sıra kullanılamaz olması yüzünden CI'da kararsız
+    // (`TypeError: webidl.util.markAsUncloneable is not a function`,
+    // jsdom/undici bilinen bir sorunu) çıkıyordu. "forks" (ayrı süreçler,
+    // worker_threads değil) bu sınıf hatayı tamamen atlıyor.
+    pool: "forks",
     coverage: {
       provider: "v8",
       include: ["src/lib/**", "src/data/**"],
