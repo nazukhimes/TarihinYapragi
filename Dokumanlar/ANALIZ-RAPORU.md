@@ -17,6 +17,8 @@
 > | 2026-08-22 | [T-09](../Talimatlar/Tamamland%C4%B1/T-09-hata-siniri-ve-durum-ekranlari.md) | O-5, O-9, m-3, m-6 |
 > | 2026-08-22 | [T-10](../Talimatlar/Tamamland%C4%B1/T-10-icerik-mimarisi-ve-kapsam.md) | U-2 |
 > | 2026-08-22 | [T-11](../Talimatlar/Tamamland%C4%B1/T-11-siniflandirma-dogrulugu.md) | U-3 |
+> | 2026-08-22 | [T-12](../Talimatlar/Tamamland%C4%B1/T-12-test-lint-bicimlendirme.md) | U-5 |
+> | 2026-08-23 | [T-13](../Talimatlar/Tamamland%C4%B1/T-13-performans-ve-derleme.md) | m-1, m-4 |
 >
 > Bu rapor **ilk analiz anının** fotoğrafıdır; metin korunur, çözülen bulguların
 > başlığına `✅ ÇÖZÜLDÜ` işareti ve bir *Çözüm* bloğu eklenir.
@@ -31,9 +33,9 @@
 | `npm run build` | ✅ Geçiyor | 2.90 s · 253 kB JS (82 kB gzip) · 51 kB CSS |
 | Uygulama açılıyor mu | ✅ Evet | Veri geliyor, 23 kayıt listelendi |
 | Kritik hata | ⚠️ 5 adet · **4 çözüldü** | K-1…K-5 · K-1 ✅ T-03, K-2 ✅ T-04, K-3 ✅ T-04, K-4 ✅ T-01 · K-5 T-03 sırasında keşfedildi, henüz atanmadı |
-| Orta seviye eksik | ⚠️ 12 adet · **9 çözüldü** | O-1…O-12 · O-1, O-2, O-3 ✅ T-01 · O-4, O-8 ✅ T-05 · O-5, O-9 ✅ T-09 · O-6, O-7 ✅ T-07 · O-10 T-07 sırasında keşfedildi, henüz atanmadı · O-11 T-09 sırasında keşfedildi, henüz atanmadı · O-12 T-10 sırasında keşfedildi, henüz atanmadı |
+| Orta seviye eksik | ⚠️ 13 adet · **9 çözüldü** | O-1…O-13 · O-1, O-2, O-3 ✅ T-01 · O-4, O-8 ✅ T-05 · O-5, O-9 ✅ T-09 · O-6, O-7 ✅ T-07 · O-10 T-07 sırasında keşfedildi, henüz atanmadı · O-11 T-09 sırasında keşfedildi, henüz atanmadı · O-12 T-10 sırasında keşfedildi, henüz atanmadı · O-13 T-13 sırasında keşfedildi (bağımlılık güvenliği), henüz atanmadı |
 | Ürün/içerik boşluğu | ⚠️ 5 adet · **5 çözüldü** | U-1…U-5 · U-1 ✅ T-06 · U-4 ✅ T-08 · U-2 ✅ T-10 · U-3 ✅ T-11 · U-5 ✅ T-12 |
-| Küçük not | ⚠️ 8 adet · **4 çözüldü** | m-1…m-8 · m-2 ✅ T-01 · m-3, m-6 ✅ T-09 · m-5 ✅ T-07 · m-8 T-12 sırasında keşfedildi, henüz atanmadı (zararsız) |
+| Küçük not | ⚠️ 8 adet · **6 çözüldü** | m-1…m-8 · m-2 ✅ T-01 · m-3, m-6 ✅ T-09 · m-5 ✅ T-07 · m-1, m-4 ✅ T-13 · m-8 T-12 sırasında keşfedildi, henüz atanmadı (zararsız) |
 
 **Kısa hüküm:** Uygulama sağlam bir iskelete ve gerçekten güzel bir tasarım diline sahip.
 Kod temiz, tipli ve tutarlı. Sorun "bozuk olması" değil, **yarım kalmış olması**:
@@ -701,10 +703,10 @@ Kritik saf fonksiyonlar (`dayOfYear`, `classifyItem`, `formatYear`, `firstSenten
 
 | # | Bulgu | Yer |
 |---|---|---|
-| m-1 | `NAV[stats.indexOf(s)]` — dizi sırasına gizli bağımlılık, kırılgan | `App.tsx` istatistik bağlantıları |
+| m-1 | ~~`NAV[stats.indexOf(s)]` — dizi sırasına gizli bağımlılık, kırılgan~~ **✅ ÇÖZÜLDÜ (T-13)** — her `stat` nesnesine doğrudan bir `hedef` alanı eklendi, `NAV`/`indexOf` bağımlılığı tamamen kaldırıldı | `src/components/GunOzeti.tsx` |
 | m-2 | ~~`vite.config.js` — proje TS olduğu hâlde config JS~~ **✅ ÇÖZÜLDÜ (T-01)** — `vite.config.ts` | kök |
 | m-3 | ~~`CasesSection` otomatik dosyaları `slice(0, 6)` ile kesiyor, "daha fazla" yok~~ **✅ ÇÖZÜLDÜ (T-09)** — sınır kaldırıldı, "N dosya daha göster" düğmesi eklendi (aynı desen `ScienceSection`'daki `slice(0,3)`'e de uygulandı) | `App.tsx` allCases, `sections.tsx` |
-| m-4 | Ticker `55s` sabit; 3 öğede de 14 öğede de aynı hız | `index.css:127` |
+| m-4 | ~~Ticker `55s` sabit; 3 öğede de 14 öğede de aynı hız~~ **✅ ÇÖZÜLDÜ (T-13)** — süre öğe sayısına göre hesaplanıyor (`öğe × 4s`, 20-90s arasında sınırlı), satır içi `animationDuration` ile uygulanıyor (canlı doğrulandı: 14 öğede 56s) | `src/components/leaf.tsx` Ticker |
 | m-5 | ~~Kişi kartlarında görseller `loading="lazy"` var ama `width/height` yok → düzen kayması~~ **✅ ÇÖZÜLDÜ (T-07)** — kart küçük resmi `248×132`, modal küçük resmi `96×112` | `sections.tsx` PeopleRow |
 | m-6 | ~~Arama sonucu global sayacı yok; kullanıcı hangi bölümde kaç sonuç olduğunu göremiyor~~ **✅ ÇÖZÜLDÜ (T-09)** — toplam + bölüm bazlı sayaç şeridi, `aria-live` duyurusu, sonuç yoksa tek boş durum ekranı | `App.tsx` |
 | m-7 | Yazdırma (print) stil sayfası yok — kart çıktısı alınamıyor | `index.css` |
@@ -994,3 +996,49 @@ bağlı** olmalı (mevcut ve yeni science kayıtlarının çoğunda henüz yok).
 doğruluğu) hem `wiki.ts` hem `App.tsx`'in ayıklama/eşleştirme mantığına zaten
 dokunacağı için uygun bir aday olabilir; ayrı bir küçük talimat da mümkün —
 nihai karar plan sahibine aittir.
+
+---
+
+## 10. T-13 Sırasında Keşfedilen Yeni Bulgu (2026-08-23)
+
+> Bu bölüm ilk analiz anının parçası değildir. T-13 (performans ve derleme
+> iyileştirmesi) talimatı sırasında, `npm audit` çalıştırılırken keşfedilmiş,
+> kod mantığı değil **bağımlılık güvenliği** ile ilgili bir bulgudur.
+
+### O-13 · `react-router-dom`'un dolaylı bağımlılığı `react-router`'da 2 orta seviye güvenlik danışma kaydı
+
+**Dosya:** `package.json` (dolaylı: `react-router-dom` → `react-router`)
+
+`npm audit` şu ikisini bildiriyor:
+
+- **Open redirect via backslash in `<Link>` and `useNavigate`**
+  (CVE-2025-68470 bypass)
+- **Arbitrary Constructor Injection via `deserializeErrors()`** — React
+  Router SSR Hydration sırasında
+
+Düzeltme `react-router-dom@7.18.2`'ye **kırılma içeren** bir yükseltme
+gerektiriyor (`npm audit fix --force`); mevcut sürüm T-06'nın kurduğu
+`createBrowserRouter` API'sini kullanıyor, 6→7 geçişi `src/main.tsx` ve
+muhtemelen `src/lib/slug.ts`/`App.tsx`'in yönlendirme çağrılarını etkileyebilir.
+
+**Risk değerlendirmesi (hafifletici, kanıt değil):** İkinci danışma SSR
+hydration'a özgü — bu proje **backend'siz, saf istemci taraflı bir SPA**
+(bkz. `BAGLAM.md` §2), SSR hiç yapılmıyor, bu yüzden o vektör muhtemelen
+uygulanmıyor. Birincisi (`<Link>`/`useNavigate` açık yönlendirme) için
+projedeki tüm `navigate()`/`toDaySlug()` çağrıları yalnızca doğrulanmış
+sayısal `day`/`month` değerlerinden URL kurar (`parseDaySlug` ile
+ayrıştırılmış ya da `new Date()`'ten gelir) — hiçbir yerde ham, kullanıcı
+kontrollü bir dize doğrudan `navigate()`'e verilmiyor. Yine de bu bir kanıt
+değil, yalnızca bu spesifik kod tabanında **şu anki** kullanım örüntüsünün
+gözlemlenen bir özelliği; paket kendisi hâlâ güvenlik açığı taşıyor ve
+yükseltilmeli.
+
+**Önerilen düzeltme:** `react-router-dom@7.x`'e ayrı, dikkatli bir talimatla
+yükseltmek — `createBrowserRouter`/`useNavigate`/`useParams` kullanım
+noktalarının (T-06, `src/main.tsx`, `src/App.tsx`) hepsini regresyon
+testleriyle (T-12'nin 203 testi + T-13'ün 3 günlük canlı regresyon turu)
+doğrulayarak.
+
+**Önerilen talimat:** Henüz hiçbir talimata atanmadı. PLAN-01'in kapsamı
+dışında yeni, küçük bir talimat (ör. T-15) ya da PLAN-02'nin bakım
+kapsamına alınabilir — nihai karar plan sahibine aittir.

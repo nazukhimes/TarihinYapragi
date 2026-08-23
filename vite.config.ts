@@ -3,11 +3,14 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { VitePWA } from "vite-plugin-pwa";
+import { visualizer } from "rollup-plugin-visualizer";
 
 export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
+    process.env.ANALYZE &&
+      visualizer({ open: true, gzipSize: true, filename: "dist/analiz.html" }),
     VitePWA({
       registerType: "autoUpdate",
       manifest: false, // kendi manifest.webmanifest dosyamızı kullanıyoruz
@@ -36,7 +39,18 @@ export default defineConfig({
         ],
       },
     }),
-  ],
+  ].filter(Boolean),
+  build: {
+    rollupOptions: {
+      output: {
+        // React'i uygulama kodundan ayrı parçaya alır — uygulama kodu değiştiğinde
+        // kullanıcının React'i yeniden indirmesi gerekmez (uzun vadeli tarayıcı önbelleği).
+        manualChunks: {
+          react: ["react", "react-dom", "react-router-dom"],
+        },
+      },
+    },
+  },
   server: {
     host: true,          // ağdaki diğer cihazlardan erişim
     port: 3000,          // tercih edilen port

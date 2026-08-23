@@ -285,6 +285,8 @@ function MiniCalendar({
 export function Ticker({ items }: { items: { year: number; text: string }[] }) {
   if (items.length === 0) return null;
   const loop = [...items, ...items];
+  // öğe başına ~4 saniye, 20–90 s arasında sınırla (m-4: 3 öğede sürünmesin, 14 öğede hızlı geçmesin)
+  const sure = Math.min(90, Math.max(20, items.length * 4));
   return (
     <div className="relative overflow-hidden border-y border-brand-deep/60 bg-[#1a1014] py-2.5 group">
       <div className="absolute left-0 top-0 bottom-0 z-10 flex items-center bg-brand pl-4 pr-5 shadow-[14px_0_24px_rgba(10,6,8,0.5)]">
@@ -293,7 +295,10 @@ export function Ticker({ items }: { items: { year: number; text: string }[] }) {
         </span>
       </div>
       <div className="absolute right-0 top-0 bottom-0 z-10 w-24 bg-gradient-to-l from-[#1a1014] to-transparent pointer-events-none" />
-      <div className="ticker-track flex items-center gap-10 whitespace-nowrap w-max">
+      <div
+        className="ticker-track flex items-center gap-10 whitespace-nowrap w-max"
+        style={{ animationDuration: `${sure}s` }}
+      >
         {loop.map((it, i) => (
           <span key={i} className="inline-flex items-center gap-3 text-[13.5px] text-ink/85">
             <span className="font-mono font-bold text-gold">{it.year}</span>

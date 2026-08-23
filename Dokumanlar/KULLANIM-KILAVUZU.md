@@ -2,7 +2,7 @@
 
 > Uygulamayı **kullanacak** kişiler için. Kod bilgisi gerekmez.
 >
-> **Sürüm:** 0.1.0 · **Son güncelleme:** 2026-08-22
+> **Sürüm:** 0.1.0 · **Son güncelleme:** 2026-08-23
 
 ---
 

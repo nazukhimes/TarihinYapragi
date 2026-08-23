@@ -3,7 +3,7 @@
 > Teknik derinlik belgesi. Projenin "ne olduğu" için önce
 > [`BAGLAM.md`](BAGLAM.md)'yi okuyun; burası **nasıl çalıştığını** anlatır.
 >
-> **Son güncelleme:** 2026-08-22 (T-11)
+> **Son güncelleme:** 2026-08-23 (T-13)
 
 ---
 
@@ -13,7 +13,8 @@
 ┌──────────────────────────────────────────────────────────────────┐
 │  index.html                                                      │
 │    · lang="tr", meta, theme-color, Google Fonts (Fraunces /      │
-│      IBM Plex Sans / IBM Plex Mono)                              │
+│      IBM Plex Sans / IBM Plex Mono — daraltılmış ağırlık/italik  │
+│      aralığı + preload/onload takası, T-13, bkz. 7)              │
 │    · favicon/apple-touch-icon/manifest <link>, og:*/twitter:*,   │
 │      canonical yer tutucusu, WebSite JSON-LD (T-08, bkz. 9)      │
 │    · <div id="root">                                             │
@@ -27,7 +28,7 @@
                     ])
                                │
                     ┌──────────▼──────────┐
-                    │      App.tsx        │  ← TEK sayfa, tek durum sahibi
+                    │      App.tsx        │  ← TEK sayfa, tek durum sahibi (244 satır, T-13'te 1.079'dan indi)
                     │  ------------------ │
                     │  useParams():       │
                     │   daySlug           │  → parseDaySlug → day, month (URL tek kaynak)
@@ -37,23 +38,41 @@
                     │   broadcast         │  yayın modu açık mı
                     │  ------------------ │
                     │  useDayData()       │  → { data, loading, reload }
-                    │  ------------------ │
-                    │  6 adet useMemo     │  ham veriyi bölüm verisine dönüştürür
+                    │  useGunVerisi()     │  → türetilmiş veri (bkz. 4.1)
+                    │  useAramaSonuclari()│  → arama sonuçları (bkz. 4.1)
+                    │  useKlavyeKisayollari() → global ←/→/T// /?/Esc dinleyicisi
                     │  ------------------ │
                     │  !parsed → <NotFound/> (tüm hook'lardan sonra, en son)
                     └──────────┬──────────┘
                                │  props (aşağı doğru tek yön)
-        ┌──────────────┬───────┴────────┬──────────────┐
-        ▼              ▼                ▼              ▼
-   leaf.tsx       sections.tsx      talk.tsx        ui.tsx
-   (takvim)       (4 bölüm)      (kart + yayın)  (ortak parçalar)
+     ┌───────────┬─────────────┼─────────────┬────────────┬─────────────┐
+     ▼           ▼             ▼             ▼            ▼             ▼
+ UstBar    AcilisBolumu   BolumNav      Bolumler     AltBilgi    KisayolYardimi
+(başlık+   (takvim yaprağı (yapışkan     (6 içerik    (footer)    (? modalı)
+ arama)     +GunOzeti+      bölüm nav)    bölümü, her
+            OzelGunler+                   biri sections.tsx/
+            Ticker)                       talk.tsx'ten)
+                                                │
+                              ┌─────────────────┼─────────────────┐
+                              ▼                 ▼                 ▼
+                         leaf.tsx         sections.tsx        talk.tsx
+                         (takvim)         (4 bölüm)         (kart; BroadcastMode
+                                                              React.lazy ile
+                                                              broadcast.tsx'ten,
+                                                              T-13 bkz. 7)
 ```
+
+Tüm bu bileşenler (+ `ui.tsx`, ortak parçalar) `src/components/` altında yaşar.
 
 **Mimari karar:** Global durum yönetimi (Context/Redux/Zustand) **yok**.
 `App.tsx` tek durum sahibi, alt bileşenler saf sunum. Uygulama tek sayfa ve tek
 "seçili gün" ekseninde döndüğü için bu doğru bir sadeleştirme. **Seçili günün
 kendisi de artık `App.tsx`'in kendi state'i değil** — `react-router-dom`'un URL
-state'i (T-06, bkz. 2.8).
+state'i (T-06, bkz. 2.8). **T-13'te** veri türetme (`useMemo` katmanı) ve
+sunum, `App.tsx`'ten `src/hooks/useGunVerisi.ts` ile 9 yeni `components/*.tsx`
+dosyasına ayrıştırıldı; `App.tsx`'in kendisi artık yalnızca *düzen + durum +
+efekt* kabuğu — tek durum sahibi olma ilkesi bozulmadı, yalnızca JSX/hesaplama
+hacmi dışarı taşındı (bkz. 4.1, 4.6).
 
 ---
 
@@ -359,7 +378,7 @@ olarak ertelendi; paket boyutu artışı (+64,64 kB gzip) talimatın kendi eşi�
 
 ## 4. Sunum Katmanı
 
-### 4.1 `App.tsx` — birleştirme (useMemo) katmanı
+### 4.1 `src/hooks/useGunVerisi.ts` — birleştirme (useMemo) katmanı (T-13'te `App.tsx`'ten taşındı)
 
 | useMemo | Girdi | Çıktı | Kural |
 |---|---|---|---|
@@ -371,7 +390,24 @@ olarak ertelendi; paket boyutu artışı (+64,64 kB gzip) talimatın kendi eşi�
 | `spotlight` | CURATED.spotlight ya da `selected[0]` | manşet | editör varsa o kazanır |
 
 Ayrıca `tickerItems` (14 öğeye seyreltilmiş bant) ve `ambientYears` (arka plandaki
-dev yıl rakamları) türetilir.
+dev yıl rakamları) türetilir. `useGunVerisi(data, curated)` bu yediyi tek bir
+`GunVerisi` nesnesinde döner; `App.tsx` bunu çağırıp aşağı doğru (bkz. 4.6)
+props olarak dağıtır — davranış T-13 öncesiyle **birebir aynı**, yalnızca
+konum değişti.
+
+**Arama süzmesi — `useAramaSonuclari(veri, query)` (aynı dosya, T-13):**
+Önceden üst bardaki arama sonuç sayacı ile her bölümün kendi `visible` listesi
+**aynı** `matchQuery` taramasını iki kez (App.tsx'te sayaç için, bölüm
+içinde render için) çalıştırıyordu — üstelik biraz **farklı** alan
+listeleriyle (sayaç daha dar, bölüm daha geniş arıyordu, bkz. eski m-8 notu /
+T-09 Tamamlanma Kaydı). `useAramaSonuclari` artık her tür (`olay`/`dogum`/
+`vefat`/`dosya`/`bilim`) için **tek** bir kanonik `matchQuery` çağrısı yapar
+(bölümlerin daha geniş alan listesi kazandı) ve süzülmüş dizileri döner; üst
+bar bunların `.length`'ini sayaç olarak, bölüm bileşenleri (`sections.tsx`,
+bkz. 4.3) kendi tam listeleriyle kesişimini (`Set`+kimlik karşılaştırması,
+metin taraması **tekrar çalışmaz**) `matched` prop'u üzerinden alır. Arama
+boşsa (`query.trim()===""`) filtreleme hiç çalışmaz, tam listeler doğrudan
+döner (ucuz kısayol).
 
 ### 4.2 `components/leaf.tsx`
 
@@ -398,16 +434,34 @@ her gün değişiminde tekrar oynar. Bu bilinçli bir hiledir.
 | `PeopleRow` | Yatay kaydırmalı kart şeridi + modal |
 | `CasesSection` | 2 sütunlu dosya kartları, damgalı durum etiketi |
 | `ScienceSection` | 3 sütunlu dönüm noktası kartları |
-| `SectionShell` | `id` + `scroll-mt-28` sarmalayıcı (yapışkan nav için) |
+| `SectionShell` | `id` + `scroll-mt-28` + `.section-shell` (`content-visibility:auto`, T-13) sarmalayıcı (yapışkan nav için) |
 
-### 4.4 `components/talk.tsx`
+**T-13 API değişikliği:** `TimelineSection`/`PeopleRow`/`CasesSection`/
+`ScienceSection` artık bir `query: string` prop'u **almaz** — bunun yerine
+`matched` prop'unu alır (üst düzeyde `useAramaSonuclari`'nin ürettiği,
+önceden süzülmüş alt küme, bkz. 4.1). İçeride `matchQuery` **çağırmazlar**;
+yalnızca `matched`'ten kurulan bir `Set`e kimlik (`id`) karşılaştırmasıyla
+bakarlar. Kategori (`cat`) filtresi ve "Tümü · N" çip sayaçları **tam**
+listeden (`events`/`people`/`cases`/`items`, arama ile daralmaz) beslenmeye
+devam eder — bu, T-13 öncesindeki davranışla birebir aynı kalması gereken bir
+ayrıntıydı (arama açıkken bile çip sayaçları günün toplamını göstermeli).
 
-- `TalkSection` — yayıncı bandı + kart ızgarası
-- `TalkCardView` — kâğıt dokulu, çizgili defter görünümlü kart + kopyala
+### 4.4 `components/talk.tsx` + `components/broadcast.tsx` (T-13'te ayrıldı)
+
+- `TalkSection` — yayıncı bandı + kart ızgarası (`talk.tsx`, ana pakette)
+- `TalkCardView` — kâğıt dokulu, çizgili defter görünümlü kart + kopyala (`talk.tsx`)
 - `BroadcastMode` — tam ekran teleprompter; `←` `→` `Space` `Esc` klavye desteği,
-  ilerleme çubuğu, nokta göstergeleri, `scanlines` efekti
+  ilerleme çubuğu, nokta göstergeleri, `scanlines` efekti — **`broadcast.tsx`**
+  dosyasına taşındı, `App.tsx`'te `React.lazy(() => import("./components/
+  broadcast"))` ile yükleniyor (T-13 Adım 1). Çoğu ziyaretçi Yayın Modu'nu hiç
+  açmadığı için bu içerik ilk pakete girmiyor; `Suspense` geri dönüşü
+  (`YayinYukleniyor`, `App.tsx`) tam ekran koyu zemin + yanıp sönen nokta.
 
-`CAT_COLOR` sözlüğü kart kategorisini renge çevirir; eşleşme yoksa altın (`#e8b04b`).
+`CAT_COLOR`/`catColor()` sözlüğü kart kategorisini renge çevirir (eşleşme
+yoksa altın `#e8b04b`); **`talk.tsx`'te kalıyor** (`dışa aktarılıyor`) çünkü
+`TalkSection` zaten ana pakette — `broadcast.tsx` bunu oradan içe aktarır,
+kopyalanmaz (Rollup, ayrı parçadan ana paketteki bir dışa aktarıma referans
+verir, tekrar paketlemez).
 
 ### 4.5 `components/ui.tsx`
 
@@ -424,6 +478,30 @@ her gün değişiminde tekrar oynar. Bu bilinçli bir hiledir.
 **Not:** İkon kütüphanesi yok — hepsi 24×24 viewBox'ta elle çizilmiş.
 Yeni ikon eklerken aynı kalıbı izleyin: `viewBox="0 0 24 24"`, `fill="none"`,
 `stroke="currentColor"`, `strokeWidth` 1.4–1.8, `aria-hidden`.
+
+### 4.6 `App.tsx`'in bölündüğü bileşenler (T-13)
+
+`App.tsx` 1.079 satırdan 244'e indi (hedef ≤300, bkz. 7). Bölünme sorumluluğa
+göre yapıldı — her parça `App.tsx`'in JSX'inde neyin karşılığıysa onu taşıyor,
+davranış **birebir aynı** kaldı:
+
+| Dosya | Karşılık geldiği eski JSX | Not |
+|---|---|---|
+| `UstBar.tsx` | Üst bar: logo, arama (masaüstü+mobil), canlı saat, Yayın Modu düğmesi, arama sonuç şeridi | `aramaRef`/`aramaMobilRef` `App.tsx`'te kalır (klavye kısayolu `/` bunlara odaklanır), prop olarak geçirilir |
+| `AcilisBolumu.tsx` | Açılış `<section>`: dev ambiyans yılları + takvim yaprağı + paylaş düğmesi + `GunOzeti` + `OzelGunler` + haber bandı | `veri: GunVerisi`'i tek prop olarak alır (bkz. 4.1) |
+| `GunOzeti.tsx` | Spotlight başlığı + sayaçlar + zaman aralığı + yükleniyor/hata durumları | `HATA_BASLIK` haritası buraya taşındı; `stats` dizisi burada kurulur (`hedef` alanıyla, m-1 düzeltmesi) |
+| `OzelGunler.tsx` | "Özel dosyalı günler" pill şeridi | `CURATED`'ı doğrudan içe aktarır |
+| `BolumNav.tsx` | Yapışkan bölüm navigasyonu | `NAV` dizisi artık burada tanımlı (eskiden `App.tsx`'te); `visible` prop'u `false` ise `null` döner |
+| `Bolumler.tsx` | Altı içerik bölümü (`SectionShell`×6) + "Bugünün anlamı" şeridi + arama boş durumu | `arama: AramaSonuclari`'ni her bölüme `matched` olarak dağıtır (bkz. 4.1, 4.3) |
+| `AltBilgi.tsx` | Footer | Durumsuz, saf statik JSX |
+| `KisayolYardimi.tsx` | Klavye kısayolları modalı (`?` ile açılır) | `Modal`'ı sarar, kısayol listeleri sabit dizi |
+| `Iskeletler.tsx` | `SkeletonLines`/`SkeletonCards` | Değişmedi, yalnızca taşındı |
+| `src/hooks/useKlavyeKisayollari.ts` | Global `←/→/T///?/Esc` `keydown` dinleyicisi | `aktif` prop'u eski `if (broadcast) return;` kontrolünün yerini alır |
+
+`App.tsx`'te kalanlar: `useParams`/URL ayrıştırma, tüm `useState`, `useDayData`,
+`useGunVerisi`/`useAramaSonuclari` çağrıları, `setDate`/`gunKaydir`/
+`bugüneDön`/`shareDay` geri çağırmaları, kanonik URL yönlendirme `useEffect`'i,
+gün bazlı meta `useEffect`'i (2.9) ve yukarıdaki bileşenleri saran düzen JSX'i.
 
 ---
 
@@ -481,34 +559,102 @@ Hepsi dosya sonundaki `@media (prefers-reduced-motion: reduce)` bloğuyla 0.01ms
 
 ---
 
-## 7. Performans Notları
+## 7. Performans Notları (T-13'te ölçüldü ve iyileştirildi)
 
-**Mevcut derleme (T-11 sonrası, 60 gün):** 537,90 kB JS (174,35 kB gzip),
-54,97 kB CSS (10,44 kB gzip), 59 modül, + `registerSW.js` (0,13 kB, T-08 —
-service worker kaydı, ana pakete girmez). T-10 sonrası/T-11 öncesi: 532,14 kB
-JS (173,42 kB gzip), 58 modül — sınıflandırma kurallarının `RULES`/
-`DARK_THEMES`'ten `classification.ts`'e ayrılması ve puanlama mantığı
-paket boyutuna **+5,76 kB** (+0,93 kB gzip) ekledi, modül sayısı 58→59
-(yeni dosya). T-10 öncesi (10 gün): 328,74 kB JS (107,19 kB gzip) — 50 yeni
-günün verisi paket boyutuna **+64,64 kB gzip** ekledi (T-10'un kendi eşiği
-<100 kB gzip idi, tembel yükleme uygulanmadan geçildi — bkz. 3.3). Vite artık
-ana JS parçasının 500 kB'yi aştığını uyarıyor (`chunkSizeWarningLimit`); bu
-bir hata değil, T-13'e (performans ve derleme iyileştirmesi) not.
+**Mevcut derleme (T-13 sonrası, 60 gün, 72 modül):** 3 parça —
+`react` (206,26 kB / 67,36 kB gzip, `manualChunks` ile ayrıldı — uygulama
+kodu değiştiğinde yeniden inmez), `index` (330,98 kB / 108,18 kB gzip, uygulama
+kodu + 60 günlük editör verisi), `broadcast` (4,67 kB / 1,63 kB gzip, **yalnızca
+Yayın Modu açılınca iner**, `React.lazy`). İlk yük (`react`+`index`) =
+**175,54 kB gzip**. CSS: **54,73 kB (10,43 kB gzip)** — `@source not` ile
+`Dokumanlar/`/`Talimatlar/` artık taranmıyor (A/B testiyle doğrulandı:
+55,19→54,65 kB ham, exclusion olmadan/olarak, bkz. 11.1).
+
+**T-13 öncesi (T-12 sonrası, tek parça, 59 modül):** 537,97 kB JS
+(174,38 kB gzip), 55,01 kB CSS (10,44 kB gzip, belge klasörleri dahil
+taranmış). **İlk yük neredeyse değişmedi** (174,38→175,54 kB gzip, kod bölme
++`manualChunks` sayesinde parça sayısı arttı ama toplam gzip bayt hafifçe
+arttı bile — çoklu parça gzip sıkıştırmasının bağlam paylaşamamasının
+beklenen bedeli). **Kök neden:** `rollup-plugin-visualizer` (`npm run
+analyze`, T-13 Adım 9) ile incelenince `src/data/gunler/` (60 günlük editör
+içeriği, T-10) tek başına **~300 kB kaynak kod** olduğu ve `index` parçasının
+büyük çoğunluğunu oluşturduğu görüldü — bu, 3.3'teki "tembel yükleme
+ertelendi" kararının artık gerçek bir bedeli olduğunun kanıtı. T-13'ün
+yaptığı her şey (kod bölme, font/CSS daraltma, `manualChunks`) doğru ve etkili
+ama **veri hacminden bağımsız**; asıl kütleyi düşürmek 3.3'teki tembel
+yüklemeyi gerektiriyor (bkz. Bilinen maliyet kalemleri, aşağı).
+
+**Lighthouse (mobil, üretim derlemesi — `vite preview` + `npx lighthouse`,
+Bash üzerinden, Browser pane'den bağımsız, T-13):** İlk kez Performans,
+Erişilebilirlik ve SEO **aynı üretim derlemesine karşı, birlikte** ölçüldü.
+
+| Kategori | Puan | Not |
+|---|---|---|
+| Performans | **92** | LCP 2,3 s · CLS 0,009 · TBT 240 ms · FCP 2,1 s (29 Ekim, temiz ölçüm) |
+| Erişilebilirlik | **96** | T-07'deki 96 ile birebir aynı, regresyon yok |
+| SEO | **100** | T-08'deki 100 ile birebir aynı, regresyon yok |
+
+**Ölçüm sapmaları (T-13 Tamamlanma Kaydı'nda ayrıntılı):** (1) dev sunucusuna
+(`npm run dev`) karşı ölçülen ilk deneme Performans **42** verdi — bu bir
+regresyon değil, Vite dev modunun her modülü bundlesiz ayrı dosya olarak
+servis etmesinin doğal sonucu (LCP 18,5 s); yalnızca `vite preview` (gerçek
+paket) anlamlı bir ölçüm verir. (2) İlk `vite preview` turunda render-blocking
+font CSS'i ~1.980 ms kayıp olarak işaretlendi; talimatın önerdiği çıplak
+`<link rel="preload" as="style">` **tek başına** bunu çözmüyordu — standart
+preload+`onload` takas deseni eklenince Performans **69 → 92**'ye çıktı (bkz.
+`index.html`). (3) Aynı sayfayı farklı turlarda ölçünce puan **68-92**
+arasında salındı; kök neden client kodda değil, canlı Wikipedia API isteğinin
+(~750 kB, ~2,4 s) LCP'nin önündeki gerçek darboğaz olması ve Lighthouse'un
+`simulate` gecikme modelinin bu dış isteğin zamanlamasına duyarlı olması —
+PLAN-01'in "backend yok" ilkesiyle doğrudan çelişen bir sunucu-taraflı önbellek/
+proxy olmadan **garanti edilemez**.
 
 Bilinen maliyet kalemleri:
 
 - ~~**181 IntersectionObserver örneği**~~ **✅ çözüldü (T-04)** — `src/lib/useInView.ts`
   artık tek paylaşılan gözlemci kullanıyor (181 → 1); bkz. 2.7.
-- **Kod bölme yok** — `BroadcastMode` ilk yüklemede geliyor, oysa yalnızca butona
-  basılınca gerekiyor. `React.lazy` adayı.
-- **`data/gunler/*.ts` hiç tembel yüklenmiyor** — 60 günün tamamı (T-10) ana
-  pakete giriyor; kullanıcı tek bir günü görüyor. T-10'un kendi A3 adımı bu
-  amaçla ay bazlı `import()` tasarladı ama uygulamadı: karar, 60 gün eşiğinden
-  sonra (bu talimatla) yeniden değerlendirilsin diye bilinçli olarak
-  ertelendi (bkz. 3.3) — içerik 100+ güne çıkarsa T-13 için güçlü bir aday.
-- **Görsellerde `width`/`height` yok** — Vikipedi küçük resimleri yüklenirken düzen kayar.
-- **Google Fonts** `display=swap` ile geliyor (doğru), ancak 3 aile × çok ağırlık
-  yükleniyor; alt küme daraltılabilir.
+- ~~**Kod bölme yok**~~ **✅ çözüldü (T-13)** — `BroadcastMode` `broadcast.tsx`'e
+  taşındı, `React.lazy` ile yalnızca Yayın Modu düğmesine basılınca iner
+  (canlı doğrulandı: ağ isteği tıklamadan önce yok); `react` de ayrı bir
+  önbellek parçasında (`manualChunks`).
+- **`data/gunler/*.ts` hâlâ hiç tembel yüklenmiyor** — 60 günün tamamı (T-10)
+  ana pakete giriyor; kullanıcı tek bir günü görüyor. T-13'ün `rollup-plugin-
+  visualizer` ölçümü bunun artık paketin **baskın** kalemi olduğunu doğruladı
+  (~300 kB kaynak). T-10'un kendi A3 adımı bu amaçla ay bazlı `import()`
+  tasarladı ama uygulamadı; T-13 de kendi Kapsam Dışı tablosu gereği
+  dokunmadı — 366 güne çıkılırsa (PLAN-02) artık **zorunlu** bir adım.
+- ~~**Görsellerde `width`/`height` yok**~~ **✅ çözüldü (T-07)** — kart küçük
+  resmi `248×132`, modal küçük resmi `96×112` (bkz. eski m-5 notu).
+- ~~**Google Fonts** 3 aile × çok ağırlık yükleniyordu~~ **✅ çözüldü (T-13)** —
+  gerçek kullanım (`grep -rn italic`/`font-bold` vb.) taranıp aralık
+  daraltıldı: Fraunces düz 600-900 + italik yalnızca 400-500 (talimatın
+  önerdiği "italiği tamamen kaldır" diff'i **uygulanmadı** — 4 gerçek italik
+  kullanım noktası vardı), IBM Plex Mono 400/600/700, IBM Plex Sans (gövde)
+  yalnızca 400. Ayrıca render-blocking olmaktan çıkarıldı (preload+onload
+  takası, yukarı bkz.).
+- **Canlı Wikipedia API isteği** (~750 kB, ~2,4 s) — LCP'nin önündeki en büyük
+  tek darboğaz (yukarı bkz.); istemci taraflı bir çözümü yok, PLAN-01'in
+  backend'siz ilkesiyle çelişiyor.
+
+---
+
+### 7.1 Diğer T-13 iyileştirmeleri (kısa liste)
+
+Yukarıdaki paket/Lighthouse rakamlarına doğrudan yansımayan ama görsel/kod
+kalitesi açısından önemli değişiklikler:
+
+- **Ticker hızı** artık öğe sayısına bağlı (`öğe × 4s`, 20-90s sınırlı;
+  `leaf.tsx` → `Ticker`) — önceden sabit 55s, 3 öğede sürünüyordu.
+- **`.noise` ve `.drift-slow`/`.drift-slower`** mobilde (≤768px / ≤640px)
+  tamamen kapatılıyor (`index.css`) — masaüstünde değişmedi.
+- **`content-visibility: auto`** altı içerik bölümünün her birinde
+  (`.section-shell`, `sections.tsx` → `SectionShell`) — ekran dışı bölümler
+  render/boyama maliyetinden muaf. `scrollIntoView` ile hedef konumlandırma
+  canlı doğrulandı, geri alınmadı (bkz. T-13 Tamamlanma Kaydı).
+- **`stats.indexOf(s)` kalıbı kaldırıldı** (eski m-1) — her sayaç nesnesine
+  doğrudan bir `hedef` alanı eklendi (`GunOzeti.tsx`).
+- **Arama süzmesi tekilleştirildi** (`useAramaSonuclari`, bkz. 4.1) — üst bar
+  sayacı ile bölümler artık aynı, tutarlı sonuç kümesini paylaşıyor.
 
 ---
 
@@ -678,3 +824,66 @@ yakınlığı şartı eklenerek düzeltildi (bkz. `classification.ts` → `KARAN
 tarihlemek için kullanılıyor) çözülmeden bırakıldı — gömme (embedding)
 tabanlı bir yaklaşım gerektirir, T-11'in kendi *Kapsam Dışı* tablosunda
 bilinçli olarak dışarıda bırakılmış.
+
+---
+
+## 11. Derleme Optimizasyonu (T-13)
+
+Performans rakamları için bkz. 7. Bu bölüm yalnızca **derleme yapılandırması**
+değişikliklerini belgeler.
+
+### 11.1 Tailwind kaynak taraması — `src/index.css`
+
+Tailwind v4'ün otomatik kaynak keşfi, `.gitignore`'da olmayan **her** dosyayı
+tarar. Proje belgeleri (`Dokumanlar/`, `Talimatlar/`) markdown kod bloklarında
+gerçek `className` örnekleri taşıdığı için bu dosyalar da taranıyor, oradaki
+metinler yardımcı sınıf adı sanılıp üretim CSS'ine sızabiliyordu (T-01'de ilk
+kez ölçülmüştü, düzeltmesi bu talimata bırakılmıştı). Çözüm, `@import
+"tailwindcss";` satırının hemen altına iki satır:
+
+```css
+@source not "../Dokumanlar";
+@source not "../Talimatlar";
+```
+
+**Doğrulama yöntemi:** Bu iki satır geçici olarak yorum satırına alınıp
+derleme tekrarlandı (55,19 kB ham CSS), sonra geri açılıp tekrar derlendi
+(54,65 kB ham CSS) — fark (-0,54 kB ham / -0,09 kB gzip) doğrulandı. T-01'de
+ölçülen fark (-1,72 kB ham) daha büyüktü çünkü o tarihte belge klasörleri
+farklı içerik taşıyordu; kesin sayı yerine **yönün doğruluğu ve mekanizmanın
+çalıştığı** önemli — belge klasörleri büyüdükçe bu koruma olmadan CSS de
+büyürdü.
+
+### 11.2 Paket analizi — `rollup-plugin-visualizer` + `manualChunks`
+
+```bash
+npm run analyze   # = npm run sitemap && cross-env ANALYZE=1 vite build
+```
+
+`vite.config.ts`'teki `visualizer({ open: true, gzipSize: true, filename:
+"dist/analiz.html" })` yalnızca `process.env.ANALYZE` set edilmişse pakete
+eklenir (`plugins` dizisi `.filter(Boolean)` ile süzülür); `dist/analiz.html`
+bir treemap üretir. **`cross-env` neden gerekti:** talimatın önerdiği
+`"ANALYZE=1 vite build"` yalnızca POSIX kabuğunda çalışır; proje Windows'u da
+resmî olarak destekliyor (T-02'nin `başlat.bat`/`baslat.sh` çifti), bu yüzden
+`cross-env` devDependency olarak eklendi.
+
+`build.rollupOptions.output.manualChunks: { react: ["react", "react-dom",
+"react-router-dom"] }` React'i uygulama kodundan ayrı bir parçaya alır —
+uygulama kodu (`index-*.js`) her deploy'da değişse bile `react-*.js` aynı
+kalırsa tarayıcı onu yeniden indirmez (uzun vadeli önbellek kazancı; **ilk
+ziyarette** toplam bayt sayısını azaltmaz, bkz. 7).
+
+### 11.3 Windows'ta Lighthouse çalıştırma notu
+
+`npx lighthouse` bu makinede Chrome'u (`C:\Program Files\Google\Chrome\
+Application\chrome.exe`) buluyor ve raporu doğru üretiyor, ancak her
+çalıştırmanın **sonunda** (rapor yazıldıktan sonra) geçici Chrome profilini
+silerken zararsız bir `EPERM`/`Runtime error` fırlatıyor
+(`chrome-launcher`'ın Windows'a özgü bilinen bir dosya-kilidi sorunu). Bu
+hatayı görürseniz paniklemeyin — `--output-path` ile verilen JSON dosyası
+büyük olasılıkla zaten diskte. Ayrıca **dev sunucusuna** (`npm run dev`)
+karşı Lighthouse çalıştırmayın — Vite dev modu her modülü ayrı, bundlesiz bir
+dosya olarak servis eder, bu da Performans puanını gerçek dışı biçimde çok
+düşük gösterir (bu talimatta 42 vs. gerçek 92). Her zaman `npm run build &&
+npm run preview` çıktısına karşı ölçün.

@@ -4,7 +4,7 @@
 > **ilk okuyacağı** dosyadır. Kodu okumadan önce projenin ne olduğunu, nasıl çalıştığını
 > ve hangi kurallara uyulduğunu buradan öğren.
 >
-> **Son güncelleme:** 2026-08-22 (T-12) · **Sürüm:** 0.1.0 (geliştirme aşaması)
+> **Son güncelleme:** 2026-08-23 (T-13) · **Sürüm:** 0.1.0 (geliştirme aşaması)
 
 ---
 
@@ -145,8 +145,8 @@ TarihinYapragi/
 │
 ├── src/
 │   ├── main.tsx            ← createBrowserRouter + RouterProvider (/, /:daySlug, *) (T-06)
-│   ├── App.tsx             ← TEK sayfa. Tüm veri birleştirme (useMemo) burada. URL → day/month (T-06)
-│   ├── index.css           ← Tailwind v4 @theme + tüm özel animasyon/doku sınıfları
+│   ├── App.tsx             ← TEK sayfa, 244 satır (T-13'te 1.079'dan indi). Düzen + durum + efektler; veri/sunum aşağıdaki dosyalara ayrıştırıldı. URL → day/month (T-06)
+│   ├── index.css           ← Tailwind v4 @theme + tüm özel animasyon/doku sınıfları + `@source not` (T-13)
 │   ├── vite-env.d.ts       ← `ImportMetaEnv` tipi (VITE_WIKI_API_BASE)
 │   │
 │   ├── data/
@@ -164,13 +164,27 @@ TarihinYapragi/
 │   │   ├── useInView.ts    ← Paylaşılan IntersectionObserver + setTimeout güvenlik ağı (T-04)
 │   │   └── wiki.ts         ← API çağrısı, önbellek, otomatik kart üretimi (sınıflandırmayı classification.ts'ten alır)
 │   │
+│   ├── hooks/               ← (T-13) App.tsx'ten ayrıştırılan veri/etkileşim hook'ları
+│   │   ├── useGunVerisi.ts  ← useMemo birleştirme katmanı + useAramaSonuclari (arama tekilleştirme)
+│   │   └── useKlavyeKisayollari.ts ← Global ←/→/T///?/Esc dinleyicisi
+│   │
 │   └── components/
-│       ├── leaf.tsx        ← Takvim yaprağı, mini takvim, canlı saat, haber bandı
+│       ├── leaf.tsx        ← Takvim yaprağı, mini takvim, canlı saat, haber bandı (ticker hızı T-13'te öğe sayısına bağlandı)
 │       ├── ErrorBoundary.tsx ← Hata sınırı (kök + bölüm) ve rota hata ekranı (T-09)
 │       ├── NotFound.tsx    ← 404 sayfası — geçersiz gün adresi (T-06)
-│       ├── sections.tsx    ← Zaman tüneli, kişi kartları, karanlık dosyalar, bilim
-│       ├── talk.tsx        ← Sohbet kartları + Yayın Modu (teleprompter)
-│       └── ui.tsx          ← Reveal, CountUp, Modal, Toaster, copyText, tüm SVG ikonlar
+│       ├── sections.tsx    ← Zaman tüneli, kişi kartları, karanlık dosyalar, bilim (T-13: `query`→`matched` API, `SectionShell` artık `content-visibility:auto`)
+│       ├── talk.tsx        ← Sohbet kartları (Yayın Modu artık `broadcast.tsx`'te, T-13)
+│       ├── broadcast.tsx   ← (T-13) Yayın Modu (teleprompter) — `App.tsx`'te `React.lazy` ile yüklenir
+│       ├── ui.tsx          ← Reveal, CountUp, Modal, Toaster, copyText, tüm SVG ikonlar
+│       ├── UstBar.tsx      ← (T-13) Üst bar: logo, arama, canlı saat, Yayın Modu düğmesi
+│       ├── AcilisBolumu.tsx← (T-13) Açılış bölümü: ambiyans yılları + takvim yaprağı + paylaş + GunOzeti + OzelGunler + ticker
+│       ├── GunOzeti.tsx    ← (T-13) Spotlight + sayaçlar + zaman aralığı + yükleniyor/hata durumları
+│       ├── OzelGunler.tsx  ← (T-13) "Özel dosyalı günler" pill şeridi
+│       ├── BolumNav.tsx    ← (T-13) Yapışkan bölüm navigasyonu (NAV dizisi burada)
+│       ├── Bolumler.tsx    ← (T-13) Altı içerik bölümü + "Bugünün anlamı" şeridi + arama boş durumu
+│       ├── AltBilgi.tsx    ← (T-13) Footer
+│       ├── KisayolYardimi.tsx ← (T-13) Klavye kısayolları modalı
+│       └── Iskeletler.tsx  ← (T-13) SkeletonLines / SkeletonCards
 │
 ├── Dokumanlar/             ← BU KLASÖR — proje belgeleri
 │   ├── BAGLAM.md           ← (bu dosya)
@@ -193,10 +207,10 @@ TarihinYapragi/
 |---|---|
 | Yeni bir güne özel dosya eklemek | İlgili ay dosyası, `src/data/gunler/MM-ad.ts` → şablon: [`ICERIK-SABLONU.md`](ICERIK-SABLONU.md) |
 | Yeni renk / font eklemek | `src/index.css` → `@theme` bloğu |
-| Yeni bölüm eklemek | `src/App.tsx` → `NAV` dizisi + `SectionShell` |
+| Yeni bölüm eklemek | `src/components/BolumNav.tsx` → `NAV` dizisi · `src/components/Bolumler.tsx` → yeni `SectionShell` bloğu (T-13) |
 | Sınıflandırma kuralı değiştirmek | `src/lib/classification.ts` → `KURALLAR` / `KARANLIK`, sonra `npm run siniflandirma` ile doğrula |
 | Yeni ikon eklemek | `src/components/ui.tsx` → `IconXxx` fonksiyonu |
-| Yayın modunu değiştirmek | `src/components/talk.tsx` → `BroadcastMode` |
+| Yayın modunu değiştirmek | `src/components/broadcast.tsx` → `BroadcastMode` (T-13'te ayrıldı, `App.tsx`'te `React.lazy`) |
 | API tabanını değiştirmek | `.env` içine `VITE_WIKI_API_BASE=...` (örnek: `.env.example`) |
 | URL şemasını değiştirmek | `src/lib/slug.ts` → `toDaySlug`/`parseDaySlug`; rotalar `src/main.tsx` |
 | Favicon/PWA simgelerini yeniden üretmek | `npm run icons` → `scripts/generate-brand-assets.mjs` (kaynak: `ui.tsx` → `IconLeafMark`) |
@@ -268,7 +282,7 @@ karşı ölçer (T-11); başlatıcı menüsünde değil, yalnızca `classificati
 
 ## 7. Mevcut Durum — Dürüst Özet
 
-> **Plan ilerlemesi:** PLAN-01 · 11 / 14 talimat tamamlandı (T-01, T-02, T-03, T-04, T-05, T-06, T-07, T-08 · 2026-08-21; T-09, T-10, T-11 · 2026-08-22).
+> **Plan ilerlemesi:** PLAN-01 · 13 / 14 talimat tamamlandı (T-01, T-02, T-03, T-04, T-05, T-06, T-07, T-08 · 2026-08-21; T-09, T-10, T-11, T-12 · 2026-08-22; T-13 · 2026-08-23).
 > Ayrıntı → [`../Talimatlar/PLAN-01-temel-duzeltme-ve-tamamlama.md`](../Talimatlar/PLAN-01-temel-duzeltme-ve-tamamlama.md)
 
 **Çalışan:** Takvim yaprağı ve gün geçişi, Vikipedi entegrasyonu (TR→EN yedeği),
@@ -326,7 +340,24 @@ kaynak doğrulamasıyla eklendi (T-10). Otomatik sınıflandırma (`classifyItem
 `detectDarkItem`) artık bağımsız bir modülde (`src/lib/classification.ts`) ve
 "ilk eşleşen kazanır" yerine puanlama kullanıyor; en az %85 hedefine karşı
 altın kümede **%100** kategori doğruluğu, karanlık dosyalarda **0 yanlış
-pozitif** ölçüldü (`npm run siniflandirma`, T-11).
+pozitif** ölçüldü (`npm run siniflandirma`, T-11). Test/lint/format altyapısı
+artık var: Vitest ile 203 test, ESLint + Prettier, tek komutla hepsini
+çalıştıran `npm run kontrol`, ve GitHub Actions CI (T-12). Uygulama artık
+ölçülmüş biçimde daha hızlı: Yayın Modu ayrı bir pakete alınıp yalnızca
+düğmeye basılınca iniyor (`React.lazy`), Google Fonts isteği gerçek kullanıma
+göre daraltıldı ve render-blocking olmaktan çıkarıldı, ticker hızı öğe
+sayısına göre değişiyor, mobilde ambiyans animasyonları kapanıyor, ekran dışı
+bölümler `content-visibility:auto` ile render maliyetinden muaf tutuluyor,
+Tailwind artık proje belgelerini (`Dokumanlar/`/`Talimatlar/`) taramıyor.
+`App.tsx` 1.079 satırdan **244**'e indi — veri birleştirme mantığı
+`src/hooks/useGunVerisi.ts`'e, sunum dokuz yeni bileşen dosyasına ayrıştırıldı;
+arama artık tek bir yerde süzülüyor (üst bar sayacı ile bölümler aynı, tutarlı
+sonucu paylaşıyor). Lighthouse'ta **ilk kez** Performans, Erişilebilirlik ve
+SEO birlikte, gerçek bir üretim derlemesine karşı ölçüldü: **92 / 96 / 100**
+(T-13). **Sapma:** İlk paket boyutunda hedeflenen ≥%15 küçülme
+gerçekleşmedi — T-10'un eklediği 60 günlük içerik verisi paketin çoğunluğunu
+oluşturuyor ve tembel yüklemesi ayrı bir talimatı (PLAN-02 adayı) gerektiriyor;
+ayrıntı → `MIMARI.md` §7.
 
 **Eksik / hatalı:** Ayrıntılı liste ve kanıtlar için → [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md)
 Özet başlıklar:
@@ -392,6 +423,19 @@ pozitif** ölçüldü (`npm run siniflandirma`, T-11).
   203 test · `src/lib` %78,78 satır kapsamı · ESLint + Prettier ·
   `npm run kontrol` · CI) — ayrıntı
   [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md#u-5-kalite-güvencesi-altyapısı-hiç-yok--✅-çözüldü-t-12)
+- ~~`NAV[stats.indexOf(s)]` kırılgan bağımlılığı, ticker'ın öğe sayısından
+  bağımsız sabit hızı~~ ✅ **T-13 ile çözüldü** (m-1, m-4) — ayrıca kod bölme
+  (`BroadcastMode` artık `React.lazy`), font daraltma, `content-visibility`,
+  `App.tsx`'in 244 satıra bölünmesi ve arama tekilleştirmesi de bu talimatta;
+  Lighthouse ilk kez Performans+Erişilebilirlik+SEO birlikte ölçüldü:
+  92/96/100 — ayrıntı [`MIMARI.md`](MIMARI.md) §7, §11
+- **Bulgu (T-13 sırasında, `npm audit` ile keşfedildi, hâlâ açık):**
+  `react-router-dom`'un dolaylı bağımlılığı `react-router`'da 2 orta seviye
+  güvenlik danışma kaydı var (açık yönlendirme + SSR hydration enjeksiyonu —
+  bu proje SSR yapmadığı için ikincisi muhtemelen uygulanmıyor). Düzeltmesi
+  kırılma içeren bir `react-router-dom@7.x` yükseltmesi gerektiriyor, T-13'ün
+  kapsamı dışında bırakıldı — O-13, henüz bir talimata atanmadı →
+  [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md#o-13-react-router-domun-dolaylı-bağımlılığı-react-routerda-2-orta-seviye-güvenlik-danışma-kaydı)
 
 **Çalışma planı:** [`../Talimatlar/`](../Talimatlar/) klasöründe. İş akışı için
 → [`CALISMA-SISTEMI.md`](CALISMA-SISTEMI.md)

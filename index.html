@@ -33,10 +33,27 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Gerçekten kullanılan ağırlık/italik aralığına daraltıldı (T-13 Adım 2):
+         Fraunces yalnızca başlıklarda — düz 600/700/900, italik yalnızca 400/500
+         (leaf.tsx'teki tarih ayı metni); IBM Plex Mono 400/600/700, italik hiç
+         kullanılmıyor; IBM Plex Sans (gövde) her yerde ağırlıksız (400) kullanılıyor,
+         kalın/yarı-kalın hiç yok. Doğrulama: `grep -rohE "font-(bold|black|semibold|medium)"`. -->
+    <!-- preload + onload takası: font CSS'i render-blocking olmaktan çıkarır
+         (Lighthouse ölçümünde ~2 sn'lik render-blocking kaybı tespit edildi,
+         T-13 Doğrulama Adım 4 — Performans ≥90 hedefi için gerekliydi).
+         JS kapalıysa <noscript> yedeği normal (bloklayan) bağlantıyı yükler. -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600..900;1,9..144,400..500&family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@400&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600..900;1,9..144,400..500&family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@400&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
     <style>
       html, body { margin: 0; padding: 0; background-color: #0f131a; }
     </style>

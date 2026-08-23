@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+/* Tailwind'in otomatik kaynak taraması varsayılan olarak .gitignore'da olmayan HER
+   dosyayı tarar — proje belgeleri (Dokumanlar/, Talimatlar/) dahil. Bu klasörlerdeki
+   Markdown kod bloklarındaki metinler yardımcı sınıf adı sanılıp üretim CSS'ine
+   giriyordu (T-01'de +1,72 kB ölçüldü). Belge klasörlerini tarama dışı bırak. */
+@source not "../Dokumanlar";
+@source not "../Talimatlar";
+
 @theme {
   --font-display: "Fraunces", "Georgia", serif;
   --font-body: "IBM Plex Sans", "Segoe UI", sans-serif;
@@ -73,7 +80,14 @@ body {
   z-index: 70;
   pointer-events: none;
   opacity: 0.05;
+  content-visibility: auto;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (max-width: 768px) {
+  .noise {
+    display: none; /* mobilde görsel katkısı düşük, sürekli kompozisyon maliyeti yüksek */
+  }
 }
 
 /* ---------- paper & tear-off calendar ---------- */
@@ -124,7 +138,7 @@ body {
   }
 }
 .ticker-track {
-  animation: tickerSlide 55s linear infinite;
+  animation: tickerSlide 55s linear infinite; /* satır içi stil (öğe sayısına göre) geçersiz kılar */
   will-change: transform;
 }
 .ticker-track:hover {
@@ -172,11 +186,22 @@ body {
     transform: translate3d(2.5rem, -1.6rem, 0) rotate(2deg);
   }
 }
+.drift-slow,
+.drift-slower {
+  will-change: transform;
+}
 .drift-slow {
   animation: driftSlow 22s ease-in-out infinite;
 }
 .drift-slower {
   animation: driftSlow 34s ease-in-out infinite reverse;
+}
+
+@media (max-width: 640px) {
+  .drift-slow,
+  .drift-slower {
+    animation: none;
+  }
 }
 
 @keyframes blinkDot {
@@ -232,6 +257,14 @@ body {
 .reveal.in-view {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* ekran dışı bölümleri render/boyama maliyetinden muaf tutar (T-13 Adım 5).
+   `contain-intrinsic-size` tarayıcının hâlâ hesaplamadığı bölüm için kabaca bir
+   yükseklik ayırmasını sağlar (kayan sayfa/scroll-bar zıplaması olmasın diye). */
+.section-shell {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
 }
 
 .outline-num {

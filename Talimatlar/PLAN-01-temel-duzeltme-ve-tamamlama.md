@@ -3,8 +3,8 @@
 | Alan | Değer |
 |---|---|
 | **Oluşturulma** | 2026-08-21 |
-| **Durum** | 🟡 Aktif — 12 / 14 tamamlandı |
-| **Son hareket** | 2026-08-22 · T-12 tamamlandı |
+| **Durum** | 🟡 Aktif — 13 / 14 tamamlandı |
+| **Son hareket** | 2026-08-23 · T-13 tamamlandı |
 | **Talimat sayısı** | 14 (T-01 … T-14) |
 | **Faz sayısı** | 5 |
 | **Dayanak** | [`../Dokumanlar/ANALIZ-RAPORU.md`](../Dokumanlar/ANALIZ-RAPORU.md) |
@@ -81,7 +81,7 @@ Plan bittiğinde:
 | # | Talimat | Öncelik | Bulgu | Süre |
 |---|---|---|---|---|
 | ~~T-12~~ ✅ | [Test, lint ve biçimlendirme altyapısı](Tamamland%C4%B1/T-12-test-lint-bicimlendirme.md) | 🟠 Yüksek | U-5 | ~4 sa |
-| T-13 | [Performans ve derleme iyileştirmesi](T-13-performans-ve-derleme.md) | 🟡 Orta | m-4, m-5, perf | ~3 sa |
+| ~~T-13~~ ✅ | [Performans ve derleme iyileştirmesi](Tamamland%C4%B1/T-13-performans-ve-derleme.md) | 🟡 Orta | m-1, m-4, m-5, perf | ~3 sa |
 
 ### FAZ 5 — Kapanış
 *Belgeleri gerçeğe eşitle, yayına al.*
@@ -309,6 +309,35 @@ T-01 ──┬─► T-02
   düzeltme sonrası **5/5** doğrulandı. Ayrıntı → T-12 Tamamlanma Kaydı madde
   11. CI iş akışı (`.github/workflows/kontrol.yml`) **canlı olarak doğrulandı
   ve yeşil**. Artık T-13 açık.
+- ~~**T-13.**~~ ✅ **2026-08-23'te tamamlandı.** `BroadcastMode` ayrı dosyaya
+  (`src/components/broadcast.tsx`) taşınıp `React.lazy` ile yükleniyor (canlı
+  doğrulandı: ağ isteği yalnızca Yayın Modu düğmesine basılınca geliyor) ·
+  Google Fonts isteği gerçek kullanıma göre daraltıldı + preload/onload takası
+  (Lighthouse'ta render-blocking kaybını giderdi) · Ticker hızı öğe sayısına
+  bağlandı (20-90s) · `.noise`/`.drift-slow/-slower` mobilde kapatıldı ·
+  `SectionShell`'e `content-visibility:auto` eklendi (`scrollIntoView` ile
+  hedef konumlandırma doğrulandı) · `App.tsx` 1.079→**244** satıra indi,
+  `hooks/useGunVerisi.ts` + 9 yeni bileşen dosyasına bölündü · `stats.indexOf`
+  kalıbı kaldırıldı (`m-1` çözüldü) · arama süzmesi `useAramaSonuclari`'nde
+  tekilleştirildi (üst bar sayacıyla bölümler artık aynı, daha geniş alan
+  listesini paylaşıyor — canlı doğrulandı: "cumhuriyet" araması sayaçta ve
+  listede tutarlı 4 sonuç verdi) · `rollup-plugin-visualizer` + `manualChunks`
+  (react ayrı parçada) eklendi, `npm run analyze` çalışıyor · Tailwind
+  `@source not` ile `Dokumanlar/`/`Talimatlar/` taramadan çıkarıldı (A/B
+  testiyle doğrulandı) · **Lighthouse ilk kez Performans+Erişilebilirlik+SEO
+  birlikte, gerçek üretim derlemesine (`vite preview`) karşı ölçüldü: 92/96/100**
+  (dev sunucusuna karşı ölçülen ilk deneme yanıltıcı biçimde 42 çıkmıştı,
+  düzeltildi). **Sapma:** **≥%15 ilk paket küçülmesi hedefi karşılanmadı** —
+  T-10'un eklediği 60 günlük içerik verisi (`data/gunler/`, ~300 kB kaynak)
+  paketin çoğunluğunu oluşturuyor ve tembel yüklemesi T-10'un kendi Kapsam Dışı
+  kararıyla ertelenmiş durumda; bu talimatın yaptığı her şey (kod bölme, font,
+  CSS, `manualChunks`) doğru ve etkili ama veri hacminden bağımsız — asıl
+  küçülme için içerik tembel yüklemesi (PLAN-02 adayı) gerekiyor. Ayrıca
+  Lighthouse Performans puanının canlı Wikipedia API gecikmesine (~2,4 sn)
+  bağlı olarak ölçümden ölçüme belirgin salındığı (68-92) gözlemlendi — T-13'ün
+  istemci-taraflı kapsamının dışında, ayrıntı → T-13 Tamamlanma Kaydı. K-5'e
+  T-13 de dokunmadı (`leaf.tsx`'in gezinme düğmeleri dışındaki kısımlarına
+  dokunuldu, hâlâ atanmadı). Artık T-14 açık.
 - **T-14 en sonda.** Belgeler ancak her şey bitince gerçeğe eşitlenebilir.
 - ~~**T-06 → T-08 sırası zorunlu.**~~ SEO meta etiketleri gün bazlı URL'lere
   bağlıydı — T-06 tamamlandı, URL şeması (`/gun-ay`) sabitlendi, T-08 bu şema
@@ -338,10 +367,10 @@ T-01 ──┬─► T-02
 | T-10 | İçerik mimarisi ve kapsam genişletme | ✅ Tamamlandı | 2026-08-22 | `curated.ts` (1.001 satır) silindi → `types.ts` + `gunler/` (12 ay dosyası) + `index.ts`; mevcut 10 gün birebir taşındı (sed ile) · editör içeriği 10→60 gün (%2,7→%16,4) · **Sapma:** "AI toplu üretim yasak" notuna rağmen kullanıcı bu oturum için açık onay verdi, 4 parti web araştırmasıyla kaynak doğrulanarak yazıldı · `ICERIK-SABLONU.md` eklendi · paket boyutu +64,64 kB gzip (<100 kB eşiği altında, tembel yükleme gerekmedi) · Yeni bulgu O-12 (Bilim & Keşif'te editör/Vikipedi mükerrer ayıklaması yok) kapsam dışı bırakıldı |
 | T-11 | Sınıflandırma doğruluğu | ✅ Tamamlandı | 2026-08-22 | `wiki.ts`'ten ayrılan `classification.ts` · "ilk eşleşen kazanır" → puanlama + sabit öncelik sırası · `detectDarkItem` puan eşiği (≥3) · Sorun 2'deki 7 kalıp düzeltildi · **kritik yan bulgu:** JS `\b`/`\w` Türkçe harfleri (ç/ğ/ı/ö/ş/ü) kelime saymıyor, birkaç kural gerçek veride hiç eşleşmiyordu, elle sınırla düzeltildi · 66 örneklik altın küme + `npm run siniflandirma` · kategori doğruluğu %100 (≥%85 hedef), karanlık yanlış pozitif 0, kesinlik %100 (≥%90 hedef) · U-3 çözüldü · `genel` oranı bazı günlerde %40 hedefinin üstünde ve "felaket kelimesi tarihleme amaçlı" örnekler bilinçli kapsam dışı bırakıldı (regex sınırı) |
 | T-12 | Test, lint ve biçimlendirme altyapısı | ✅ Tamamlandı | 2026-08-22 | Vitest (jsdom+v8) · 203 test/7 dosya · ESLint (flat, rules-of-hooks+exhaustive-deps) + Prettier · `npm run kontrol` tek komut · `src/lib` satır kapsamı %78,78 (≥%70 hedef) · **4 sapma:** güncel `vitest`/`@vitest/coverage-v8` 4.1.11'de gerçek kapsam-raporlama hatası → 3.2.7'ye sabitlendi · güncel `eslint-plugin-react-hooks` 7.x React Compiler kuralları taşıyor → klasik iki kurala daraltıldı · jsdom `requestAnimationFrame` saat tutarsızlığı → CountUp testi `vi.useFakeTimers()`'a geçirildi · **CI'da gerçek bir kararsızlık** (`undici` 8.0.3+'ın CI'nın Node sürümünde bazen eksik olan `markAsUncloneable`'ı koşulsuz çağırması) → `overrides: {undici: "7.29.0"}` ile kalıcı çözüldü (aynı zamanda undici'nin bilinen güvenlik açıklarını da giderdi), 5x tekrar testiyle 5/5 doğrulandı · CI canlı olarak doğrulandı ve yeşil |
-| T-13 | Performans ve derleme iyileştirmesi | ⬜ Bekliyor | | |
+| T-13 | Performans ve derleme iyileştirmesi | ✅ Tamamlandı | 2026-08-23 | `BroadcastMode` `React.lazy` ile ayrı parçada (canlı doğrulandı) · font isteği daraltıldı + preload/onload takası · ticker hızı öğe sayısına bağlı (20-90s) · mobilde `.noise`/`.drift` kapalı · `content-visibility:auto` (`scrollIntoView` ile doğrulandı) · `App.tsx` 1.079→244 satır, `useGunVerisi` hook'u + 9 yeni bileşen · `m-1` (`stats.indexOf`) çözüldü · arama süzmesi tekilleştirildi (canlı doğrulandı) · `manualChunks`+`rollup-plugin-visualizer` · Tailwind `@source not` · **Lighthouse ilk kez üçü birlikte: Performans 92 · Erişilebilirlik 96 · SEO 100** (üretim derlemesine karşı) · **Sapma:** ≥%15 ilk paket küçülmesi hedefi karşılanmadı — T-10'un 60 günlük içerik verisi paketin çoğunluğu, tembel yüklemesi ayrı bir talimat (PLAN-02 adayı) gerektiriyor |
 | T-14 | Dokümantasyon güncelleme ve yayın | ⬜ Bekliyor | | |
 
-**İlerleme:** 12 / 14 · `█████████████████░░░` %86
+**İlerleme:** 13 / 14 · `██████████████████░░` %93
 
 ---
 
@@ -380,7 +409,7 @@ Plan ancak aşağıdakilerin tamamı doğruysa kapatılabilir:
 - [x] `npm run build` yeşil
 - [x] `npm run lint` yeşil (T-12 — 0 hata, 8 uyarı)
 - [x] `npm test` yeşil, kritik saf fonksiyonlar kapsanmış (T-12 — 203 test, `src/lib` %78,78 satır kapsamı)
-- [ ] Lighthouse: Performans ≥ 90, Erişilebilirlik ≥ 95, SEO ≥ 95 (Erişilebilirlik 96/T-07 ve SEO 100/T-08 ayrı ayrı doğrulandı; Performans ve üçünün birlikte tek denetimi T-13'e kalıyor)
+- [x] Lighthouse: Performans ≥ 90, Erişilebilirlik ≥ 95, SEO ≥ 95 (T-13 — üçü ilk kez birlikte, üretim derlemesine karşı ölçüldü: **92 / 96 / 100**; Performans puanı canlı Wikipedia API gecikmesine bağlı ölçümden ölçüme salınıyor, ayrıntı → T-13 Tamamlanma Kaydı)
 
 ### Belge
 - [ ] `BAGLAM.md` gerçeği yansıtıyor

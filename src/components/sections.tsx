@@ -38,18 +38,24 @@ export interface MergedEvent {
   page?: { title: string; excerpt?: string; url?: string };
 }
 
-export function TimelineSection({ events, query }: { events: MergedEvent[]; query: string }) {
+export function TimelineSection({
+  events,
+  matched,
+}: {
+  events: MergedEvent[];
+  /** Arama sonucuyla eşleşen alt küme — üst düzeyde (useAramaSonuclari) tek seferde
+   * hesaplanır; burada yalnızca kimlik karşılaştırması yapılır, metin taraması
+   * tekrarlanmaz (T-13 Adım 8). Arama yokken tüm `events` ile aynıdır. */
+  matched: MergedEvent[];
+}) {
   const [cat, setCat] = useState<CategoryId | "all">("all");
   const [openId, setOpenId] = useState<string | null>(null);
 
+  const matchedIds = useMemo(() => new Set(matched.map((e) => e.id)), [matched]);
+
   const visible = useMemo(
-    () =>
-      events.filter(
-        (e) =>
-          (cat === "all" || e.category === cat) &&
-          matchQuery(query, e.text, e.detail, e.page?.excerpt, formatYear(e.year))
-      ),
-    [events, cat, query]
+    () => events.filter((e) => (cat === "all" || e.category === cat) && matchedIds.has(e.id)),
+    [events, cat, matchedIds]
   );
 
   const presentCats = useMemo(() => {
@@ -258,13 +264,14 @@ const MONOGRAM_COLORS = ["#d23b2e", "#e8b04b", "#43a08f", "#6f9fd8", "#c08bc9", 
 
 export function PeopleRow({
   people,
-  query,
+  matched,
   accentLabel,
   accentColor,
   emptyText,
 }: {
   people: PersonCard[];
-  query: string;
+  /** bkz. TimelineSection'daki `matched` notu. */
+  matched: PersonCard[];
   accentLabel: string;
   accentColor: string;
   emptyText: string;
@@ -278,14 +285,11 @@ export function PeopleRow({
     return Array.from(set).sort((a, b) => a.localeCompare(b));
   }, [people]);
 
+  const matchedIds = useMemo(() => new Set(matched.map((p) => p.id)), [matched]);
+
   const visible = useMemo(
-    () =>
-      people.filter(
-        (p) =>
-          (cat === "all" || p.category === cat) &&
-          matchQuery(query, p.name, p.excerpt, formatYear(p.year), CATEGORIES[p.category].label)
-      ),
-    [people, cat, query]
+    () => people.filter((p) => (cat === "all" || p.category === cat) && matchedIds.has(p.id)),
+    [people, cat, matchedIds]
   );
 
   if (people.length === 0) {
@@ -469,7 +473,14 @@ export function PeopleRow({
 
 const CASES_LIMIT = 6;
 
-export function CasesSection({ cases, query }: { cases: CaseFile[]; query: string }) {
+export function CasesSection({
+  cases,
+  matched,
+}: {
+  cases: CaseFile[];
+  /** bkz. TimelineSection'daki `matched` notu. */
+  matched: CaseFile[];
+}) {
   const [openId, setOpenId] = useState<string | null>(cases[0]?.id ?? null);
   const [hepsi, setHepsi] = useState(false);
 
@@ -477,18 +488,9 @@ export function CasesSection({ cases, query }: { cases: CaseFile[]; query: strin
     setOpenId(cases[0]?.id ?? null);
     setHepsi(false);
   }, [cases]);
-  const visible = cases.filter((c) =>
-    matchQuery(
-      query,
-      c.title,
-      c.summary,
-      c.detail,
-      c.location,
-      formatYear(c.year),
-      c.tags.join(" "),
-      CASE_LABELS[c.type]
-    )
-  );
+
+  const matchedIds = useMemo(() => new Set(matched.map((c) => c.id)), [matched]);
+  const visible = cases.filter((c) => matchedIds.has(c.id));
   const gosterilecek = hepsi ? visible : visible.slice(0, CASES_LIMIT);
 
   if (cases.length === 0) {
@@ -613,15 +615,15 @@ const SCIENCE_LIMIT = 3;
 
 export function ScienceSection({
   items,
-  query,
+  matched,
 }: {
   items: (ScienceMilestone & { curated?: boolean })[];
-  query: string;
+  /** bkz. TimelineSection'daki `matched` notu. */
+  matched: (ScienceMilestone & { curated?: boolean })[];
 }) {
   const [hepsi, setHepsi] = useState(false);
-  const visible = items.filter((s) =>
-    matchQuery(query, s.title, s.summary, s.field, formatYear(s.year))
-  );
+  const matchedIds = useMemo(() => new Set(matched.map((s) => s.id)), [matched]);
+  const visible = items.filter((s) => matchedIds.has(s.id));
   const gosterilecek = hepsi ? visible : visible.slice(0, SCIENCE_LIMIT);
 
   useEffect(() => {
@@ -719,7 +721,7 @@ export function SectionShell({
   labelledBy?: string;
 }) {
   return (
-    <section id={id} aria-labelledby={labelledBy} className="relative scroll-mt-28">
+    <section id={id} aria-labelledby={labelledBy} className="section-shell relative scroll-mt-28">
       {children}
     </section>
   );
