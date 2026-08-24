@@ -4,7 +4,7 @@
 > **ilk okuyacağı** dosyadır. Kodu okumadan önce projenin ne olduğunu, nasıl çalıştığını
 > ve hangi kurallara uyulduğunu buradan öğren.
 >
-> **Son güncelleme:** 2026-08-24 (T-15) · **Sürüm:** 0.1.0 (geliştirme aşaması)
+> **Son güncelleme:** 2026-08-24 (T-14 · PLAN-01 kapanışı) · **Sürüm:** 0.2.0
 
 ---
 
@@ -130,6 +130,12 @@ TarihinYapragi/
 ├── vite.config.ts          ← Sunucu portu + eklentiler + vite-plugin-pwa (T-08)
 ├── tsconfig.json           ← strict TypeScript
 ├── package.json
+├── README.md               ← proje tanıtımı, hızlı başlangıç, komut tablosu (T-14)
+├── CHANGELOG.md            ← sürüm günlüğü (T-14)
+├── LICENSE                 ← MIT (T-14)
+├── eslint.config.js        ← ESLint flat config (T-12)
+├── .prettierrc / .prettierignore ← biçimlendirme sözleşmesi (T-12)
+├── .github/workflows/kontrol.yml ← CI: npm run kontrol (T-12)
 │
 ├── scripts/
 │   ├── generate-brand-assets.mjs ← favicon/PWA simgeleri + og-image.png üretir (npm run icons, T-08)
@@ -149,9 +155,13 @@ TarihinYapragi/
 │   ├── index.css           ← Tailwind v4 @theme + tüm özel animasyon/doku sınıfları + `@source not` (T-13)
 │   ├── vite-env.d.ts       ← `ImportMetaEnv` tipi (VITE_WIKI_API_BASE)
 │   │
+│   ├── test/
+│   │   └── setup.ts        ← Vitest kurulum dosyası (@testing-library/jest-dom) (T-12)
+│   │
 │   ├── data/
 │   │   ├── types.ts        ← Tip tanımları + curatedKey() (T-10)
 │   │   ├── index.ts        ← 12 ay dosyasını birleştirip CURATED'ı dışa aktarır (T-10)
+│   │   ├── data.test.ts    ← CURATED bütünlük testi (T-12)
 │   │   └── gunler/         ← 12 ay dosyası (01-ocak.ts … 12-aralik.ts), şu an 60 gün (T-10)
 │   │
 │   ├── lib/
@@ -162,7 +172,8 @@ TarihinYapragi/
 │   │   ├── date.ts         ← Artık yıl / gün sayısı / haftanın günü — saf fonksiyonlar
 │   │   ├── slug.ts         ← toDaySlug / parseDaySlug — gün ↔ URL çevrimi (T-06)
 │   │   ├── useInView.ts    ← Paylaşılan IntersectionObserver + setTimeout güvenlik ağı (T-04)
-│   │   └── wiki.ts         ← API çağrısı, önbellek, otomatik kart üretimi (sınıflandırmayı classification.ts'ten alır)
+│   │   ├── wiki.ts         ← API çağrısı, önbellek, otomatik kart üretimi (sınıflandırmayı classification.ts'ten alır)
+│   │   └── *.test.ts       ← date / slug / classification / wiki testleri — kaynak dosyanın yanında (T-12)
 │   │
 │   ├── hooks/               ← (T-13) App.tsx'ten ayrıştırılan veri/etkileşim hook'ları
 │   │   ├── useGunVerisi.ts  ← useMemo birleştirme katmanı + useAramaSonuclari (arama tekilleştirme)
@@ -176,6 +187,7 @@ TarihinYapragi/
 │       ├── talk.tsx        ← Sohbet kartları (Yayın Modu artık `broadcast.tsx`'te, T-13)
 │       ├── broadcast.tsx   ← (T-13) Yayın Modu (teleprompter) — `App.tsx`'te `React.lazy` ile yüklenir
 │       ├── ui.tsx          ← Reveal, CountUp, Modal, Toaster, copyText, tüm SVG ikonlar
+│       ├── ui.test.tsx / sections.test.ts ← bileşen testleri (T-12)
 │       ├── UstBar.tsx      ← (T-13) Üst bar: logo, arama, canlı saat, Yayın Modu düğmesi
 │       ├── AcilisBolumu.tsx← (T-13) Açılış bölümü: ambiyans yılları + takvim yaprağı + paylaş + GunOzeti + OzelGunler + ticker
 │       ├── GunOzeti.tsx    ← (T-13) Spotlight + sayaçlar + zaman aralığı + yükleniyor/hata durumları
@@ -192,13 +204,12 @@ TarihinYapragi/
 │   ├── KULLANIM-KILAVUZU.md← son kullanıcı kılavuzu
 │   ├── ANALIZ-RAPORU.md    ← mevcut durum eksik/hata analizi
 │   ├── ICERIK-SABLONU.md   ← yeni gün ekleme şablonu ve kalite ölçütleri (T-10)
-│   └── CALISMA-SISTEMI.md  ← plan → talimat → tamamlandı iş akışı
+│   ├── CALISMA-SISTEMI.md  ← plan → talimat → tamamlandı iş akışı
+│   └── gorseller/          ← belge görselleri (README ekran görüntüsü)
 │
 └── Talimatlar/             ← İŞ AKIŞI klasörü
-    ├── PLAN-01-*.md        ← aktif plan
-    ├── T-12-*.md ...       ← aktif talimatlar
-    ├── Tamamlandı/         ← biten talimatlar buraya taşınır (T-01…T-11)
-    └── Plan/               ← tamamen biten planlar buraya taşınır
+    ├── Tamamlandı/         ← biten talimatlar (T-01 … T-15, 15 dosya)
+    └── Plan/               ← tamamen biten planlar (PLAN-01)
 ```
 
 ### Nerede ne var? (hızlı referans)
@@ -262,6 +273,26 @@ npm run typecheck
 Windows'ta bunların hepsi `başlat.bat` menüsünden de yapılabilir (çift tık → 1-4 seç).
 macOS/Linux'ta aynı menü `./baslat.sh` ile gelir.
 
+**Yeşil kapı — bir talimat kapatılmadan önce bu geçmeli:**
+
+```bash
+npm run kontrol
+```
+
+`typecheck` → `lint` → `test` → `build` zincirini sırayla çalıştırır (T-12).
+Aynı komut her push'ta GitHub Actions'ta da koşar (`.github/workflows/kontrol.yml`).
+
+Tek tek çalıştırmak isterseniz:
+
+| Komut | Ne yapar |
+|---|---|
+| `npm run lint` / `npm run lint:fix` | ESLint (flat config; `rules-of-hooks` + `exhaustive-deps`) |
+| `npm run format` / `npm run format:check` | Prettier |
+| `npm test` / `npm run test:watch` / `npm run test:cov` | Vitest — 203 test, `src/lib` satır kapsamı %78,78 |
+| `npm run sitemap` | 366 adresli `public/sitemap.xml` (`build` bunu zaten çağırır) |
+| `npm run icons` | Favicon + PWA simgeleri + `og-image.png` (kaynak: `ui.tsx` → `IconLeafMark`) |
+| `npm run analyze` | `rollup-plugin-visualizer` ile paket içeriği haritası (T-13) |
+
 ```bash
 npm run siniflandirma
 ```
@@ -282,8 +313,10 @@ karşı ölçer (T-11); başlatıcı menüsünde değil, yalnızca `classificati
 
 ## 7. Mevcut Durum — Dürüst Özet
 
-> **Plan ilerlemesi:** PLAN-01 · 14 / 15 talimat tamamlandı (T-01, T-02, T-03, T-04, T-05, T-06, T-07, T-08 · 2026-08-21; T-09, T-10, T-11, T-12 · 2026-08-22; T-13 · 2026-08-23; T-15 · 2026-08-24). Kalan: T-14 (dokümantasyon ve yayın).
-> Ayrıntı → [`../Talimatlar/PLAN-01-temel-duzeltme-ve-tamamlama.md`](../Talimatlar/PLAN-01-temel-duzeltme-ve-tamamlama.md)
+> **Plan durumu:** PLAN-01 · **15 / 15 talimat tamamlandı — plan kapandı** (2026-08-24).
+> Plan dosyası artık [`../Talimatlar/Plan/PLAN-01-temel-duzeltme-ve-tamamlama.md`](../Talimatlar/Plan/PLAN-01-temel-duzeltme-ve-tamamlama.md)
+> altında; talimatların tamamı [`../Talimatlar/Tamamlandı/`](../Talimatlar/Tamamland%C4%B1/) klasöründe.
+> Sıradaki iş yeni bir analiz turu ve PLAN-02'dir — bkz. [`CALISMA-SISTEMI.md`](CALISMA-SISTEMI.md) §9.
 
 **Çalışan:** Takvim yaprağı ve gün geçişi, Vikipedi entegrasyonu (TR→EN yedeği),
 zaman tüneli + kategori filtresi, kişi kartları + modal, karanlık dosya kartları,
@@ -357,7 +390,15 @@ SEO birlikte, gerçek bir üretim derlemesine karşı ölçüldü: **92 / 96 / 1
 (T-13). **Sapma:** İlk paket boyutunda hedeflenen ≥%15 küçülme
 gerçekleşmedi — T-10'un eklediği 60 günlük içerik verisi paketin çoğunluğunu
 oluşturuyor ve tembel yüklemesi ayrı bir talimatı (PLAN-02 adayı) gerektiriyor;
-ayrıntı → `MIMARI.md` §7.
+ayrıntı → `MIMARI.md` §7. Son olarak proje belgeleri gerçeğe eşitlendi: dolu bir
+`README.md` (ekran görüntüsü, hızlı başlangıç, komut ve teknoloji tabloları),
+`CHANGELOG.md` (0.2.0 girdisi), MIT `LICENSE`, `MIMARI.md`'ye Yönlendirme ve Test
+Stratejisi bölümleri, `ANALIZ-RAPORU.md`'ye tüm bulguları tek tabloda toplayan bir
+durum özeti; sürüm 0.2.0'a yükseltildi (T-14). **Uygulama bilinçli olarak yayına
+alınmadı** — proje sahibinin kararıyla bu bir web sitesi değil, yerel çalıştırılan
+bir uygulama olarak kullanılıyor; T-14'ün "Bölüm B — Yayın" adımları bu yüzden
+uygulanmadı (paylaşılabilir adresler, sosyal medya önizlemesi ve PWA kurulumu
+teknik olarak hazır, yalnızca herkese açık bir adrese ihtiyaç duyuyorlar).
 
 **Eksik / hatalı:** Ayrıntılı liste ve kanıtlar için → [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md)
 Özet başlıklar:

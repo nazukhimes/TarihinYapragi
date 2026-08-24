@@ -3,12 +3,12 @@
 | Alan | Değer |
 |---|---|
 | **Oluşturulma** | 2026-08-21 |
-| **Durum** | 🟡 Aktif — 14 / 15 tamamlandı |
-| **Son hareket** | 2026-08-24 · T-15 tamamlandı (K-5 kapandı) |
+| **Durum** | ✅ **Tamamlandı — 15 / 15** (2026-08-24) |
+| **Son hareket** | 2026-08-24 · T-14 tamamlandı, plan kapandı |
 | **Talimat sayısı** | 15 (T-01 … T-15 · T-15 plan yürürken eklendi) |
 | **Faz sayısı** | 5 |
-| **Dayanak** | [`../Dokumanlar/ANALIZ-RAPORU.md`](../Dokumanlar/ANALIZ-RAPORU.md) |
-| **İş akışı** | [`../Dokumanlar/CALISMA-SISTEMI.md`](../Dokumanlar/CALISMA-SISTEMI.md) |
+| **Dayanak** | [`../Dokumanlar/ANALIZ-RAPORU.md`](../../Dokumanlar/ANALIZ-RAPORU.md) |
+| **İş akışı** | [`../Dokumanlar/CALISMA-SISTEMI.md`](../../Dokumanlar/CALISMA-SISTEMI.md) |
 
 ---
 
@@ -45,51 +45,51 @@ Plan bittiğinde:
 
 | # | Talimat | Öncelik | Bulgu | Süre |
 |---|---|---|---|---|
-| ~~T-01~~ ✅ | [Proje kimliği ve bağımlılık temizliği](Tamamland%C4%B1/T-01-proje-kimligi-ve-bagimlilik-temizligi.md) | 🔴 Kritik | O-1, O-2, O-3, K-4, m-2 | ~2 sa |
-| ~~T-02~~ ✅ | [Geliştirme ortamı ve başlatıcı](Tamamland%C4%B1/T-02-gelistirme-ortami-ve-baslatici.md) | 🟠 Yüksek | — | ~1,5 sa |
+| ~~T-01~~ ✅ | [Proje kimliği ve bağımlılık temizliği](../Tamamland%C4%B1/T-01-proje-kimligi-ve-bagimlilik-temizligi.md) | 🔴 Kritik | O-1, O-2, O-3, K-4, m-2 | ~2 sa |
+| ~~T-02~~ ✅ | [Geliştirme ortamı ve başlatıcı](../Tamamland%C4%B1/T-02-gelistirme-ortami-ve-baslatici.md) | 🟠 Yüksek | — | ~1,5 sa |
 
 ### FAZ 1 — Kritik Hata Düzeltmeleri
 *Kullanıcının gördüğü yanlış bilgiler. Doğruluk her şeyden önce gelir.*
 
 | # | Talimat | Öncelik | Bulgu | Süre |
 |---|---|---|---|---|
-| ~~T-03~~ ✅ | [Takvim ve tarih doğruluğu](Tamamland%C4%B1/T-03-takvim-tarih-dogrulugu.md) | 🔴 Kritik | K-1 | ~2 sa |
-| ~~T-04~~ ✅ | [Sayaç ve görünürlük hataları](Tamamland%C4%B1/T-04-sayac-ve-gorunurluk-hatalari.md) | 🔴 Kritik | K-2, K-3 | ~2,5 sa |
-| ~~T-05~~ ✅ | [Ağ katmanı sağlamlaştırma](Tamamland%C4%B1/T-05-ag-katmani-saglamlastirma.md) | 🟠 Yüksek | O-4, O-8 | ~3 sa |
-| ~~T-15~~ ✅ | [Yaprak gezinme satırının dekoratif katmanla örtülmesi](Tamamland%C4%B1/T-15-yaprak-gezinme-tiklama-hatasi.md) *(plan yürürken eklendi, 2026-08-24'te uygulandı)* | 🔴 Kritik | K-5 | ~1 sa |
+| ~~T-03~~ ✅ | [Takvim ve tarih doğruluğu](../Tamamland%C4%B1/T-03-takvim-tarih-dogrulugu.md) | 🔴 Kritik | K-1 | ~2 sa |
+| ~~T-04~~ ✅ | [Sayaç ve görünürlük hataları](../Tamamland%C4%B1/T-04-sayac-ve-gorunurluk-hatalari.md) | 🔴 Kritik | K-2, K-3 | ~2,5 sa |
+| ~~T-05~~ ✅ | [Ağ katmanı sağlamlaştırma](../Tamamland%C4%B1/T-05-ag-katmani-saglamlastirma.md) | 🟠 Yüksek | O-4, O-8 | ~3 sa |
+| ~~T-15~~ ✅ | [Yaprak gezinme satırının dekoratif katmanla örtülmesi](../Tamamland%C4%B1/T-15-yaprak-gezinme-tiklama-hatasi.md) *(plan yürürken eklendi, 2026-08-24'te uygulandı)* | 🔴 Kritik | K-5 | ~1 sa |
 
 ### FAZ 2 — Ürün Kabuğu
 *Uygulamayı "web sitesi" yapan katman: paylaşım, simge, hata dayanıklılığı, erişilebilirlik.*
 
 | # | Talimat | Öncelik | Bulgu | Süre |
 |---|---|---|---|---|
-| ~~T-06~~ ✅ | [Yönlendirme ve paylaşılabilir bağlantı](Tamamland%C4%B1/T-06-yonlendirme-ve-paylasilabilir-baglanti.md) | 🔴 Kritik | U-1 | ~4 sa |
-| ~~T-07~~ ✅ | [Erişilebilirlik ve klavye](Tamamland%C4%B1/T-07-erisilebilirlik-ve-klavye.md) | 🟠 Yüksek | O-6, O-7 | ~3,5 sa |
-| ~~T-08~~ ✅ | [Site kimliği: favicon, SEO, PWA](Tamamland%C4%B1/T-08-site-kimligi-favicon-seo-pwa.md) | 🟠 Yüksek | U-4 | ~3 sa |
-| ~~T-09~~ ✅ | [Hata sınırı ve durum ekranları](Tamamland%C4%B1/T-09-hata-siniri-ve-durum-ekranlari.md) | 🟠 Yüksek | O-5, O-9, m-3, m-6 | ~3 sa |
+| ~~T-06~~ ✅ | [Yönlendirme ve paylaşılabilir bağlantı](../Tamamland%C4%B1/T-06-yonlendirme-ve-paylasilabilir-baglanti.md) | 🔴 Kritik | U-1 | ~4 sa |
+| ~~T-07~~ ✅ | [Erişilebilirlik ve klavye](../Tamamland%C4%B1/T-07-erisilebilirlik-ve-klavye.md) | 🟠 Yüksek | O-6, O-7 | ~3,5 sa |
+| ~~T-08~~ ✅ | [Site kimliği: favicon, SEO, PWA](../Tamamland%C4%B1/T-08-site-kimligi-favicon-seo-pwa.md) | 🟠 Yüksek | U-4 | ~3 sa |
+| ~~T-09~~ ✅ | [Hata sınırı ve durum ekranları](../Tamamland%C4%B1/T-09-hata-siniri-ve-durum-ekranlari.md) | 🟠 Yüksek | O-5, O-9, m-3, m-6 | ~3 sa |
 
 ### FAZ 3 — İçerik
 *Uygulamanın asıl değeri. En uzun soluklu faz.*
 
 | # | Talimat | Öncelik | Bulgu | Süre |
 |---|---|---|---|---|
-| ~~T-10~~ ✅ | [İçerik mimarisi ve kapsam genişletme](Tamamland%C4%B1/T-10-icerik-mimarisi-ve-kapsam.md) | 🟠 Yüksek | U-2 | ~6 sa+ |
-| ~~T-11~~ ✅ | [Sınıflandırma doğruluğu](Tamamland%C4%B1/T-11-siniflandirma-dogrulugu.md) | 🟡 Orta | U-3 | ~4 sa |
+| ~~T-10~~ ✅ | [İçerik mimarisi ve kapsam genişletme](../Tamamland%C4%B1/T-10-icerik-mimarisi-ve-kapsam.md) | 🟠 Yüksek | U-2 | ~6 sa+ |
+| ~~T-11~~ ✅ | [Sınıflandırma doğruluğu](../Tamamland%C4%B1/T-11-siniflandirma-dogrulugu.md) | 🟡 Orta | U-3 | ~4 sa |
 
 ### FAZ 4 — Kalite Güvencesi
 *Buraya kadar yapılan her şeyi koruyan çit.*
 
 | # | Talimat | Öncelik | Bulgu | Süre |
 |---|---|---|---|---|
-| ~~T-12~~ ✅ | [Test, lint ve biçimlendirme altyapısı](Tamamland%C4%B1/T-12-test-lint-bicimlendirme.md) | 🟠 Yüksek | U-5 | ~4 sa |
-| ~~T-13~~ ✅ | [Performans ve derleme iyileştirmesi](Tamamland%C4%B1/T-13-performans-ve-derleme.md) | 🟡 Orta | m-1, m-4, m-5, perf | ~3 sa |
+| ~~T-12~~ ✅ | [Test, lint ve biçimlendirme altyapısı](../Tamamland%C4%B1/T-12-test-lint-bicimlendirme.md) | 🟠 Yüksek | U-5 | ~4 sa |
+| ~~T-13~~ ✅ | [Performans ve derleme iyileştirmesi](../Tamamland%C4%B1/T-13-performans-ve-derleme.md) | 🟡 Orta | m-1, m-4, m-5, perf | ~3 sa |
 
 ### FAZ 5 — Kapanış
 *Belgeleri gerçeğe eşitle, yayına al.*
 
 | # | Talimat | Öncelik | Bulgu | Süre |
 |---|---|---|---|---|
-| T-14 | [Dokümantasyon güncelleme ve yayın](T-14-dokumantasyon-ve-yayin.md) | 🟠 Yüksek | — | ~2,5 sa |
+| ~~T-14~~ ✅ | [Dokümantasyon güncelleme ve yayın](../Tamamland%C4%B1/T-14-dokumantasyon-ve-yayin.md) *(Bölüm B — Yayın, proje sahibinin kararıyla kapsam dışı)* | 🟠 Yüksek | — | ~2,5 sa |
 
 **Toplam tahmini süre:** ~45 saat
 
@@ -354,7 +354,15 @@ T-01 ──┬─► T-02
   **görünürlüğünü** de bozuyormuş — dekor opak (`#e7dcc4`) olduğu için üç düğme
   yazısı hiç okunmuyordu; ekran görüntüsüyle kanıtlandı ve `ANALIZ-RAPORU.md`'ye
   işlendi. Üç düğme de gerçek fare tıklamasıyla doğrulandı. Artık yalnızca T-14 açık.
-- **T-14 en sonda.** Belgeler ancak her şey bitince gerçeğe eşitlenebilir.
+- ~~**T-14 en sonda.**~~ ✅ **2026-08-24'te tamamlandı.** Belgeler gerçeğe eşitlendi:
+  dolu bir `README.md` (gerçek ekran görüntüsüyle), MIT `LICENSE`, `CHANGELOG.md`
+  (0.2.0), `MIMARI.md`'ye **Yönlendirme** ve **Test Stratejisi** bölümleri,
+  `ANALIZ-RAPORU.md`'ye 31 bulguyu tek sayfada toplayan **§11 Bulgu Durum Tablosu**,
+  `KULLANIM-KILAVUZU.md`'nin Sorun Giderme tablosundan çözülmüş dört "bilinen sorun"
+  satırının silinmesi, sürüm 0.2.0. **Bölüm B (Yayın) bilinçli olarak yapılmadı** —
+  proje sahibi uygulamanın bir web sitesi değil, yerel çalıştırılan normal bir
+  uygulama olduğunu belirtti; barındırma hesabı, alan adı ve arama motoru kaydı
+  bu yüzden atlandı (yayınla ilgili her yapılandırma depoda hazır duruyor).
 - ~~**T-06 → T-08 sırası zorunlu.**~~ SEO meta etiketleri gün bazlı URL'lere
   bağlıydı — T-06 tamamlandı, URL şeması (`/gun-ay`) sabitlendi, T-08 bu şema
   üzerine yazıldı ve tamamlandı.
@@ -385,9 +393,9 @@ T-01 ──┬─► T-02
 | T-12 | Test, lint ve biçimlendirme altyapısı | ✅ Tamamlandı | 2026-08-22 | Vitest (jsdom+v8) · 203 test/7 dosya · ESLint (flat, rules-of-hooks+exhaustive-deps) + Prettier · `npm run kontrol` tek komut · `src/lib` satır kapsamı %78,78 (≥%70 hedef) · **4 sapma:** güncel `vitest`/`@vitest/coverage-v8` 4.1.11'de gerçek kapsam-raporlama hatası → 3.2.7'ye sabitlendi · güncel `eslint-plugin-react-hooks` 7.x React Compiler kuralları taşıyor → klasik iki kurala daraltıldı · jsdom `requestAnimationFrame` saat tutarsızlığı → CountUp testi `vi.useFakeTimers()`'a geçirildi · **CI'da gerçek bir kararsızlık** (`undici` 8.0.3+'ın CI'nın Node sürümünde bazen eksik olan `markAsUncloneable`'ı koşulsuz çağırması) → `overrides: {undici: "7.29.0"}` ile kalıcı çözüldü (aynı zamanda undici'nin bilinen güvenlik açıklarını da giderdi), 5x tekrar testiyle 5/5 doğrulandı · CI canlı olarak doğrulandı ve yeşil |
 | T-13 | Performans ve derleme iyileştirmesi | ✅ Tamamlandı | 2026-08-23 | `BroadcastMode` `React.lazy` ile ayrı parçada (canlı doğrulandı) · font isteği daraltıldı + preload/onload takası · ticker hızı öğe sayısına bağlı (20-90s) · mobilde `.noise`/`.drift` kapalı · `content-visibility:auto` (`scrollIntoView` ile doğrulandı) · `App.tsx` 1.079→244 satır, `useGunVerisi` hook'u + 9 yeni bileşen · `m-1` (`stats.indexOf`) çözüldü · arama süzmesi tekilleştirildi (canlı doğrulandı) · `manualChunks`+`rollup-plugin-visualizer` · Tailwind `@source not` · **Lighthouse ilk kez üçü birlikte: Performans 92 · Erişilebilirlik 96 · SEO 100** (üretim derlemesine karşı) · **Sapma:** ≥%15 ilk paket küçülmesi hedefi karşılanmadı — T-10'un 60 günlük içerik verisi paketin çoğunluğu, tembel yüklemesi ayrı bir talimat (PLAN-02 adayı) gerektiriyor |
 | T-15 | Yaprak gezinme satırının dekoratif katmanla örtülmesi | ✅ Tamamlandı | 2026-08-24 | Plan yürürken eklendi · K-5 kapandı · dekor katmanları kartın kendi `relative` sarmalayıcısına alındı, `pointer-events-none` + `aria-hidden` eklendi, gezinme satırı `relative` yapıldı · **kayıtlı bulgudan farkı:** hata satırı görsel olarak da örtüyormuş (opak dekor), ekran görüntüsüyle kanıtlandı · üç düğme de gerçek fare tıklamasıyla doğrulandı · 203 test + `npm run kontrol` yeşil |
-| T-14 | Dokümantasyon güncelleme ve yayın | ⬜ Bekliyor | | |
+| T-14 | Dokümantasyon güncelleme ve yayın | ✅ Tamamlandı | 2026-08-24 | README (ekran görüntülü) · LICENSE · CHANGELOG 0.2.0 · MIMARI'ye §12 Yönlendirme + §13 Test Stratejisi · ANALIZ-RAPORU'ya §11 Bulgu Durum Tablosu (31 bulgu, 25 çözüldü, 6 devredildi) · kılavuzdan çözülmüş "bilinen sorun" satırları silindi · sürüm 0.2.0 · **Bölüm B (Yayın) proje sahibinin kararıyla kapsam dışı** |
 
-**İlerleme:** 14 / 15 · `██████████████████░░` %93
+**İlerleme:** 15 / 15 · `████████████████████` **%100** ✅
 
 ---
 
@@ -429,9 +437,13 @@ Plan ancak aşağıdakilerin tamamı doğruysa kapatılabilir:
 - [x] Lighthouse: Performans ≥ 90, Erişilebilirlik ≥ 95, SEO ≥ 95 (T-13 — üçü ilk kez birlikte, üretim derlemesine karşı ölçüldü: **92 / 96 / 100**; Performans puanı canlı Wikipedia API gecikmesine bağlı ölçümden ölçüme salınıyor, ayrıntı → T-13 Tamamlanma Kaydı)
 
 ### Belge
-- [ ] `BAGLAM.md` gerçeği yansıtıyor
-- [ ] `KULLANIM-KILAVUZU.md` yeni özellikleri içeriyor
-- [ ] `README.md` dolu
+- [x] `BAGLAM.md` gerçeği yansıtıyor (T-14 — dosya haritası gerçek `src/` ağacıyla
+      karşılaştırıldı, komut tablosu `package.json` ile birebir)
+- [x] `KULLANIM-KILAVUZU.md` yeni özellikleri içeriyor (T-14 — paylaşım, PWA kurulumu,
+      klavye kısayolları, çevrimdışı davranış; Sorun Giderme'de çözülmemiş "bilinen
+      sorun" satırı kalmadı)
+- [x] `README.md` dolu (T-14 — ekran görüntüsü, hızlı başlangıç, belge/komut/teknoloji
+      tabloları, lisans)
 
 ---
 
@@ -449,11 +461,61 @@ Plan ancak aşağıdakilerin tamamı doğruysa kapatılabilir:
 
 ## 8. Kapanış Özeti
 
-> Plan tamamlandığında doldurulacak.
+- **Kapanış tarihi:** 2026-08-24
+- **Süre:** 4 gün (2026-08-21 → 2026-08-24) · tahmin ~45 saat
+- **Tamamlanan talimatlar:** **15 / 15** — T-01…T-13 planlandığı gibi, T-15 plan
+  yürürken eklendi (K-5), T-14 kapanış.
+- **Bulgular:** 31 bulgunun **25'i çözüldü (%81)**. Kritik hataların (K-1…K-5) ve
+  ürün/içerik boşluklarının (U-1…U-5) **tamamı** kapandı. Ayrıntı →
+  [`../Dokumanlar/ANALIZ-RAPORU.md`](../../Dokumanlar/ANALIZ-RAPORU.md) §11.
 
-- **Kapanış tarihi:**
-- **Gerçekleşen süre:**
-- **Tamamlanan talimatlar:** / 14
-- **Kapsam dışı bırakılanlar ve gerekçesi:**
-- **PLAN-02'ye devredilen konular:**
-- **Öğrenilenler:**
+### Kapsam dışı bırakılanlar ve gerekçesi
+
+| Konu | Gerekçe |
+|---|---|
+| **Yayın (T-14 · Bölüm B)** | Proje sahibinin kararı: uygulama bir web sitesi değil, **yerel çalıştırılan normal bir uygulama**. Barındırma hesabı, alan adı ve arama motoru kaydı yapılmadı. Yayınla ilgili tüm yapılandırma (SPA fallback, `og:*`, manifest, service worker, 366 adresli `sitemap.xml`) depoda hazır bekliyor |
+| O-10, O-11, O-12, O-13 | Sırasıyla: tasarım dili kararı gerektiriyor · kaynak veri süzgeci gerektiriyor · şema + bileşen değişikliği gerektiriyor · kırılma içeren `react-router` 6→7 yükseltmesi gerektiriyor |
+| m-7, m-8 | Biri yeni özellik (yazdırma düzeni), diğeri kullanıcıya yansımayan ölü kod eşiği |
+| İçerik tembel yüklemesi | T-10 kendi kararıyla erteledi (paket eşiği altında kalındı); T-13'ün ≥%15 küçülme hedefinin karşılanamamasının tek nedeni bu |
+| Backend, kullanıcı hesabı, i18n, tasarım dili değişikliği | Planın kendi *Kapsam Dışı* tablosunda baştan dışarıda bırakılmıştı |
+
+### PLAN-02'ye devredilenler
+
+1. Açık altı bulgu (O-10, O-11, O-12, O-13, m-7, m-8)
+2. **Otomatik tıklama (hit-test) denetimi** — gerçek tarayıcı sürücüsüyle
+3. İçerik tembel yüklemesi (paket boyutu)
+4. Editör içeriğini 60 günden ileriye taşımak (mimari 366 güne hazır)
+5. Doğrulanamamış iki madde: service worker'ın canlı kaydı, `content-visibility` etkisi
+
+### Öğrenilenler
+
+1. **jsdom'un düzen motoru yok — bu bir test boşluğu değil, bir *sınıf* boşluğu.**
+   K-5 (birincil gün gezinmesinin hem görünmez hem tıklanamaz olması) 203 testin,
+   her talimatın "canlı doğrulama" adımının ve on ayrı oturumun içinden geçip
+   **10 talimat boyunca** ayakta kaldı; çünkü `button.click()` DOM olay akışını
+   atlar ve klavye yolu hit-testing'e hiç uğramaz. Kapsam disiplini bu bulguyu her
+   seferinde doğru biçimde "sıradaki talimata" havale etti ama hiçbir talimat onu
+   sahiplenmedi. **Ders:** hiçbir talimatın kapsamına girmeyen bir bulgu, kendi
+   talimatını hak eder — havale zinciri üçüncü kez tekrarlandığında bu bir sinyaldir.
+2. **"Güncel sürüm" varsayılan olarak güvenli değil.** Bu planda dört ayrı araç
+   zinciri arızası bugün kurulan paketlerden çıktı: `vitest` 4.1.11'in kapsam
+   raporlama hatası, `eslint-plugin-react-hooks` 7.x'in React Compiler kuralları,
+   jsdom'un `requestAnimationFrame` saat tutarsızlığı ve `undici` 8.x'in CI'ı
+   aralıklı olarak çökerten `markAsUncloneable` çağrısı. Dördü de uygulama kodunda
+   değil, bağımlılık seçiminde çözüldü.
+3. **Ölçümü doğru ortamda yapmak, ölçümün kendisi kadar önemli.** Lighthouse dev
+   sunucusuna karşı 42, üretim derlemesine karşı 92 verdi. Tarayıcı sekmesi
+   compositing yapmadığında CSS animasyonları donuyor ve alakasız öğeleri
+   "engellenmiş" gösteriyor. Her iki durumda da ilk okuma yanlıştı.
+4. **JS'in ``/`\w` sınırı Türkçe harfleri kelime karakteri saymaz.** `çığ`,
+   `şampiyon`, `öldürüldü` gibi kurallar gerçek veride **hiç** eşleşmiyordu —
+   sessizce, hatasız. Türkçe metinle çalışan her regex bu açıdan gözden geçirilmeli.
+5. **Talimatın kendi "doğrulama" tarifi de eskiyebilir.** Birden çok talimatta,
+   dosyanın önerdiği doğrulama adımı gerçek riski sınamıyordu (T-12'nin mutasyon
+   testi ölü koda dokunuyordu; T-09'un kök `ErrorBoundary` önerisi react-router
+   altında etkisizdi). Sürpriz biçimde yeşil geçen bir doğrulama, kutlanacak değil
+   kazılacak bir sonuçtur.
+6. **Belgeleri her talimatta güncel tutmak kapanışı ucuzlattı.** T-14'ün "dört
+   belgeyi tamamen yeniden yaz" varsayımı gerçekleşmedi; belgeler zaten büyük
+   ölçüde günceldi, yalnızca gerçekten eskimiş kısımlar ve iki eksik bölüm
+   kaldı. Kapanış talimatı bu sayede yarım günlük bir iş oldu.

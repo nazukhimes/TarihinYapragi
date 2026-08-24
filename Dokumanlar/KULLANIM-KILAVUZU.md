@@ -2,7 +2,7 @@
 
 > Uygulamayı **kullanacak** kişiler için. Kod bilgisi gerekmez.
 >
-> **Sürüm:** 0.1.0 · **Son güncelleme:** 2026-08-23
+> **Sürüm:** 0.2.0 · **Son güncelleme:** 2026-08-24
 
 ---
 
@@ -145,7 +145,7 @@ yanında **"◆ dosya açık"** yazar.
 | **Bugüne dön** | Başka bir gündeyken ortadaki `BUGÜNE DÖN` düğmesi. Bugündeyseniz yerine yanıp sönen **● Bugün** yazar. |
 | **Ay takvimi** | Yaprağın üzerindeki `AĞUSTOS TAKVİMİ ▾` düğmesi → tam ay ızgarası açılır. Ok tuşlarıyla ay değiştirin, bir güne tıklayın. |
 | **Özel dosyalı gün** | Kısayol düğmelerinden birine tıklayın; sayfa yukarı kayar. |
-| **Adres çubuğu** | Her günün kendi adresi var: `siteadresi.com/21-agustos`. Adresi doğrudan yazıp Enter'a basabilir, yer imine ekleyebilir veya bir bağlantı olarak paylaşabilirsiniz. |
+| **Adres çubuğu** | Her günün kendi adresi var: `localhost:3000/21-agustos`. Adresi doğrudan yazıp Enter'a basabilir, yer imine ekleyebilir veya bir bağlantı olarak paylaşabilirsiniz. (Uygulama internette yayınlanırsa aynı adres `siteadresi.com/21-agustos` biçiminde çalışır.) |
 
 > **Ay takviminde:** Seçili gün **kırmızı**, bugün **altın çerçeveli**tir.
 > Hafta Pazartesi'den başlar.
@@ -427,16 +427,14 @@ Evet, arayüz mobil uyumludur. Kart şeritleri dokunmatik kaydırılır.
 | Sayfa açılıyor ama boş | Tarayıcı çok eski | Güncel Chrome, Edge veya Firefox kullanın |
 | *"İnternet bağlantısı yok." / "Arşiv şu an çok yoğun." / "Arşiv sunucusu yanıt vermiyor."* | Vikipedi'ye erişilemiyor, sorunun türü ekranda ayrı başlıkla belirtiliyor | Varsa `YENİDEN DENE`'ye basın; yoksa (ör. o gün için kayıt yok) internet sorunu değildir |
 | Bir bölüm "Arşivde bir sorun çıktı / Yaprak yırtıldı" kartı gösteriyor | O bölümde beklenmeyen bir hata oldu (T-09) | Diğer bölümler etkilenmez, normal kullanmaya devam edebilirsiniz. Düzelmezse `SAYFAYI YENİLE`, olmazsa `ÖNBELLEĞİ TEMİZLE`'ye basın |
-| Bölümler görünmüyor, sayfa boş kalıyor | Sekme arka planda açıldı | *(K-3 · T-04 ile düzeltildi — sekme arka planda bile içerik en geç ~1,2 saniyede kendiliğinden görünür olur.)* Eskisi gibi sayfayı yenilemenize gerek yok |
-| Sayaçlar gün değişince güncellenmiyor | Bilinen hataydı | *(K-2 · T-04 ile düzeltildi — sayaçlar artık her gün değişiminde önceki değerden yeni değere doğru güncelleniyor.)* |
-| Kod değişikliği tarayıcıya yansımıyor | HMR bağlantısı koptu | *(K-4 · T-01 ile düzeltildi — hangi portta çalışırsanız çalışın HMR bağlanır.)* Yine de olursa sayfayı yenileyin |
-| "Yılın X. günü" bir fazla görünüyordu | Bilinen hataydı | *(K-1 · T-03 ile düzeltildi — 2026-08-21'den itibaren gün sayısı her yıl için doğru.)* |
-| "Önceki gün" / "Sonraki gün" / "Bugüne dön" düğmeleri tıklamaya yanıt vermiyordu | Bilinen görsel katman hatasıydı | *(K-5 · T-15 ile düzeltildi — düğmeler artık hem görünüyor hem de fare/dokunmatikle çalışıyor.)* Klavyeden `←` `→` `T` tuşları da çalışmaya devam ediyor — bkz. [Klavye Kısayolları](#7-klavye-kısayolları) |
+| Kod değişikliği tarayıcıya yansımıyor | Geliştirme sunucusunun canlı yenileme bağlantısı koptu | Sayfayı yenileyin. (Bu yalnızca `npm run dev` ile çalışırken görülür.) |
 | Kopyala çalışmıyor | Tarayıcı pano izni vermedi | Adres çubuğundaki izin simgesinden panoya erişime izin verin |
 | Port 3000 meşgul | Başka uygulama kullanıyor | Vite kendiliğinden bir sonraki boş porta geçer (3001, 3002…) ve adresi konsola yazar. Belirli bir port isterseniz: `npm run dev -- --port 3005` |
 
-> Buradaki **"bilinen sorun"** kodları ([`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md))
-> düzeltme planına alınmıştır — [`../Talimatlar/`](../Talimatlar/) klasörüne bakın.
+> **Bu tabloda artık çözülmemiş bir "bilinen sorun" yok.** PLAN-01 kapsamında
+> raporlanan beş kritik hatanın (K-1 … K-5) hepsi düzeltildi; kayıtları
+> [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md) ve
+> [`../Talimatlar/Tamamlandı/`](../Talimatlar/Tamamland%C4%B1/) altında durur.
 
 ---
 

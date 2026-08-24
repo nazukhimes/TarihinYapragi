@@ -7,7 +7,7 @@
 | **Tahmini süre** | ~2,5 saat |
 | **Bağımlılık** | **T-01 … T-13'ün tamamı** |
 | **İlgili bulgu** | — (kapanış) |
-| **Durum** | ⬜ Bekliyor |
+| **Durum** | ✅ Tamamlandı — 2026-08-24 (Bölüm B kapsam dışı bırakıldı) |
 
 > ⛔ **Bu talimat en sonda yapılır.** Belgeler ancak her şey bittiğinde gerçeğe
 > eşitlenebilir. Erken yapılırsa yanlış bilgi üretir.
@@ -296,32 +296,37 @@ git tag -a v0.2.0 -m "PLAN-01 tamamlandı — ilk yayın sürümü"
 
 ### Belgeler
 
-- [ ] `README.md` dolu; ekran görüntüsü, hızlı başlangıç, belge bağlantıları var
-- [ ] `BAGLAM.md` güncel — dosya haritası gerçek yapıyla birebir
-- [ ] `MIMARI.md` güncel — Yönlendirme ve Test Stratejisi bölümleri eklendi
-- [ ] `KULLANIM-KILAVUZU.md` güncel — Sorun Giderme'de çözülen "bilinen sorun" satırı **kalmadı**
-- [ ] `ANALIZ-RAPORU.md` — her bulgu ✅ / ⏭️ işaretli, özet tablo var
-- [ ] `LICENSE` var
-- [ ] `CHANGELOG.md` var, `0.2.0` girdisi dolu
-- [ ] `package.json` sürümü `0.2.0`
+- [x] `README.md` dolu; ekran görüntüsü, hızlı başlangıç, belge bağlantıları var
+- [x] `BAGLAM.md` güncel — dosya haritası gerçek yapıyla birebir
+- [x] `MIMARI.md` güncel — Yönlendirme ve Test Stratejisi bölümleri eklendi
+- [x] `KULLANIM-KILAVUZU.md` güncel — Sorun Giderme'de çözülen "bilinen sorun" satırı **kalmadı**
+- [x] `ANALIZ-RAPORU.md` — her bulgu ✅ / ⏭️ işaretli, özet tablo var
+- [x] `LICENSE` var
+- [x] `CHANGELOG.md` var, `0.2.0` girdisi dolu
+- [x] `package.json` sürümü `0.2.0`
 
-### Yayın
+### Yayın — 🚫 **KAPSAM DIŞI BIRAKILDI (proje sahibinin kararı, 2026-08-24)**
 
-- [ ] Uygulama gerçek bir adreste çalışıyor
-- [ ] Gün adresleri doğrudan açılıyor (SPA fallback)
-- [ ] Sosyal medya önizlemesi çıkıyor
-- [ ] PWA kurulabiliyor
-- [ ] `sitemap.xml` yayında, 366 adres
-- [ ] Search Console'a gönderildi
-- [ ] Lighthouse (gerçek adres): Perf ≥ 90, Erişilebilirlik ≥ 95, SEO ≥ 95
+> Proje sahibi, uygulamanın bir web sitesi olarak yayınlanmayacağını, **yerel
+> çalıştırılan normal bir uygulama** olarak kullanılacağını bildirdi. Barındırma
+> hesabı, alan adı ve arama motoru kaydı bu yüzden yapılmadı. Aşağıdaki maddeler
+> teknik olarak **hazır** ama herkese açık bir adres olmadan doğrulanamaz:
+
+- [—] Uygulama gerçek bir adreste çalışıyor — *yayınlanmadı*
+- [x] Gün adresleri doğrudan açılıyor (SPA fallback) — *yerelde doğrulandı; `_redirects` + `vercel.json` hazır*
+- [—] Sosyal medya önizlemesi çıkıyor — *`og:*`/`twitter:*` etiketleri hazır, herkese açık adres gerekiyor*
+- [—] PWA kurulabiliyor — *service worker üretiliyor (17 girdi), gerçek tarayıcıda kayıt doğrulanmadı*
+- [x] `sitemap.xml` 366 adres — *`npm run build` her derlemede üretiyor*
+- [—] Search Console'a gönderildi — *yayın olmadığı için geçersiz*
+- [x] Lighthouse: Perf ≥ 90, Erişilebilirlik ≥ 95, SEO ≥ 95 — *T-13'te üretim derlemesine karşı 92 / 96 / 100*
 
 ### Plan kapanışı
 
-- [ ] `Talimatlar/` kökünde `T-*.md` **kalmadı**
-- [ ] `Talimatlar/Tamamlandı/` içinde **14** talimat var
-- [ ] `PLAN-01` ilerleme tablosu 14/14, Kapanış Özeti dolu
-- [ ] `PLAN-01` → `Talimatlar/Plan/` klasörüne taşındı
-- [ ] `v0.2.0` etiketi atıldı
+- [x] `Talimatlar/` kökünde `T-*.md` **kalmadı**
+- [x] `Talimatlar/Tamamlandı/` içinde **15** talimat var *(plan yürürken T-15 eklendi)*
+- [x] `PLAN-01` ilerleme tablosu **15/15**, Kapanış Özeti dolu
+- [x] `PLAN-01` → `Talimatlar/Plan/` klasörüne taşındı
+- [x] `v0.2.0` etiketi atıldı
 
 ---
 
@@ -391,10 +396,78 @@ ls Talimatlar/Tamamlandı/ | wc -l  # → 14
 
 ## 📝 Tamamlanma Kaydı
 
-- **Tamamlanma tarihi:**
-- **Yayın adresi:**
-- **Barındırma:**
-- **Lighthouse (gerçek adres):** Perf __ · Erişilebilirlik __ · SEO __ · En iyi uygulamalar __
-- **Sürüm etiketi:**
-- **PLAN-02'ye devredilen konular:**
+- **Tamamlanma tarihi:** 2026-08-24
+- **Yayın adresi:** — (yayına alınmadı, aşağıdaki *Sapmalar* maddesi 1)
+- **Barındırma:** — (aynı gerekçe)
+- **Lighthouse (gerçek adres):** — · *yerel üretim derlemesinde (T-13):
+  Performans 92 · Erişilebilirlik 96 · SEO 100*
+- **Sürüm etiketi:** `v0.2.0`
+- **PLAN-02'ye devredilen konular:** O-10, O-11, O-12, O-13, m-7, m-8 + otomatik
+  tıklama (hit-test) denetimi + içerik tembel yüklemesi + kalan 306 günün editör
+  içeriği. Gerekçeleriyle birlikte → `ANALIZ-RAPORU.md` §11.
+
+- **Değişen dosyalar:**
+
+  | Dosya | İşlem |
+  |---|---|
+  | `README.md` | Baştan yazıldı — ekran görüntüsü, "Ne yapar", hızlı başlangıç (Windows/macOS/Linux/elle), belge tablosu, 13 satırlık komut tablosu, teknoloji tablosu, kaynaklar, lisans |
+  | `LICENSE` | Yeni — MIT, `Copyright (c) 2026 Tarih Yaprağı` |
+  | `CHANGELOG.md` | Yeni — `0.2.0` girdisi (Eklenen / Düzeltilen / Kaldırılan / Bilinen sınırlar) + geriye dönük `0.1.0` |
+  | `package.json` | Sürüm `0.1.0` → `0.2.0` |
+  | `Dokumanlar/gorseller/ekran-goruntusu.png` | Yeni — README görseli, gerçek uygulamadan (29 Ekim, başsız Chrome, 1280×745) |
+  | `Dokumanlar/BAGLAM.md` | §4 dosya haritasına test dosyaları, `src/test/setup.ts`, README/CHANGELOG/LICENSE/eslint/prettier/CI ve `gorseller/` eklendi; `Talimatlar/` ağacı gerçek duruma çekildi; §6'ya `kontrol`/`lint`/`format`/`test`/`sitemap`/`icons`/`analyze` tablosu eklendi; §7 plan durumu 15/15 + T-14 cümlesi + yayın kararı; sürüm 0.2.0 |
+  | `Dokumanlar/MIMARI.md` | §1 şemasına `ErrorBoundary`/`errorElement` zinciri ve neden kök sarmalayıcının yetmediği notu; **§12 Yönlendirme** (URL şeması, slug mantığı, 29 Şubat kararı, `errorElement`, SPA fallback) ve **§13 Test Stratejisi** (neyi/neden test ediyoruz tablosu, yapılandırma, `pool: forks` + `undici` override gerekçesi, jsdom'un iki tuzağı, yeşil kapı) eklendi |
+  | `Dokumanlar/KULLANIM-KILAVUZU.md` | §9'daki dört çözülmüş "bilinen sorun" satırı **silindi** (K-1, K-2, K-3, K-5); K-4 satırı kullanıcı diline çevrildi; tablo altındaki not "çözülmemiş bilinen sorun kalmadı"a güncellendi; adres örneği `localhost:3000` olarak düzeltildi; sürüm 0.2.0 |
+  | `Dokumanlar/ANALIZ-RAPORU.md` | **§11 Bulgu Durum Tablosu** eklendi (31 bulgu, dört kategori, toplam tablosu, devredilenlerin tek tek gerekçesi, doğrulanamamış iki madde); O-10…O-13 başlıkları `⏭️ PLAN-02'YE DEVREDİLDİ` işaretlendi; §0 sağlık tablosu ve derleme rakamları güncellendi; kapanış hükmü eklendi |
+  | `Talimatlar/PLAN-01-*.md` | 15/15, başarı ölçütlerinin tamamı işaretli, Kapanış Özeti dolduruldu, `Plan/` klasörüne taşındı |
+  | `Talimatlar/T-14-*.md` | Bu dosya — kriterler işaretlendi, Bölüm B kapsam dışı olarak kayda geçirildi, `Tamamlandı/`ya taşındı |
+
 - **Sapmalar / notlar:**
+
+  1. **Bölüm B (Yayın) bütünüyle yapılmadı — proje sahibinin açık kararı.** Talimat,
+     uygulamanın herkese açık bir adrese alınmasını, sosyal medya önizlemesinin ve
+     PWA kurulumunun gerçek adreste doğrulanmasını, `sitemap.xml`'in Search
+     Console'a gönderilmesini öngörüyordu. Sorulduğunda proje sahibi bunun bir web
+     sitesi değil, **yerel çalıştırılan normal bir uygulama** olarak kullanılacağını
+     belirtti. Barındırma hesabı açmak, alan adı almak ve arama motoruna kayıt
+     yaptırmak bu yüzden yapılmadı. Yayınla ilgili her şey (SPA fallback
+     yapılandırmaları, `og:*`/`twitter:*`, manifest, service worker, 366 adresli
+     `sitemap.xml`) depoda **hazır durumda** duruyor; gelecekte bir adres
+     seçilirse yalnızca mutlak URL'lerin doldurulması gerekir
+     (`index.html` `og:image`/`og:url`, `public/robots.txt` `Sitemap:`,
+     `scripts/sitemap.mjs` `SITE_URL`). Talimatın Adım B2'si de bu yüzden
+     uygulanmadı — doldurulacak bir alan adı yok.
+  2. **Talimatın öngördüğü belge işlerinin bir kısmı zaten yapılmıştı.** T-04'ten
+     T-15'e kadar her talimat kendi Tamamlanma Kaydı'nda `BAGLAM.md`/`MIMARI.md`/
+     `KULLANIM-KILAVUZU.md`'yi güncel tutmuştu; bu yüzden A2/A3/A4'ün "tamamen
+     yeniden yaz" maddeleri yerine **gerçekten eskimiş olan** kısımlar düzeltildi
+     (dosya haritasındaki eksik test dosyaları, `Talimatlar/` ağacı, komut listesi,
+     çözülmüş "bilinen sorun" satırları). A3'ün istediği iki **yeni** bölüm
+     (Yönlendirme, Test Stratejisi) gerçekten eksikti ve sıfırdan yazıldı.
+  3. **Kabul kriterlerindeki sayılar 14 değil 15.** Talimat yazıldığında plan 14
+     talimattı; K-5 için plan yürürken T-15 eklendi (bkz. T-15 Tamamlanma Kaydı).
+     `Tamamlandı/` klasöründe 15 dosya var, ilerleme tablosu 15/15.
+  4. **Doğrulama adımı 3 ("yeni geliştirici testi") tam olarak uygulanmadı** —
+     depo temiz bir klasöre klonlanıp README yalnızca onun adımlarıyla
+     çalıştırılmadı. README'deki komutlar mevcut çalışma kopyasında tek tek
+     doğrulandı (`npm run dev` ayakta, `npm run kontrol` yeşil, betik tablosu
+     `package.json` ile birebir karşılaştırıldı) ama bu, gerçekten temiz bir
+     klonda `npm install`'un sorunsuz geçtiğini kanıtlamaz.
+  5. **Belge bağlantıları makine ile denetlendi:** tüm `.md` dosyalarındaki göreli
+     bağlantılar yüzde kodlaması çözülerek kontrol edildi, kırık bağlantı yok.
+
+- **Sonraki talimata not:**
+
+  PLAN-01 kapandı; sıradaki adım `CALISMA-SISTEMI.md` §9'a göre **yeni bir analiz
+  turu ve PLAN-02**'dir. PLAN-02'ye hazır bekleyen konular:
+
+  1. Açık bulgular: O-10 (kontrast), O-11 (`holidays` çöp kayıt), O-12 (Bilim &
+     Keşif mükerrer), O-13 (`react-router` 6→7 güvenlik yükseltmesi), m-7
+     (yazdırma stili), m-8 (ölü eşik).
+  2. **Otomatik tıklama (hit-test) denetimi** — K-5'in 10 talimat boyunca
+     gözden kaçmasının kök nedeni; gerçek bir tarayıcı sürücüsü gerektirir.
+  3. **İçerik tembel yüklemesi** — T-13'ün ≥%15 paket küçülme hedefinin
+     karşılanamamasının tek nedeni.
+  4. **Editör içeriğini 60 günden ileriye taşımak** — mimari 366 güne hazır.
+  5. Doğrulanamamış iki madde (service worker canlı kaydı, `content-visibility`
+     etkisi) gerçek bir tarayıcıda kontrol edilmeli.

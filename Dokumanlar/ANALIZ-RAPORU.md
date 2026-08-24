@@ -30,17 +30,26 @@
 | Ölçüt | Durum | Not |
 |---|---|---|
 | `npm run typecheck` | ✅ Geçiyor | Hata yok |
-| `npm run build` | ✅ Geçiyor | 2.90 s · 253 kB JS (82 kB gzip) · 51 kB CSS |
-| Uygulama açılıyor mu | ✅ Evet | Veri geliyor, 23 kayıt listelendi |
+| `npm run build` | ✅ Geçiyor | react 206 kB + uygulama 331 kB + yayın modu 4,7 kB · gzip toplam ~177 kB · 54,7 kB CSS (T-13 sonrası, 3 parça) |
+| Uygulama açılıyor mu | ✅ Evet | Veri geliyor · `npm run kontrol` (typecheck+lint+203 test+build) yeşil |
 | Kritik hata | ✅ 5 adet · **5 çözüldü** | K-1…K-5 · K-1 ✅ T-03, K-2 ✅ T-04, K-3 ✅ T-04, K-4 ✅ T-01, K-5 ✅ T-15 |
-| Orta seviye eksik | ⚠️ 13 adet · **9 çözüldü** | O-1…O-13 · O-1, O-2, O-3 ✅ T-01 · O-4, O-8 ✅ T-05 · O-5, O-9 ✅ T-09 · O-6, O-7 ✅ T-07 · O-10 T-07 sırasında keşfedildi, henüz atanmadı · O-11 T-09 sırasında keşfedildi, henüz atanmadı · O-12 T-10 sırasında keşfedildi, henüz atanmadı · O-13 T-13 sırasında keşfedildi (bağımlılık güvenliği), henüz atanmadı |
-| Ürün/içerik boşluğu | ⚠️ 5 adet · **5 çözüldü** | U-1…U-5 · U-1 ✅ T-06 · U-4 ✅ T-08 · U-2 ✅ T-10 · U-3 ✅ T-11 · U-5 ✅ T-12 |
-| Küçük not | ⚠️ 8 adet · **6 çözüldü** | m-1…m-8 · m-2 ✅ T-01 · m-3, m-6 ✅ T-09 · m-5 ✅ T-07 · m-1, m-4 ✅ T-13 · m-8 T-12 sırasında keşfedildi, henüz atanmadı (zararsız) |
+| Orta seviye eksik | ⚠️ 13 adet · **9 çözüldü** | O-1, O-2, O-3 ✅ T-01 · O-4, O-8 ✅ T-05 · O-5, O-9 ✅ T-09 · O-6, O-7 ✅ T-07 · **O-10, O-11, O-12, O-13 ⏭️ PLAN-02'ye devredildi** (gerekçeler → §11) |
+| Ürün/içerik boşluğu | ✅ 5 adet · **5 çözüldü** | U-1 ✅ T-06 · U-4 ✅ T-08 · U-2 ✅ T-10 · U-3 ✅ T-11 · U-5 ✅ T-12 |
+| Küçük not | ⚠️ 8 adet · **6 çözüldü** | m-2 ✅ T-01 · m-3, m-6 ✅ T-09 · m-5 ✅ T-07 · m-1, m-4 ✅ T-13 · **m-7, m-8 ⏭️ PLAN-02** (ikisi de zararsız) |
 
-**Kısa hüküm:** Uygulama sağlam bir iskelete ve gerçekten güzel bir tasarım diline sahip.
-Kod temiz, tipli ve tutarlı. Sorun "bozuk olması" değil, **yarım kalmış olması**:
-üretime çıkmak için gereken kabuk (paylaşım, SEO, PWA, hata sınırı, test) ve
-içerik hacmi henüz yok.
+> 📋 **Tüm bulguların tek sayfalık durum özeti için → [§11 Bulgu Durum Tablosu](#11-bulgu-durum-tablosu--plan-01-kapanışı-2026-08-24)**
+
+**İlk hüküm (2026-08-21, PLAN-01 öncesi):** Uygulama sağlam bir iskelete ve gerçekten
+güzel bir tasarım diline sahip. Kod temiz, tipli ve tutarlı. Sorun "bozuk olması"
+değil, **yarım kalmış olması**: üretime çıkmak için gereken kabuk (paylaşım, SEO,
+PWA, hata sınırı, test) ve içerik hacmi henüz yok.
+
+**Kapanış hükmü (2026-08-24, PLAN-01 sonrası):** O kabuk artık var. 31 bulgunun
+25'i (%81) çözüldü; **kritik hataların ve ürün/içerik boşluklarının tamamı kapandı.**
+Kalan 6 bulgunun hiçbiri kullanıcıya yanlış bilgi göstermiyor — dördü ayrı bir
+karar veya kırılma içeren bir yükseltme gerektirdiği için, ikisi zararsız olduğu
+için PLAN-02'ye devredildi. Uygulama bilinçli olarak yayına alınmadı; yerel
+çalıştırılan bir uygulama olarak kullanılıyor.
 
 ---
 
@@ -869,7 +878,7 @@ ikisi de tek satırlık, sıfır görsel etkili düzeltmelerle aynı oturumda gi
 | 1 | Üst bardaki "Yayın Modu" düğmesinin metni `hidden md:inline` — dar viewport'ta düğmenin tek içeriği `aria-hidden` bir SVG ikon, erişilebilir adı yok | `App.tsx` | `aria-label="Yayın Modu"` eklendi |
 | 2 | `PeopleRow` kart başlığı `<h4>`, `<h2>` (bölüm başlığı) altında doğrudan geliyor — `h3` atlanıyor | `sections.tsx` | `<h4>` → `<h3>` (kişi modalındaki başlık zaten `<h3>`, çakışma yok) |
 
-### O-10 · `text-brand` koyu zeminde metin/simge rengi olarak yetersiz kontrast
+### O-10 · `text-brand` koyu zeminde metin/simge rengi olarak yetersiz kontrast — ⏭️ PLAN-02'YE DEVREDİLDİ
 
 **Dosyalar:** `src/components/leaf.tsx:267` (`Ticker` başlığı), `src/components/sections.tsx` (`CasesSection` dosya türü rozeti ve "Dosyayı aç/kapat" düğmesi)
 
@@ -911,7 +920,7 @@ mümkün — nihai karar plan sahibine aittir.
 > ekranları) talimatının canlı doğrulaması sırasında keşfedilmiş, ilk analizde
 > yakalanmamış bir bulgudur.
 
-### O-11 · `holidays` alanında Vikipedi şablon artığı çöp kayıtlar
+### O-11 · `holidays` alanında Vikipedi şablon artığı çöp kayıtlar — ⏭️ PLAN-02'YE DEVREDİLDİ
 
 **Dosya:** `src/lib/wiki.ts:252-255` (`holidays` üretimi — dokunulmadı, yalnızca kanıtlandı)
 
@@ -965,7 +974,7 @@ talimat da mümkün — nihai karar plan sahibine aittir.
 > genişletme) talimatının canlı doğrulaması sırasında keşfedilmiş, ilk analizde
 > yakalanmamış bir bulgudur.
 
-### O-12 · `allScience` (Bilim & Keşif), editör kaydını Vikipedi'nin aynı olayına karşı ayıklamıyor
+### O-12 · `allScience` (Bilim & Keşif), editör kaydını Vikipedi'nin aynı olayına karşı ayıklamıyor — ⏭️ PLAN-02'YE DEVREDİLDİ
 
 **Dosya:** `src/App.tsx:261-277` (`allScience` useMemo'su)
 
@@ -1024,7 +1033,7 @@ nihai karar plan sahibine aittir.
 > iyileştirmesi) talimatı sırasında, `npm audit` çalıştırılırken keşfedilmiş,
 > kod mantığı değil **bağımlılık güvenliği** ile ilgili bir bulgudur.
 
-### O-13 · `react-router-dom`'un dolaylı bağımlılığı `react-router`'da 2 orta seviye güvenlik danışma kaydı
+### O-13 · `react-router-dom`'un dolaylı bağımlılığı `react-router`'da 2 orta seviye güvenlik danışma kaydı — ⏭️ PLAN-02'YE DEVREDİLDİ
 
 **Dosya:** `package.json` (dolaylı: `react-router-dom` → `react-router`)
 
@@ -1061,3 +1070,93 @@ doğrulayarak.
 **Önerilen talimat:** Henüz hiçbir talimata atanmadı. PLAN-01'in kapsamı
 dışında yeni, küçük bir talimat (ör. T-15) ya da PLAN-02'nin bakım
 kapsamına alınabilir — nihai karar plan sahibine aittir.
+
+---
+
+## 11. Bulgu Durum Tablosu — PLAN-01 Kapanışı (2026-08-24)
+
+> Bu tablo, raporun tamamındaki bulguların tek sayfalık özetidir. Ayrıntı ve kanıt
+> için ilgili bulgunun kendi bölümüne bakın; düzeltmenin nasıl yapıldığı için
+> talimatın Tamamlanma Kaydı'na → [`../Talimatlar/Tamamlandı/`](../Talimatlar/Tamamland%C4%B1/).
+
+### Kritik hatalar — 5 / 5 çözüldü
+
+| Kod | Bulgu | Durum | Talimat |
+|---|---|---|---|
+| K-1 | Takvimde "Yılın X. günü" artık yıl hatası | ✅ | T-03 |
+| K-2 | Gün değişince istatistik sayaçları güncellenmiyor | ✅ | T-04 |
+| K-3 | Sayfanın tamamı `IntersectionObserver`'a bağımlı, yedeği yok | ✅ | T-04 |
+| K-4 | HMR WebSocket'i sabit 3000 portuna bağlı | ✅ | T-01 |
+| K-5 | Gün gezinme düğmeleri dekoratif katman yüzünden görünmüyor ve tıklanamıyor | ✅ | T-15 |
+
+### Orta seviye eksikler — 9 / 13 çözüldü
+
+| Kod | Bulgu | Durum | Talimat |
+|---|---|---|---|
+| O-1 | Kullanılmayan 10 bağımlılık | ✅ | T-01 |
+| O-2 | `package.json` kimliği iskelet şablonundan kalma | ✅ | T-01 |
+| O-3 | `.gitignore` yanlış çatıya ait | ✅ | T-01 |
+| O-4 | Ağ katmanında iptal (abort) yok | ✅ | T-05 |
+| O-5 | Hata sınırı (`ErrorBoundary`) yok | ✅ | T-09 |
+| O-6 | Erişilebilirlik boşlukları | ✅ | T-07 |
+| O-7 | Klavye kısayolları yalnızca Yayın Modu'nda | ✅ | T-07 |
+| O-8 | Önbellek stratejisi yarım | ✅ | T-05 |
+| O-9 | `holidays` verisi çekiliyor ama kullanılmıyor | ✅ | T-09 |
+| O-10 | `text-brand` koyu zeminde yetersiz kontrast (3 yer) | ⏭️ PLAN-02 | — |
+| O-11 | `holidays` alanında Vikipedi şablon artığı çöp kayıtlar | ⏭️ PLAN-02 | — |
+| O-12 | Bilim & Keşif, editör kaydını Vikipedi'nin aynı olayına karşı ayıklamıyor | ⏭️ PLAN-02 | — |
+| O-13 | `react-router`'da 2 orta seviye güvenlik danışma kaydı | ⏭️ PLAN-02 | — |
+
+### Ürün / içerik boşlukları — 5 / 5 çözüldü
+
+| Kod | Bulgu | Durum | Talimat |
+|---|---|---|---|
+| U-1 | Paylaşılabilir bağlantı yok | ✅ | T-06 |
+| U-2 | Editör içeriği 366 günün 10'unda (%2,7) | ✅ | T-10 (60 gün · %16,4) |
+| U-3 | Otomatik sınıflandırma kalitesi ölçülmemiş | ✅ | T-11 |
+| U-4 | Site kabuğu eksik: favicon, PWA, SEO, paylaşım kartı | ✅ | T-08 |
+| U-5 | Kalite güvencesi altyapısı hiç yok | ✅ | T-12 |
+
+### Küçük notlar — 6 / 8 çözüldü
+
+| Kod | Bulgu | Durum | Talimat |
+|---|---|---|---|
+| m-1 | `NAV[stats.indexOf(s)]` — dizi sırasına gizli bağımlılık | ✅ | T-13 |
+| m-2 | `vite.config.js` — proje TS olduğu hâlde config JS | ✅ | T-01 |
+| m-3 | Karanlık dosyalar `slice(0, 6)` ile sessizce kesiliyor | ✅ | T-09 |
+| m-4 | Ticker hızı sabit `55s` | ✅ | T-13 |
+| m-5 | Kişi kartı görsellerinde `width`/`height` yok | ✅ | T-07 |
+| m-6 | Arama sonucu global sayacı yok | ✅ | T-09 |
+| m-7 | Yazdırma (print) stil sayfası yok | ⏭️ PLAN-02 | — |
+| m-8 | `estimateMinutes`'ın "3 dakika" eşiği erişilemez (zararsız) | ⏭️ PLAN-02 | — |
+
+### Toplam
+
+| | Adet | Çözüldü | Devredildi |
+|---|---|---|---|
+| Kritik | 5 | **5** | 0 |
+| Orta | 13 | 9 | 4 |
+| Ürün / içerik | 5 | **5** | 0 |
+| Küçük | 8 | 6 | 2 |
+| **Toplam** | **31** | **25 (%81)** | **6** |
+
+### PLAN-02'ye devredilenlerin gerekçesi
+
+| Kod | Neden bu planda yapılmadı |
+|---|---|
+| O-10 | T-07'nin doğrulaması sırasında keşfedildi; renk paleti kararı, tasarım dilinin korunması ilkesiyle birlikte ele alınmalı (PLAN-01 *Kapsam Dışı*: "tasarım dilinin değiştirilmesi") |
+| O-11 | Kaynak veri temizliği; `wiki.ts`'in ayrıştırma katmanında yeni bir süzgeç gerektiriyor, T-09'un kapsamı yalnızca gösterimdi |
+| O-12 | Hem veri şeması (`ScienceMilestone`'a `matchKeys`) hem bileşen mantığı değişikliği gerektiriyor; T-10 veri-yalnız, T-11 sınıflandırma-yalnızdı |
+| O-13 | Düzeltmesi `react-router-dom@7`'ye **kırılma içeren** bir yükseltme; T-06'nın kurduğu yönlendirme katmanının tamamının regresyon testini gerektirir |
+| m-7 | Yeni özellik (yazdırma düzeni), hata değil |
+| m-8 | Ölü kod eşiği; yalnızca bir okuma-süresi rozetini etkiliyor, kullanıcıya yansıyan bir yanlışlık yok |
+
+### Ayrıca not: doğrulanamamış iki madde
+
+Bunlar bulgu değil, **kapatılamamış doğrulama**dır — bir sonraki oturumda gerçek
+bir tarayıcıda elle kontrol edilmelidir:
+
+| Madde | Durum |
+|---|---|
+| Service worker'ın canlı kaydı (T-08) | Sunucu tarafı ve Workbox çıktısı doğrulandı; tarayıcıda kayıt, geliştirme ortamının sandbox kısıtı yüzünden doğrulanamadı |
+| `content-visibility:auto`'nun canlı etkisi (T-13) | Konumlandırma mantığı (`scrollIntoView`) doğrulandı; render kazancı aynı kısıt yüzünden ölçülemedi |

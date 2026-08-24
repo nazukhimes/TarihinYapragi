@@ -3,7 +3,7 @@
 > Teknik derinlik belgesi. Projenin "ne olduğu" için önce
 > [`BAGLAM.md`](BAGLAM.md)'yi okuyun; burası **nasıl çalıştığını** anlatır.
 >
-> **Son güncelleme:** 2026-08-23 (T-13)
+> **Son güncelleme:** 2026-08-24 (T-14 · PLAN-01 kapanışı)
 
 ---
 
@@ -21,11 +21,20 @@
 └──────────────────────────────┬───────────────────────────────────┘
                                │
                     src/main.tsx
-                    createBrowserRouter([
-                      "/"         → Navigate → /{bugünün-slug'ı} (replace)
-                      "/:daySlug" → <App/>
-                      "*"         → <NotFound/>
-                    ])
+                    <ErrorBoundary>            ← son çare ağı (rota dışı hatalar)
+                      <RouterProvider router={
+                        createBrowserRouter([
+                          "/"         → Navigate → /{bugünün-slug'ı} (replace)
+                          "/:daySlug" → <App/>       errorElement: <RouteErrorFallback/>
+                          "*"         → <NotFound/>  errorElement: <RouteErrorFallback/>
+                        ])
+                      }/>
+                    </ErrorBoundary>
+
+                    NOT: rota elemanında oluşan bir hata kök ErrorBoundary'ye
+                    ULAŞMAZ — react-router kendi iç hata sınırını kullanır ve o
+                    her zaman daha yakındır. Gerçek koruma `errorElement`'tir
+                    (T-09'da canlı doğrulandı, bkz. 12.4).
                                │
                     ┌──────────▼──────────┐
                     │      App.tsx        │  ← TEK sayfa, tek durum sahibi (244 satır, T-13'te 1.079'dan indi)
@@ -887,3 +896,137 @@ karşı Lighthouse çalıştırmayın — Vite dev modu her modülü ayrı, bund
 dosya olarak servis eder, bu da Performans puanını gerçek dışı biçimde çok
 düşük gösterir (bu talimatta 42 vs. gerçek 92). Her zaman `npm run build &&
 npm run preview` çıktısına karşı ölçün.
+
+---
+
+## 12. Yönlendirme (T-06)
+
+Uygulamanın **tek doğruluk kaynağı URL'dir.** `App.tsx` içinde `day`/`month` için
+ayrı bir `useState` yoktur; seçili gün her zaman adres çubuğundan okunur.
+
+### 12.1 URL şeması
+
+| Biçim | Örnek | Davranış |
+|---|---|---|
+| Kanonik ad biçimi | `/21-agustos` | Doğrudan açılır |
+| Sayısal biçim | `/08-21` | Kanonik biçime `replace` ile yönlendirilir |
+| Kök | `/` | Bugünün adresine `replace` ile yönlendirilir |
+| Geçersiz | `/olmayan-gun` | `<NotFound/>` (404 ekranı) |
+
+Sayısal biçimin korunmasının nedeni, elle yazılan/eski bağlantıların kırılmaması;
+`replace` kullanılması ise geri tuşunun bir yönlendirme döngüsüne düşmemesi içindir.
+
+### 12.2 Slug mantığı — `src/lib/slug.ts`
+
+```
+toDaySlug(8, 21)          → "21-agustos"
+parseDaySlug("21-agustos") → { month: 8, day: 21 }
+parseDaySlug("08-21")      → { month: 8, day: 21 }
+parseDaySlug("32-ocak")    → null
+```
+
+Ay adları `MONTHS_TR`'den türetilir ve `asciify()` ile URL güvenli hâle gelir:
+`toLocaleLowerCase("tr-TR")` (Türkçe `I`/`İ` kuralı için **zorunlu**), ardından
+ç/ğ/ı/ö/ş/ü → c/g/i/o/s/u eşlemesi, sonra ASCII olmayan her şey tireye dönüşür.
+
+**29 Şubat bilinçli olarak geçerlidir.** `isValidDay()` gün sayısını `daysInMonth(month)`
+ile *yıl vermeden* karşılaştırır — uygulama bir takvim değil bir **arşiv**;
+"29 Şubat'ta tarihte ne oldu?" sorusunun içinde bulunulan yıldan bağımsız bir
+cevabı vardır.
+
+366 günün tamamı için gidiş-dönüş çevrimi testlidir (`src/lib/slug.test.ts`).
+
+### 12.3 Rota tanımı — `src/main.tsx`
+
+Üç rota (`/`, `/:daySlug`, `*`) `createBrowserRouter` ile kurulur. `App.tsx`
+`useParams()` → `parseDaySlug` zincirini kullanır; ayrıştırma başarısızsa
+`<NotFound/>` döner — ancak **tüm hook'lar çalıştıktan sonra**, hook sırası
+bozulmasın diye.
+
+### 12.4 `errorElement` — kök `ErrorBoundary` neden yetmez
+
+Her rotaya ayrı bir `errorElement={<RouteErrorFallback/>}` verilir. Bu bir üslup
+tercihi değil, zorunluluktur: `createBrowserRouter` her rota elemanını kendi
+dahili hata sınırıyla sarar ve React **en yakın** hata sınırını kullanır. Dolayısıyla
+`<RouterProvider>`'ı dışarıdan saran bir `ErrorBoundary`, rota bileşeninin
+render'ında oluşan bir hatayı **hiç görmez**; kullanıcı react-router'ın jenerik
+İngilizce hata ekranını görür. T-09'da canlı doğrulandı. Kök `ErrorBoundary`
+yalnızca rota render'ının dışında kalan hatalar için son çare olarak durur.
+
+### 12.5 Sunucu tarafı gereksinim (SPA fallback)
+
+İstemci tarafı yönlendirme, `/29-ekim` gibi bir adrese **doğrudan** girildiğinde
+sunucunun `index.html` döndürmesini gerektirir. Depoda iki hazır yapılandırma var:
+
+| Dosya | Hedef |
+|---|---|
+| `public/_redirects` | Netlify / Cloudflare Pages — `/*  /index.html  200` |
+| `vercel.json` | Vercel — tüm yolları `/index.html`'e rewrite |
+
+`npm run dev` ve `npm run preview` bunu kendiliğinden yapar; ek yapılandırma
+gerekmez. (Uygulama şu an yayına alınmamıştır — bkz. `BAGLAM.md` §7.)
+
+---
+
+## 13. Test Stratejisi (T-12)
+
+### 13.1 Neyi test ediyoruz, neden
+
+Testler **saf mantığa** odaklanır: yanlış olduğunda kullanıcının yanlış *bilgi*
+gördüğü kod. Görsel düzen, ağ katmanı ve React yaşam döngüsü bilinçli olarak
+kapsam dışıdır — bunların bakım maliyeti, yakaladıkları hatadan yüksektir.
+
+| Dosya | Test | Neden bu dosya |
+|---|---|---|
+| `src/lib/date.test.ts` | 14 | **K-1 regresyonu** — artık yıl / gün sayısı hatası buradan çıkmıştı |
+| `src/lib/slug.test.ts` | 5 | 366 günün tamamında gidiş-dönüş çevrimi; kırılırsa her adres kırılır |
+| `src/lib/classification.test.ts` | 132 | T-11'in altın kümesi (`it.each`) + karanlık dosya kesinliği |
+| `src/lib/wiki.test.ts` | 12 | `normalize`, `classifyStatus`, `buildAutoTalk` — saf dönüşümler |
+| `src/components/sections.test.ts` | 7 | Türkçe duyarlı `matchQuery` (arama) |
+| `src/data/data.test.ts` | 7 | `CURATED` bütünlüğü — anahtar biçimi, çakışma, zorunlu alanlar |
+| `src/components/ui.test.tsx` | 1 | **K-2 regresyonu** — `CountUp` gün değişiminde güncelleniyor mu |
+| **Toplam** | **203** | `src/lib` satır kapsamı **%78,78** (eşik: 70) |
+
+### 13.2 Yapılandırma
+
+`vite.config.ts` içindeki `test` bloğu: `jsdom` ortamı, `globals: true`,
+`src/test/setup.ts` (yalnızca `@testing-library/jest-dom/vitest`), v8 kapsam
+sağlayıcısı (`src/lib/**` + `src/data/**`, eşikler `lines: 70` / `branches: 60`).
+
+### 13.3 İki kalıcı karar — ikisi de gerçek arıza sonrası alındı
+
+**`pool: "forks"`** — varsayılan `threads` havuzu, jsdom'un bağımlılığı
+`undici`nin `worker_threads.markAsUncloneable`'ı koşulsuz çağırması yüzünden
+CI'da kararsızdı. Ayrı süreçler bu sınıf hatayı atlıyor.
+
+**`overrides: { undici: "7.29.0" }`** (`package.json`) — asıl kalıcı çözüm.
+`undici@8.0.3+` bahsi geçen fonksiyon için çalışma zamanı yoklamasını kaldırdı;
+CI çalıştırıcısının Node sürümünde fonksiyon her zaman bulunmadığından test
+dosyaları import anında çöküyordu (`TypeError: webidl.util.markAsUncloneable is
+not a function`). 7.x hattı bu kod yoluna hiç girmiyor ve `npm audit`
+bulgularını da temizliyor. **Bu iki satır kaldırılırsa CI aralıklı olarak
+kırmızıya döner** — ayrıntı: T-12 Tamamlanma Kaydı madde 11.
+
+### 13.4 jsdom'un iki tuzağı
+
+- **`requestAnimationFrame` saati farklıdır.** jsdom'un rAF geri çağrısı pencere
+  oluşturulmasına göre yeniden temellenmiş bir zaman verir; aynı testteki doğrudan
+  bir `performance.now()` çağrısı ise temellenmemiş değeri döndürür. Gerçek
+  tarayıcıda bu ikisi aynı saattir. `CountUp` gibi rAF tabanlı bileşenleri
+  `vi.useFakeTimers()` ile test edin.
+- **Düzen (layout) motoru yoktur.** Genişlik, yükseklik, çakışma ve tıklama
+  hedefi (`elementFromPoint`) jsdom'da anlamlı değildir. **K-5 tam olarak bu
+  yüzden 10 talimat boyunca gözden kaçtı:** dekoratif bir katman gün gezinme
+  düğmelerinin üzerini kapatıyordu, ama `button.click()` DOM olay akışını
+  atladığı için 203 testin hiçbiri bunu göremezdi. Bu sınıf hata ancak gerçek
+  bir tarayıcıda yakalanır (bkz. T-15 Tamamlanma Kaydı; otomatik bir hit-test
+  denetimi PLAN-02 adayıdır).
+
+### 13.5 Yeşil kapı ve CI
+
+```bash
+npm run kontrol     # typecheck → lint → test → build
+```
+
+Aynı komut her push'ta `.github/workflows/kontrol.yml` içinde koşar. Bir talimat
+bu zincir yeşil olmadan kapatılmaz (`CALISMA-SISTEMI.md` §6.2).
