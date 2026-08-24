@@ -32,7 +32,7 @@
 | `npm run typecheck` | ✅ Geçiyor | Hata yok |
 | `npm run build` | ✅ Geçiyor | 2.90 s · 253 kB JS (82 kB gzip) · 51 kB CSS |
 | Uygulama açılıyor mu | ✅ Evet | Veri geliyor, 23 kayıt listelendi |
-| Kritik hata | ⚠️ 5 adet · **4 çözüldü** | K-1…K-5 · K-1 ✅ T-03, K-2 ✅ T-04, K-3 ✅ T-04, K-4 ✅ T-01 · K-5 T-03 sırasında keşfedildi, henüz atanmadı |
+| Kritik hata | ✅ 5 adet · **5 çözüldü** | K-1…K-5 · K-1 ✅ T-03, K-2 ✅ T-04, K-3 ✅ T-04, K-4 ✅ T-01, K-5 ✅ T-15 |
 | Orta seviye eksik | ⚠️ 13 adet · **9 çözüldü** | O-1…O-13 · O-1, O-2, O-3 ✅ T-01 · O-4, O-8 ✅ T-05 · O-5, O-9 ✅ T-09 · O-6, O-7 ✅ T-07 · O-10 T-07 sırasında keşfedildi, henüz atanmadı · O-11 T-09 sırasında keşfedildi, henüz atanmadı · O-12 T-10 sırasında keşfedildi, henüz atanmadı · O-13 T-13 sırasında keşfedildi (bağımlılık güvenliği), henüz atanmadı |
 | Ürün/içerik boşluğu | ⚠️ 5 adet · **5 çözüldü** | U-1…U-5 · U-1 ✅ T-06 · U-4 ✅ T-08 · U-2 ✅ T-10 · U-3 ✅ T-11 · U-5 ✅ T-12 |
 | Küçük not | ⚠️ 8 adet · **6 çözüldü** | m-1…m-8 · m-2 ✅ T-01 · m-3, m-6 ✅ T-09 · m-5 ✅ T-07 · m-1, m-4 ✅ T-13 · m-8 T-12 sırasında keşfedildi, henüz atanmadı (zararsız) |
@@ -743,7 +743,7 @@ bkz. bölüm 9.
 > talimatının canlı doğrulaması sırasında keşfedilmiş, ilk analizde
 > yakalanmamış yeni bir bulgudur. K-serisi numaralandırması sürdürülür.
 
-### K-5 · "Önceki gün" / "Sonraki gün" / "Bugüne dön" düğmeleri gerçek bir tıklamayla tetiklenemiyor
+### K-5 · "Önceki gün" / "Sonraki gün" / "Bugüne dön" düğmeleri gerçek bir tıklamayla tetiklenemiyor — ✅ ÇÖZÜLDÜ (T-15)
 
 **Dosya:** `src/components/leaf.tsx:69-70` (dekoratif "arkadaki yapraklar" katmanı) ve `:127-160` (gün navigasyonu)
 
@@ -828,6 +828,25 @@ karar plan sahibine aittir.
 > (bkz. T-07 Tamamlanma Kaydı) canlı olarak yeniden doğrulanamadı. K-5 hâlâ
 > atanmadı; `leaf.tsx`'e gerçekten dokunacak bir sonraki talimat (T-13 ya da yeni
 > bir T-15) önerilir.
+>
+> **Çözüm (T-15, 2026-08-24):** ✅ Kök neden doğrulandı ve giderildi. İki dekoratif
+> katman, kartın kendi `relative` sarmalayıcısının içine alındı — `inset-0` artık
+> dış sütunun tamamını değil **yalnızca kartın kutusunu** ifade ediyor; ayrıca
+> ikisine de `pointer-events-none` ve `aria-hidden="true"` eklendi, gezinme satırı
+> `relative` yapıldı. Üç düğme de gerçek fare tıklamasıyla doğrulandı
+> (29 Ekim → 30 Ekim → 29 Ekim → bugün).
+>
+> **Kayda geçmemiş ikinci belirti:** Bu bulgu yalnızca *tıklanamama* olarak
+> yazılmıştı. T-15 hazırlanırken alınan gerçek tarayıcı ekran görüntüsü, dekoratif
+> katmanın rengi (`#e7dcc4`, opak) nedeniyle gezinme satırını **görsel olarak da
+> örttüğünü** gösterdi: "ÖNCEKİ GÜN" / "BUGÜNE DÖN" / "SONRAKİ GÜN" yazılarının
+> hiçbiri okunmuyordu, kartın altında boş bir krem blok görünüyordu. Yani hatanın
+> etkisi kayıtlı hâlinden **daha ağırdı**. Düzeltme her iki belirtiyi de giderdi.
+>
+> **Ölçüm (düzeltme sonrası, 29 Şubat, mini takvim açık):** dekor kutuları
+> 160-645 / 157-635, kart 155-626, gezinme satırı **654-712** — dekorun tamamen
+> dışında. Sayfadaki 148 görünür denetimin hiçbiri `elementFromPoint` testinde
+> engellenmiyor.
 
 ---
 

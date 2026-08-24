@@ -669,7 +669,7 @@ Tam liste ve kanıtlar → [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md)
 | ~~K-2~~ | ~~`CountUp` gün değişiminde tetiklenmiyor~~ **✅ çözüldü** (`useInView` + `[to,duration,inView]` bağımlılığı) | T-04 · 2026-08-21 |
 | ~~K-3~~ | ~~`Reveal` için IO yedeği yok~~ **✅ çözüldü** (paylaşılan gözlemci + `setTimeout` güvenlik ağı) | T-04 · 2026-08-21 |
 | ~~K-4~~ | ~~HMR sabit port~~ **✅ çözüldü** | T-01 · 2026-08-21 |
-| K-5 | Gün gezinme düğmeleri (Önceki/Sonraki/Bugüne dön) dekoratif katman yüzünden fare/dokunmatikle tıklanamıyor — T-03 sırasında keşfedildi | Henüz atanmadı (T-04, T-06 ve T-07 sırayla değerlendirdi, üçü de bilinçli olarak dokunmadı — `leaf.tsx`'e gerçekten dokunacak bir talimat gerekiyor) |
+| ~~K-5~~ | ~~Gün gezinme düğmeleri (Önceki/Sonraki/Bugüne dön) dekoratif katman yüzünden fare/dokunmatikle tıklanamıyor~~ | **✅ ÇÖZÜLDÜ (T-15)** — dekoratif katmanlar kartın kendi `relative` sarmalayıcısına alındı (`inset-0` artık kartın kutusunu ifade ediyor), `pointer-events-none` + `aria-hidden` eklendi, gezinme satırı `relative` yapıldı. Düğmeler hem görünür hem tıklanabilir |
 | ~~O-1~~ | ~~10 kullanılmayan bağımlılık~~ **✅ çözüldü** (11 paket kaldırıldı, `react-router-dom` korundu) | T-01 · 2026-08-21 |
 | ~~O-4~~ | ~~Ağ isteği iptali yok, TR doluyken de EN çekiliyordu~~ **✅ çözüldü** (`AbortController` + TR-önce/EN-tamamlayıcı + 429/5xx için sınırlı deneme) | T-05 · 2026-08-21 |
 | ~~O-8~~ | ~~Önbellek stratejisi yarım (TTL/sınır yok)~~ **✅ çözüldü** (`savedAt`/`stale`, `pruneCache()` 60 kayıt, `memSet()` 40 kayıt FIFO) | T-05 · 2026-08-21 |

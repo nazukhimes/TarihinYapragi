@@ -431,7 +431,7 @@ Evet, arayüz mobil uyumludur. Kart şeritleri dokunmatik kaydırılır.
 | Sayaçlar gün değişince güncellenmiyor | Bilinen hataydı | *(K-2 · T-04 ile düzeltildi — sayaçlar artık her gün değişiminde önceki değerden yeni değere doğru güncelleniyor.)* |
 | Kod değişikliği tarayıcıya yansımıyor | HMR bağlantısı koptu | *(K-4 · T-01 ile düzeltildi — hangi portta çalışırsanız çalışın HMR bağlanır.)* Yine de olursa sayfayı yenileyin |
 | "Yılın X. günü" bir fazla görünüyordu | Bilinen hataydı | *(K-1 · T-03 ile düzeltildi — 2026-08-21'den itibaren gün sayısı her yıl için doğru.)* |
-| "Önceki gün" / "Sonraki gün" / "Bugüne dön" düğmeleri tıklamaya yanıt vermiyor | Bilinen görsel katman hatası (K-5) — yalnızca fare/dokunmatikle tıklamayı etkiler | İki çalışan alternatif var: (1) klavyeden `←` `→` `T` tuşlarına basın — bkz. [Klavye Kısayolları](#7-klavye-kısayolları); (2) `[AY ADI] TAKVİMİ` düğmesini açıp güne doğrudan tıklayın. Düğmelerin kendisi henüz bir talimata bağlanmadı |
+| "Önceki gün" / "Sonraki gün" / "Bugüne dön" düğmeleri tıklamaya yanıt vermiyordu | Bilinen görsel katman hatasıydı | *(K-5 · T-15 ile düzeltildi — düğmeler artık hem görünüyor hem de fare/dokunmatikle çalışıyor.)* Klavyeden `←` `→` `T` tuşları da çalışmaya devam ediyor — bkz. [Klavye Kısayolları](#7-klavye-kısayolları) |
 | Kopyala çalışmıyor | Tarayıcı pano izni vermedi | Adres çubuğundaki izin simgesinden panoya erişime izin verin |
 | Port 3000 meşgul | Başka uygulama kullanıyor | Vite kendiliğinden bir sonraki boş porta geçer (3001, 3002…) ve adresi konsola yazar. Belirli bir port isterseniz: `npm run dev -- --port 3005` |
 

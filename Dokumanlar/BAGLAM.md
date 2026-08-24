@@ -4,7 +4,7 @@
 > **ilk okuyacağı** dosyadır. Kodu okumadan önce projenin ne olduğunu, nasıl çalıştığını
 > ve hangi kurallara uyulduğunu buradan öğren.
 >
-> **Son güncelleme:** 2026-08-23 (T-13) · **Sürüm:** 0.1.0 (geliştirme aşaması)
+> **Son güncelleme:** 2026-08-24 (T-15) · **Sürüm:** 0.1.0 (geliştirme aşaması)
 
 ---
 
@@ -282,7 +282,7 @@ karşı ölçer (T-11); başlatıcı menüsünde değil, yalnızca `classificati
 
 ## 7. Mevcut Durum — Dürüst Özet
 
-> **Plan ilerlemesi:** PLAN-01 · 13 / 14 talimat tamamlandı (T-01, T-02, T-03, T-04, T-05, T-06, T-07, T-08 · 2026-08-21; T-09, T-10, T-11, T-12 · 2026-08-22; T-13 · 2026-08-23).
+> **Plan ilerlemesi:** PLAN-01 · 14 / 15 talimat tamamlandı (T-01, T-02, T-03, T-04, T-05, T-06, T-07, T-08 · 2026-08-21; T-09, T-10, T-11, T-12 · 2026-08-22; T-13 · 2026-08-23; T-15 · 2026-08-24). Kalan: T-14 (dokümantasyon ve yayın).
 > Ayrıntı → [`../Talimatlar/PLAN-01-temel-duzeltme-ve-tamamlama.md`](../Talimatlar/PLAN-01-temel-duzeltme-ve-tamamlama.md)
 
 **Çalışan:** Takvim yaprağı ve gün geçişi, Vikipedi entegrasyonu (TR→EN yedeği),
@@ -365,11 +365,10 @@ ayrıntı → `MIMARI.md` §7.
 - ~~Takvimde artık yıl kaynaklı gün-sayısı hatası~~ ✅ **T-03 ile çözüldü**
 - ~~Gün değişince sayaçların güncellenmemesi~~ ✅ **T-04 ile çözüldü**
 - ~~Sekme arka planda açıldığında sayfanın tamamen boş görünmesi~~ ✅ **T-04 ile çözüldü**
-- **Bulgu (T-03 sırasında keşfedildi, hâlâ açık, T-06'da canlı yeniden doğrulandı):**
-  "Önceki gün" / "Sonraki gün" / "Bugüne dön" düğmeleri, dekoratif bir arka plan
-  katmanının üzerlerini kaplaması yüzünden gerçek bir tıklamayla tetiklenemiyor
-  (K-5, henüz bir talimata atanmadı — T-04 ve T-06 bilinçli olarak bunun dışında
-  kaldı) → ayrıntı [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md#6-t-03-sırasında-keşfedilen-yeni-bulgu-2026-08-21)
+- ~~"Önceki gün" / "Sonraki gün" / "Bugüne dön" düğmelerinin dekoratif arka plan
+  katmanı yüzünden tıklanamaması ve görünmemesi~~ ✅ **T-15 ile çözüldü** (K-5 —
+  T-03'te keşfedilmiş, 10 talimat boyunca atanmamıştı; dekor katmanları kartın
+  kendi sarmalayıcısına alındı) → ayrıntı [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md)
 - ~~HMR WebSocket'inin sabit porta bağlı olması~~ ✅ **T-01 ile çözüldü**
 - ~~Kullanılmayan 10 bağımlılık (paket boyutu ve kurulum süresi)~~ ✅ **T-01 ile çözüldü**
 - ~~`başlat.bat`'ın PowerShell ile elle port araması~~ ✅ **T-02 ile çözüldü**

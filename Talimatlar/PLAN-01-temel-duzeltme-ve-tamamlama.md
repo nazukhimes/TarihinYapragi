@@ -3,9 +3,9 @@
 | Alan | Değer |
 |---|---|
 | **Oluşturulma** | 2026-08-21 |
-| **Durum** | 🟡 Aktif — 13 / 14 tamamlandı |
-| **Son hareket** | 2026-08-23 · T-13 tamamlandı |
-| **Talimat sayısı** | 14 (T-01 … T-14) |
+| **Durum** | 🟡 Aktif — 14 / 15 tamamlandı |
+| **Son hareket** | 2026-08-24 · T-15 tamamlandı (K-5 kapandı) |
+| **Talimat sayısı** | 15 (T-01 … T-15 · T-15 plan yürürken eklendi) |
 | **Faz sayısı** | 5 |
 | **Dayanak** | [`../Dokumanlar/ANALIZ-RAPORU.md`](../Dokumanlar/ANALIZ-RAPORU.md) |
 | **İş akışı** | [`../Dokumanlar/CALISMA-SISTEMI.md`](../Dokumanlar/CALISMA-SISTEMI.md) |
@@ -56,6 +56,7 @@ Plan bittiğinde:
 | ~~T-03~~ ✅ | [Takvim ve tarih doğruluğu](Tamamland%C4%B1/T-03-takvim-tarih-dogrulugu.md) | 🔴 Kritik | K-1 | ~2 sa |
 | ~~T-04~~ ✅ | [Sayaç ve görünürlük hataları](Tamamland%C4%B1/T-04-sayac-ve-gorunurluk-hatalari.md) | 🔴 Kritik | K-2, K-3 | ~2,5 sa |
 | ~~T-05~~ ✅ | [Ağ katmanı sağlamlaştırma](Tamamland%C4%B1/T-05-ag-katmani-saglamlastirma.md) | 🟠 Yüksek | O-4, O-8 | ~3 sa |
+| ~~T-15~~ ✅ | [Yaprak gezinme satırının dekoratif katmanla örtülmesi](Tamamland%C4%B1/T-15-yaprak-gezinme-tiklama-hatasi.md) *(plan yürürken eklendi, 2026-08-24'te uygulandı)* | 🔴 Kritik | K-5 | ~1 sa |
 
 ### FAZ 2 — Ürün Kabuğu
 *Uygulamayı "web sitesi" yapan katman: paylaşım, simge, hata dayanıklılığı, erişilebilirlik.*
@@ -90,7 +91,7 @@ Plan bittiğinde:
 |---|---|---|---|---|
 | T-14 | [Dokümantasyon güncelleme ve yayın](T-14-dokumantasyon-ve-yayin.md) | 🟠 Yüksek | — | ~2,5 sa |
 
-**Toplam tahmini süre:** ~44 saat
+**Toplam tahmini süre:** ~45 saat
 
 ---
 
@@ -111,6 +112,8 @@ T-01 ──┬─► T-02
               T-11 ──────────┤   (T-10 ile paralel yürüyebilir)
                              │
                              ├─► T-12 ──► T-13
+                             │
+              T-15 ──────────┤   (bağımsız · plan yürürken eklendi, K-5)
                              │
                              └───────────► T-14  (EN SON)
 ```
@@ -338,6 +341,19 @@ T-01 ──┬─► T-02
   istemci-taraflı kapsamının dışında, ayrıntı → T-13 Tamamlanma Kaydı. K-5'e
   T-13 de dokunmadı (`leaf.tsx`'in gezinme düğmeleri dışındaki kısımlarına
   dokunuldu, hâlâ atanmadı). Artık T-14 açık.
+- ~~**T-15.**~~ ✅ **2026-08-24'te tamamlandı.** K-5, T-03'te keşfedilip 10 talimat
+  boyunca hiçbir talimata atanmamıştı; T-14 (kapanış) öncesinde ayrı bir talimat
+  olarak açıldı ve kapatıldı. Kök neden doğrulandı: `leaf.tsx`'teki iki dekoratif
+  "arkadaki yapraklar" katmanı `absolute inset-0` ile **dış sarmalayıcıya**
+  bağlıydı, bu yüzden kutuları kart + gezinme satırı + mini takvimin tamamını
+  kaplıyordu; `z-index:auto` konumlanmış öğeler `static` öğelerin üzerine
+  boyandığı için gezinme satırı altta kalıyordu. Düzeltme: kart ve dekor kendi
+  `relative` sarmalayıcısına alındı (`inset-0` artık kartın kutusu), dekora
+  `pointer-events-none` + `aria-hidden="true"`, gezinme satırına `relative`
+  eklendi. **Kayıtlı bulgudan farkı:** hata yalnızca tıklamayı değil, satırın
+  **görünürlüğünü** de bozuyormuş — dekor opak (`#e7dcc4`) olduğu için üç düğme
+  yazısı hiç okunmuyordu; ekran görüntüsüyle kanıtlandı ve `ANALIZ-RAPORU.md`'ye
+  işlendi. Üç düğme de gerçek fare tıklamasıyla doğrulandı. Artık yalnızca T-14 açık.
 - **T-14 en sonda.** Belgeler ancak her şey bitince gerçeğe eşitlenebilir.
 - ~~**T-06 → T-08 sırası zorunlu.**~~ SEO meta etiketleri gün bazlı URL'lere
   bağlıydı — T-06 tamamlandı, URL şeması (`/gun-ay`) sabitlendi, T-08 bu şema
@@ -368,9 +384,10 @@ T-01 ──┬─► T-02
 | T-11 | Sınıflandırma doğruluğu | ✅ Tamamlandı | 2026-08-22 | `wiki.ts`'ten ayrılan `classification.ts` · "ilk eşleşen kazanır" → puanlama + sabit öncelik sırası · `detectDarkItem` puan eşiği (≥3) · Sorun 2'deki 7 kalıp düzeltildi · **kritik yan bulgu:** JS `\b`/`\w` Türkçe harfleri (ç/ğ/ı/ö/ş/ü) kelime saymıyor, birkaç kural gerçek veride hiç eşleşmiyordu, elle sınırla düzeltildi · 66 örneklik altın küme + `npm run siniflandirma` · kategori doğruluğu %100 (≥%85 hedef), karanlık yanlış pozitif 0, kesinlik %100 (≥%90 hedef) · U-3 çözüldü · `genel` oranı bazı günlerde %40 hedefinin üstünde ve "felaket kelimesi tarihleme amaçlı" örnekler bilinçli kapsam dışı bırakıldı (regex sınırı) |
 | T-12 | Test, lint ve biçimlendirme altyapısı | ✅ Tamamlandı | 2026-08-22 | Vitest (jsdom+v8) · 203 test/7 dosya · ESLint (flat, rules-of-hooks+exhaustive-deps) + Prettier · `npm run kontrol` tek komut · `src/lib` satır kapsamı %78,78 (≥%70 hedef) · **4 sapma:** güncel `vitest`/`@vitest/coverage-v8` 4.1.11'de gerçek kapsam-raporlama hatası → 3.2.7'ye sabitlendi · güncel `eslint-plugin-react-hooks` 7.x React Compiler kuralları taşıyor → klasik iki kurala daraltıldı · jsdom `requestAnimationFrame` saat tutarsızlığı → CountUp testi `vi.useFakeTimers()`'a geçirildi · **CI'da gerçek bir kararsızlık** (`undici` 8.0.3+'ın CI'nın Node sürümünde bazen eksik olan `markAsUncloneable`'ı koşulsuz çağırması) → `overrides: {undici: "7.29.0"}` ile kalıcı çözüldü (aynı zamanda undici'nin bilinen güvenlik açıklarını da giderdi), 5x tekrar testiyle 5/5 doğrulandı · CI canlı olarak doğrulandı ve yeşil |
 | T-13 | Performans ve derleme iyileştirmesi | ✅ Tamamlandı | 2026-08-23 | `BroadcastMode` `React.lazy` ile ayrı parçada (canlı doğrulandı) · font isteği daraltıldı + preload/onload takası · ticker hızı öğe sayısına bağlı (20-90s) · mobilde `.noise`/`.drift` kapalı · `content-visibility:auto` (`scrollIntoView` ile doğrulandı) · `App.tsx` 1.079→244 satır, `useGunVerisi` hook'u + 9 yeni bileşen · `m-1` (`stats.indexOf`) çözüldü · arama süzmesi tekilleştirildi (canlı doğrulandı) · `manualChunks`+`rollup-plugin-visualizer` · Tailwind `@source not` · **Lighthouse ilk kez üçü birlikte: Performans 92 · Erişilebilirlik 96 · SEO 100** (üretim derlemesine karşı) · **Sapma:** ≥%15 ilk paket küçülmesi hedefi karşılanmadı — T-10'un 60 günlük içerik verisi paketin çoğunluğu, tembel yüklemesi ayrı bir talimat (PLAN-02 adayı) gerektiriyor |
+| T-15 | Yaprak gezinme satırının dekoratif katmanla örtülmesi | ✅ Tamamlandı | 2026-08-24 | Plan yürürken eklendi · K-5 kapandı · dekor katmanları kartın kendi `relative` sarmalayıcısına alındı, `pointer-events-none` + `aria-hidden` eklendi, gezinme satırı `relative` yapıldı · **kayıtlı bulgudan farkı:** hata satırı görsel olarak da örtüyormuş (opak dekor), ekran görüntüsüyle kanıtlandı · üç düğme de gerçek fare tıklamasıyla doğrulandı · 203 test + `npm run kontrol` yeşil |
 | T-14 | Dokümantasyon güncelleme ve yayın | ⬜ Bekliyor | | |
 
-**İlerleme:** 13 / 14 · `██████████████████░░` %93
+**İlerleme:** 14 / 15 · `██████████████████░░` %93
 
 ---
 

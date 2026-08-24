@@ -84,74 +84,83 @@ export function CalendarLeaf({
 
   return (
     <div className="relative" style={{ perspective: "1400px" }}>
-      {/* arkadaki yapraklar */}
-      <div className="absolute inset-0 translate-y-3 translate-x-2 rounded-sm bg-paper-2/70 rotate-2" />
-      <div className="absolute inset-0 translate-y-1.5 translate-x-1 rounded-sm bg-paper-2 rotate-1" />
+      {/* kart + arkadaki yapraklar — dekor kendi relative sarmalayıcısında durmalı:
+          dış sarmalayıcıya bağlanırsa inset-0 gezinme satırını da kaplar (K-5) */}
+      <div className="relative">
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 translate-y-3 translate-x-2 rounded-sm bg-paper-2/70 rotate-2 pointer-events-none"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 translate-y-1.5 translate-x-1 rounded-sm bg-paper-2 rotate-1 pointer-events-none"
+        />
 
-      <div className="paper torn-edge relative w-full rounded-sm shadow-[0_30px_70px_rgba(4,6,10,0.55)] overflow-visible select-none">
-        {/* zımba delikleri */}
-        <div className="absolute top-3.5 left-1/2 -translate-x-1/2 flex gap-24 z-10">
-          <span className="w-3 h-3 rounded-full bg-night shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)]" />
-          <span className="w-3 h-3 rounded-full bg-night shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)]" />
-        </div>
-
-        {/* kırmızı bant */}
-        <div className="bg-brand text-paper pt-7 pb-3 px-6 text-center relative">
-          <div className="flex items-center justify-center gap-3">
-            <span className="h-px w-8 bg-paper/50" />
-            <p className="font-mono text-[11px] tracking-[0.32em] uppercase">
-              Tarih Yaprağı · {year}
-            </p>
-            <span className="h-px w-8 bg-paper/50" />
+        <div className="paper torn-edge relative w-full rounded-sm shadow-[0_30px_70px_rgba(4,6,10,0.55)] overflow-visible select-none">
+          {/* zımba delikleri */}
+          <div className="absolute top-3.5 left-1/2 -translate-x-1/2 flex gap-24 z-10">
+            <span className="w-3 h-3 rounded-full bg-night shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)]" />
+            <span className="w-3 h-3 rounded-full bg-night shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)]" />
           </div>
-        </div>
 
-        {/* gövde — tarih değişince çevrilir */}
-        <div key={`${day}-${month}`} className="leaf-flip relative px-6 pt-5 pb-7 text-center">
-          <div className="paper-grain absolute inset-0 pointer-events-none" />
-          <p className="font-mono text-[12px] tracking-[0.3em] uppercase text-brand font-semibold">
-            {weekday ?? "Artık gün"}
-          </p>
-          <p
-            className="font-display font-black leading-none mt-1 text-inkpaper"
-            style={{ fontSize: "clamp(6.5rem, 18vw, 11rem)" }}
-          >
-            {day}
-          </p>
-          <p className="font-display italic font-medium text-2xl md:text-3xl text-inkpaper/85 -mt-1">
-            {MONTHS_TR[month - 1]}
-          </p>
-
-          <div className="mt-5 pt-4 border-t border-dashed border-inkpaper-dim/40">
-            <div className="flex items-center justify-between font-mono text-[11px] text-inkpaper-dim">
-              <span>Yılın {dayOfYear(month, day, year)}. günü</span>
-              <span>{month}. ay</span>
-            </div>
-            {weekday === null && (
-              <p className="mt-2 font-mono text-[10.5px] text-inkpaper-dim text-center tracking-wide">
-                {year} artık yıl değil
+          {/* kırmızı bant */}
+          <div className="bg-brand text-paper pt-7 pb-3 px-6 text-center relative">
+            <div className="flex items-center justify-center gap-3">
+              <span className="h-px w-8 bg-paper/50" />
+              <p className="font-mono text-[11px] tracking-[0.32em] uppercase">
+                Tarih Yaprağı · {year}
               </p>
-            )}
+              <span className="h-px w-8 bg-paper/50" />
+            </div>
           </div>
 
-          <button
-            onClick={onOpenPicker}
-            className={`mt-5 w-full flex items-center justify-between gap-2 px-4 py-2.5 rounded-sm border transition-all duration-200 cursor-pointer ${
-              pickerOpen
-                ? "border-brand bg-brand text-paper shadow-[0_8px_20px_rgba(210,59,46,0.35)]"
-                : "border-inkpaper-dim/50 text-inkpaper hover:border-brand hover:text-brand hover:shadow-[0_6px_18px_rgba(210,59,46,0.18)]"
-            }`}
-          >
-            <span className="font-mono text-[12px] tracking-[0.18em] uppercase">
-              {MONTHS_TR[month - 1]} takvimi
-            </span>
-            <IconArrow dir={pickerOpen ? "up" : "down"} className="w-3.5 h-3.5" />
-          </button>
+          {/* gövde — tarih değişince çevrilir */}
+          <div key={`${day}-${month}`} className="leaf-flip relative px-6 pt-5 pb-7 text-center">
+            <div className="paper-grain absolute inset-0 pointer-events-none" />
+            <p className="font-mono text-[12px] tracking-[0.3em] uppercase text-brand font-semibold">
+              {weekday ?? "Artık gün"}
+            </p>
+            <p
+              className="font-display font-black leading-none mt-1 text-inkpaper"
+              style={{ fontSize: "clamp(6.5rem, 18vw, 11rem)" }}
+            >
+              {day}
+            </p>
+            <p className="font-display italic font-medium text-2xl md:text-3xl text-inkpaper/85 -mt-1">
+              {MONTHS_TR[month - 1]}
+            </p>
+
+            <div className="mt-5 pt-4 border-t border-dashed border-inkpaper-dim/40">
+              <div className="flex items-center justify-between font-mono text-[11px] text-inkpaper-dim">
+                <span>Yılın {dayOfYear(month, day, year)}. günü</span>
+                <span>{month}. ay</span>
+              </div>
+              {weekday === null && (
+                <p className="mt-2 font-mono text-[10.5px] text-inkpaper-dim text-center tracking-wide">
+                  {year} artık yıl değil
+                </p>
+              )}
+            </div>
+
+            <button
+              onClick={onOpenPicker}
+              className={`mt-5 w-full flex items-center justify-between gap-2 px-4 py-2.5 rounded-sm border transition-all duration-200 cursor-pointer ${
+                pickerOpen
+                  ? "border-brand bg-brand text-paper shadow-[0_8px_20px_rgba(210,59,46,0.35)]"
+                  : "border-inkpaper-dim/50 text-inkpaper hover:border-brand hover:text-brand hover:shadow-[0_6px_18px_rgba(210,59,46,0.18)]"
+              }`}
+            >
+              <span className="font-mono text-[12px] tracking-[0.18em] uppercase">
+                {MONTHS_TR[month - 1]} takvimi
+              </span>
+              <IconArrow dir={pickerOpen ? "up" : "down"} className="w-3.5 h-3.5" />
+            </button>
+          </div>
         </div>
       </div>
 
       {/* yaprak navigasyonu */}
-      <div className="flex items-center justify-between mt-7">
+      <div className="relative flex items-center justify-between mt-7">
         <button
           onClick={() => shift(-1)}
           aria-label="Önceki gün"
