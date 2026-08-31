@@ -3,8 +3,8 @@
 | Alan | Değer |
 |---|---|
 | **Oluşturulma** | 2026-08-24 |
-| **Durum** | ⬜ **Başlamadı — 0 / 7** |
-| **Son hareket** | 2026-08-24 · Plan oluşturuldu |
+| **Durum** | 🟡 **Sürüyor — 1 / 7** (FAZ 1'in ilk adımı kapandı) |
+| **Son hareket** | 2026-08-31 · **T-16 tamamlandı** — Vikipedi veri sözleşmesi düzeltildi (K-6, K-7, O-16, m-9 kapandı) |
 | **Talimat sayısı** | 7 (T-16 … T-22) |
 | **Faz sayısı** | 4 |
 | **Dayanak** | [`../Dokumanlar/ANALIZ-RAPORU-02.md`](../Dokumanlar/ANALIZ-RAPORU-02.md) |
@@ -61,8 +61,14 @@ Plan bittiğinde:
 
 | Talimat | Başlık | Bulgular | Öncelik | Süre |
 |---|---|---|---|---|
-| **T-16** | Vikipedi veri sözleşmesi düzeltmesi | K-6, K-7, O-16, m-9 | 🔴 Kritik | ~3s |
+| ~~**T-16**~~ | ~~Vikipedi veri sözleşmesi düzeltmesi~~ ✅ | K-6, K-7, O-16, m-9 | 🔴 Kritik | ~3s |
 | **T-17** | Karanlık dosyalarda kaynak dürüstlüğü ve kontrast | O-15, O-10 | 🟠 Yüksek | ~2s |
+
+> ✅ **T-16 kapandı (2026-08-31).** `extract` artık okunuyor: Sohbet Kartları'nda
+> "Bugün Doğanlar" ve "Aramızdan Ayrılanlar" üretiliyor, kişi adları düz metin,
+> `description` alt başlık olarak görünüyor. Testler gerçek API yanıtından üretilmiş
+> bir fixture'dan besleniyor. Devir notları T-17, T-18 ve T-19 dosyalarına işlendi.
+> Ayrıntı: [`Tamamlandı/T-16-vikipedi-veri-sozlesmesi.md`](Tamamland%C4%B1/T-16-vikipedi-veri-sozlesmesi.md)
 
 **T-16 kapsamı:** `WikiPage.excerpt` → `extract` (31 nokta) · `displaytitle` → `normalizedtitle`
 (monogram, `alt`, arama dahil) · `description` kişi kartlarında alt başlık olarak gösterilir ·
@@ -205,15 +211,19 @@ Vikipedi içeriğinin otomatik, YZ'nin istek üzerine çalışmasını onayladı
 
 ## 6. İlerleme Tablosu
 
-| # | Talimat | Faz | Bulgular | Durum | Tarih |
+| # | Talimat dosyası | Faz | Bulgular | Durum | Tarih |
 |---|---|---|---|---|---|
-| T-16 | Vikipedi veri sözleşmesi düzeltmesi | 1 | K-6, K-7, O-16, m-9 | ⬜ Bekliyor | — |
-| T-17 | Karanlık dosyalarda kaynak dürüstlüğü ve kontrast | 1 | O-15, O-10 | ⬜ Bekliyor | — |
-| T-18 | İlgili sayfalar ve kaynak çıkışları | 2 | O-14 | ⬜ Bekliyor | — |
-| T-19 | Zengin detay paneli | 3 | U-6 | ⬜ Bekliyor | — |
-| T-20 | Yapay zekâ araştırma katmanı | 3 | U-6 | ⬜ Bekliyor | — |
-| T-21 | Devredilen içerik bulguları | 4 | O-11, O-12, m-7, m-8 | ⬜ Bekliyor | — |
-| T-22 | `react-router` güvenlik yükseltmesi | 4 | O-13 | ⬜ Bekliyor | — |
+| ~~T-16~~ ✅ | [`T-16-vikipedi-veri-sozlesmesi.md`](Tamamland%C4%B1/T-16-vikipedi-veri-sozlesmesi.md) | 1 | K-6, K-7, O-16, m-9 | ✅ **Tamamlandı** | 2026-08-31 |
+| T-17 | [`T-17-karanlik-dosya-durustlugu.md`](T-17-karanlik-dosya-durustlugu.md) | 1 | O-15, O-10 | ⬜ Bekliyor | — |
+| T-18 | [`T-18-kaynak-ve-ilgili-sayfalar.md`](T-18-kaynak-ve-ilgili-sayfalar.md) | 2 | O-14 | ⬜ Bekliyor | — |
+| T-19 | [`T-19-detay-paneli.md`](T-19-detay-paneli.md) | 3 | U-6 | ⬜ Bekliyor | — |
+| T-20 | [`T-20-yapay-zeka-katmani.md`](T-20-yapay-zeka-katmani.md) | 3 | U-6 | ⬜ Bekliyor | — |
+| T-21 | [`T-21-devredilen-icerik-bulgulari.md`](T-21-devredilen-icerik-bulgulari.md) | 4 | O-11, O-12, m-7, m-8 | ⬜ Bekliyor | — |
+| T-22 | [`T-22-react-router-yukseltmesi.md`](T-22-react-router-yukseltmesi.md) | 4 | O-13 | ⬜ Bekliyor | — |
+
+> **Uygulama sırası:** T-16 → T-17 → T-18 → T-19 → T-20 → T-21 → T-22.
+> T-16 zorunlu ilk adımdır (§4). T-21 bağımsızdır, araya alınabilir.
+> T-22 kırıcı bir yükseltme olduğu için **en sonda** kalmalıdır.
 
 **Toplam tahmini süre:** ~21 saat
 
@@ -223,7 +233,7 @@ Vikipedi içeriğinin otomatik, YZ'nin istek üzerine çalışmasını onayladı
 
 | Risk | Olasılık | Karşı önlem |
 |---|---|---|
-| `excerpt` → `extract` yeniden adlandırması bir noktayı atlar | Orta | 31 noktanın tamamı listelenir; sonrasında `grep -rn "excerpt" src/` **sıfır** sonuç vermeli (kabul kriteri) |
+| ~~`excerpt` → `extract` yeniden adlandırması bir noktayı atlar~~ ✅ | Orta | **Gerçekleşmedi.** 31 noktanın tamamı güncellendi; üretim kodunda `grep` sıfır sonuç veriyor. Kalan geçişler yalnızca sözleşme testinin kendi iddiasında (bkz. T-16 Sapmalar §2) |
 | Gerçek API fixture'ı büyük olur, test yavaşlar | Düşük | Yanıt kırpılır: her bölümden 3 öğe, ~15 kB |
 | API alan sözleşmesi ileride yine değişir | Düşük | Gerçek yanıttan beslenen fixture + alan varlığını doğrulayan test |
 | YZ anahtarı yanlışlıkla depoya girer | Düşük | `.gitignore` kontrolü + anahtar yalnızca `localStorage`, hiç dosyaya yazılmaz (kabul kriteri) |

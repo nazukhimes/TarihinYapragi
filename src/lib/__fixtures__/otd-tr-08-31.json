@@ -1,0 +1,1405 @@
+{
+  "selected": [
+    {
+      "text": "Trinidad ve Tobago bağımsızlığını ilan etti.",
+      "pages": [
+        {
+          "type": "standard",
+          "title": "Trinidad_ve_Tobago",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Trinidad ve Tobago</span></span>",
+          "namespace": {
+            "id": 0,
+            "text": ""
+          },
+          "wikibase_item": "Q754",
+          "titles": {
+            "canonical": "Trinidad_ve_Tobago",
+            "normalized": "Trinidad ve Tobago",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Trinidad ve Tobago</span></span>"
+          },
+          "pageid": 4420,
+          "thumbnail": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Flag_of_Trinidad_and_Tobago.svg/langtr-330px-Flag_of_Trinidad_and_Tobago.svg.png?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+            "width": 330,
+            "height": 198
+          },
+          "originalimage": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Flag_of_Trinidad_and_Tobago.svg/langtr-960px-Flag_of_Trinidad_and_Tobago.svg.png?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+            "width": 800,
+            "height": 480
+          },
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "36997789",
+          "tid": "b826abd6-2f26-11f1-8fcc-bde23a3d2172",
+          "timestamp": "2026-04-03T06:31:17Z",
+          "description": "Karayipler ülkesi",
+          "description_source": "central",
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/Trinidad_ve_Tobago",
+              "revisions": "https://tr.wikipedia.org/wiki/Trinidad_ve_Tobago?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/Trinidad_ve_Tobago?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Trinidad_ve_Tobago"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/Trinidad_ve_Tobago",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/Trinidad_ve_Tobago",
+              "edit": "https://tr.wikipedia.org/wiki/Trinidad_ve_Tobago?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Trinidad_ve_Tobago"
+            }
+          },
+          "extract": "Trinidad ve Tobago, resmî adıyla Trinidad ve Tobago Cumhuriyeti, Karayipler'de yer alan, Trinidad ve Tobago adlı iki farklı adadan oluşan ülke. Ülkenin para birimi Trinidad ve Tobago dolarıdır.",
+          "extract_html": "<p><b>Trinidad ve Tobago</b>, resmî adıyla <b>Trinidad ve Tobago Cumhuriyeti,</b> Karayipler'de yer alan, Trinidad ve Tobago adlı iki farklı adadan oluşan ülke. Ülkenin para birimi Trinidad ve Tobago dolarıdır.</p>",
+          "normalizedtitle": "Trinidad ve Tobago"
+        }
+      ],
+      "year": 1962
+    },
+    {
+      "text": "Gleiwitz Vakası: II. Dünya Savaşı'nın Avrupa'da başlamasının arefesinde, Polonyalı kılığına bürünmüş Alman güçlerince düzmece bir saldırı düzenlendi.",
+      "pages": [
+        {
+          "type": "standard",
+          "title": "Gleiwitz_Vakası",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Gleiwitz Vakası</span></span>",
+          "namespace": {
+            "id": 0,
+            "text": ""
+          },
+          "wikibase_item": "Q25980",
+          "titles": {
+            "canonical": "Gleiwitz_Vakası",
+            "normalized": "Gleiwitz Vakası",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Gleiwitz Vakası</span></span>"
+          },
+          "pageid": 1191541,
+          "thumbnail": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Sender_gliwice.jpg/330px-Sender_gliwice.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+            "width": 330,
+            "height": 485
+          },
+          "originalimage": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Sender_gliwice.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+            "width": 457,
+            "height": 672
+          },
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "33734945",
+          "tid": "580ed50b-67d0-11ef-8667-324835210b25",
+          "timestamp": "2024-08-31T19:36:40Z",
+          "description": "Nazi kuvvetleri tarafından 1939'da Polonya'yı işgal etmek için yapılan düzmece saldırı",
+          "description_source": "central",
+          "coordinates": {
+            "lat": 50.31337,
+            "lon": 18.689037
+          },
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/Gleiwitz_Vakas%C4%B1",
+              "revisions": "https://tr.wikipedia.org/wiki/Gleiwitz_Vakas%C4%B1?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/Gleiwitz_Vakas%C4%B1?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Gleiwitz_Vakas%C4%B1"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/Gleiwitz_Vakas%C4%B1",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/Gleiwitz_Vakas%C4%B1",
+              "edit": "https://tr.wikipedia.org/wiki/Gleiwitz_Vakas%C4%B1?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Gleiwitz_Vakas%C4%B1"
+            }
+          },
+          "extract": "Gleiwitz Vakası, 31 Ağustos 1939'da, II. Dünya Savaşı'nın Avrupa'da başlamasının arefesinde, Polonyalı kılığına bürünmüş Alman güçlerince Yukarı Silezya'nın Gleiwitz kentindeki Gleiwitz Radyo İstasyonu'na yapılan düzmece saldırıdır.",
+          "extract_html": "<p><b>Gleiwitz Vakası</b>, 31 Ağustos 1939'da, II. Dünya Savaşı'nın Avrupa'da başlamasının arefesinde, Polonyalı kılığına bürünmüş Alman güçlerince Yukarı Silezya'nın Gleiwitz kentindeki Gleiwitz Radyo İstasyonu'na yapılan düzmece saldırıdır.</p>",
+          "normalizedtitle": "Gleiwitz Vakası"
+        },
+        {
+          "type": "standard",
+          "title": "II._Dünya_Savaşı",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">II. Dünya Savaşı</span></span>",
+          "namespace": {
+            "id": 0,
+            "text": ""
+          },
+          "wikibase_item": "Q362",
+          "titles": {
+            "canonical": "II._Dünya_Savaşı",
+            "normalized": "II. Dünya Savaşı",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">II. Dünya Savaşı</span></span>"
+          },
+          "pageid": 3765,
+          "thumbnail": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Changde_battle.jpg/330px-Changde_battle.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+            "width": 330,
+            "height": 236
+          },
+          "originalimage": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/3/34/Changde_battle.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+            "width": 400,
+            "height": 286
+          },
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "37789489",
+          "tid": "42ba1e8b-9b3d-11f1-8ce0-ac658d46e360",
+          "timestamp": "2026-08-18T19:44:44Z",
+          "description": "1939-1945 yılları arasındaki küresel savaş",
+          "description_source": "central",
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/II._D%C3%BCnya_Sava%C5%9F%C4%B1",
+              "revisions": "https://tr.wikipedia.org/wiki/II._D%C3%BCnya_Sava%C5%9F%C4%B1?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/II._D%C3%BCnya_Sava%C5%9F%C4%B1?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:II._D%C3%BCnya_Sava%C5%9F%C4%B1"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/II._D%C3%BCnya_Sava%C5%9F%C4%B1",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/II._D%C3%BCnya_Sava%C5%9F%C4%B1",
+              "edit": "https://tr.wikipedia.org/wiki/II._D%C3%BCnya_Sava%C5%9F%C4%B1?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:II._D%C3%BCnya_Sava%C5%9F%C4%B1"
+            }
+          },
+          "extract": "II. Dünya Savaşı, 1939'dan 1945'e kadar süren küresel savaştır. Savaşa dönemin büyük güçleri ve dünya ülkelerinin büyük çoğunluğu katıldı, Müttefikler ve Mihver olmak üzere iki karşıt askerî ittifak kuruldu. 30'dan fazla ülkeden gelen 100 milyondan fazla personelin doğrudan katıldığı bu topyekûn savaşta, savaşın büyük tarafları tüm ekonomik, endüstriyel ve bilimsel kapasitelerini seferber ettiler. 70 ila 85 milyon insanın ölümüyle sonuçlanan II. Dünya Savaşı, insanlık tarihindeki en ölümcül savaştı ve savaş boyunca askerî personelden daha çok sivil kayıp verildi. Milyonlarca insan soykırımdan, planlanmış açlık ölümlerinden, katliamlardan ve hastalıklardan öldü. Tanklar, zırhlı araçlar, savaş uçakları, stratejik bombardımanlar, uçak gemileri, radar ve sonar, nükleer silahların geliştirilmesi ve roketler gibi birçok savaş teknolojisi savaşta önemli rol oynadı.",
+          "extract_html": "<p><b>II. Dünya Savaşı</b>, 1939'dan 1945'e kadar süren küresel savaştır. Savaşa dönemin büyük güçleri ve dünya ülkelerinin büyük çoğunluğu katıldı, Müttefikler ve Mihver olmak üzere iki karşıt askerî ittifak kuruldu. 30'dan fazla ülkeden gelen 100 milyondan fazla personelin doğrudan katıldığı bu topyekûn savaşta, savaşın büyük tarafları tüm ekonomik, endüstriyel ve bilimsel kapasitelerini seferber ettiler. 70 ila 85 milyon insanın ölümüyle sonuçlanan II. Dünya Savaşı, insanlık tarihindeki en ölümcül savaştı ve savaş boyunca askerî personelden daha çok sivil kayıp verildi. Milyonlarca insan soykırımdan, planlanmış açlık ölümlerinden, katliamlardan ve hastalıklardan öldü. Tanklar, zırhlı araçlar, savaş uçakları, stratejik bombardımanlar, uçak gemileri, radar ve sonar, nükleer silahların geliştirilmesi ve roketler gibi birçok savaş teknolojisi savaşta önemli rol oynadı.</p>",
+          "normalizedtitle": "II. Dünya Savaşı"
+        },
+        {
+          "type": "standard",
+          "title": "Avrupa",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Avrupa</span></span>",
+          "namespace": {
+            "id": 0,
+            "text": ""
+          },
+          "wikibase_item": "Q46",
+          "titles": {
+            "canonical": "Avrupa",
+            "normalized": "Avrupa",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Avrupa</span></span>"
+          },
+          "pageid": 6239,
+          "thumbnail": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Europe_orthographic_Caucasus_Urals_boundary_%28with_borders%29.svg/langtr-330px-Europe_orthographic_Caucasus_Urals_boundary_%28with_borders%29.svg.png?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+            "width": 330,
+            "height": 329
+          },
+          "originalimage": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Europe_orthographic_Caucasus_Urals_boundary_%28with_borders%29.svg/langtr-960px-Europe_orthographic_Caucasus_Urals_boundary_%28with_borders%29.svg.png?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+            "width": 537,
+            "height": 536
+          },
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "37741701",
+          "tid": "bccb3133-959e-11f1-9883-0ad1af9cdae7",
+          "timestamp": "2026-08-11T16:07:23Z",
+          "description": "kıta",
+          "description_source": "central",
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/Avrupa",
+              "revisions": "https://tr.wikipedia.org/wiki/Avrupa?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/Avrupa?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Avrupa"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/Avrupa",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/Avrupa",
+              "edit": "https://tr.wikipedia.org/wiki/Avrupa?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Avrupa"
+            }
+          },
+          "extract": "Avrupa, kuzeyde Arktik Okyanusu, batıda Atlantik Okyanusu, güneyde Akdeniz ve doğuda Asya ile çevrili bir kıtadır. Avrupa'nın Asya'dan Ural Dağları, Ural Nehri, Hazar Denizi, Büyük Kafkaslar, Karadeniz ve Türk Boğazlarının su yolları ile ayrıldığı kabul edilir.",
+          "extract_html": "<p><b>Avrupa</b>, kuzeyde Arktik Okyanusu, batıda Atlantik Okyanusu, güneyde Akdeniz ve doğuda Asya ile çevrili bir kıtadır. Avrupa'nın Asya'dan Ural Dağları, Ural Nehri, Hazar Denizi, Büyük Kafkaslar, Karadeniz ve Türk Boğazlarının su yolları ile ayrıldığı kabul edilir.</p>",
+          "normalizedtitle": "Avrupa"
+        }
+      ],
+      "year": 1939
+    },
+    {
+      "text": "Bertolt Brecht'in Üç Kuruşluk Opera adlı oyununun ilk gösterimi Berlin'de yapıldı.",
+      "pages": [
+        {
+          "type": "standard",
+          "title": "Bertolt_Brecht",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Bertolt Brecht</span></span>",
+          "namespace": {
+            "id": 0,
+            "text": ""
+          },
+          "wikibase_item": "Q38757",
+          "titles": {
+            "canonical": "Bertolt_Brecht",
+            "normalized": "Bertolt Brecht",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Bertolt Brecht</span></span>"
+          },
+          "pageid": 13009,
+          "thumbnail": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Bundesarchiv_Bild_183-W0409-300%2C_Bertolt_Brecht.jpg/330px-Bundesarchiv_Bild_183-W0409-300%2C_Bertolt_Brecht.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+            "width": 330,
+            "height": 478
+          },
+          "originalimage": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/f/f8/Bundesarchiv_Bild_183-W0409-300%2C_Bertolt_Brecht.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+            "width": 548,
+            "height": 794
+          },
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "37754980",
+          "tid": "3bda8857-979e-11f1-87eb-ce1c3265e46e",
+          "timestamp": "2026-08-14T05:08:49Z",
+          "description": "Alman şair, tiyatro yazarı ve yönetmeni (1898-1956)",
+          "description_source": "central",
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/Bertolt_Brecht",
+              "revisions": "https://tr.wikipedia.org/wiki/Bertolt_Brecht?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/Bertolt_Brecht?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Bertolt_Brecht"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/Bertolt_Brecht",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/Bertolt_Brecht",
+              "edit": "https://tr.wikipedia.org/wiki/Bertolt_Brecht?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Bertolt_Brecht"
+            }
+          },
+          "extract": "Eugen Bertolt Friedrich Brecht, kısaca Bertolt ya da Bert Brecht,, Alman şair, tiyatro yazarı ve yönetmenidir.",
+          "extract_html": "<p><b>Eugen Bertolt Friedrich Brecht</b>, kısaca <b>Bertolt</b> ya da <b>Bert Brecht,</b>, Alman şair, tiyatro yazarı ve yönetmenidir.</p>",
+          "normalizedtitle": "Bertolt Brecht"
+        },
+        {
+          "type": "standard",
+          "title": "Üç_Kuruşluk_Opera",
+          "displaytitle": "<i>Üç Kuruşluk Opera</i>",
+          "namespace": {
+            "id": 0,
+            "text": ""
+          },
+          "wikibase_item": "Q212495",
+          "titles": {
+            "canonical": "Üç_Kuruşluk_Opera",
+            "normalized": "Üç Kuruşluk Opera",
+            "display": "<i>Üç Kuruşluk Opera</i>"
+          },
+          "pageid": 1067212,
+          "thumbnail": {
+            "source": "https://upload.wikimedia.org/wikipedia/tr/0/07/%C3%9C%C3%A7_Kuru%C5%9Fluk_Opera_T%C3%BCrk%C3%A7e_afi%C5%9F.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+            "width": 287,
+            "height": 400
+          },
+          "originalimage": {
+            "source": "https://upload.wikimedia.org/wikipedia/tr/0/07/%C3%9C%C3%A7_Kuru%C5%9Fluk_Opera_T%C3%BCrk%C3%A7e_afi%C5%9F.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+            "width": 287,
+            "height": 400
+          },
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "34274111",
+          "tid": "210137f7-aa44-11ef-bef6-b29eabec48e1",
+          "timestamp": "2024-11-24T09:11:46Z",
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/%C3%9C%C3%A7_Kuru%C5%9Fluk_Opera",
+              "revisions": "https://tr.wikipedia.org/wiki/%C3%9C%C3%A7_Kuru%C5%9Fluk_Opera?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/%C3%9C%C3%A7_Kuru%C5%9Fluk_Opera?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:%C3%9C%C3%A7_Kuru%C5%9Fluk_Opera"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/%C3%9C%C3%A7_Kuru%C5%9Fluk_Opera",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/%C3%9C%C3%A7_Kuru%C5%9Fluk_Opera",
+              "edit": "https://tr.wikipedia.org/wiki/%C3%9C%C3%A7_Kuru%C5%9Fluk_Opera?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:%C3%9C%C3%A7_Kuru%C5%9Fluk_Opera"
+            }
+          },
+          "extract": "Üç Kuruşluk Opera Alman tiyatro yazarı Bertolt Brecht'in yazdığı ve besteci Kurt Weill'ın müziklerini bestelediği müzikal tiyatro oyunudur. Brecht ve Weill \"Üç Kuruşluk Opera\" için çevirmen Elisabeth Hauptmann tasarımcı Caspar Neher ile birlikte çalıştılar. Oyun John Gay ve Pebusch'un 18. yüzyıl İngiliz Balad operası Dilenciler Operası'nın bir uyarlamasıdır. Kapitalist bir dünyaya Marksist bir eleştiri getiren oyun ilk kez 31 Ağustos 1928'de Berlin'deki Theater am Schiffbauerdamm'da sahnelendi.",
+          "extract_html": "<p><b>Üç Kuruşluk Opera</b> Alman tiyatro yazarı Bertolt Brecht'in yazdığı ve besteci Kurt Weill'ın müziklerini bestelediği müzikal tiyatro oyunudur. Brecht ve Weill \"Üç Kuruşluk Opera\" için çevirmen Elisabeth Hauptmann tasarımcı Caspar Neher ile birlikte çalıştılar. Oyun John Gay ve Pebusch'un 18. yüzyıl İngiliz Balad operası Dilenciler Operası'nın bir uyarlamasıdır. Kapitalist bir dünyaya Marksist bir eleştiri getiren oyun ilk kez 31 Ağustos 1928'de Berlin'deki Theater am Schiffbauerdamm'da sahnelendi.</p>",
+          "normalizedtitle": "Üç Kuruşluk Opera"
+        },
+        {
+          "type": "standard",
+          "title": "Berlin",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Berlin</span></span>",
+          "namespace": {
+            "id": 0,
+            "text": ""
+          },
+          "wikibase_item": "Q64",
+          "titles": {
+            "canonical": "Berlin",
+            "normalized": "Berlin",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Berlin</span></span>"
+          },
+          "pageid": 8598,
+          "thumbnail": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Museumsinsel_Berlin_Juli_2021_1_%28cropped%29.jpg/330px-Museumsinsel_Berlin_Juli_2021_1_%28cropped%29.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+            "width": 330,
+            "height": 192
+          },
+          "originalimage": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Museumsinsel_Berlin_Juli_2021_1_%28cropped%29.jpg/3840px-Museumsinsel_Berlin_Juli_2021_1_%28cropped%29.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+            "width": 5464,
+            "height": 3186
+          },
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "37744906",
+          "tid": "02e5c905-965b-11f1-997e-3f6c308e309e",
+          "timestamp": "2026-08-12T14:35:06Z",
+          "description": "Almanya'nın başkenti",
+          "description_source": "central",
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/Berlin",
+              "revisions": "https://tr.wikipedia.org/wiki/Berlin?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/Berlin?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Berlin"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/Berlin",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/Berlin",
+              "edit": "https://tr.wikipedia.org/wiki/Berlin?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Berlin"
+            }
+          },
+          "extract": "Berlin, hem yüzölçümü hem de nüfus bakımından Almanya'nın başkenti ve en büyük şehridir. 3,7 milyon nüfusuyla, Avrupa Birliği'ndeki herhangi bir şehrin şehir sınırları içindeki en yüksek nüfusa sahiptir. Şehir aynı zamanda Almanya'nın eyaletlerinden biridir ve yüzölçümü bakımından ülkenin üçüncü en küçük eyaletidir. Berlin, Brandenburg eyaletiyle çevrilidir ve güneybatıda Brandenburg'un başkenti Potsdam ile sınır komşusudur. Berlin'in kentsel alanının nüfusu 5 milyonu aşmaktadır ve bu da onu Almanya'nın en kalabalık kentsel alanı yapmaktadır. Berlin-Brandenburg başkent bölgesi yaklaşık 6 milyon nüfusa sahiptir ve Ren-Ruhr bölgesinden sonra Almanya'nın ikinci büyük metropol bölgesidir ve Avrupa Birliği'nde GSYİH bakımından beşinci büyük metropol bölgesidir.",
+          "extract_html": "<p><b>Berlin</b>, hem yüzölçümü hem de nüfus bakımından Almanya'nın başkenti ve en büyük şehridir. 3,7 milyon nüfusuyla, Avrupa Birliği'ndeki herhangi bir şehrin şehir sınırları içindeki en yüksek nüfusa sahiptir. Şehir aynı zamanda Almanya'nın eyaletlerinden biridir ve yüzölçümü bakımından ülkenin üçüncü en küçük eyaletidir. Berlin, Brandenburg eyaletiyle çevrilidir ve güneybatıda Brandenburg'un başkenti Potsdam ile sınır komşusudur. Berlin'in kentsel alanının nüfusu 5 milyonu aşmaktadır ve bu da onu Almanya'nın en kalabalık kentsel alanı yapmaktadır. Berlin-Brandenburg başkent bölgesi yaklaşık 6 milyon nüfusa sahiptir ve Ren-Ruhr bölgesinden sonra Almanya'nın ikinci büyük metropol bölgesidir ve Avrupa Birliği'nde GSYİH bakımından beşinci büyük metropol bölgesidir.</p>",
+          "normalizedtitle": "Berlin"
+        }
+      ],
+      "year": 1928
+    }
+  ],
+  "births": [
+    {
+      "text": "Jang Wonyoung, Güney Koreli şarkıcı ve model",
+      "pages": [
+        {
+          "type": "standard",
+          "title": "Jang_Wonyoung",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Jang Wonyoung</span></span>",
+          "namespace": {
+            "id": 0,
+            "text": ""
+          },
+          "wikibase_item": "Q56476186",
+          "titles": {
+            "canonical": "Jang_Wonyoung",
+            "normalized": "Jang Wonyoung",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Jang Wonyoung</span></span>"
+          },
+          "pageid": 2935609,
+          "thumbnail": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Jang_Won-young_of_Ive%2C_April_16%2C_2025.png/330px-Jang_Won-young_of_Ive%2C_April_16%2C_2025.png?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+            "width": 330,
+            "height": 418
+          },
+          "originalimage": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/6/6f/Jang_Won-young_of_Ive%2C_April_16%2C_2025.png?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+            "width": 1154,
+            "height": 1460
+          },
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "37527828",
+          "tid": "b6ffb234-85d3-11f1-a153-18295250cbb0",
+          "timestamp": "2026-07-22T13:46:18Z",
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/Jang_Wonyoung",
+              "revisions": "https://tr.wikipedia.org/wiki/Jang_Wonyoung?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/Jang_Wonyoung?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Jang_Wonyoung"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/Jang_Wonyoung",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/Jang_Wonyoung",
+              "edit": "https://tr.wikipedia.org/wiki/Jang_Wonyoung?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Jang_Wonyoung"
+            }
+          },
+          "extract": "Jang Wonyoung, Güney Koreli şarkıcı ve model. Starship Entertainment tarafından kurulmuş Güney Koreli-Japon kız grubu Ive'ın dansçısı ve vokalistidir. Ayrıca Mnet'in düzenlediği Produce 48 programındaki birinciliği sayesinde eski grubu olan Iz*One'da ilk çıkışını yapmıştır.",
+          "extract_html": "<p><b>Jang Wonyoung</b>, Güney Koreli şarkıcı ve model. Starship Entertainment tarafından kurulmuş Güney Koreli-Japon kız grubu <span class=\"mw-disambig\">Ive</span>'ın dansçısı ve vokalistidir. Ayrıca Mnet'in düzenlediği Produce 48 programındaki birinciliği sayesinde eski grubu olan Iz*One'da ilk çıkışını yapmıştır.</p>",
+          "normalizedtitle": "Jang Wonyoung"
+        }
+      ],
+      "year": 2004
+    },
+    {
+      "text": "Selin Geçit, Türk şarkıcı",
+      "pages": [
+        {
+          "type": "standard",
+          "title": "Selin_(şarkıcı)",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Selin (şarkıcı)</span></span>",
+          "namespace": {
+            "id": 0,
+            "text": ""
+          },
+          "wikibase_item": "Q133817984",
+          "titles": {
+            "canonical": "Selin_(şarkıcı)",
+            "normalized": "Selin (şarkıcı)",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Selin (şarkıcı)</span></span>"
+          },
+          "pageid": 4464393,
+          "thumbnail": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Selin_Ge%C3%A7it.jpg/330px-Selin_Ge%C3%A7it.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+            "width": 330,
+            "height": 587
+          },
+          "originalimage": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Selin_Ge%C3%A7it.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+            "width": 1320,
+            "height": 2347
+          },
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "37856577",
+          "tid": "05ef1110-a4cd-11f1-9858-7b14e8f497a8",
+          "timestamp": "2026-08-30T23:46:30Z",
+          "description": "Türk şarkıcı ve söz yazarı",
+          "description_source": "central",
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/Selin_(%C5%9Fark%C4%B1c%C4%B1)",
+              "revisions": "https://tr.wikipedia.org/wiki/Selin_(%C5%9Fark%C4%B1c%C4%B1)?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/Selin_(%C5%9Fark%C4%B1c%C4%B1)?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Selin_(%C5%9Fark%C4%B1c%C4%B1)"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/Selin_(%C5%9Fark%C4%B1c%C4%B1)",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/Selin_(%C5%9Fark%C4%B1c%C4%B1)",
+              "edit": "https://tr.wikipedia.org/wiki/Selin_(%C5%9Fark%C4%B1c%C4%B1)?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Selin_(%C5%9Fark%C4%B1c%C4%B1)"
+            }
+          },
+          "extract": "Selin veya gerçek adıyla Selin Geçit, Türk pop müziği sanatçısı ve söz yazarıdır.",
+          "extract_html": "<p><b>Selin</b> veya gerçek adıyla <b>Selin Geçit</b>, Türk pop müziği sanatçısı ve söz yazarıdır.</p>",
+          "normalizedtitle": "Selin (şarkıcı)"
+        }
+      ],
+      "year": 1998
+    },
+    {
+      "text": "Fabio Jakobsen, Hollandalı futbolcu",
+      "pages": [
+        {
+          "type": "standard",
+          "title": "Fabio_Jakobsen",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Fabio Jakobsen</span></span>",
+          "namespace": {
+            "id": 0,
+            "text": ""
+          },
+          "wikibase_item": "Q20743779",
+          "titles": {
+            "canonical": "Fabio_Jakobsen",
+            "normalized": "Fabio Jakobsen",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Fabio Jakobsen</span></span>"
+          },
+          "pageid": 3072498,
+          "thumbnail": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Fabio_Jakobsen_-_Vuelta_a_Espa%C3%B1a_2019.jpg/330px-Fabio_Jakobsen_-_Vuelta_a_Espa%C3%B1a_2019.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+            "width": 330,
+            "height": 440
+          },
+          "originalimage": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/3/36/Fabio_Jakobsen_-_Vuelta_a_Espa%C3%B1a_2019.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+            "width": 1777,
+            "height": 2370
+          },
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "27386490",
+          "tid": "cfe83d47-a994-11ec-bdfd-681769b263f4",
+          "timestamp": "2022-03-22T04:01:55Z",
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/Fabio_Jakobsen",
+              "revisions": "https://tr.wikipedia.org/wiki/Fabio_Jakobsen?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/Fabio_Jakobsen?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Fabio_Jakobsen"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/Fabio_Jakobsen",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/Fabio_Jakobsen",
+              "edit": "https://tr.wikipedia.org/wiki/Fabio_Jakobsen?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Fabio_Jakobsen"
+            }
+          },
+          "extract": "Fabio Jakobsen şu anda UCI WorldTeam Soudal-Quick-Step için yarışan Hollandalı bir bisikletçidir.",
+          "extract_html": "<p><b>Fabio Jakobsen</b> şu anda UCI WorldTeam Soudal-Quick-Step için yarışan Hollandalı bir bisikletçidir.</p>",
+          "normalizedtitle": "Fabio Jakobsen"
+        }
+      ],
+      "year": 1996
+    }
+  ],
+  "deaths": [
+    {
+      "text": "Sol Bamba, Fildişi Sahili millî futbolcu (d. 1985)",
+      "pages": [
+        {
+          "type": "standard",
+          "title": "Sol_Bamba",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Sol Bamba</span></span>",
+          "namespace": {
+            "id": 0,
+            "text": ""
+          },
+          "wikibase_item": "Q350107",
+          "titles": {
+            "canonical": "Sol_Bamba",
+            "normalized": "Sol Bamba",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Sol Bamba</span></span>"
+          },
+          "pageid": 1464023,
+          "thumbnail": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Sol_Bamba_8915.JPG/330px-Sol_Bamba_8915.JPG?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+            "width": 330,
+            "height": 495
+          },
+          "originalimage": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/a/ae/Sol_Bamba_8915.JPG?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+            "width": 697,
+            "height": 1046
+          },
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "36417970",
+          "tid": "16f61187-c586-11f0-b754-10f8f4d4199e",
+          "timestamp": "2025-11-19T20:26:55Z",
+          "description": "Fransız futbolcu",
+          "description_source": "central",
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/Sol_Bamba",
+              "revisions": "https://tr.wikipedia.org/wiki/Sol_Bamba?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/Sol_Bamba?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Sol_Bamba"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/Sol_Bamba",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/Sol_Bamba",
+              "edit": "https://tr.wikipedia.org/wiki/Sol_Bamba?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Sol_Bamba"
+            }
+          },
+          "extract": "Souleymane Bamba, Fransa doğumlu Fildişi Sahilli eski millî futbolcu ve teknik direktör. Stoper mevkiinde görev yapmaktaydı.",
+          "extract_html": "<p><b>Souleymane Bamba</b>, Fransa doğumlu Fildişi Sahilli eski millî futbolcu ve teknik direktör. Stoper mevkiinde görev yapmaktaydı.</p>",
+          "normalizedtitle": "Sol Bamba"
+        },
+        {
+          "type": "standard",
+          "title": "1985",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">1985</span></span>",
+          "namespace": {
+            "id": 0,
+            "text": ""
+          },
+          "wikibase_item": "Q2431",
+          "titles": {
+            "canonical": "1985",
+            "normalized": "1985",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">1985</span></span>"
+          },
+          "pageid": 2280,
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "37834560",
+          "tid": "26277500-a149-11f1-b02c-908af9d3f2bb",
+          "timestamp": "2026-08-26T12:24:57Z",
+          "description": "yıl",
+          "description_source": "central",
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/1985",
+              "revisions": "https://tr.wikipedia.org/wiki/1985?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/1985?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:1985"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/1985",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/1985",
+              "edit": "https://tr.wikipedia.org/wiki/1985?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:1985"
+            }
+          },
+          "extract": "1985 (MCMLXXXV) salı günü başlayan bir yıldır.",
+          "extract_html": "<p><b>1985</b> (<b>MCMLXXXV</b>) salı günü başlayan bir yıldır.</p>",
+          "normalizedtitle": "1985"
+        }
+      ],
+      "year": 2024
+    },
+    {
+      "text": "Kadir Baikenov, Kazak mühendis ve siyasetçi (d. 1944)",
+      "pages": [
+        {
+          "type": "standard",
+          "title": "Kadir_Baykenov",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Kadir Baykenov</span></span>",
+          "namespace": {
+            "id": 0,
+            "text": ""
+          },
+          "wikibase_item": "Q65124007",
+          "titles": {
+            "canonical": "Kadir_Baykenov",
+            "normalized": "Kadir Baykenov",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Kadir Baykenov</span></span>"
+          },
+          "pageid": 3417593,
+          "thumbnail": {
+            "source": "https://upload.wikimedia.org/wikipedia/tr/3/3a/Kadir_Baikenov.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+            "width": 165,
+            "height": 177
+          },
+          "originalimage": {
+            "source": "https://upload.wikimedia.org/wikipedia/tr/3/3a/Kadir_Baikenov.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+            "width": 165,
+            "height": 177
+          },
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "36822642",
+          "tid": "1759b095-0df8-11f1-926f-87db57832bb0",
+          "timestamp": "2026-02-20T01:04:22Z",
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/Kadir_Baykenov",
+              "revisions": "https://tr.wikipedia.org/wiki/Kadir_Baykenov?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/Kadir_Baykenov?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Kadir_Baykenov"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/Kadir_Baykenov",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/Kadir_Baykenov",
+              "edit": "https://tr.wikipedia.org/wiki/Kadir_Baykenov?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Kadir_Baykenov"
+            }
+          },
+          "extract": "Kadir Karkabatuly Baikenov, Kazak mühendis ve siyasetçi.",
+          "extract_html": "<p><b>Kadir Karkabatuly Baikenov</b>, Kazak mühendis ve siyasetçi.</p>",
+          "normalizedtitle": "Kadir Baykenov"
+        },
+        {
+          "type": "standard",
+          "title": "1944",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">1944</span></span>",
+          "namespace": {
+            "id": 0,
+            "text": ""
+          },
+          "wikibase_item": "Q5268",
+          "titles": {
+            "canonical": "1944",
+            "normalized": "1944",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">1944</span></span>"
+          },
+          "pageid": 2346,
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "37417871",
+          "tid": "316385fb-7582-11f1-99d0-61b0b96b0f0b",
+          "timestamp": "2026-07-01T19:22:26Z",
+          "description": "yıl",
+          "description_source": "central",
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/1944",
+              "revisions": "https://tr.wikipedia.org/wiki/1944?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/1944?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:1944"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/1944",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/1944",
+              "edit": "https://tr.wikipedia.org/wiki/1944?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:1944"
+            }
+          },
+          "extract": "1944 bir yıldır.",
+          "extract_html": "<p><b>1944</b> bir yıldır.</p>",
+          "normalizedtitle": "1944"
+        }
+      ],
+      "year": 2022
+    },
+    {
+      "text": "Lorraine Botha, Güney Afrikalı siyasetçi (d. 1965)",
+      "pages": [
+        {
+          "type": "standard",
+          "title": "Lorraine_Botha",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Lorraine Botha</span></span>",
+          "namespace": {
+            "id": 0,
+            "text": ""
+          },
+          "wikibase_item": "Q31736970",
+          "titles": {
+            "canonical": "Lorraine_Botha",
+            "normalized": "Lorraine Botha",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Lorraine Botha</span></span>"
+          },
+          "pageid": 3418293,
+          "thumbnail": {
+            "source": "https://upload.wikimedia.org/wikipedia/tr/f/f6/Lorraine_botha.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+            "width": 125,
+            "height": 174
+          },
+          "originalimage": {
+            "source": "https://upload.wikimedia.org/wikipedia/tr/f/f6/Lorraine_botha.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+            "width": 125,
+            "height": 174
+          },
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "36959059",
+          "tid": "da7df688-2522-11f1-bb60-c0d68b09af7f",
+          "timestamp": "2026-03-21T12:38:25Z",
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/Lorraine_Botha",
+              "revisions": "https://tr.wikipedia.org/wiki/Lorraine_Botha?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/Lorraine_Botha?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Lorraine_Botha"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/Lorraine_Botha",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/Lorraine_Botha",
+              "edit": "https://tr.wikipedia.org/wiki/Lorraine_Botha?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Lorraine_Botha"
+            }
+          },
+          "extract": "Lorraine Juliette Botha, Güney Afrikalı siyasetçidir.",
+          "extract_html": "<p><b>Lorraine Juliette Botha</b>, Güney Afrikalı siyasetçidir.</p>",
+          "normalizedtitle": "Lorraine Botha"
+        },
+        {
+          "type": "standard",
+          "title": "1965",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">1965</span></span>",
+          "namespace": {
+            "id": 0,
+            "text": ""
+          },
+          "wikibase_item": "Q2650",
+          "titles": {
+            "canonical": "1965",
+            "normalized": "1965",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">1965</span></span>"
+          },
+          "pageid": 2367,
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "37628041",
+          "tid": "cf01a389-8b88-11f1-b2bb-1bc5ab20bd9e",
+          "timestamp": "2026-07-29T20:05:13Z",
+          "description": "yıl",
+          "description_source": "central",
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/1965",
+              "revisions": "https://tr.wikipedia.org/wiki/1965?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/1965?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:1965"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/1965",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/1965",
+              "edit": "https://tr.wikipedia.org/wiki/1965?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:1965"
+            }
+          },
+          "extract": "1965 bir yıldır.",
+          "extract_html": "<p><b>1965</b> bir yıldır.</p>",
+          "normalizedtitle": "1965"
+        }
+      ],
+      "year": 2022
+    }
+  ],
+  "events": [
+    {
+      "text": "Irak Savaşı, ABD Başkanı Barack Obama'nın konuşmasıyla resmen bitti.",
+      "pages": [
+        {
+          "type": "standard",
+          "title": "Irak_Savaşı",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Irak Savaşı</span></span>",
+          "namespace": {
+            "id": 0,
+            "text": ""
+          },
+          "wikibase_item": "Q545449",
+          "titles": {
+            "canonical": "Irak_Savaşı",
+            "normalized": "Irak Savaşı",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Irak Savaşı</span></span>"
+          },
+          "pageid": 54150,
+          "thumbnail": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/0/07/Iraq_header_2.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+            "width": 300,
+            "height": 278
+          },
+          "originalimage": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/0/07/Iraq_header_2.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+            "width": 300,
+            "height": 278
+          },
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "37609260",
+          "tid": "599cc1cf-8afd-11f1-a4e6-71c137f730c4",
+          "timestamp": "2026-07-29T03:26:56Z",
+          "description": "ABD öncülüğündeki koalisyon güçlerinin, Irak'ı işgaliyle başlayan savaş (2003-2011)",
+          "description_source": "central",
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/Irak_Sava%C5%9F%C4%B1",
+              "revisions": "https://tr.wikipedia.org/wiki/Irak_Sava%C5%9F%C4%B1?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/Irak_Sava%C5%9F%C4%B1?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Irak_Sava%C5%9F%C4%B1"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/Irak_Sava%C5%9F%C4%B1",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/Irak_Sava%C5%9F%C4%B1",
+              "edit": "https://tr.wikipedia.org/wiki/Irak_Sava%C5%9F%C4%B1?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Irak_Sava%C5%9F%C4%B1"
+            }
+          },
+          "extract": "Irak Savaşı, 20 Mart 2003'te Amerika Birleşik Devletleri ve Birleşik Krallık önderliğinde oluşturulmuş Çok Uluslu Koalisyon Kuvvetleri'nin bir askerî harekâtla Irak'a girmesiyle başlayan ve devam eden savaş. Ayrıca İkinci Körfez Savaşı, Irak'ın İşgali ve koalisyon ülkelerince Irak'ı Özgürleştirme Operasyonu olarak da adlandırılır. 21 Ekim 2011 tarihinde ABD Başkanı Barack Obama yaptığı açıklamada, ülkedeki ABD askerlerinin 31 Aralık 2011'e kadar geri çekileceğini açıkladı. 15 Aralık 2011 tarihinde Bağdat'ta bulunan Amerikan Üssü'nden son Amerikan Bayrağı'nın indirilmesiyle savaş resmen sona ermiştir. ABD Dışişleri Bakanı John Kerry savaşın vahim bir hata olduğunu belirtmiştir.",
+          "extract_html": "<p><b>Irak Savaşı</b>, 20 Mart 2003'te Amerika Birleşik Devletleri ve Birleşik Krallık önderliğinde oluşturulmuş Çok Uluslu Koalisyon Kuvvetleri'nin bir askerî harekâtla Irak'a girmesiyle başlayan ve devam eden savaş. Ayrıca <b>İkinci Körfez Savaşı</b>, <b>Irak'ın İşgali</b> ve koalisyon ülkelerince <b>Irak'ı Özgürleştirme Operasyonu</b> olarak da adlandırılır. 21 Ekim 2011 tarihinde ABD Başkanı Barack Obama yaptığı açıklamada, ülkedeki ABD askerlerinin 31 Aralık 2011'e kadar geri çekileceğini açıkladı. 15 Aralık 2011 tarihinde Bağdat'ta bulunan Amerikan Üssü'nden son Amerikan Bayrağı'nın indirilmesiyle savaş resmen sona ermiştir. ABD Dışişleri Bakanı John Kerry savaşın vahim bir hata olduğunu belirtmiştir.</p>",
+          "normalizedtitle": "Irak Savaşı"
+        },
+        {
+          "type": "standard",
+          "title": "Amerika_Birleşik_Devletleri",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Amerika Birleşik Devletleri</span></span>",
+          "namespace": {
+            "id": 0,
+            "text": ""
+          },
+          "wikibase_item": "Q30",
+          "titles": {
+            "canonical": "Amerika_Birleşik_Devletleri",
+            "normalized": "Amerika Birleşik Devletleri",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Amerika Birleşik Devletleri</span></span>"
+          },
+          "pageid": 1958,
+          "thumbnail": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Flag_of_the_United_States_%28DoS_ECA_Color_Standard%29.svg/langtr-330px-Flag_of_the_United_States_%28DoS_ECA_Color_Standard%29.svg.png?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+            "width": 330,
+            "height": 174
+          },
+          "originalimage": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Flag_of_the_United_States_%28DoS_ECA_Color_Standard%29.svg/langtr-1280px-Flag_of_the_United_States_%28DoS_ECA_Color_Standard%29.svg.png?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+            "width": 1235,
+            "height": 650
+          },
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "37744273",
+          "tid": "b2f20f0b-9630-11f1-b8f9-814033c11112",
+          "timestamp": "2026-08-12T09:32:13Z",
+          "description": "Kuzey Amerika'da bir ülke",
+          "description_source": "central",
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/Amerika_Birle%C5%9Fik_Devletleri",
+              "revisions": "https://tr.wikipedia.org/wiki/Amerika_Birle%C5%9Fik_Devletleri?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/Amerika_Birle%C5%9Fik_Devletleri?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Amerika_Birle%C5%9Fik_Devletleri"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/Amerika_Birle%C5%9Fik_Devletleri",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/Amerika_Birle%C5%9Fik_Devletleri",
+              "edit": "https://tr.wikipedia.org/wiki/Amerika_Birle%C5%9Fik_Devletleri?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Amerika_Birle%C5%9Fik_Devletleri"
+            }
+          },
+          "extract": "Amerika Birleşik Devletleri (ABD), daha yaygın kullanılan adıyla Amerika veya Birleşik Devletler, Kuzey Amerika kıtasında Kanada ve Meksika arasında bulunan bir ülkedir. 50 eyaletin birleşiminden meydana gelen federal anayasal bir cumhuriyet ile yönetilir. Bir federal bölgeye sahiptir ve 9,8 milyon km2 yüz ölçümü ile dünyanın karasal alan bakımından dördüncü, toplam alan bakımındansa üçüncü en büyük ülkesi ve 334 milyonu aşan nüfusu ile de en kalabalık üçüncü ülkesidir. Ülkenin başkenti aynı zamanda federal bölgesi olan Washington, DC olup en kalabalık şehri ise New York'tur.",
+          "extract_html": "<p><b>Amerika Birleşik Devletleri</b> (<b>ABD</b>), daha yaygın kullanılan adıyla <b>Amerika</b> veya <b>Birleşik Devletler</b>, Kuzey Amerika kıtasında Kanada ve Meksika arasında bulunan bir ülkedir. 50 eyaletin birleşiminden meydana gelen federal anayasal bir cumhuriyet ile yönetilir. Bir federal bölgeye sahiptir ve 9,8 milyon <span>km<sup>2</sup></span> yüz ölçümü ile dünyanın karasal alan bakımından dördüncü, toplam alan bakımındansa üçüncü en büyük ülkesi ve 334 milyonu aşan nüfusu ile de en kalabalık üçüncü ülkesidir. Ülkenin başkenti aynı zamanda federal bölgesi olan Washington, DC olup en kalabalık şehri ise New York'tur.</p>",
+          "normalizedtitle": "Amerika Birleşik Devletleri"
+        },
+        {
+          "type": "standard",
+          "title": "Barack_Obama",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Barack Obama</span></span>",
+          "namespace": {
+            "id": 0,
+            "text": ""
+          },
+          "wikibase_item": "Q76",
+          "titles": {
+            "canonical": "Barack_Obama",
+            "normalized": "Barack Obama",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Barack Obama</span></span>"
+          },
+          "pageid": 189864,
+          "thumbnail": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/President_Barack_Obama.jpg/330px-President_Barack_Obama.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+            "width": 330,
+            "height": 412
+          },
+          "originalimage": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/8/8d/President_Barack_Obama.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+            "width": 2687,
+            "height": 3356
+          },
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "37723692",
+          "tid": "0b9a7fe1-937f-11f1-a0b8-8d972636e99e",
+          "timestamp": "2026-08-08T23:15:29Z",
+          "description": "44. Amerika Birleşik Devletleri başkanı (2009–2017)",
+          "description_source": "central",
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/Barack_Obama",
+              "revisions": "https://tr.wikipedia.org/wiki/Barack_Obama?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/Barack_Obama?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Barack_Obama"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/Barack_Obama",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/Barack_Obama",
+              "edit": "https://tr.wikipedia.org/wiki/Barack_Obama?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Barack_Obama"
+            }
+          },
+          "extract": "Barack Hussein Obama II, Amerika Birleşik Devletleri'nin 44. başkanı. İlk olarak 4 Kasım 2008'de yapılan 2008 ABD başkanlık seçimlerinde ABD'nin 44. devlet başkanı seçilmiş ve 20 Ocak 2009 tarihinde bu görevi George W. Bush'tan devralmıştır. 6 Kasım 2012'de yapılan 2012 ABD başkanlık seçimlerinde Mitt Romney karşısında seçimi kazanmış ve Amerika Birleşik Devletleri Başkanlığına ikinci kez seçilmiştir. Demokrat Parti'nin adayı olan Obama, ABD tarihindeki ilk ve tek Afroamerikalı devlet başkanıdır. Başkanlık görevinden önce; 1997'den 2004'e kadar da Illinois eyalet senatörü ve 2005'ten 2008'e kadar Illinois senatörü olarak görev yaptı.",
+          "extract_html": "<p><b>Barack Hussein Obama II</b>, Amerika Birleşik Devletleri'nin 44. başkanı. İlk olarak 4 Kasım 2008'de yapılan 2008 ABD başkanlık seçimlerinde ABD'nin 44. devlet başkanı seçilmiş ve 20 Ocak 2009 tarihinde bu görevi George W. Bush'tan devralmıştır. 6 Kasım 2012'de yapılan 2012 ABD başkanlık seçimlerinde Mitt Romney karşısında seçimi kazanmış ve Amerika Birleşik Devletleri Başkanlığına ikinci kez seçilmiştir. Demokrat Parti'nin adayı olan Obama, ABD tarihindeki ilk ve tek Afroamerikalı devlet başkanıdır. Başkanlık görevinden önce; 1997'den 2004'e kadar da Illinois eyalet senatörü ve 2005'ten 2008'e kadar Illinois senatörü olarak görev yaptı.</p>",
+          "normalizedtitle": "Barack Obama"
+        }
+      ],
+      "year": 2010
+    },
+    {
+      "text": "Bağdat'ta bir köprüde meydana gelen izdihamda yaklaşık 1000 kişi öldü.",
+      "pages": [
+        {
+          "type": "standard",
+          "title": "Bağdat",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Bağdat</span></span>",
+          "namespace": {
+            "id": 0,
+            "text": ""
+          },
+          "wikibase_item": "Q1530",
+          "titles": {
+            "canonical": "Bağdat",
+            "normalized": "Bağdat",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Bağdat</span></span>"
+          },
+          "pageid": 9195,
+          "thumbnail": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/5628442718_b10fc2c47f_o.jpg/330px-5628442718_b10fc2c47f_o.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+            "width": 330,
+            "height": 216
+          },
+          "originalimage": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/4/4b/5628442718_b10fc2c47f_o.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+            "width": 2000,
+            "height": 1312
+          },
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "36867437",
+          "tid": "be8b0edd-1820-11f1-8975-a34a333b2de3",
+          "timestamp": "2026-03-04T23:20:34Z",
+          "description": "Irak'ın başkenti ve en büyük şehri",
+          "description_source": "central",
+          "coordinates": {
+            "lat": 33.31527778,
+            "lon": 44.36611111
+          },
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/Ba%C4%9Fdat",
+              "revisions": "https://tr.wikipedia.org/wiki/Ba%C4%9Fdat?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/Ba%C4%9Fdat?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Ba%C4%9Fdat"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/Ba%C4%9Fdat",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/Ba%C4%9Fdat",
+              "edit": "https://tr.wikipedia.org/wiki/Ba%C4%9Fdat?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Ba%C4%9Fdat"
+            }
+          },
+          "extract": "Bağdat, Irak'ın başkenti ve en büyük şehridir. Irak'ın merkezinde, Dicle Nehri kıyısında yer almaktadır. Şehrin tahmini nüfusu 8 milyondur. Orta Doğu ve Arap dünyasının en kalabalık ve büyük şehirleri arasında yer almakta olup Irak nüfusunun %22'sini oluşturmaktadır. Bağdat, bölgenin başlıca finans ve ticaret merkezidir.",
+          "extract_html": "<p><b>Bağdat</b>, Irak'ın başkenti ve en büyük şehridir. Irak'ın merkezinde, Dicle Nehri kıyısında yer almaktadır. Şehrin tahmini nüfusu 8 milyondur. Orta Doğu ve Arap dünyasının en kalabalık ve büyük şehirleri arasında yer almakta olup Irak nüfusunun %22'sini oluşturmaktadır. Bağdat, bölgenin başlıca finans ve ticaret merkezidir.</p>",
+          "normalizedtitle": "Bağdat"
+        }
+      ],
+      "year": 2005
+    },
+    {
+      "text": "Boeing 737-200 tipi bir yolcu uçağı, Buenos Aires'ten kalkışı sırasında düştü; 67 kişi öldü.",
+      "pages": [
+        {
+          "type": "standard",
+          "title": "Boeing_737",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Boeing 737</span></span>",
+          "namespace": {
+            "id": 0,
+            "text": ""
+          },
+          "wikibase_item": "Q6387",
+          "titles": {
+            "canonical": "Boeing_737",
+            "normalized": "Boeing 737",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Boeing 737</span></span>"
+          },
+          "pageid": 214450,
+          "thumbnail": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/01202019_American_Airlines_B738M_N342RX_KBFI_NASEDIT_%2847193748641%29.jpg/330px-01202019_American_Airlines_B738M_N342RX_KBFI_NASEDIT_%2847193748641%29.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+            "width": 330,
+            "height": 186
+          },
+          "originalimage": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/0/0f/01202019_American_Airlines_B738M_N342RX_KBFI_NASEDIT_%2847193748641%29.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+            "width": 2048,
+            "height": 1152
+          },
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "37843116",
+          "tid": "ed34fff6-a306-11f1-a46d-91761bfa40cd",
+          "timestamp": "2026-08-28T17:35:57Z",
+          "description": "yolcu uçağı",
+          "description_source": "central",
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/Boeing_737",
+              "revisions": "https://tr.wikipedia.org/wiki/Boeing_737?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/Boeing_737?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Boeing_737"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/Boeing_737",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/Boeing_737",
+              "edit": "https://tr.wikipedia.org/wiki/Boeing_737?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Boeing_737"
+            }
+          },
+          "extract": "Boeing 737, Boeing tarafından Washington eyaletindeki Renton fabrikasında üretilen Amerikan yapımı dar gövdeli bir yolcu uçağıdır. Kısa ve yoğun olmayan rotalarda Boeing 727'yi tamamlamak amacıyla geliştirilen bu çift motorlu model, Boeing 707'nin gövde genişliğini ve altı koltuklu kabin düzenini korurken, kanat altına yerleştirilmiş iki Pratt & Whitney JT8D düşük baypaslı turbofan motoruyla donatıldı. İlk olarak 1964'te tasarlanan 737-100, Nisan 1967'de ilk uçuşunu yaptı ve Şubat 1968'de Lufthansa filosuna katılarak hizmete girdi.",
+          "extract_html": "<p><b>Boeing 737</b>, Boeing tarafından Washington eyaletindeki Renton fabrikasında üretilen Amerikan yapımı dar gövdeli bir yolcu uçağıdır. Kısa ve yoğun olmayan rotalarda Boeing 727'yi tamamlamak amacıyla geliştirilen bu çift motorlu model, Boeing 707'nin gövde genişliğini ve altı koltuklu kabin düzenini korurken, kanat altına yerleştirilmiş iki Pratt &amp; Whitney JT8D düşük baypaslı turbofan motoruyla donatıldı. İlk olarak 1964'te tasarlanan 737-100, Nisan 1967'de ilk uçuşunu yaptı ve Şubat 1968'de Lufthansa filosuna katılarak hizmete girdi.</p>",
+          "normalizedtitle": "Boeing 737"
+        },
+        {
+          "type": "standard",
+          "title": "Buenos_Aires",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Buenos Aires</span></span>",
+          "namespace": {
+            "id": 0,
+            "text": ""
+          },
+          "wikibase_item": "Q1486",
+          "titles": {
+            "canonical": "Buenos_Aires",
+            "normalized": "Buenos Aires",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Buenos Aires</span></span>"
+          },
+          "pageid": 7851,
+          "thumbnail": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Puerto_Madero%2C_Buenos_Aires_%2840689219792%29_%28cropped%29.jpg/330px-Puerto_Madero%2C_Buenos_Aires_%2840689219792%29_%28cropped%29.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+            "width": 330,
+            "height": 135
+          },
+          "originalimage": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/1/1e/Puerto_Madero%2C_Buenos_Aires_%2840689219792%29_%28cropped%29.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+            "width": 3761,
+            "height": 1538
+          },
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "37283902",
+          "tid": "197858a4-6370-11f1-b6ae-c33697d1fa75",
+          "timestamp": "2026-06-08T19:27:34Z",
+          "description": "Arjantin'in başkenti ve en büyük şehri",
+          "description_source": "central",
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/Buenos_Aires",
+              "revisions": "https://tr.wikipedia.org/wiki/Buenos_Aires?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/Buenos_Aires?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Buenos_Aires"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/Buenos_Aires",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/Buenos_Aires",
+              "edit": "https://tr.wikipedia.org/wiki/Buenos_Aires?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Buenos_Aires"
+            }
+          },
+          "extract": "Buenos Aires, resmî adıyla Buenos Aires Özerk Şehri, Arjantin'in başkenti ve en büyük şehridir. \"Güney yarımkürenin Paris'i\" olarak anılan şehir, Río de la Plata'nın güneybatı kıyısında yer almaktadır. Şehir merkezinin nüfusu yaklaşık 3,1 milyon, kentsel alanının nüfusu ise 16,7 milyondur; bu da Buenos Aires'i dünyanın en kalabalık 21. metropol alanı hâline getirmektedir.",
+          "extract_html": "<p><b>Buenos Aires</b>, resmî adıyla <b>Buenos Aires Özerk Şehri</b>, Arjantin'in başkenti ve en büyük şehridir. \"Güney yarımkürenin Paris'i\" olarak anılan şehir, Río de la Plata'nın güneybatı kıyısında yer almaktadır. Şehir merkezinin nüfusu yaklaşık 3,1 milyon, kentsel alanının nüfusu ise 16,7 milyondur; bu da Buenos Aires'i dünyanın en kalabalık 21. metropol alanı hâline getirmektedir.</p>",
+          "normalizedtitle": "Buenos Aires"
+        }
+      ],
+      "year": 1999
+    }
+  ],
+  "holidays": [
+    {
+      "text": "Uşak'ın Sivaslı ilçesinin Yunan işgalinden kurtuluşu (1922)",
+      "pages": [
+        {
+          "type": "standard",
+          "title": "Uşak",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Uşak</span></span>",
+          "namespace": {
+            "id": 0,
+            "text": ""
+          },
+          "wikibase_item": "Q189134",
+          "titles": {
+            "canonical": "Uşak",
+            "normalized": "Uşak",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Uşak</span></span>"
+          },
+          "pageid": 4219,
+          "thumbnail": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/U%C5%9Fak_Kurtulu%C5%9F_An%C4%B1t%C4%B1_ve_Atat%C3%BCrk_Heykeli.jpg/330px-U%C5%9Fak_Kurtulu%C5%9F_An%C4%B1t%C4%B1_ve_Atat%C3%BCrk_Heykeli.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+            "width": 330,
+            "height": 248
+          },
+          "originalimage": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/f/fc/U%C5%9Fak_Kurtulu%C5%9F_An%C4%B1t%C4%B1_ve_Atat%C3%BCrk_Heykeli.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+            "width": 1000,
+            "height": 751
+          },
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "37726029",
+          "tid": "e482939b-93fc-11f1-b230-d27a8c353add",
+          "timestamp": "2026-08-09T14:16:20Z",
+          "description": "Uşak ilinin merkezi olan şehir",
+          "description_source": "central",
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/U%C5%9Fak",
+              "revisions": "https://tr.wikipedia.org/wiki/U%C5%9Fak?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/U%C5%9Fak?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:U%C5%9Fak"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/U%C5%9Fak",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/U%C5%9Fak",
+              "edit": "https://tr.wikipedia.org/wiki/U%C5%9Fak?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:U%C5%9Fak"
+            }
+          },
+          "extract": "Uşak, Ege Bölgesi üzerinde yer alan Uşak ilinin merkezi olan şehirdir. Uşak ilinin deniz seviyesinden yüksekliği 920 metredir. Uşak merkez ilçesinin yüzölçümü 1.655 km²dir.",
+          "extract_html": "<p><b>Uşak</b>, Ege Bölgesi üzerinde yer alan Uşak ilinin merkezi olan şehirdir. Uşak ilinin deniz seviyesinden yüksekliği 920 metredir. Uşak merkez ilçesinin yüzölçümü 1.655 km²dir.</p>",
+          "normalizedtitle": "Uşak"
+        },
+        {
+          "type": "standard",
+          "title": "Sivaslı",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Sivaslı</span></span>",
+          "namespace": {
+            "id": 0,
+            "text": ""
+          },
+          "wikibase_item": "Q1022144",
+          "titles": {
+            "canonical": "Sivaslı",
+            "normalized": "Sivaslı",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Sivaslı</span></span>"
+          },
+          "pageid": 48018,
+          "thumbnail": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Sebaste_Ruins_Sivasli_UsakProvince_Turkey.jpg/330px-Sebaste_Ruins_Sivasli_UsakProvince_Turkey.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+            "width": 330,
+            "height": 241
+          },
+          "originalimage": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/d/d7/Sebaste_Ruins_Sivasli_UsakProvince_Turkey.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+            "width": 799,
+            "height": 584
+          },
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "37745905",
+          "tid": "8c61c188-968c-11f1-b577-e8639ddc1a89",
+          "timestamp": "2026-08-12T20:29:42Z",
+          "description": "Uşak'ın ilçesi",
+          "description_source": "central",
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/Sivasl%C4%B1",
+              "revisions": "https://tr.wikipedia.org/wiki/Sivasl%C4%B1?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/Sivasl%C4%B1?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Sivasl%C4%B1"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/Sivasl%C4%B1",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/Sivasl%C4%B1",
+              "edit": "https://tr.wikipedia.org/wiki/Sivasl%C4%B1?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Sivasl%C4%B1"
+            }
+          },
+          "extract": "Sivaslı, Uşak ilinin bir ilçesidir.",
+          "extract_html": "<p><b>Sivaslı</b>, Uşak ilinin bir ilçesidir.</p>",
+          "normalizedtitle": "Sivaslı"
+        },
+        {
+          "type": "standard",
+          "title": "1922",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">1922</span></span>",
+          "namespace": {
+            "id": 0,
+            "text": ""
+          },
+          "wikibase_item": "Q2165",
+          "titles": {
+            "canonical": "1922",
+            "normalized": "1922",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">1922</span></span>"
+          },
+          "pageid": 2324,
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "36531193",
+          "tid": "f09e96e0-daa1-11f0-aa29-b4ca1e14b258",
+          "timestamp": "2025-12-16T17:09:11Z",
+          "description": "yıl",
+          "description_source": "central",
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/1922",
+              "revisions": "https://tr.wikipedia.org/wiki/1922?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/1922?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:1922"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/1922",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/1922",
+              "edit": "https://tr.wikipedia.org/wiki/1922?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:1922"
+            }
+          },
+          "extract": "1922 bir yıldır.",
+          "extract_html": "<p><b>1922</b> bir yıldır.</p>",
+          "normalizedtitle": "1922"
+        }
+      ]
+    },
+    {
+      "text": "Polonya Dayanışma Günü",
+      "pages": [
+        {
+          "type": "standard",
+          "title": "Polonya",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Polonya</span></span>",
+          "namespace": {
+            "id": 0,
+            "text": ""
+          },
+          "wikibase_item": "Q36",
+          "titles": {
+            "canonical": "Polonya",
+            "normalized": "Polonya",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Polonya</span></span>"
+          },
+          "pageid": 5953,
+          "thumbnail": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Flag_of_Poland.svg/langtr-330px-Flag_of_Poland.svg.png?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+            "width": 330,
+            "height": 206
+          },
+          "originalimage": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Flag_of_Poland.svg/langtr-960px-Flag_of_Poland.svg.png?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+            "width": 640,
+            "height": 400
+          },
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "37701414",
+          "tid": "149d1cff-91d8-11f1-82c6-d307aaac3859",
+          "timestamp": "2026-08-06T20:47:47Z",
+          "description": "Doğu Avrupa ülkesi",
+          "description_source": "central",
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/Polonya",
+              "revisions": "https://tr.wikipedia.org/wiki/Polonya?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/Polonya?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Polonya"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/Polonya",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/Polonya",
+              "edit": "https://tr.wikipedia.org/wiki/Polonya?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Polonya"
+            }
+          },
+          "extract": "Polonya, resmî adıyla Polonya Cumhuriyeti, Orta Avrupa'da yer alan bir ülkedir. Polonya, kuzeyde Baltık Denizi'nden güneyde Südetler ve Karpat Dağları'na kadar uzanır. Polonya, kuzeyde Kaliningrad Oblastı ve Litvanya; doğuda Belarus ve Ukrayna; güneyde Slovakya ve Çek Cumhuriyeti; batıda ise Almanya ile sınır komşusudur. Ülke, çeşitli bir coğrafyaya, farklı ekosistemlere ve ılıman bir iklime sahiptir. On altı voyvodalıktan oluşan Polonya, 38 milyondan fazla nüfusuyla Avrupa Birliği'nin (AB) beşinci en kalabalık üye ülkesi ve 312.696 km² yüzölçümüyle de beşinci büyük AB ülkesidir. Başkenti ve en büyük şehri Varşova'dır; diğer önemli şehirler arasında Kraków, Wrocław, Łódź, Poznań ve Gdańsk yer almaktadır.",
+          "extract_html": "<p><b>Polonya</b>, resmî adıyla <b>Polonya Cumhuriyeti</b>, Orta Avrupa'da yer alan bir ülkedir. Polonya, kuzeyde Baltık Denizi'nden güneyde Südetler ve Karpat Dağları'na kadar uzanır. Polonya, kuzeyde Kaliningrad Oblastı ve Litvanya; doğuda Belarus ve Ukrayna; güneyde Slovakya ve Çek Cumhuriyeti; batıda ise Almanya ile sınır komşusudur. Ülke, çeşitli bir coğrafyaya, farklı ekosistemlere ve ılıman bir iklime sahiptir. On altı voyvodalıktan oluşan Polonya, 38 milyondan fazla nüfusuyla Avrupa Birliği'nin (AB) beşinci en kalabalık üye ülkesi ve 312.696 km² yüzölçümüyle de beşinci büyük AB ülkesidir. Başkenti ve en büyük şehri Varşova'dır; diğer önemli şehirler arasında Kraków, Wrocław, Łódź, Poznań ve Gdańsk yer almaktadır.</p>",
+          "normalizedtitle": "Polonya"
+        }
+      ]
+    },
+    {
+      "text": "Kırgızistan Bağımsızlık Günü",
+      "pages": [
+        {
+          "type": "standard",
+          "title": "Kırgızistan_Bağımsızlık_Günü",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Kırgızistan Bağımsızlık Günü</span></span>",
+          "namespace": {
+            "id": 0,
+            "text": ""
+          },
+          "wikibase_item": "Q39069651",
+          "titles": {
+            "canonical": "Kırgızistan_Bağımsızlık_Günü",
+            "normalized": "Kırgızistan Bağımsızlık Günü",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Kırgızistan Bağımsızlık Günü</span></span>"
+          },
+          "pageid": 4415229,
+          "thumbnail": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/KG-2016-Ag-10som-independence-25-a.png/330px-KG-2016-Ag-10som-independence-25-a.png?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+            "width": 330,
+            "height": 330
+          },
+          "originalimage": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/f/f8/KG-2016-Ag-10som-independence-25-a.png?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+            "width": 900,
+            "height": 900
+          },
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "34522132",
+          "tid": "2a43dcc1-bfcf-11ef-ba56-5a4a7c480cbb",
+          "timestamp": "2024-12-21T19:09:56Z",
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/K%C4%B1rg%C4%B1zistan_Ba%C4%9F%C4%B1ms%C4%B1zl%C4%B1k_G%C3%BCn%C3%BC",
+              "revisions": "https://tr.wikipedia.org/wiki/K%C4%B1rg%C4%B1zistan_Ba%C4%9F%C4%B1ms%C4%B1zl%C4%B1k_G%C3%BCn%C3%BC?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/K%C4%B1rg%C4%B1zistan_Ba%C4%9F%C4%B1ms%C4%B1zl%C4%B1k_G%C3%BCn%C3%BC?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:K%C4%B1rg%C4%B1zistan_Ba%C4%9F%C4%B1ms%C4%B1zl%C4%B1k_G%C3%BCn%C3%BC"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/K%C4%B1rg%C4%B1zistan_Ba%C4%9F%C4%B1ms%C4%B1zl%C4%B1k_G%C3%BCn%C3%BC",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/K%C4%B1rg%C4%B1zistan_Ba%C4%9F%C4%B1ms%C4%B1zl%C4%B1k_G%C3%BCn%C3%BC",
+              "edit": "https://tr.wikipedia.org/wiki/K%C4%B1rg%C4%B1zistan_Ba%C4%9F%C4%B1ms%C4%B1zl%C4%B1k_G%C3%BCn%C3%BC?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:K%C4%B1rg%C4%B1zistan_Ba%C4%9F%C4%B1ms%C4%B1zl%C4%B1k_G%C3%BCn%C3%BC"
+            }
+          },
+          "extract": "Kırgızistan Bağımsızlık Günü, Kırgızistan'ın ana millî bayramıdır. Her yıl 1991'de bağımsızlık ilanının yıldönümü olan 31 Ağustos'ta kutlanmaktadır.",
+          "extract_html": "<p><b>Kırgızistan Bağımsızlık Günü</b>, Kırgızistan'ın ana millî bayramıdır. Her yıl 1991'de bağımsızlık ilanının yıldönümü olan 31 Ağustos'ta kutlanmaktadır.</p>",
+          "normalizedtitle": "Kırgızistan Bağımsızlık Günü"
+        }
+      ]
+    }
+  ]
+}

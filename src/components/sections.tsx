@@ -35,7 +35,7 @@ export interface MergedEvent {
   detail?: string;
   category: CategoryId;
   curated: boolean;
-  page?: { title: string; excerpt?: string; url?: string };
+  page?: { title: string; extract?: string; url?: string };
 }
 
 export function TimelineSection({
@@ -138,7 +138,7 @@ export function TimelineSection({
                     {e.text}
                   </p>
 
-                  {(e.detail || e.page?.excerpt || e.page?.url) && (
+                  {(e.detail || e.page?.extract || e.page?.url) && (
                     <div className="mt-2.5 flex items-center gap-4">
                       <button
                         onClick={() => setOpenId(open ? null : e.id)}
@@ -167,7 +167,7 @@ export function TimelineSection({
                       className="rise-in mt-3 max-w-3xl border-l-2 pl-4 py-1 text-[14.5px] leading-relaxed text-ink-dim"
                       style={{ borderColor: catInfo.color }}
                     >
-                      {e.detail || e.page?.excerpt}
+                      {e.detail || e.page?.extract}
                     </div>
                   )}
                 </Reveal>
@@ -234,7 +234,8 @@ export interface PersonCard {
   year: number;
   years?: string;
   category: CategoryId;
-  excerpt?: string;
+  description?: string;
+  extract?: string;
   thumb?: string;
   url?: string;
   lang: "tr" | "en";
@@ -245,13 +246,14 @@ export function itemToPeople(items: OtdItem[], kind: "births" | "deaths"): Perso
   for (const it of items) {
     const p = it.pages?.[0];
     if (!p) continue;
-    const probe = `${p.title} ${p.description || ""} ${p.excerpt || ""} ${it.text}`;
+    const probe = `${p.title} ${p.description || ""} ${p.extract || ""} ${it.text}`;
     out.push({
       id: `${kind}-${it.id}`,
-      name: p.displaytitle || p.title,
+      name: p.normalizedtitle || p.title,
       year: it.year,
       category: classifyItem(probe),
-      excerpt: p.excerpt,
+      description: p.description,
+      extract: p.extract,
       thumb: p.thumbnail?.source,
       url: p.content_urls?.desktop?.page,
       lang: it.lang,
@@ -383,9 +385,14 @@ export function PeopleRow({
                     <h3 className="font-display font-semibold text-[17px] leading-snug text-ink group-hover:text-gold transition-colors duration-200">
                       {p.name}
                     </h3>
-                    {p.excerpt && (
+                    {p.description && (
+                      <p className="mt-1 text-[12px] leading-snug text-ink-faint line-clamp-2">
+                        {p.description}
+                      </p>
+                    )}
+                    {p.extract && (
                       <p className="mt-2 text-[13px] leading-relaxed text-ink-dim line-clamp-3">
-                        {p.excerpt}
+                        {p.extract}
                       </p>
                     )}
                     <span className="mt-3 inline-flex items-center gap-1.5 font-mono text-[11px] tracking-widest uppercase text-ink-faint group-hover:text-gold transition-colors">
@@ -446,8 +453,8 @@ export function PeopleRow({
                 </span>
               </div>
             </div>
-            {modal.excerpt && (
-              <p className="mt-5 text-[15px] leading-relaxed text-ink-dim">{modal.excerpt}</p>
+            {modal.extract && (
+              <p className="mt-5 text-[15px] leading-relaxed text-ink-dim">{modal.extract}</p>
             )}
             {modal.url && (
               <a

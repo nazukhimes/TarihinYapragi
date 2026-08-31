@@ -7,9 +7,9 @@ export { classifyItem, detectDarkItem } from "./classification";
 
 export interface WikiPage {
   title: string;
-  displaytitle?: string;
+  normalizedtitle?: string;
   description?: string;
-  excerpt?: string;
+  extract?: string;
   thumbnail?: { source: string };
   originalimage?: { source: string };
   content_urls?: { desktop?: { page?: string } };
@@ -335,27 +335,27 @@ export function buildAutoTalk(day: DayData): TalkCard[] {
     }
   }
 
-  const famousBirth = day.births.find((b) => b.pages?.some((p) => p.thumbnail && p.excerpt));
+  const famousBirth = day.births.find((b) => b.pages?.some((p) => p.thumbnail && p.extract));
   if (famousBirth) {
-    const p = famousBirth.pages!.find((x) => x.thumbnail && x.excerpt)!;
+    const p = famousBirth.pages!.find((x) => x.thumbnail && x.extract)!;
     cards.push({
       id: "auto-birth",
       category: "Bugün Doğanlar",
-      hook: `${famousBirth.year}'de bugün doğan: ${p.displaytitle || p.title}`,
-      body: firstSentence(p.excerpt!, 400),
-      minutes: estimateMinutes(firstSentence(p.excerpt!, 400)),
+      hook: `${famousBirth.year}'de bugün doğan: ${p.normalizedtitle || p.title}`,
+      body: firstSentence(p.extract!, 400),
+      minutes: estimateMinutes(firstSentence(p.extract!, 400)),
     });
   }
 
-  const famousDeath = day.deaths.find((d) => d.pages?.some((p) => p.excerpt));
+  const famousDeath = day.deaths.find((d) => d.pages?.some((p) => p.extract));
   if (famousDeath) {
-    const p = famousDeath.pages!.find((x) => x.excerpt)!;
+    const p = famousDeath.pages!.find((x) => x.extract)!;
     cards.push({
       id: "auto-death",
       category: "Aramızdan Ayrılanlar",
-      hook: `${famousDeath.year}'de bugün veda etti: ${p.displaytitle || p.title}`,
-      body: firstSentence(p.excerpt!, 400),
-      minutes: estimateMinutes(firstSentence(p.excerpt!, 400)),
+      hook: `${famousDeath.year}'de bugün veda etti: ${p.normalizedtitle || p.title}`,
+      body: firstSentence(p.extract!, 400),
+      minutes: estimateMinutes(firstSentence(p.extract!, 400)),
     });
   }
 

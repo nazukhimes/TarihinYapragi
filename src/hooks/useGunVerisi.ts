@@ -82,7 +82,7 @@ export function useGunVerisi(
     (data?.events || []).forEach((item) => {
       const t = trLower(item.text);
       if (cur.some((ce) => ce.matchKeys.some((k) => t.includes(trLower(k))))) return;
-      const page = item.pages?.find((p) => p.excerpt || p.content_urls?.desktop?.page);
+      const page = item.pages?.find((p) => p.extract || p.content_urls?.desktop?.page);
       out.push({
         id: item.id,
         year: item.year,
@@ -90,7 +90,7 @@ export function useGunVerisi(
         category: classifyItem(item.text),
         curated: false,
         page: page
-          ? { title: page.title, excerpt: page.excerpt, url: page.content_urls?.desktop?.page }
+          ? { title: page.title, extract: page.extract, url: page.content_urls?.desktop?.page }
           : undefined,
       });
     });
@@ -130,7 +130,7 @@ export function useGunVerisi(
         location: "Arşiv taraması — otomatik tespit",
         status: "KAPANDI",
         summary: truncate(item.text, 240),
-        detail: item.pages?.[0]?.excerpt || item.text,
+        detail: item.pages?.[0]?.extract || item.text,
         tags: [theme.toLocaleLowerCase("tr-TR"), formatYear(item.year)],
       });
     });
@@ -150,7 +150,7 @@ export function useGunVerisi(
         year: e.year,
         field: CATEGORIES[classifyItem(e.text)].label,
         title: firstClause(e.text, 80),
-        summary: e.pages?.[0]?.excerpt || truncate(e.text, 260),
+        summary: e.pages?.[0]?.extract || truncate(e.text, 260),
         curated: false,
       }));
     return [...base, ...auto].sort((a, b) => b.year - a.year);
@@ -177,12 +177,12 @@ export function useGunVerisi(
     if (curated?.spotlight) return { ...curated.spotlight, curated: true };
     const featured = data?.selected?.[0] || mergedEvents[Math.floor(mergedEvents.length / 2)];
     if (!featured) return null;
-    const excerpt =
-      "pages" in featured && featured.pages?.[0]?.excerpt ? featured.pages[0].excerpt : undefined;
+    const extract =
+      "pages" in featured && featured.pages?.[0]?.extract ? featured.pages[0].extract : undefined;
     return {
       kicker: "Arşivden öne çıkan",
       title: truncate(featured.text, 90),
-      text: excerpt ? truncate(excerpt, 240) : "",
+      text: extract ? truncate(extract, 240) : "",
       curated: false,
     };
   }, [curated, data, mergedEvents]);
@@ -252,13 +252,13 @@ export function useAramaSonuclari(veri: GunVerisi, query: string): AramaSonuclar
     }
     return {
       olay: veri.mergedEvents.filter((e) =>
-        matchQuery(query, e.text, e.detail, e.page?.excerpt, formatYear(e.year))
+        matchQuery(query, e.text, e.detail, e.page?.extract, formatYear(e.year))
       ),
       dogum: veri.births.filter((p) =>
-        matchQuery(query, p.name, p.excerpt, formatYear(p.year), CATEGORIES[p.category].label)
+        matchQuery(query, p.name, p.extract, formatYear(p.year), CATEGORIES[p.category].label)
       ),
       vefat: veri.deaths.filter((p) =>
-        matchQuery(query, p.name, p.excerpt, formatYear(p.year), CATEGORIES[p.category].label)
+        matchQuery(query, p.name, p.extract, formatYear(p.year), CATEGORIES[p.category].label)
       ),
       dosya: veri.allCases.filter((c) =>
         matchQuery(
