@@ -1,5 +1,18 @@
-dist
-coverage
+# Bağımlılıklar ve derleme/önbellek çıktıları — elle yazılmış kaynak değil.
 node_modules
+dist
+build
+dev-dist
+.vite
+coverage
 package-lock.json
+
+# Claude Code'un worktree'leri: projenin tam kopyası, ikinci kez biçimlendirilmemeli.
+.claude
+
+# Üretilmiş dosyalar — `npm run rekor-avi` ve `npm run sitemap` yazar.
+Dokumanlar/rekor-adaylari.md
+public/sitemap.xml
+
+# Windows toplu iş dosyası: CRLF kalmalı (bkz. .gitattributes), Prettier de tanımaz.
 *.bat

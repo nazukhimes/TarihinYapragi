@@ -44,6 +44,11 @@ Biçim [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/) yaklaşımını 
   `dev-dist` ve `.claude` yok sayılanlara eklendi. `npm run dev` çalıştırılmış bir
   kopyada `eslint .`, `.vite/deps` altındaki paketlenmiş React kaynağı yüzünden
   yüzlerce hata veriyordu
+- **Biçim denetimi tüm ağacı kapsıyor** — `format` ve `format:check` artık glob
+  listesi yerine `prettier .` çalıştırıyor; istisnalar `.prettierignore`'da. Daha
+  önce `index.html`, `vite.config.ts`, `scripts/*.mjs` ve `Dokumanlar/`,
+  `Talimatlar/` altındaki 32 belge hiç denetlenmiyordu. İki betiğin globlarının
+  birbirinden ayrışması da artık yapısal olarak mümkün değil
 - **Vitest yalnızca `src/` altını tarıyor** — `.claude/worktrees/` altında bir
   çalışma kopyası varken testler iki kez toplanıyordu (9 yerine 18 dosya)
 
