@@ -1,13 +1,13 @@
 # T-02 · Geliştirme Ortamı ve Başlatıcı
 
-| Alan | Değer |
-|---|---|
-| **Faz** | FAZ 0 — Temizlik ve Zemin |
-| **Öncelik** | 🟠 Yüksek |
-| **Tahmini süre** | ~1,5 saat |
-| **Bağımlılık** | **T-01 tamamlanmış olmalı** (`vite.config.ts` ve betikler) |
-| **İlgili bulgu** | — (proje hijyeni) |
-| **Durum** | ✅ Tamamlandı — 2026-08-21 |
+| Alan             | Değer                                                      |
+| ---------------- | ---------------------------------------------------------- |
+| **Faz**          | FAZ 0 — Temizlik ve Zemin                                  |
+| **Öncelik**      | 🟠 Yüksek                                                  |
+| **Tahmini süre** | ~1,5 saat                                                  |
+| **Bağımlılık**   | **T-01 tamamlanmış olmalı** (`vite.config.ts` ve betikler) |
+| **İlgili bulgu** | — (proje hijyeni)                                          |
+| **Durum**        | ✅ Tamamlandı — 2026-08-21                                 |
 
 ---
 
@@ -48,12 +48,12 @@ if "!PORT!"=="" set "PORT=3000"
 
 Yerine doğrudan npm betiklerini çağır:
 
-| Menü | Yeni komut |
-|---|---|
-| 1 — Geliştirme | `call npm run dev -- --open` |
-| 2 — Önizleme | `call npm run build` sonra `call npm run preview -- --open` |
-| 3 — Build | `call npm run build` |
-| 4 — Tip kontrolü | `call npm run typecheck` |
+| Menü             | Yeni komut                                                  |
+| ---------------- | ----------------------------------------------------------- |
+| 1 — Geliştirme   | `call npm run dev -- --open`                                |
+| 2 — Önizleme     | `call npm run build` sonra `call npm run preview -- --open` |
+| 3 — Build        | `call npm run build`                                        |
+| 4 — Tip kontrolü | `call npm run typecheck`                                    |
 
 **Korunacak davranışlar:**
 
@@ -189,13 +189,13 @@ interface ImportMeta {
 
 ## 🚫 Kapsam Dışı
 
-| Dokunma | Neden / Hangi talimat |
-|---|---|
-| ESLint / Prettier yapılandırması | T-12 (`extensions.json`'a yazmak yeterli, kurma) |
-| CI / GitHub Actions | T-12 |
-| `wiki.ts` içinde API sabitinden başka hiçbir şey | T-05 |
-| Dağıtım (deploy) yapılandırması | T-14 |
-| Docker | Kapsam dışı |
+| Dokunma                                          | Neden / Hangi talimat                            |
+| ------------------------------------------------ | ------------------------------------------------ |
+| ESLint / Prettier yapılandırması                 | T-12 (`extensions.json`'a yazmak yeterli, kurma) |
+| CI / GitHub Actions                              | T-12                                             |
+| `wiki.ts` içinde API sabitinden başka hiçbir şey | T-05                                             |
+| Dağıtım (deploy) yapılandırması                  | T-14                                             |
+| Docker                                           | Kapsam dışı                                      |
 
 ---
 
@@ -243,7 +243,7 @@ Geçici olarak `.env` oluştur:
 VITE_WIKI_API_BASE=https://ornek-yok.invalid/feed/v1/wikipedia
 ```
 
-`npm run dev` → uygulama *"Arşive şu an ulaşılamıyor"* çevrimdışı ekranını
+`npm run dev` → uygulama _"Arşive şu an ulaşılamıyor"_ çevrimdışı ekranını
 göstermeli (yani ortam değişkeni gerçekten okunuyor). Testten sonra `.env`'i **sil**.
 
 ### 4. Varsayılan davranış
@@ -258,19 +258,19 @@ göstermeli (yani ortam değişkeni gerçekten okunuyor). Testten sonra `.env`'i
 
 - **Değişen dosyalar:**
 
-  | Dosya | İşlem |
-  |---|---|
-  | `başlat.bat` | PowerShell port tarama bloğu kaldırıldı, 4 menü seçeneği doğrudan npm betiklerine bağlandı; BOM'suz + CRLF + ASCII korundu |
-  | `baslat.sh` | Yeni — macOS/Linux başlatıcı, `chmod +x` uygulandı |
-  | `.editorconfig` | Yeni |
-  | `.nvmrc` | Yeni — `20` |
-  | `.vscode/extensions.json` | Yeni |
-  | `.vscode/settings.json` | Yeni |
-  | `.gitignore` | `!.vscode/settings.json` istisnası eklendi (aşağıya bakın — sapma) |
-  | `.env.example` | Yeni |
-  | `src/lib/config.ts` | Yeni — `WIKI_API_BASE` |
-  | `src/vite-env.d.ts` | Yeni — `ImportMetaEnv` tipi |
-  | `src/lib/wiki.ts` | Gömülü `API` sabiti kaldırıldı, `config.ts`'ten `WIKI_API_BASE as API` içe aktarılıyor |
+  | Dosya                     | İşlem                                                                                                                      |
+  | ------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+  | `başlat.bat`              | PowerShell port tarama bloğu kaldırıldı, 4 menü seçeneği doğrudan npm betiklerine bağlandı; BOM'suz + CRLF + ASCII korundu |
+  | `baslat.sh`               | Yeni — macOS/Linux başlatıcı, `chmod +x` uygulandı                                                                         |
+  | `.editorconfig`           | Yeni                                                                                                                       |
+  | `.nvmrc`                  | Yeni — `20`                                                                                                                |
+  | `.vscode/extensions.json` | Yeni                                                                                                                       |
+  | `.vscode/settings.json`   | Yeni                                                                                                                       |
+  | `.gitignore`              | `!.vscode/settings.json` istisnası eklendi (aşağıya bakın — sapma)                                                         |
+  | `.env.example`            | Yeni                                                                                                                       |
+  | `src/lib/config.ts`       | Yeni — `WIKI_API_BASE`                                                                                                     |
+  | `src/vite-env.d.ts`       | Yeni — `ImportMetaEnv` tipi                                                                                                |
+  | `src/lib/wiki.ts`         | Gömülü `API` sabiti kaldırıldı, `config.ts`'ten `WIKI_API_BASE as API` içe aktarılıyor                                     |
 
 - **Sapmalar / notlar:**
 
@@ -290,20 +290,20 @@ göstermeli (yani ortam değişkeni gerçekten okunuyor). Testten sonra `.env`'i
 
 - **Doğrulama kanıtları:**
 
-  | Test | Sonuç |
-  |---|---|
-  | BOM kontrolü | `head -c 3` → `@ e c`, BOM baytı yok |
-  | Satır sonu | 118 satırın 118'i de CRLF (`\r` sayısı = `\n` sayısı = 118) |
-  | ASCII saflığı | `LC_ALL=C grep '[^ -~]'` → CR dışında eşleşme yok |
-  | Menü — mod 4 | Gerçek çalıştırma (`cmd /c başlat.bat` + piped `4`): `npm run typecheck` başarıyla tamamlandı, `pause` ile bekledi |
-  | Menü — mod 3 | Gerçek çalıştırma: `npm run build` başarıyla tamamlandı, `dist` yoluyla bitti |
-  | Menü — mod 1/2 mantığı | Statik incelemeyle doğrulandı (`npm run dev -- --open` / `npm run build` + `npm run preview -- --open`); ayrıca mod 1'in eşdeğeri olan `npm run dev`, Browser pane üzerinden ayrıca canlı test edildi (aşağıya bakın) |
-  | `npm run typecheck` | Temiz, hata yok |
-  | `npm run build` | Temiz, `dist/` üretti |
-  | Gömülü URL taraması | `grep "api.wikimedia.org" src/**/*.ts(x)` → yalnızca `config.ts` içinde, başka yerde yok |
-  | `.env` geçersiz kılma (canlı) | `.env`'e geçersiz `VITE_WIKI_API_BASE` yazıldı → `npm run dev` çalışırken Browser pane'de **"Arşive şu an ulaşılamıyor"** çevrimdışı ekranı göründü → env değişkeninin gerçekten okunduğu kanıtlandı |
-  | Varsayılan davranış (canlı) | `.env` silindi → Vite `.env changed, restarting server...` ile kendini yeniden başlattı → sayfa yeniden yüklendiğinde `kaynak: TR Vikipedi`, 23 kayıt, 1680–2008 aralığı ile normal veri geldi |
-  | Build çıktısı temizliği | `.env` kaldırıldıktan sonra yeniden `build` alındı; pakette ne geçersiz URL ne de sızıntı kaldı |
+  | Test                          | Sonuç                                                                                                                                                                                                                 |
+  | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | BOM kontrolü                  | `head -c 3` → `@ e c`, BOM baytı yok                                                                                                                                                                                  |
+  | Satır sonu                    | 118 satırın 118'i de CRLF (`\r` sayısı = `\n` sayısı = 118)                                                                                                                                                           |
+  | ASCII saflığı                 | `LC_ALL=C grep '[^ -~]'` → CR dışında eşleşme yok                                                                                                                                                                     |
+  | Menü — mod 4                  | Gerçek çalıştırma (`cmd /c başlat.bat` + piped `4`): `npm run typecheck` başarıyla tamamlandı, `pause` ile bekledi                                                                                                    |
+  | Menü — mod 3                  | Gerçek çalıştırma: `npm run build` başarıyla tamamlandı, `dist` yoluyla bitti                                                                                                                                         |
+  | Menü — mod 1/2 mantığı        | Statik incelemeyle doğrulandı (`npm run dev -- --open` / `npm run build` + `npm run preview -- --open`); ayrıca mod 1'in eşdeğeri olan `npm run dev`, Browser pane üzerinden ayrıca canlı test edildi (aşağıya bakın) |
+  | `npm run typecheck`           | Temiz, hata yok                                                                                                                                                                                                       |
+  | `npm run build`               | Temiz, `dist/` üretti                                                                                                                                                                                                 |
+  | Gömülü URL taraması           | `grep "api.wikimedia.org" src/**/*.ts(x)` → yalnızca `config.ts` içinde, başka yerde yok                                                                                                                              |
+  | `.env` geçersiz kılma (canlı) | `.env`'e geçersiz `VITE_WIKI_API_BASE` yazıldı → `npm run dev` çalışırken Browser pane'de **"Arşive şu an ulaşılamıyor"** çevrimdışı ekranı göründü → env değişkeninin gerçekten okunduğu kanıtlandı                  |
+  | Varsayılan davranış (canlı)   | `.env` silindi → Vite `.env changed, restarting server...` ile kendini yeniden başlattı → sayfa yeniden yüklendiğinde `kaynak: TR Vikipedi`, 23 kayıt, 1680–2008 aralığı ile normal veri geldi                        |
+  | Build çıktısı temizliği       | `.env` kaldırıldıktan sonra yeniden `build` alındı; pakette ne geçersiz URL ne de sızıntı kaldı                                                                                                                       |
 
 - **Sonraki talimata not:**
 

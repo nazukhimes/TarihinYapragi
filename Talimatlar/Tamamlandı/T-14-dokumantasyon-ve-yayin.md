@@ -1,13 +1,13 @@
 # T-14 · Dokümantasyon Güncelleme ve Yayın
 
-| Alan | Değer |
-|---|---|
-| **Faz** | FAZ 5 — Kapanış |
-| **Öncelik** | 🟠 Yüksek |
-| **Tahmini süre** | ~2,5 saat |
-| **Bağımlılık** | **T-01 … T-13'ün tamamı** |
-| **İlgili bulgu** | — (kapanış) |
-| **Durum** | ✅ Tamamlandı — 2026-08-24 (Bölüm B kapsam dışı bırakıldı) |
+| Alan             | Değer                                                      |
+| ---------------- | ---------------------------------------------------------- |
+| **Faz**          | FAZ 5 — Kapanış                                            |
+| **Öncelik**      | 🟠 Yüksek                                                  |
+| **Tahmini süre** | ~2,5 saat                                                  |
+| **Bağımlılık**   | **T-01 … T-13'ün tamamı**                                  |
+| **İlgili bulgu** | — (kapanış)                                                |
+| **Durum**        | ✅ Tamamlandı — 2026-08-24 (Bölüm B kapsam dışı bırakıldı) |
 
 > ⛔ **Bu talimat en sonda yapılır.** Belgeler ancak her şey bittiğinde gerçeğe
 > eşitlenebilir. Erken yapılırsa yanlış bilgi üretir.
@@ -30,18 +30,19 @@
 
 ```markdown
 # TarihinYapragi
+
 Bugünün Tarihi ve Bilimsel Gelişmeler
 ```
 
 `Dokumanlar/` altındaki dört belge **2026-08-21 tarihli** — yani T-01 öncesi
 duruma göre yazıldı. 13 talimat sonrası hepsi eskimiş olacak:
 
-| Belge | Neden eskimiş olacak |
-|---|---|
-| `BAGLAM.md` | Bağımlılıklar, dosya haritası, "Mevcut Durum" bölümü |
-| `MIMARI.md` | Yeni dosyalar (`date.ts`, `slug.ts`, `useInView.ts`, `ErrorBoundary`), yönlendirme, veri klasörü |
-| `KULLANIM-KILAVUZU.md` | URL'ler, klavye kısayolları, PWA kurulumu, düzelen "bilinen sorunlar" |
-| `ANALIZ-RAPORU.md` | Çözülen bulgular işaretlenmemiş |
+| Belge                  | Neden eskimiş olacak                                                                             |
+| ---------------------- | ------------------------------------------------------------------------------------------------ |
+| `BAGLAM.md`            | Bağımlılıklar, dosya haritası, "Mevcut Durum" bölümü                                             |
+| `MIMARI.md`            | Yeni dosyalar (`date.ts`, `slug.ts`, `useInView.ts`, `ErrorBoundary`), yönlendirme, veri klasörü |
+| `KULLANIM-KILAVUZU.md` | URL'ler, klavye kısayolları, PWA kurulumu, düzelen "bilinen sorunlar"                            |
+| `ANALIZ-RAPORU.md`     | Çözülen bulgular işaretlenmemiş                                                                  |
 
 Ayrıca yayın için hiçbir şey yok: dağıtım yapılandırması, alan adı, LICENSE.
 
@@ -63,42 +64,49 @@ Kapsam:
 Her güne bir arşiv — [tarihyapragi.xyz](https://...)
 
 ## Ne yapar
+
 [3-4 cümle + özellik listesi]
 
 ## Hızlı başlangıç
+
 Windows: `başlat.bat` çift tıkla
-Diğer:   `npm install && npm run dev`
+Diğer: `npm install && npm run dev`
 
 ## Belgeler
-| Belge | İçerik |
-|---|---|
-| [Bağlam](Dokumanlar/BAGLAM.md) | Projeyi tanı — buradan başla |
-| [Mimari](Dokumanlar/MIMARI.md) | Teknik derinlik |
-| [Kullanım Kılavuzu](Dokumanlar/KULLANIM-KILAVUZU.md) | Son kullanıcı rehberi |
-| [Çalışma Sistemi](Dokumanlar/CALISMA-SISTEMI.md) | Plan → talimat iş akışı |
+
+| Belge                                                | İçerik                       |
+| ---------------------------------------------------- | ---------------------------- |
+| [Bağlam](Dokumanlar/BAGLAM.md)                       | Projeyi tanı — buradan başla |
+| [Mimari](Dokumanlar/MIMARI.md)                       | Teknik derinlik              |
+| [Kullanım Kılavuzu](Dokumanlar/KULLANIM-KILAVUZU.md) | Son kullanıcı rehberi        |
+| [Çalışma Sistemi](Dokumanlar/CALISMA-SISTEMI.md)     | Plan → talimat iş akışı      |
 
 ## Komutlar
+
 [betik tablosu]
 
 ## Teknoloji
+
 [yığın tablosu]
 
 ## Kaynaklar ve teşekkür
+
 Wikimedia REST API · Google Fonts
 
 ## Lisans
+
 MIT
 ```
 
 #### Adım A2 — `Dokumanlar/BAGLAM.md` güncelle
 
-| Bölüm | Yapılacak |
-|---|---|
-| Başlık | Tarihi ve sürümü güncelle |
-| §2 Teknoloji Yığını | Yönlendirme satırı: *(yok)* → **react-router-dom v6, `/GG-ayadi`** |
-| §4 Dosya Haritası | Yeni dosyaların hepsi eklensin |
-| §6 Komutlar | `lint`, `format`, `test`, `kontrol`, `sitemap`, `analyze` |
-| §7 Mevcut Durum | **Tamamen yeniden yaz** — çözülenler "Çalışan"a taşınsın |
+| Bölüm               | Yapılacak                                                          |
+| ------------------- | ------------------------------------------------------------------ |
+| Başlık              | Tarihi ve sürümü güncelle                                          |
+| §2 Teknoloji Yığını | Yönlendirme satırı: _(yok)_ → **react-router-dom v6, `/GG-ayadi`** |
+| §4 Dosya Haritası   | Yeni dosyaların hepsi eklensin                                     |
+| §6 Komutlar         | `lint`, `format`, `test`, `kontrol`, `sitemap`, `analyze`          |
+| §7 Mevcut Durum     | **Tamamen yeniden yaz** — çözülenler "Çalışan"a taşınsın           |
 
 #### Adım A3 — `Dokumanlar/MIMARI.md` güncelle
 
@@ -115,16 +123,16 @@ Eklenecek/değişecek:
 
 #### Adım A4 — `Dokumanlar/KULLANIM-KILAVUZU.md` güncelle
 
-| Bölüm | Yapılacak |
-|---|---|
-| §1 Başlatma | Yeni `başlat.bat` menüsü, `baslat.sh` |
-| §3 Gün Seçme | **Adres çubuğu** satırı: "desteklenmiyor" → **destekleniyor**, örneklerle |
-| §5 Yayın Modu | Değişmedi (kontrol et) |
-| §7 Klavye Kısayolları | `←` `→` `T` `/` `?` eklendi |
-| **§ YENİ** | "Günü paylaşma" bölümü |
-| **§ YENİ** | "Telefona uygulama olarak ekleme" bölümü |
-| §8 SSS | Çevrimdışı cevabı güncelle (service worker) |
-| §9 Sorun Giderme | **K-1…K-4 "bilinen sorun" satırlarını sil** — hepsi çözüldü |
+| Bölüm                 | Yapılacak                                                                 |
+| --------------------- | ------------------------------------------------------------------------- |
+| §1 Başlatma           | Yeni `başlat.bat` menüsü, `baslat.sh`                                     |
+| §3 Gün Seçme          | **Adres çubuğu** satırı: "desteklenmiyor" → **destekleniyor**, örneklerle |
+| §5 Yayın Modu         | Değişmedi (kontrol et)                                                    |
+| §7 Klavye Kısayolları | `←` `→` `T` `/` `?` eklendi                                               |
+| **§ YENİ**            | "Günü paylaşma" bölümü                                                    |
+| **§ YENİ**            | "Telefona uygulama olarak ekleme" bölümü                                  |
+| §8 SSS                | Çevrimdışı cevabı güncelle (service worker)                               |
+| §9 Sorun Giderme      | **K-1…K-4 "bilinen sorun" satırlarını sil** — hepsi çözüldü               |
 
 > Sorun giderme tablosundaki "bilinen sorun" satırlarının silinmesi, bu planın
 > en somut çıktısıdır. Silinecek satır kalmadıysa iyi iş çıkarılmış demektir.
@@ -135,15 +143,16 @@ Her bulguya durum işareti ekle:
 
 ```markdown
 ### K-1 · Takvim yaprağındaki "Yılın X. günü" artık yıl hatası
+
 **Durum:** ✅ Çözüldü — T-03 · 2026-XX-XX
 ```
 
 Sona bir özet tablo ekle:
 
-| Kod | Bulgu | Durum | Talimat |
-|---|---|---|---|
-| K-1 | Artık yıl hatası | ✅ | T-03 |
-| … | … | … | … |
+| Kod | Bulgu            | Durum | Talimat |
+| --- | ---------------- | ----- | ------- |
+| K-1 | Artık yıl hatası | ✅    | T-03    |
+| …   | …                | …     | …       |
 
 Çözülmeyenler `⏭️ PLAN-02'ye devredildi` işaretiyle kalsın, gerekçesiyle.
 
@@ -157,9 +166,11 @@ MIT lisans metni, telif satırı: `Copyright (c) 2026 <ad>`
 # Değişiklik Günlüğü
 
 ## [0.2.0] — 2026-XX-XX
+
 İlk yayın sürümü. PLAN-01 tamamlandı.
 
 ### Eklenen
+
 - Paylaşılabilir gün adresleri (`/21-agustos`)
 - Klavye kısayolları (← → T / ?)
 - PWA desteği — telefona kurulabilir, çevrimdışı çalışır
@@ -169,12 +180,14 @@ MIT lisans metni, telif satırı: `Copyright (c) 2026 <ad>`
 - Editör içeriği 10 → 60 gün
 
 ### Düzeltilen
+
 - Takvimde "Yılın X. günü" artık yıl hatası (K-1)
 - Gün değişince güncellenmeyen sayaçlar (K-2)
 - Arka plan sekmede görünmeyen içerik (K-3)
 - HMR WebSocket bağlantı hatası (K-4)
 
 ### Kaldırılan
+
 - 10 kullanılmayan bağımlılık
 ```
 
@@ -184,12 +197,12 @@ MIT lisans metni, telif satırı: `Copyright (c) 2026 <ad>`
 
 #### Adım B1 — Barındırma seç
 
-| Seçenek | Artı | Eksi |
-|---|---|---|
-| **Cloudflare Pages** | Ücretsiz, hızlı, `_redirects` doğrudan çalışır | — |
-| **Netlify** | `_redirects` yerleşik, kolay | Ücretsiz katman sınırlı |
-| **Vercel** | `vercel.json` hazır | SPA için fazla |
-| **GitHub Pages** | Ücretsiz | SPA fallback zor, alt yol sorunu |
+| Seçenek              | Artı                                           | Eksi                             |
+| -------------------- | ---------------------------------------------- | -------------------------------- |
+| **Cloudflare Pages** | Ücretsiz, hızlı, `_redirects` doğrudan çalışır | —                                |
+| **Netlify**          | `_redirects` yerleşik, kolay                   | Ücretsiz katman sınırlı          |
+| **Vercel**           | `vercel.json` hazır                            | SPA için fazla                   |
+| **GitHub Pages**     | Ücretsiz                                       | SPA fallback zor, alt yol sorunu |
 
 **Öneri:** Cloudflare Pages veya Netlify. `public/_redirects` T-06'da hazırlandı.
 
@@ -197,13 +210,13 @@ MIT lisans metni, telif satırı: `Copyright (c) 2026 <ad>`
 
 Alan adı belli olunca güncelle:
 
-| Yer | Ne |
-|---|---|
-| `index.html` | `og:image` → mutlak URL |
-| `index.html` | `og:url` ekle |
-| `public/robots.txt` | `Sitemap:` mutlak URL |
-| `scripts/sitemap.mjs` | `SITE_URL` ortam değişkeni |
-| `App.tsx` | canonical zaten `location.origin` kullanıyor ✅ |
+| Yer                   | Ne                                              |
+| --------------------- | ----------------------------------------------- |
+| `index.html`          | `og:image` → mutlak URL                         |
+| `index.html`          | `og:url` ekle                                   |
+| `public/robots.txt`   | `Sitemap:` mutlak URL                           |
+| `scripts/sitemap.mjs` | `SITE_URL` ortam değişkeni                      |
+| `App.tsx`             | canonical zaten `location.origin` kullanıyor ✅ |
 
 Dağıtım ortamında: `SITE_URL=https://alan-adi.com`
 
@@ -282,13 +295,13 @@ git tag -a v0.2.0 -m "PLAN-01 tamamlandı — ilk yayın sürümü"
 
 ## 🚫 Kapsam Dışı
 
-| Dokunma | Neden |
-|---|---|
-| Yeni kod özelliği | Bu talimat **yalnızca belge + yayın** |
-| Hata düzeltme | Bulunan hatalar PLAN-02'ye not edilir |
-| PLAN-02'yi yazmak | Ayrı bir analiz turu gerektirir |
-| Ücretli hizmet / alan adı satın alma | Kullanıcı kararı |
-| Sosyal medya hesabı, tanıtım | Ürün kararı |
+| Dokunma                              | Neden                                 |
+| ------------------------------------ | ------------------------------------- |
+| Yeni kod özelliği                    | Bu talimat **yalnızca belge + yayın** |
+| Hata düzeltme                        | Bulunan hatalar PLAN-02'ye not edilir |
+| PLAN-02'yi yazmak                    | Ayrı bir analiz turu gerektirir       |
+| Ücretli hizmet / alan adı satın alma | Kullanıcı kararı                      |
+| Sosyal medya hesabı, tanıtım         | Ürün kararı                           |
 
 ---
 
@@ -312,18 +325,18 @@ git tag -a v0.2.0 -m "PLAN-01 tamamlandı — ilk yayın sürümü"
 > hesabı, alan adı ve arama motoru kaydı bu yüzden yapılmadı. Aşağıdaki maddeler
 > teknik olarak **hazır** ama herkese açık bir adres olmadan doğrulanamaz:
 
-- [—] Uygulama gerçek bir adreste çalışıyor — *yayınlanmadı*
-- [x] Gün adresleri doğrudan açılıyor (SPA fallback) — *yerelde doğrulandı; `_redirects` + `vercel.json` hazır*
-- [—] Sosyal medya önizlemesi çıkıyor — *`og:*`/`twitter:*` etiketleri hazır, herkese açık adres gerekiyor*
-- [—] PWA kurulabiliyor — *service worker üretiliyor (17 girdi), gerçek tarayıcıda kayıt doğrulanmadı*
-- [x] `sitemap.xml` 366 adres — *`npm run build` her derlemede üretiyor*
-- [—] Search Console'a gönderildi — *yayın olmadığı için geçersiz*
-- [x] Lighthouse: Perf ≥ 90, Erişilebilirlik ≥ 95, SEO ≥ 95 — *T-13'te üretim derlemesine karşı 92 / 96 / 100*
+- [—] Uygulama gerçek bir adreste çalışıyor — _yayınlanmadı_
+- [x] Gün adresleri doğrudan açılıyor (SPA fallback) — _yerelde doğrulandı; `_redirects` + `vercel.json` hazır_
+- [—] Sosyal medya önizlemesi çıkıyor — _`og:*`/`twitter:*` etiketleri hazır, herkese açık adres gerekiyor_
+- [—] PWA kurulabiliyor — _service worker üretiliyor (17 girdi), gerçek tarayıcıda kayıt doğrulanmadı_
+- [x] `sitemap.xml` 366 adres — _`npm run build` her derlemede üretiyor_
+- [—] Search Console'a gönderildi — _yayın olmadığı için geçersiz_
+- [x] Lighthouse: Perf ≥ 90, Erişilebilirlik ≥ 95, SEO ≥ 95 — _T-13'te üretim derlemesine karşı 92 / 96 / 100_
 
 ### Plan kapanışı
 
 - [x] `Talimatlar/` kökünde `T-*.md` **kalmadı**
-- [x] `Talimatlar/Tamamlandı/` içinde **15** talimat var *(plan yürürken T-15 eklendi)*
+- [x] `Talimatlar/Tamamlandı/` içinde **15** talimat var _(plan yürürken T-15 eklendi)_
 - [x] `PLAN-01` ilerleme tablosu **15/15**, Kapanış Özeti dolu
 - [x] `PLAN-01` → `Talimatlar/Plan/` klasörüne taşındı
 - [x] `v0.2.0` etiketi atıldı
@@ -397,10 +410,10 @@ ls Talimatlar/Tamamlandı/ | wc -l  # → 14
 ## 📝 Tamamlanma Kaydı
 
 - **Tamamlanma tarihi:** 2026-08-24
-- **Yayın adresi:** — (yayına alınmadı, aşağıdaki *Sapmalar* maddesi 1)
+- **Yayın adresi:** — (yayına alınmadı, aşağıdaki _Sapmalar_ maddesi 1)
 - **Barındırma:** — (aynı gerekçe)
-- **Lighthouse (gerçek adres):** — · *yerel üretim derlemesinde (T-13):
-  Performans 92 · Erişilebilirlik 96 · SEO 100*
+- **Lighthouse (gerçek adres):** — · _yerel üretim derlemesinde (T-13):
+  Performans 92 · Erişilebilirlik 96 · SEO 100_
 - **Sürüm etiketi:** `v0.2.0`
 - **PLAN-02'ye devredilen konular:** O-10, O-11, O-12, O-13, m-7, m-8 + otomatik
   tıklama (hit-test) denetimi + içerik tembel yüklemesi + kalan 306 günün editör
@@ -408,19 +421,19 @@ ls Talimatlar/Tamamlandı/ | wc -l  # → 14
 
 - **Değişen dosyalar:**
 
-  | Dosya | İşlem |
-  |---|---|
-  | `README.md` | Baştan yazıldı — ekran görüntüsü, "Ne yapar", hızlı başlangıç (Windows/macOS/Linux/elle), belge tablosu, 13 satırlık komut tablosu, teknoloji tablosu, kaynaklar, lisans |
-  | `LICENSE` | Yeni — MIT, `Copyright (c) 2026 Tarih Yaprağı` |
-  | `CHANGELOG.md` | Yeni — `0.2.0` girdisi (Eklenen / Düzeltilen / Kaldırılan / Bilinen sınırlar) + geriye dönük `0.1.0` |
-  | `package.json` | Sürüm `0.1.0` → `0.2.0` |
-  | `Dokumanlar/gorseller/ekran-goruntusu.png` | Yeni — README görseli, gerçek uygulamadan (29 Ekim, başsız Chrome, 1280×745) |
-  | `Dokumanlar/BAGLAM.md` | §4 dosya haritasına test dosyaları, `src/test/setup.ts`, README/CHANGELOG/LICENSE/eslint/prettier/CI ve `gorseller/` eklendi; `Talimatlar/` ağacı gerçek duruma çekildi; §6'ya `kontrol`/`lint`/`format`/`test`/`sitemap`/`icons`/`analyze` tablosu eklendi; §7 plan durumu 15/15 + T-14 cümlesi + yayın kararı; sürüm 0.2.0 |
-  | `Dokumanlar/MIMARI.md` | §1 şemasına `ErrorBoundary`/`errorElement` zinciri ve neden kök sarmalayıcının yetmediği notu; **§12 Yönlendirme** (URL şeması, slug mantığı, 29 Şubat kararı, `errorElement`, SPA fallback) ve **§13 Test Stratejisi** (neyi/neden test ediyoruz tablosu, yapılandırma, `pool: forks` + `undici` override gerekçesi, jsdom'un iki tuzağı, yeşil kapı) eklendi |
-  | `Dokumanlar/KULLANIM-KILAVUZU.md` | §9'daki dört çözülmüş "bilinen sorun" satırı **silindi** (K-1, K-2, K-3, K-5); K-4 satırı kullanıcı diline çevrildi; tablo altındaki not "çözülmemiş bilinen sorun kalmadı"a güncellendi; adres örneği `localhost:3000` olarak düzeltildi; sürüm 0.2.0 |
-  | `Dokumanlar/ANALIZ-RAPORU.md` | **§11 Bulgu Durum Tablosu** eklendi (31 bulgu, dört kategori, toplam tablosu, devredilenlerin tek tek gerekçesi, doğrulanamamış iki madde); O-10…O-13 başlıkları `⏭️ PLAN-02'YE DEVREDİLDİ` işaretlendi; §0 sağlık tablosu ve derleme rakamları güncellendi; kapanış hükmü eklendi |
-  | `Talimatlar/PLAN-01-*.md` | 15/15, başarı ölçütlerinin tamamı işaretli, Kapanış Özeti dolduruldu, `Plan/` klasörüne taşındı |
-  | `Talimatlar/T-14-*.md` | Bu dosya — kriterler işaretlendi, Bölüm B kapsam dışı olarak kayda geçirildi, `Tamamlandı/`ya taşındı |
+  | Dosya                                      | İşlem                                                                                                                                                                                                                                                                                                                                                          |
+  | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | `README.md`                                | Baştan yazıldı — ekran görüntüsü, "Ne yapar", hızlı başlangıç (Windows/macOS/Linux/elle), belge tablosu, 13 satırlık komut tablosu, teknoloji tablosu, kaynaklar, lisans                                                                                                                                                                                       |
+  | `LICENSE`                                  | Yeni — MIT, `Copyright (c) 2026 Tarih Yaprağı`                                                                                                                                                                                                                                                                                                                 |
+  | `CHANGELOG.md`                             | Yeni — `0.2.0` girdisi (Eklenen / Düzeltilen / Kaldırılan / Bilinen sınırlar) + geriye dönük `0.1.0`                                                                                                                                                                                                                                                           |
+  | `package.json`                             | Sürüm `0.1.0` → `0.2.0`                                                                                                                                                                                                                                                                                                                                        |
+  | `Dokumanlar/gorseller/ekran-goruntusu.png` | Yeni — README görseli, gerçek uygulamadan (29 Ekim, başsız Chrome, 1280×745)                                                                                                                                                                                                                                                                                   |
+  | `Dokumanlar/BAGLAM.md`                     | §4 dosya haritasına test dosyaları, `src/test/setup.ts`, README/CHANGELOG/LICENSE/eslint/prettier/CI ve `gorseller/` eklendi; `Talimatlar/` ağacı gerçek duruma çekildi; §6'ya `kontrol`/`lint`/`format`/`test`/`sitemap`/`icons`/`analyze` tablosu eklendi; §7 plan durumu 15/15 + T-14 cümlesi + yayın kararı; sürüm 0.2.0                                   |
+  | `Dokumanlar/MIMARI.md`                     | §1 şemasına `ErrorBoundary`/`errorElement` zinciri ve neden kök sarmalayıcının yetmediği notu; **§12 Yönlendirme** (URL şeması, slug mantığı, 29 Şubat kararı, `errorElement`, SPA fallback) ve **§13 Test Stratejisi** (neyi/neden test ediyoruz tablosu, yapılandırma, `pool: forks` + `undici` override gerekçesi, jsdom'un iki tuzağı, yeşil kapı) eklendi |
+  | `Dokumanlar/KULLANIM-KILAVUZU.md`          | §9'daki dört çözülmüş "bilinen sorun" satırı **silindi** (K-1, K-2, K-3, K-5); K-4 satırı kullanıcı diline çevrildi; tablo altındaki not "çözülmemiş bilinen sorun kalmadı"a güncellendi; adres örneği `localhost:3000` olarak düzeltildi; sürüm 0.2.0                                                                                                         |
+  | `Dokumanlar/ANALIZ-RAPORU.md`              | **§11 Bulgu Durum Tablosu** eklendi (31 bulgu, dört kategori, toplam tablosu, devredilenlerin tek tek gerekçesi, doğrulanamamış iki madde); O-10…O-13 başlıkları `⏭️ PLAN-02'YE DEVREDİLDİ` işaretlendi; §0 sağlık tablosu ve derleme rakamları güncellendi; kapanış hükmü eklendi                                                                             |
+  | `Talimatlar/PLAN-01-*.md`                  | 15/15, başarı ölçütlerinin tamamı işaretli, Kapanış Özeti dolduruldu, `Plan/` klasörüne taşındı                                                                                                                                                                                                                                                                |
+  | `Talimatlar/T-14-*.md`                     | Bu dosya — kriterler işaretlendi, Bölüm B kapsam dışı olarak kayda geçirildi, `Tamamlandı/`ya taşındı                                                                                                                                                                                                                                                          |
 
 - **Sapmalar / notlar:**
 

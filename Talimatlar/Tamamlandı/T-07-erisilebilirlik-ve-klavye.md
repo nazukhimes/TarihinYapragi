@@ -1,13 +1,13 @@
 # T-07 · Erişilebilirlik ve Klavye
 
-| Alan | Değer |
-|---|---|
-| **Faz** | FAZ 2 — Ürün Kabuğu |
-| **Öncelik** | 🟠 Yüksek |
-| **Tahmini süre** | ~3,5 saat |
-| **Bağımlılık** | T-04 (`Reveal` düzeltmesi), T-06 (gün geçişi `setDate` üzerinden) |
-| **İlgili bulgu** | O-6, O-7 |
-| **Durum** | ✅ Tamamlandı |
+| Alan             | Değer                                                             |
+| ---------------- | ----------------------------------------------------------------- |
+| **Faz**          | FAZ 2 — Ürün Kabuğu                                               |
+| **Öncelik**      | 🟠 Yüksek                                                         |
+| **Tahmini süre** | ~3,5 saat                                                         |
+| **Bağımlılık**   | T-04 (`Reveal` düzeltmesi), T-06 (gün geçişi `setDate` üzerinden) |
+| **İlgili bulgu** | O-6, O-7                                                          |
+| **Durum**        | ✅ Tamamlandı                                                     |
 
 ---
 
@@ -21,18 +21,18 @@ klavyeye açmak.
 
 ## 📍 Mevcut Durum
 
-| # | Sorun | Yer |
-|---|---|---|
-| 1 | `Modal` odak tuzağı yok — Tab tuşu arka plandaki öğelere kaçıyor | `ui.tsx:117-152` |
-| 2 | Modal kapanınca odak, açan düğmeye dönmüyor | `ui.tsx` |
-| 3 | `Toaster` `aria-live` taşımıyor — ekran okuyucu bildirimi duymuyor | `ui.tsx:159-186` |
-| 4 | "Ana içeriğe atla" bağlantısı yok | `App.tsx` |
-| 5 | Arama girdisinde erişilebilir etiket yok (yalnızca `placeholder`) | `App.tsx` üst bar |
-| 6 | `text-ink-faint` (#6f7481 / #0f131a) kontrastı **4.0:1** — AA eşiği 4.5:1 | `index.css:22` |
-| 7 | Kategori çipleri `aria-pressed` taşımıyor | `sections.tsx:159-180` |
-| 8 | Ana sayfada klavyeyle gün değiştirilemiyor | `App.tsx` |
-| 9 | Odak halkası (focus ring) özelleştirilmemiş; koyu zeminde zor görülüyor | `index.css` |
-| 10 | Kişi kartı görsellerinde `width`/`height` yok → düzen kayması | `sections.tsx` |
+| #   | Sorun                                                                     | Yer                    |
+| --- | ------------------------------------------------------------------------- | ---------------------- |
+| 1   | `Modal` odak tuzağı yok — Tab tuşu arka plandaki öğelere kaçıyor          | `ui.tsx:117-152`       |
+| 2   | Modal kapanınca odak, açan düğmeye dönmüyor                               | `ui.tsx`               |
+| 3   | `Toaster` `aria-live` taşımıyor — ekran okuyucu bildirimi duymuyor        | `ui.tsx:159-186`       |
+| 4   | "Ana içeriğe atla" bağlantısı yok                                         | `App.tsx`              |
+| 5   | Arama girdisinde erişilebilir etiket yok (yalnızca `placeholder`)         | `App.tsx` üst bar      |
+| 6   | `text-ink-faint` (#6f7481 / #0f131a) kontrastı **4.0:1** — AA eşiği 4.5:1 | `index.css:22`         |
+| 7   | Kategori çipleri `aria-pressed` taşımıyor                                 | `sections.tsx:159-180` |
+| 8   | Ana sayfada klavyeyle gün değiştirilemiyor                                | `App.tsx`              |
+| 9   | Odak halkası (focus ring) özelleştirilmemiş; koyu zeminde zor görülüyor   | `index.css`            |
+| 10  | Kişi kartı görsellerinde `width`/`height` yok → düzen kayması             | `sections.tsx`         |
 
 ---
 
@@ -51,7 +51,10 @@ useEffect(() => {
   panelRef.current?.focus();
 
   const onKey = (e: KeyboardEvent) => {
-    if (e.key === "Escape") { onClose(); return; }
+    if (e.key === "Escape") {
+      onClose();
+      return;
+    }
     if (e.key !== "Tab") return;
 
     const odaklanabilir = panelRef.current?.querySelectorAll<HTMLElement>(
@@ -62,8 +65,13 @@ useEffect(() => {
     const ilk = odaklanabilir[0];
     const son = odaklanabilir[odaklanabilir.length - 1];
 
-    if (e.shiftKey && document.activeElement === ilk) { e.preventDefault(); son.focus(); }
-    else if (!e.shiftKey && document.activeElement === son) { e.preventDefault(); ilk.focus(); }
+    if (e.shiftKey && document.activeElement === ilk) {
+      e.preventDefault();
+      son.focus();
+    } else if (!e.shiftKey && document.activeElement === son) {
+      e.preventDefault();
+      ilk.focus();
+    }
   };
 
   window.addEventListener("keydown", onKey);
@@ -72,7 +80,7 @@ useEffect(() => {
   return () => {
     window.removeEventListener("keydown", onKey);
     document.body.style.overflow = "";
-    oncekiOdak.current?.focus();          // odağı geri ver
+    oncekiOdak.current?.focus(); // odağı geri ver
   };
 }, [onClose]);
 ```
@@ -97,7 +105,9 @@ Ayrıca `aria-labelledby` ile başlığa bağla.
 `App.tsx` → en üste, `<header>`'dan **önce**:
 
 ```tsx
-<a href="#top" className="skip-link">Ana içeriğe atla</a>
+<a href="#top" className="skip-link">
+  Ana içeriğe atla
+</a>
 ```
 
 `index.css`:
@@ -144,8 +154,10 @@ Arama sonucu sayısını da duyur (T-09'daki sonuç sayacıyla birlikte):
 ```css
 .sr-only {
   position: absolute;
-  width: 1px; height: 1px;
-  padding: 0; margin: -1px;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
@@ -211,15 +223,32 @@ useEffect(() => {
     const t = e.target as HTMLElement;
     if (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable) return;
     if (e.metaKey || e.ctrlKey || e.altKey) return;
-    if (broadcast) return;                  // yayın modunun kendi kısayolları var
+    if (broadcast) return; // yayın modunun kendi kısayolları var
 
     switch (e.key) {
-      case "ArrowLeft":  e.preventDefault(); gunKaydir(-1); break;
-      case "ArrowRight": e.preventDefault(); gunKaydir(+1); break;
-      case "t": case "T": e.preventDefault(); bugüneDon(); break;
-      case "/": e.preventDefault(); aramaRef.current?.focus(); break;
-      case "?": setKisayolYardimi(true); break;
-      case "Escape": setKisayolYardimi(false); break;
+      case "ArrowLeft":
+        e.preventDefault();
+        gunKaydir(-1);
+        break;
+      case "ArrowRight":
+        e.preventDefault();
+        gunKaydir(+1);
+        break;
+      case "t":
+      case "T":
+        e.preventDefault();
+        bugüneDon();
+        break;
+      case "/":
+        e.preventDefault();
+        aramaRef.current?.focus();
+        break;
+      case "?":
+        setKisayolYardimi(true);
+        break;
+      case "Escape":
+        setKisayolYardimi(false);
+        break;
     }
   };
   window.addEventListener("keydown", onKey);
@@ -229,14 +258,14 @@ useEffect(() => {
 
 **Kısayol tablosu:**
 
-| Tuş | İşlev |
-|---|---|
-| `←` | Önceki gün |
-| `→` | Sonraki gün |
-| `T` | Bugüne dön |
-| `/` | Arama kutusuna odaklan |
-| `?` | Kısayol yardımı |
-| `Esc` | Yardımı/modalı kapat |
+| Tuş   | İşlev                  |
+| ----- | ---------------------- |
+| `←`   | Önceki gün             |
+| `→`   | Sonraki gün            |
+| `T`   | Bugüne dön             |
+| `/`   | Arama kutusuna odaklan |
+| `?`   | Kısayol yardımı        |
+| `Esc` | Yardımı/modalı kapat   |
 
 ### Adım 9 — Kısayol yardımı penceresi
 
@@ -274,14 +303,14 @@ Modal'daki küçük görsele de `width={96} height={112}` ekle.
 
 ## 🚫 Kapsam Dışı
 
-| Dokunma | Neden / Hangi talimat |
-|---|---|
-| Renk paletinin geri kalanı | Yalnızca `ink-faint` (ve gerekirse `ink-dim`) değişecek |
-| Yeni bölüm veya özellik ekleme | Kapsam dışı |
-| Arama sonucu sayacının hesaplanması | T-09 (burada yalnızca `aria-live` kabı hazırlanıyor) |
-| Service worker | T-08 |
-| Otomatik erişilebilirlik testleri | T-12 |
-| Tasarım dilinin değiştirilmesi | Kapsam dışı |
+| Dokunma                             | Neden / Hangi talimat                                   |
+| ----------------------------------- | ------------------------------------------------------- |
+| Renk paletinin geri kalanı          | Yalnızca `ink-faint` (ve gerekirse `ink-dim`) değişecek |
+| Yeni bölüm veya özellik ekleme      | Kapsam dışı                                             |
+| Arama sonucu sayacının hesaplanması | T-09 (burada yalnızca `aria-live` kabı hazırlanıyor)    |
+| Service worker                      | T-08                                                    |
+| Otomatik erişilebilirlik testleri   | T-12                                                    |
+| Tasarım dilinin değiştirilmesi      | Kapsam dışı                                             |
 
 ---
 
@@ -337,7 +366,7 @@ Windows'ta **NVDA** (ücretsiz) veya Narrator ile:
 ### 4. Lighthouse
 
 DevTools → Lighthouse → Accessibility → **≥ 95**
-Kalan uyarıları not al; çözülemeyenleri *Tamamlanma Kaydı*'na yaz.
+Kalan uyarıları not al; çözülemeyenleri _Tamamlanma Kaydı_'na yaz.
 
 ### 5. Kısayol çakışma testi
 
@@ -367,7 +396,7 @@ Kalan uyarıları not al; çözülemeyenleri *Tamamlanma Kaydı*'na yaz.
     **3,98:1**), (2) `sections.tsx` `CasesSection`'daki dosya türü rozeti
     (`text-brand`, örn. "SUİKAST" — panel zemininde ölçülen **≈3,54:1**), (3) aynı
     bileşendeki "Dosyayı aç/kapat" düğmesi (aynı `text-brand`, aynı kontrast sorunu).
-    **Bilinçli olarak dokunulmadı** — bu talimatın *Kapsam Dışı* tablosu rengi yalnızca
+    **Bilinçli olarak dokunulmadı** — bu talimatın _Kapsam Dışı_ tablosu rengi yalnızca
     `ink-faint`'e (gerekirse `ink-dim`'e) sınırlıyor; `brand` kırmızısını metin
     kullanımı için değiştirmek ayrı bir tasarım kararı gerektirir (`ink-faint` gibi
     talimatın kendi verdiği hazır bir değer yok). `ANALIZ-RAPORU.md`'ye **O-10** olarak
@@ -396,10 +425,10 @@ Kalan uyarıları not al; çözülemeyenleri *Tamamlanma Kaydı*'na yaz.
        modalındaki başlık zaten `<h3>`; ikisi de aynı `<h2>`'nin altında kardeş
        düzeyde kalıyor, çakışma yok). Görsel etki **yok** — `index.css`'te `h3`/`h4`
        için ayrı bir kural yok, tüm biçim Tailwind sınıflarından geliyor.
-    Bu ikisi talimatın 11 adımının parçası değildi; gerçek bir Lighthouse denetimi
-    çalıştırılınca ortaya çıktı (bkz. Doğrulama). Kapsam dışına taşmadıkları
-    (aynı erişilebilirlik temasında, tek satırlık, sıfır görsel etkili düzeltmeler
-    olduğu) için doğrudan uygulandı, yeni bir bulgu numarası açılmadı.
+       Bu ikisi talimatın 11 adımının parçası değildi; gerçek bir Lighthouse denetimi
+       çalıştırılınca ortaya çıktı (bkz. Doğrulama). Kapsam dışına taşmadıkları
+       (aynı erişilebilirlik temasında, tek satırlık, sıfır görsel etkili düzeltmeler
+       olduğu) için doğrudan uygulandı, yeni bir bulgu numarası açılmadı.
   - **K-5 ile ilişki — bilinçli olarak dokunulmadı:** `PLAN-01`'in T-06 notu ve
     `ANALIZ-RAPORU.md` K-5 bölümü, "aynı gezinme bölgesine dokunacağı" varsayımıyla
     K-5'i (gün gezinme düğmeleri gerçek tıklamayla çalışmıyor) T-07'ye önerdi. Bu
@@ -416,7 +445,7 @@ Kalan uyarıları not al; çözülemeyenleri *Tamamlanma Kaydı*'na yaz.
   - **Arama sonucu `aria-live` kabı bilerek boş bırakıldı:** Adım 4'ün örnek kodu
     `toplamSonuc` adlı bir değişken kullanıyor; bu değişken T-09 Adım 4'te tanımlanıyor
     ("T-07'deki `aria-live` kabına da bu sayıyı bağla" — T-09'un kendi metni). Bu
-    talimatın *Kapsam Dışı* tablosu da sayacın hesaplanmasını açıkça T-09'a bırakıyor.
+    talimatın _Kapsam Dışı_ tablosu da sayacın hesaplanmasını açıkça T-09'a bırakıyor.
     Bu yüzden `<p className="sr-only" role="status" aria-live="polite" />` içeriksiz
     eklendi; T-09 kendi `toplamSonuc` hesaplamasını buraya bağlayacak.
   - **`--color-ink-dim` değiştirilmedi:** Adım 5'in notu bunu koşullu bırakıyordu
@@ -449,10 +478,10 @@ Kalan uyarıları not al; çözülemeyenleri *Tamamlanma Kaydı*'na yaz.
     → `vite preview`, port 4173, `curl` ile `HTTP 200` doğrulandı) karşı **iki kez**
     çalıştırıldı:**
     - 1. çalıştırma (yalnızca talimatın 11 adımından sonra): **89 / 100** —
-      `button-name`, `color-contrast`, `heading-order` başarısız.
+         `button-name`, `color-contrast`, `heading-order` başarısız.
     - `button-name` ve `heading-order` yukarıdaki bonus düzeltmelerle giderildi.
     - 2. çalıştırma: **96 / 100** — yalnızca `color-contrast` (yukarıdaki O-10,
-      bilinçli olarak bırakıldı) kaldı. **≥95 hedefi karşılandı.**
+         bilinçli olarak bırakıldı) kaldı. **≥95 hedefi karşılandı.**
   - Bu ölçüm gerçek bir Chrome örneğinde (headless), gerçek üretim derlemesine karşı
     çalıştı — Browser pane'in kısıtından bağımsız, geçerli bir kanıt.
   - **Canlı olarak denenemeyenler:** yalnızca-klavye tur (`Tab` sırası, gerçek tuş
@@ -478,7 +507,7 @@ Kalan uyarıları not al; çözülemeyenleri *Tamamlanma Kaydı*'na yaz.
     ayrı bir talimata (veya T-11/T-13 gibi `sections.tsx`'e zaten dokunacak bir
     talimata) bırakıldı. Ayrıntı → `ANALIZ-RAPORU.md` O-10.
   - **T-09'a bağımlılık:** Arama sonucu `aria-live` kabı (`App.tsx`, boş `<p
-    className="sr-only" role="status" aria-live="polite" />`) burada hazırlandı; T-09
+className="sr-only" role="status" aria-live="polite" />`) burada hazırlandı; T-09
     Adım 4 kendi `toplamSonuc` hesaplamasını doğrudan bu elemanın içeriğine
     bağlamalı, yeni bir kap açmamalı.
   - **Yeni bir tam ekran katman eklenirse** (`BroadcastMode` gibi), o da ya

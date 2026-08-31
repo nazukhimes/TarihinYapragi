@@ -1,14 +1,14 @@
 # PLAN-01 · Temel Düzeltme ve Tamamlama
 
-| Alan | Değer |
-|---|---|
-| **Oluşturulma** | 2026-08-21 |
-| **Durum** | ✅ **Tamamlandı — 15 / 15** (2026-08-24) |
-| **Son hareket** | 2026-08-24 · T-14 tamamlandı, plan kapandı |
-| **Talimat sayısı** | 15 (T-01 … T-15 · T-15 plan yürürken eklendi) |
-| **Faz sayısı** | 5 |
-| **Dayanak** | [`../Dokumanlar/ANALIZ-RAPORU.md`](../../Dokumanlar/ANALIZ-RAPORU.md) |
-| **İş akışı** | [`../Dokumanlar/CALISMA-SISTEMI.md`](../../Dokumanlar/CALISMA-SISTEMI.md) |
+| Alan               | Değer                                                                     |
+| ------------------ | ------------------------------------------------------------------------- |
+| **Oluşturulma**    | 2026-08-21                                                                |
+| **Durum**          | ✅ **Tamamlandı — 15 / 15** (2026-08-24)                                  |
+| **Son hareket**    | 2026-08-24 · T-14 tamamlandı, plan kapandı                                |
+| **Talimat sayısı** | 15 (T-01 … T-15 · T-15 plan yürürken eklendi)                             |
+| **Faz sayısı**     | 5                                                                         |
+| **Dayanak**        | [`../Dokumanlar/ANALIZ-RAPORU.md`](../../Dokumanlar/ANALIZ-RAPORU.md)     |
+| **İş akışı**       | [`../Dokumanlar/CALISMA-SISTEMI.md`](../../Dokumanlar/CALISMA-SISTEMI.md) |
 
 ---
 
@@ -28,68 +28,74 @@ Plan bittiğinde:
 
 ## 2. Kapsam Dışı (bu planda yapılmayacak)
 
-| Konu | Neden | Ne zaman |
-|---|---|---|
-| Backend / veritabanı | Ürün istemci taraflı çalışıyor, ihtiyaç yok | Kullanıcı hesabı gerekirse |
-| Kullanıcı hesabı, favori, not | Ürün henüz bunu gerektirmiyor | PLAN-02+ |
-| Çoklu dil arayüzü (i18n) | Hedef kitle Türkçe | PLAN-02+ |
-| Tasarım dilinin değiştirilmesi | Mevcut tasarım güçlü, korunacak | — |
-| Yapay zekâ ile içerik üretimi | Editör kalitesi korunmalı | Ayrı değerlendirme |
+| Konu                           | Neden                                       | Ne zaman                   |
+| ------------------------------ | ------------------------------------------- | -------------------------- |
+| Backend / veritabanı           | Ürün istemci taraflı çalışıyor, ihtiyaç yok | Kullanıcı hesabı gerekirse |
+| Kullanıcı hesabı, favori, not  | Ürün henüz bunu gerektirmiyor               | PLAN-02+                   |
+| Çoklu dil arayüzü (i18n)       | Hedef kitle Türkçe                          | PLAN-02+                   |
+| Tasarım dilinin değiştirilmesi | Mevcut tasarım güçlü, korunacak             | —                          |
+| Yapay zekâ ile içerik üretimi  | Editör kalitesi korunmalı                   | Ayrı değerlendirme         |
 
 ---
 
 ## 3. Fazlar ve Talimatlar
 
 ### FAZ 0 — Temizlik ve Zemin
-*Sonraki her işin üzerine basacağı düz zemin. Önce burası.*
 
-| # | Talimat | Öncelik | Bulgu | Süre |
-|---|---|---|---|---|
-| ~~T-01~~ ✅ | [Proje kimliği ve bağımlılık temizliği](../Tamamland%C4%B1/T-01-proje-kimligi-ve-bagimlilik-temizligi.md) | 🔴 Kritik | O-1, O-2, O-3, K-4, m-2 | ~2 sa |
-| ~~T-02~~ ✅ | [Geliştirme ortamı ve başlatıcı](../Tamamland%C4%B1/T-02-gelistirme-ortami-ve-baslatici.md) | 🟠 Yüksek | — | ~1,5 sa |
+_Sonraki her işin üzerine basacağı düz zemin. Önce burası._
+
+| #           | Talimat                                                                                                   | Öncelik   | Bulgu                   | Süre    |
+| ----------- | --------------------------------------------------------------------------------------------------------- | --------- | ----------------------- | ------- |
+| ~~T-01~~ ✅ | [Proje kimliği ve bağımlılık temizliği](../Tamamland%C4%B1/T-01-proje-kimligi-ve-bagimlilik-temizligi.md) | 🔴 Kritik | O-1, O-2, O-3, K-4, m-2 | ~2 sa   |
+| ~~T-02~~ ✅ | [Geliştirme ortamı ve başlatıcı](../Tamamland%C4%B1/T-02-gelistirme-ortami-ve-baslatici.md)               | 🟠 Yüksek | —                       | ~1,5 sa |
 
 ### FAZ 1 — Kritik Hata Düzeltmeleri
-*Kullanıcının gördüğü yanlış bilgiler. Doğruluk her şeyden önce gelir.*
 
-| # | Talimat | Öncelik | Bulgu | Süre |
-|---|---|---|---|---|
-| ~~T-03~~ ✅ | [Takvim ve tarih doğruluğu](../Tamamland%C4%B1/T-03-takvim-tarih-dogrulugu.md) | 🔴 Kritik | K-1 | ~2 sa |
-| ~~T-04~~ ✅ | [Sayaç ve görünürlük hataları](../Tamamland%C4%B1/T-04-sayac-ve-gorunurluk-hatalari.md) | 🔴 Kritik | K-2, K-3 | ~2,5 sa |
-| ~~T-05~~ ✅ | [Ağ katmanı sağlamlaştırma](../Tamamland%C4%B1/T-05-ag-katmani-saglamlastirma.md) | 🟠 Yüksek | O-4, O-8 | ~3 sa |
-| ~~T-15~~ ✅ | [Yaprak gezinme satırının dekoratif katmanla örtülmesi](../Tamamland%C4%B1/T-15-yaprak-gezinme-tiklama-hatasi.md) *(plan yürürken eklendi, 2026-08-24'te uygulandı)* | 🔴 Kritik | K-5 | ~1 sa |
+_Kullanıcının gördüğü yanlış bilgiler. Doğruluk her şeyden önce gelir._
+
+| #           | Talimat                                                                                                                                                              | Öncelik   | Bulgu    | Süre    |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | -------- | ------- |
+| ~~T-03~~ ✅ | [Takvim ve tarih doğruluğu](../Tamamland%C4%B1/T-03-takvim-tarih-dogrulugu.md)                                                                                       | 🔴 Kritik | K-1      | ~2 sa   |
+| ~~T-04~~ ✅ | [Sayaç ve görünürlük hataları](../Tamamland%C4%B1/T-04-sayac-ve-gorunurluk-hatalari.md)                                                                              | 🔴 Kritik | K-2, K-3 | ~2,5 sa |
+| ~~T-05~~ ✅ | [Ağ katmanı sağlamlaştırma](../Tamamland%C4%B1/T-05-ag-katmani-saglamlastirma.md)                                                                                    | 🟠 Yüksek | O-4, O-8 | ~3 sa   |
+| ~~T-15~~ ✅ | [Yaprak gezinme satırının dekoratif katmanla örtülmesi](../Tamamland%C4%B1/T-15-yaprak-gezinme-tiklama-hatasi.md) _(plan yürürken eklendi, 2026-08-24'te uygulandı)_ | 🔴 Kritik | K-5      | ~1 sa   |
 
 ### FAZ 2 — Ürün Kabuğu
-*Uygulamayı "web sitesi" yapan katman: paylaşım, simge, hata dayanıklılığı, erişilebilirlik.*
 
-| # | Talimat | Öncelik | Bulgu | Süre |
-|---|---|---|---|---|
-| ~~T-06~~ ✅ | [Yönlendirme ve paylaşılabilir bağlantı](../Tamamland%C4%B1/T-06-yonlendirme-ve-paylasilabilir-baglanti.md) | 🔴 Kritik | U-1 | ~4 sa |
-| ~~T-07~~ ✅ | [Erişilebilirlik ve klavye](../Tamamland%C4%B1/T-07-erisilebilirlik-ve-klavye.md) | 🟠 Yüksek | O-6, O-7 | ~3,5 sa |
-| ~~T-08~~ ✅ | [Site kimliği: favicon, SEO, PWA](../Tamamland%C4%B1/T-08-site-kimligi-favicon-seo-pwa.md) | 🟠 Yüksek | U-4 | ~3 sa |
-| ~~T-09~~ ✅ | [Hata sınırı ve durum ekranları](../Tamamland%C4%B1/T-09-hata-siniri-ve-durum-ekranlari.md) | 🟠 Yüksek | O-5, O-9, m-3, m-6 | ~3 sa |
+_Uygulamayı "web sitesi" yapan katman: paylaşım, simge, hata dayanıklılığı, erişilebilirlik._
+
+| #           | Talimat                                                                                                     | Öncelik   | Bulgu              | Süre    |
+| ----------- | ----------------------------------------------------------------------------------------------------------- | --------- | ------------------ | ------- |
+| ~~T-06~~ ✅ | [Yönlendirme ve paylaşılabilir bağlantı](../Tamamland%C4%B1/T-06-yonlendirme-ve-paylasilabilir-baglanti.md) | 🔴 Kritik | U-1                | ~4 sa   |
+| ~~T-07~~ ✅ | [Erişilebilirlik ve klavye](../Tamamland%C4%B1/T-07-erisilebilirlik-ve-klavye.md)                           | 🟠 Yüksek | O-6, O-7           | ~3,5 sa |
+| ~~T-08~~ ✅ | [Site kimliği: favicon, SEO, PWA](../Tamamland%C4%B1/T-08-site-kimligi-favicon-seo-pwa.md)                  | 🟠 Yüksek | U-4                | ~3 sa   |
+| ~~T-09~~ ✅ | [Hata sınırı ve durum ekranları](../Tamamland%C4%B1/T-09-hata-siniri-ve-durum-ekranlari.md)                 | 🟠 Yüksek | O-5, O-9, m-3, m-6 | ~3 sa   |
 
 ### FAZ 3 — İçerik
-*Uygulamanın asıl değeri. En uzun soluklu faz.*
 
-| # | Talimat | Öncelik | Bulgu | Süre |
-|---|---|---|---|---|
-| ~~T-10~~ ✅ | [İçerik mimarisi ve kapsam genişletme](../Tamamland%C4%B1/T-10-icerik-mimarisi-ve-kapsam.md) | 🟠 Yüksek | U-2 | ~6 sa+ |
-| ~~T-11~~ ✅ | [Sınıflandırma doğruluğu](../Tamamland%C4%B1/T-11-siniflandirma-dogrulugu.md) | 🟡 Orta | U-3 | ~4 sa |
+_Uygulamanın asıl değeri. En uzun soluklu faz._
+
+| #           | Talimat                                                                                      | Öncelik   | Bulgu | Süre   |
+| ----------- | -------------------------------------------------------------------------------------------- | --------- | ----- | ------ |
+| ~~T-10~~ ✅ | [İçerik mimarisi ve kapsam genişletme](../Tamamland%C4%B1/T-10-icerik-mimarisi-ve-kapsam.md) | 🟠 Yüksek | U-2   | ~6 sa+ |
+| ~~T-11~~ ✅ | [Sınıflandırma doğruluğu](../Tamamland%C4%B1/T-11-siniflandirma-dogrulugu.md)                | 🟡 Orta   | U-3   | ~4 sa  |
 
 ### FAZ 4 — Kalite Güvencesi
-*Buraya kadar yapılan her şeyi koruyan çit.*
 
-| # | Talimat | Öncelik | Bulgu | Süre |
-|---|---|---|---|---|
-| ~~T-12~~ ✅ | [Test, lint ve biçimlendirme altyapısı](../Tamamland%C4%B1/T-12-test-lint-bicimlendirme.md) | 🟠 Yüksek | U-5 | ~4 sa |
-| ~~T-13~~ ✅ | [Performans ve derleme iyileştirmesi](../Tamamland%C4%B1/T-13-performans-ve-derleme.md) | 🟡 Orta | m-1, m-4, m-5, perf | ~3 sa |
+_Buraya kadar yapılan her şeyi koruyan çit._
+
+| #           | Talimat                                                                                     | Öncelik   | Bulgu               | Süre  |
+| ----------- | ------------------------------------------------------------------------------------------- | --------- | ------------------- | ----- |
+| ~~T-12~~ ✅ | [Test, lint ve biçimlendirme altyapısı](../Tamamland%C4%B1/T-12-test-lint-bicimlendirme.md) | 🟠 Yüksek | U-5                 | ~4 sa |
+| ~~T-13~~ ✅ | [Performans ve derleme iyileştirmesi](../Tamamland%C4%B1/T-13-performans-ve-derleme.md)     | 🟡 Orta   | m-1, m-4, m-5, perf | ~3 sa |
 
 ### FAZ 5 — Kapanış
-*Belgeleri gerçeğe eşitle, yayına al.*
 
-| # | Talimat | Öncelik | Bulgu | Süre |
-|---|---|---|---|---|
-| ~~T-14~~ ✅ | [Dokümantasyon güncelleme ve yayın](../Tamamland%C4%B1/T-14-dokumantasyon-ve-yayin.md) *(Bölüm B — Yayın, proje sahibinin kararıyla kapsam dışı)* | 🟠 Yüksek | — | ~2,5 sa |
+_Belgeleri gerçeğe eşitle, yayına al._
+
+| #           | Talimat                                                                                                                                           | Öncelik   | Bulgu | Süre    |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ----- | ------- |
+| ~~T-14~~ ✅ | [Dokümantasyon güncelleme ve yayın](../Tamamland%C4%B1/T-14-dokumantasyon-ve-yayin.md) _(Bölüm B — Yayın, proje sahibinin kararıyla kapsam dışı)_ | 🟠 Yüksek | —     | ~2,5 sa |
 
 **Toplam tahmini süre:** ~45 saat
 
@@ -162,7 +168,7 @@ T-01 ──┬─► T-02
   Paylaş düğmesi eklendi (mobilde `navigator.share`, masaüstünde panoya kopyalama);
   `public/_redirects` + kök `vercel.json` ile üretim SPA yönlendirmesi. U-1 çözüldü.
   **Sapma:** Paylaş düğmesi, talimatın önerdiği gibi `CalendarLeaf`'in gezinme
-  satırının *içine* değil, `App.tsx`'te ona komşu eklendi — hem `leaf.tsx`↔`slug.ts`
+  satırının _içine_ değil, `App.tsx`'te ona komşu eklendi — hem `leaf.tsx`↔`slug.ts`
   döngüsel import'unu (canlı testte yakalandı) hem de K-5'in etkilediği DOM bölgesini
   atlamak için (ayrıntı → T-06 Tamamlanma Kaydı). **K-5 hâlâ atanmadı** — canlı olarak
   yeniden doğrulandı, hâlâ hiçbir talimatın kapsamında değil, T-07 için önerilir
@@ -244,7 +250,7 @@ T-01 ──┬─► T-02
   (A3 adımı) talimatın kendi kararıyla bilinçli olarak ertelendi (paket boyutu
   eşiği altında kalındığı için gerek kalmadı). **(B) İçerik** — editör içeriği
   10 günden **60 güne** çıkarıldı (4 parti + 4 editör seçimi). **Sapma:**
-  talimatın *Kapsam Dışı* tablosu "yapay zekâ ile toplu içerik üretimi"ni
+  talimatın _Kapsam Dışı_ tablosu "yapay zekâ ile toplu içerik üretimi"ni
   **yasak** olarak işaretliyordu; Bölüm A bitirildikten sonra bu çelişki
   kullanıcıya açıkça sorulmuş, kullanıcı bu oturum için 4 partinin tamamının
   web araştırmasıyla kaynak doğrulanarak yazılmasına **açıkça onay vermiştir**
@@ -268,7 +274,7 @@ T-01 ──┬─► T-02
   Tamamlanma Kaydı). `src/lib/__fixtures__/siniflandirma-ornekleri.ts` (66
   örnek, gerçek Vikipedi verisinden + talimatın kendi örnekleri, 16 yanlış
   pozitif tuzağı) ve `scripts/siniflandirma-raporu.mjs` (`npm run
-  siniflandirma`) eklendi — altın kümede kategori doğruluğu **%100** (hedef
+siniflandirma`) eklendi — altın kümede kategori doğruluğu **%100** (hedef
   ≥%85), karanlık yanlış pozitif **0**, kesinlik **%100** (hedef ≥%90). U-3
   çözüldü. **Sapma:** ölçüm betiği TypeScript kodunu (`classification.ts` ve
   fixtures) çalışma zamanında derlemek için `esbuild`'i (öncesinde yalnızca
@@ -280,7 +286,7 @@ T-01 ──┬─► T-02
   hiçbiri etkilenmiyor); anahtar kelime taraması bir felaket sözcüğünün
   cümlenin konusu mu yoksa yalnızca bir tarihleme ifadesi mi olduğunu
   ayıramıyor (nadir görülen bir örnek, en yaygın biçim düzeltildi) — ikisi de
-  regex'in doğal sınırı, embedding gerektirir, T-11'in kendi *Kapsam Dışı*
+  regex'in doğal sınırı, embedding gerektirir, T-11'in kendi _Kapsam Dışı_
   tablosunda dışarıda bırakılmış. O-12 (Bilim & Keşif mükerrer kaydı) canlı
   olarak yeniden doğrulandı, hâlâ düzeltilmedi (T-11'in kapsamı dışında).
   T-12 hâlâ açıktı (bağımlılığı T-01'di), T-11'in tamamlanması onu etkilemedi.
@@ -309,8 +315,7 @@ T-01 ──┬─► T-02
   `package.json`'a `overrides: { undici: "7.29.0" }` eklenerek kalıcı çözüldü
   (aynı zamanda undici 8.0.0-8.8.0'ın kendi bilinen güvenlik açıklarını da
   giderdi). CI'da testi 5 kez art arda çalıştıran bir teşhis adımıyla
-  düzeltme sonrası **5/5** doğrulandı. Ayrıntı → T-12 Tamamlanma Kaydı madde
-  11. CI iş akışı (`.github/workflows/kontrol.yml`) **canlı olarak doğrulandı
+  düzeltme sonrası **5/5** doğrulandı. Ayrıntı → T-12 Tamamlanma Kaydı madde 11. CI iş akışı (`.github/workflows/kontrol.yml`) **canlı olarak doğrulandı
   ve yeşil**. Artık T-13 açık.
 - ~~**T-13.**~~ ✅ **2026-08-23'te tamamlandı.** `BroadcastMode` ayrı dosyaya
   (`src/components/broadcast.tsx`) taşınıp `React.lazy` ile yükleniyor (canlı
@@ -377,23 +382,23 @@ T-01 ──┬─► T-02
 
 > Bir talimat bitince buradaki durumu `✅ Tamamlandı` yapın ve tarih girin.
 
-| # | Talimat | Durum | Tamamlanma | Not |
-|---|---|---|---|---|
-| T-01 | Proje kimliği ve bağımlılık temizliği | ✅ Tamamlandı | 2026-08-21 | 60 paket kaldırıldı · `node_modules` −47,1 MB · K-4 çözüldü · üretim paketi büyümedi. Tailwind kaynak taraması bulgusu → T-13 Adım 10 |
-| T-02 | Geliştirme ortamı ve başlatıcı | ✅ Tamamlandı | 2026-08-21 | `başlat.bat` sadeleşti (PowerShell port taraması kalktı) · `baslat.sh` eklendi · `.editorconfig`/`.nvmrc`/`.vscode/*` kuruldu · API tabanı `config.ts` + `.env.example` üzerinden ortam değişkenine taşındı |
-| T-03 | Takvim ve tarih doğruluğu | ✅ Tamamlandı | 2026-08-21 | `src/lib/date.ts` eklendi · 2024 sabiti kaldırıldı · "Yılın 233. günü" doğrulandı · Yeni bulgu K-5 (gezinme düğmeleri tıklanamıyor) → `ANALIZ-RAPORU.md` |
-| T-04 | Sayaç ve görünürlük hataları | ✅ Tamamlandı | 2026-08-21 | `src/lib/useInView.ts` eklendi (tek paylaşılan gözlemci + `setTimeout` güvenlik ağı) · gözlemci sayısı 181→1 · `Reveal`/`CountUp` bu hook'u kullanıyor, props değişmedi · K-2 ve K-3 çözüldü · K-5'e bilinçli olarak dokunulmadı (kapsam dışı) |
-| T-05 | Ağ katmanı sağlamlaştırma | ✅ Tamamlandı | 2026-08-21 | TR önce denenir, dolu günde EN hiç çekilmiyor (istek 2→1) · `AbortController` ile iptal, `reqId` kaldırıldı · `localStorage` `savedAt`/24s TTL, `stale` arayüzde bakır renkle gösteriliyor · `pruneCache()` 60 kayıt, `memSet()` 40 kayıt FIFO · `DayError` (404/429/5xx/ağ), 429/5xx'te en fazla 2 deneme · O-4, O-8 çözüldü |
-| T-06 | Yönlendirme ve paylaşılabilir bağlantı | ✅ Tamamlandı | 2026-08-21 | `src/lib/slug.ts` eklendi (366 gün çift yönlü test edildi) · `createBrowserRouter` (`/`, `/:daySlug`, `*`) · `App.tsx`'te `day`/`month` `useState`'i kalktı, URL tek kaynak · `/08-21`→`/21-agustos` kanonikleşiyor · `NotFound.tsx` eklendi · Paylaş düğmesi (native share / panoya kopyalama) · `public/_redirects` + `vercel.json` · U-1 çözüldü · K-5 canlı yeniden doğrulandı, hâlâ atanmadı → T-07'ye önerilir |
-| T-07 | Erişilebilirlik ve klavye | ✅ Tamamlandı | 2026-08-21 | `Modal` odak tuzağı + odak iadesi + `aria-labelledby` · `Toaster` `aria-live` · "Ana içeriğe atla" · arama `aria-label`/`type=search` · `ink-faint` kontrastı 3,98→5,82:1 · `aria-pressed` çipler · `←/→/T//? Esc` klavye kısayolları + Kısayol Yardımı modalı (Modal açıkken de devre dışı) · kişi görsellerine `width/height` · altı bölüme `aria-labelledby` · O-6, O-7 çözüldü · Lighthouse Erişilebilirlik 89→96 (yol boyunca 2 bonus hata da düzeltildi) · **Yeni bulgu O-10** (text-brand kontrastı) kapsam dışı bırakıldı · K-5'e T-07 de dokunmadı (leaf.tsx'e hiç dokunmadı, hâlâ atanmadı) |
-| T-08 | Site kimliği: favicon, SEO, PWA | ✅ Tamamlandı | 2026-08-21 | 7 marka görseli `ui.tsx`'teki `IconLeafMark`'tan üretildi (`scripts/generate-brand-assets.mjs`) · `index.html`'e favicon/manifest/`og:*`/`twitter:*`/canonical/JSON-LD eklendi · `App.tsx`'te gün bazlı dinamik başlık/canonical `useEffect`'i (canlı doğrulandı) · `scripts/sitemap.mjs` 366 adresi `build`'e bağlı üretiyor · `vite-plugin-pwa` ile service worker kuruldu · Lighthouse SEO **100/100** (yol boyunca `robots.txt`'teki göreli `Sitemap:` satırı düzeltildi) · U-4 çözüldü · Service worker'ın canlı kaydı Browser pane sandbox kısıtı yüzünden doğrulanamadı, sonraki oturumda gerçek tarayıcıda kontrol edilmeli |
-| T-09 | Hata sınırı ve durum ekranları | ✅ Tamamlandı | 2026-08-22 | `ErrorBoundary.tsx` eklendi (kökte + 6 bölümde) · **Sapma:** `main.tsx`'teki kök sarmalayıcı tek başına yetersizdi (react-router kendi dahili hata sınırını kullanıyor) → her rotaya `errorElement`/`RouteErrorFallback` eklendi, canlı doğrulandı · `data.error.kind`'a göre 5 başlık · arama sonuç sayacı + boş durum ekranı · "Bugünün anlamı" şeridi (`holidays`) · Karanlık Dosyalar/Bilim & Keşif'te "N daha göster" · 4 sn gecikme uyarısı · O-5, O-9, m-3, m-6 çözüldü · Yeni bulgu O-11 (`holidays`'te şablon artığı çöp kayıt) kapsam dışı bırakıldı |
-| T-10 | İçerik mimarisi ve kapsam genişletme | ✅ Tamamlandı | 2026-08-22 | `curated.ts` (1.001 satır) silindi → `types.ts` + `gunler/` (12 ay dosyası) + `index.ts`; mevcut 10 gün birebir taşındı (sed ile) · editör içeriği 10→60 gün (%2,7→%16,4) · **Sapma:** "AI toplu üretim yasak" notuna rağmen kullanıcı bu oturum için açık onay verdi, 4 parti web araştırmasıyla kaynak doğrulanarak yazıldı · `ICERIK-SABLONU.md` eklendi · paket boyutu +64,64 kB gzip (<100 kB eşiği altında, tembel yükleme gerekmedi) · Yeni bulgu O-12 (Bilim & Keşif'te editör/Vikipedi mükerrer ayıklaması yok) kapsam dışı bırakıldı |
-| T-11 | Sınıflandırma doğruluğu | ✅ Tamamlandı | 2026-08-22 | `wiki.ts`'ten ayrılan `classification.ts` · "ilk eşleşen kazanır" → puanlama + sabit öncelik sırası · `detectDarkItem` puan eşiği (≥3) · Sorun 2'deki 7 kalıp düzeltildi · **kritik yan bulgu:** JS `\b`/`\w` Türkçe harfleri (ç/ğ/ı/ö/ş/ü) kelime saymıyor, birkaç kural gerçek veride hiç eşleşmiyordu, elle sınırla düzeltildi · 66 örneklik altın küme + `npm run siniflandirma` · kategori doğruluğu %100 (≥%85 hedef), karanlık yanlış pozitif 0, kesinlik %100 (≥%90 hedef) · U-3 çözüldü · `genel` oranı bazı günlerde %40 hedefinin üstünde ve "felaket kelimesi tarihleme amaçlı" örnekler bilinçli kapsam dışı bırakıldı (regex sınırı) |
-| T-12 | Test, lint ve biçimlendirme altyapısı | ✅ Tamamlandı | 2026-08-22 | Vitest (jsdom+v8) · 203 test/7 dosya · ESLint (flat, rules-of-hooks+exhaustive-deps) + Prettier · `npm run kontrol` tek komut · `src/lib` satır kapsamı %78,78 (≥%70 hedef) · **4 sapma:** güncel `vitest`/`@vitest/coverage-v8` 4.1.11'de gerçek kapsam-raporlama hatası → 3.2.7'ye sabitlendi · güncel `eslint-plugin-react-hooks` 7.x React Compiler kuralları taşıyor → klasik iki kurala daraltıldı · jsdom `requestAnimationFrame` saat tutarsızlığı → CountUp testi `vi.useFakeTimers()`'a geçirildi · **CI'da gerçek bir kararsızlık** (`undici` 8.0.3+'ın CI'nın Node sürümünde bazen eksik olan `markAsUncloneable`'ı koşulsuz çağırması) → `overrides: {undici: "7.29.0"}` ile kalıcı çözüldü (aynı zamanda undici'nin bilinen güvenlik açıklarını da giderdi), 5x tekrar testiyle 5/5 doğrulandı · CI canlı olarak doğrulandı ve yeşil |
-| T-13 | Performans ve derleme iyileştirmesi | ✅ Tamamlandı | 2026-08-23 | `BroadcastMode` `React.lazy` ile ayrı parçada (canlı doğrulandı) · font isteği daraltıldı + preload/onload takası · ticker hızı öğe sayısına bağlı (20-90s) · mobilde `.noise`/`.drift` kapalı · `content-visibility:auto` (`scrollIntoView` ile doğrulandı) · `App.tsx` 1.079→244 satır, `useGunVerisi` hook'u + 9 yeni bileşen · `m-1` (`stats.indexOf`) çözüldü · arama süzmesi tekilleştirildi (canlı doğrulandı) · `manualChunks`+`rollup-plugin-visualizer` · Tailwind `@source not` · **Lighthouse ilk kez üçü birlikte: Performans 92 · Erişilebilirlik 96 · SEO 100** (üretim derlemesine karşı) · **Sapma:** ≥%15 ilk paket küçülmesi hedefi karşılanmadı — T-10'un 60 günlük içerik verisi paketin çoğunluğu, tembel yüklemesi ayrı bir talimat (PLAN-02 adayı) gerektiriyor |
-| T-15 | Yaprak gezinme satırının dekoratif katmanla örtülmesi | ✅ Tamamlandı | 2026-08-24 | Plan yürürken eklendi · K-5 kapandı · dekor katmanları kartın kendi `relative` sarmalayıcısına alındı, `pointer-events-none` + `aria-hidden` eklendi, gezinme satırı `relative` yapıldı · **kayıtlı bulgudan farkı:** hata satırı görsel olarak da örtüyormuş (opak dekor), ekran görüntüsüyle kanıtlandı · üç düğme de gerçek fare tıklamasıyla doğrulandı · 203 test + `npm run kontrol` yeşil |
-| T-14 | Dokümantasyon güncelleme ve yayın | ✅ Tamamlandı | 2026-08-24 | README (ekran görüntülü) · LICENSE · CHANGELOG 0.2.0 · MIMARI'ye §12 Yönlendirme + §13 Test Stratejisi · ANALIZ-RAPORU'ya §11 Bulgu Durum Tablosu (31 bulgu, 25 çözüldü, 6 devredildi) · kılavuzdan çözülmüş "bilinen sorun" satırları silindi · sürüm 0.2.0 · **Bölüm B (Yayın) proje sahibinin kararıyla kapsam dışı** |
+| #    | Talimat                                               | Durum         | Tamamlanma | Not                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| ---- | ----------------------------------------------------- | ------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| T-01 | Proje kimliği ve bağımlılık temizliği                 | ✅ Tamamlandı | 2026-08-21 | 60 paket kaldırıldı · `node_modules` −47,1 MB · K-4 çözüldü · üretim paketi büyümedi. Tailwind kaynak taraması bulgusu → T-13 Adım 10                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| T-02 | Geliştirme ortamı ve başlatıcı                        | ✅ Tamamlandı | 2026-08-21 | `başlat.bat` sadeleşti (PowerShell port taraması kalktı) · `baslat.sh` eklendi · `.editorconfig`/`.nvmrc`/`.vscode/*` kuruldu · API tabanı `config.ts` + `.env.example` üzerinden ortam değişkenine taşındı                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| T-03 | Takvim ve tarih doğruluğu                             | ✅ Tamamlandı | 2026-08-21 | `src/lib/date.ts` eklendi · 2024 sabiti kaldırıldı · "Yılın 233. günü" doğrulandı · Yeni bulgu K-5 (gezinme düğmeleri tıklanamıyor) → `ANALIZ-RAPORU.md`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| T-04 | Sayaç ve görünürlük hataları                          | ✅ Tamamlandı | 2026-08-21 | `src/lib/useInView.ts` eklendi (tek paylaşılan gözlemci + `setTimeout` güvenlik ağı) · gözlemci sayısı 181→1 · `Reveal`/`CountUp` bu hook'u kullanıyor, props değişmedi · K-2 ve K-3 çözüldü · K-5'e bilinçli olarak dokunulmadı (kapsam dışı)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| T-05 | Ağ katmanı sağlamlaştırma                             | ✅ Tamamlandı | 2026-08-21 | TR önce denenir, dolu günde EN hiç çekilmiyor (istek 2→1) · `AbortController` ile iptal, `reqId` kaldırıldı · `localStorage` `savedAt`/24s TTL, `stale` arayüzde bakır renkle gösteriliyor · `pruneCache()` 60 kayıt, `memSet()` 40 kayıt FIFO · `DayError` (404/429/5xx/ağ), 429/5xx'te en fazla 2 deneme · O-4, O-8 çözüldü                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| T-06 | Yönlendirme ve paylaşılabilir bağlantı                | ✅ Tamamlandı | 2026-08-21 | `src/lib/slug.ts` eklendi (366 gün çift yönlü test edildi) · `createBrowserRouter` (`/`, `/:daySlug`, `*`) · `App.tsx`'te `day`/`month` `useState`'i kalktı, URL tek kaynak · `/08-21`→`/21-agustos` kanonikleşiyor · `NotFound.tsx` eklendi · Paylaş düğmesi (native share / panoya kopyalama) · `public/_redirects` + `vercel.json` · U-1 çözüldü · K-5 canlı yeniden doğrulandı, hâlâ atanmadı → T-07'ye önerilir                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| T-07 | Erişilebilirlik ve klavye                             | ✅ Tamamlandı | 2026-08-21 | `Modal` odak tuzağı + odak iadesi + `aria-labelledby` · `Toaster` `aria-live` · "Ana içeriğe atla" · arama `aria-label`/`type=search` · `ink-faint` kontrastı 3,98→5,82:1 · `aria-pressed` çipler · `←/→/T//? Esc` klavye kısayolları + Kısayol Yardımı modalı (Modal açıkken de devre dışı) · kişi görsellerine `width/height` · altı bölüme `aria-labelledby` · O-6, O-7 çözüldü · Lighthouse Erişilebilirlik 89→96 (yol boyunca 2 bonus hata da düzeltildi) · **Yeni bulgu O-10** (text-brand kontrastı) kapsam dışı bırakıldı · K-5'e T-07 de dokunmadı (leaf.tsx'e hiç dokunmadı, hâlâ atanmadı)                                                                                                                                                                                                                                              |
+| T-08 | Site kimliği: favicon, SEO, PWA                       | ✅ Tamamlandı | 2026-08-21 | 7 marka görseli `ui.tsx`'teki `IconLeafMark`'tan üretildi (`scripts/generate-brand-assets.mjs`) · `index.html`'e favicon/manifest/`og:*`/`twitter:*`/canonical/JSON-LD eklendi · `App.tsx`'te gün bazlı dinamik başlık/canonical `useEffect`'i (canlı doğrulandı) · `scripts/sitemap.mjs` 366 adresi `build`'e bağlı üretiyor · `vite-plugin-pwa` ile service worker kuruldu · Lighthouse SEO **100/100** (yol boyunca `robots.txt`'teki göreli `Sitemap:` satırı düzeltildi) · U-4 çözüldü · Service worker'ın canlı kaydı Browser pane sandbox kısıtı yüzünden doğrulanamadı, sonraki oturumda gerçek tarayıcıda kontrol edilmeli                                                                                                                                                                                                                |
+| T-09 | Hata sınırı ve durum ekranları                        | ✅ Tamamlandı | 2026-08-22 | `ErrorBoundary.tsx` eklendi (kökte + 6 bölümde) · **Sapma:** `main.tsx`'teki kök sarmalayıcı tek başına yetersizdi (react-router kendi dahili hata sınırını kullanıyor) → her rotaya `errorElement`/`RouteErrorFallback` eklendi, canlı doğrulandı · `data.error.kind`'a göre 5 başlık · arama sonuç sayacı + boş durum ekranı · "Bugünün anlamı" şeridi (`holidays`) · Karanlık Dosyalar/Bilim & Keşif'te "N daha göster" · 4 sn gecikme uyarısı · O-5, O-9, m-3, m-6 çözüldü · Yeni bulgu O-11 (`holidays`'te şablon artığı çöp kayıt) kapsam dışı bırakıldı                                                                                                                                                                                                                                                                                     |
+| T-10 | İçerik mimarisi ve kapsam genişletme                  | ✅ Tamamlandı | 2026-08-22 | `curated.ts` (1.001 satır) silindi → `types.ts` + `gunler/` (12 ay dosyası) + `index.ts`; mevcut 10 gün birebir taşındı (sed ile) · editör içeriği 10→60 gün (%2,7→%16,4) · **Sapma:** "AI toplu üretim yasak" notuna rağmen kullanıcı bu oturum için açık onay verdi, 4 parti web araştırmasıyla kaynak doğrulanarak yazıldı · `ICERIK-SABLONU.md` eklendi · paket boyutu +64,64 kB gzip (<100 kB eşiği altında, tembel yükleme gerekmedi) · Yeni bulgu O-12 (Bilim & Keşif'te editör/Vikipedi mükerrer ayıklaması yok) kapsam dışı bırakıldı                                                                                                                                                                                                                                                                                                     |
+| T-11 | Sınıflandırma doğruluğu                               | ✅ Tamamlandı | 2026-08-22 | `wiki.ts`'ten ayrılan `classification.ts` · "ilk eşleşen kazanır" → puanlama + sabit öncelik sırası · `detectDarkItem` puan eşiği (≥3) · Sorun 2'deki 7 kalıp düzeltildi · **kritik yan bulgu:** JS `\b`/`\w` Türkçe harfleri (ç/ğ/ı/ö/ş/ü) kelime saymıyor, birkaç kural gerçek veride hiç eşleşmiyordu, elle sınırla düzeltildi · 66 örneklik altın küme + `npm run siniflandirma` · kategori doğruluğu %100 (≥%85 hedef), karanlık yanlış pozitif 0, kesinlik %100 (≥%90 hedef) · U-3 çözüldü · `genel` oranı bazı günlerde %40 hedefinin üstünde ve "felaket kelimesi tarihleme amaçlı" örnekler bilinçli kapsam dışı bırakıldı (regex sınırı)                                                                                                                                                                                                 |
+| T-12 | Test, lint ve biçimlendirme altyapısı                 | ✅ Tamamlandı | 2026-08-22 | Vitest (jsdom+v8) · 203 test/7 dosya · ESLint (flat, rules-of-hooks+exhaustive-deps) + Prettier · `npm run kontrol` tek komut · `src/lib` satır kapsamı %78,78 (≥%70 hedef) · **4 sapma:** güncel `vitest`/`@vitest/coverage-v8` 4.1.11'de gerçek kapsam-raporlama hatası → 3.2.7'ye sabitlendi · güncel `eslint-plugin-react-hooks` 7.x React Compiler kuralları taşıyor → klasik iki kurala daraltıldı · jsdom `requestAnimationFrame` saat tutarsızlığı → CountUp testi `vi.useFakeTimers()`'a geçirildi · **CI'da gerçek bir kararsızlık** (`undici` 8.0.3+'ın CI'nın Node sürümünde bazen eksik olan `markAsUncloneable`'ı koşulsuz çağırması) → `overrides: {undici: "7.29.0"}` ile kalıcı çözüldü (aynı zamanda undici'nin bilinen güvenlik açıklarını da giderdi), 5x tekrar testiyle 5/5 doğrulandı · CI canlı olarak doğrulandı ve yeşil |
+| T-13 | Performans ve derleme iyileştirmesi                   | ✅ Tamamlandı | 2026-08-23 | `BroadcastMode` `React.lazy` ile ayrı parçada (canlı doğrulandı) · font isteği daraltıldı + preload/onload takası · ticker hızı öğe sayısına bağlı (20-90s) · mobilde `.noise`/`.drift` kapalı · `content-visibility:auto` (`scrollIntoView` ile doğrulandı) · `App.tsx` 1.079→244 satır, `useGunVerisi` hook'u + 9 yeni bileşen · `m-1` (`stats.indexOf`) çözüldü · arama süzmesi tekilleştirildi (canlı doğrulandı) · `manualChunks`+`rollup-plugin-visualizer` · Tailwind `@source not` · **Lighthouse ilk kez üçü birlikte: Performans 92 · Erişilebilirlik 96 · SEO 100** (üretim derlemesine karşı) · **Sapma:** ≥%15 ilk paket küçülmesi hedefi karşılanmadı — T-10'un 60 günlük içerik verisi paketin çoğunluğu, tembel yüklemesi ayrı bir talimat (PLAN-02 adayı) gerektiriyor                                                            |
+| T-15 | Yaprak gezinme satırının dekoratif katmanla örtülmesi | ✅ Tamamlandı | 2026-08-24 | Plan yürürken eklendi · K-5 kapandı · dekor katmanları kartın kendi `relative` sarmalayıcısına alındı, `pointer-events-none` + `aria-hidden` eklendi, gezinme satırı `relative` yapıldı · **kayıtlı bulgudan farkı:** hata satırı görsel olarak da örtüyormuş (opak dekor), ekran görüntüsüyle kanıtlandı · üç düğme de gerçek fare tıklamasıyla doğrulandı · 203 test + `npm run kontrol` yeşil                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| T-14 | Dokümantasyon güncelleme ve yayın                     | ✅ Tamamlandı | 2026-08-24 | README (ekran görüntülü) · LICENSE · CHANGELOG 0.2.0 · MIMARI'ye §12 Yönlendirme + §13 Test Stratejisi · ANALIZ-RAPORU'ya §11 Bulgu Durum Tablosu (31 bulgu, 25 çözüldü, 6 devredildi) · kılavuzdan çözülmüş "bilinen sorun" satırları silindi · sürüm 0.2.0 · **Bölüm B (Yayın) proje sahibinin kararıyla kapsam dışı**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 
 **İlerleme:** 15 / 15 · `████████████████████` **%100** ✅
 
@@ -404,17 +409,20 @@ T-01 ──┬─► T-02
 Plan ancak aşağıdakilerin tamamı doğruysa kapatılabilir:
 
 ### Doğruluk
+
 - [x] "Yılın X. günü" değeri her yıl ve her gün için doğru
 - [x] Sayaçlar gün değişiminde doğru güncelleniyor
 - [x] 29 Şubat dahil hiçbir kenar durumda yanlış bilgi yok
 
 ### Sağlamlık
+
 - [x] Sekme arka planda açılsa bile içerik görünüyor
 - [x] Bir bileşen hata verse bile sayfa çökmüyor, kullanıcı mesaj görüyor (T-09)
 - [x] Hızlı gün değiştirmede eski istekler iptal ediliyor
 - [x] Çevrimdışı yedek TTL'li çalışıyor
 
 ### Ürün
+
 - [x] Her gün için paylaşılabilir bir URL var (örn. `/21-agustos`)
 - [x] Tarayıcı geri/ileri tuşu gün geçişinde çalışıyor
 - [x] Bağlantı sosyal medyada başlık + görselle önizleniyor (T-08 — statik `og:*`/`twitter:*`;
@@ -425,11 +433,13 @@ Plan ancak aşağıdakilerin tamamı doğruysa kapatılabilir:
       talimatta işaretlenmemiş kalmıştı, burada düzeltildi)
 
 ### İçerik
+
 - [x] Editör içeriği en az 60 günde mevcut (T-10 — tam 60/366)
 - [x] İçerik dosya yapısı 366 güne ölçekleniyor (T-10 — 12 ay dosyası, her biri bağımsız düzenlenebilir)
 - [x] Sınıflandırma doğruluğu test edilmiş ve ölçülü (T-11 — altın kümede kategori %100, karanlık yanlış pozitif 0)
 
 ### Kalite
+
 - [x] `npm run typecheck` yeşil
 - [x] `npm run build` yeşil
 - [x] `npm run lint` yeşil (T-12 — 0 hata, 8 uyarı)
@@ -437,6 +447,7 @@ Plan ancak aşağıdakilerin tamamı doğruysa kapatılabilir:
 - [x] Lighthouse: Performans ≥ 90, Erişilebilirlik ≥ 95, SEO ≥ 95 (T-13 — üçü ilk kez birlikte, üretim derlemesine karşı ölçüldü: **92 / 96 / 100**; Performans puanı canlı Wikipedia API gecikmesine bağlı ölçümden ölçüme salınıyor, ayrıntı → T-13 Tamamlanma Kaydı)
 
 ### Belge
+
 - [x] `BAGLAM.md` gerçeği yansıtıyor (T-14 — dosya haritası gerçek `src/` ağacıyla
       karşılaştırıldı, komut tablosu `package.json` ile birebir)
 - [x] `KULLANIM-KILAVUZU.md` yeni özellikleri içeriyor (T-14 — paylaşım, PWA kurulumu,
@@ -449,13 +460,13 @@ Plan ancak aşağıdakilerin tamamı doğruysa kapatılabilir:
 
 ## 7. Riskler
 
-| Risk | Olasılık | Etki | Önlem |
-|---|---|---|---|
-| Wikimedia API'si değişir / hız sınırı uygular | Düşük | Yüksek | T-05'te TTL'li önbellek ve zarif düşüş; API sözleşmesi tek dosyada (`wiki.ts`) izole |
-| İçerik yazımı (T-10) tahminden çok uzun sürer | **Yüksek** | Orta | T-10 partilere bölündü; her parti bağımsız teslim edilebilir |
-| Yönlendirme (T-06) mevcut durum akışını bozar | Orta | Yüksek | Önce T-03/T-04 bitmeli; URL yalnızca `day`/`month` state'ini yansıtsın, ikinci doğruluk kaynağı olmasın |
-| Sınıflandırma iyileştirmesi (T-11) mevcut doğru eşleşmeleri bozar | Orta | Orta | T-12'nin test altyapısı önce kurulmalı; anlık görüntü (snapshot) testi ile korunmalı |
-| Kapsam kayması — "bir de şunu yapayım" | **Yüksek** | Yüksek | Her talimatta *Kapsam Dışı* bölümü zorunlu |
+| Risk                                                              | Olasılık   | Etki   | Önlem                                                                                                   |
+| ----------------------------------------------------------------- | ---------- | ------ | ------------------------------------------------------------------------------------------------------- |
+| Wikimedia API'si değişir / hız sınırı uygular                     | Düşük      | Yüksek | T-05'te TTL'li önbellek ve zarif düşüş; API sözleşmesi tek dosyada (`wiki.ts`) izole                    |
+| İçerik yazımı (T-10) tahminden çok uzun sürer                     | **Yüksek** | Orta   | T-10 partilere bölündü; her parti bağımsız teslim edilebilir                                            |
+| Yönlendirme (T-06) mevcut durum akışını bozar                     | Orta       | Yüksek | Önce T-03/T-04 bitmeli; URL yalnızca `day`/`month` state'ini yansıtsın, ikinci doğruluk kaynağı olmasın |
+| Sınıflandırma iyileştirmesi (T-11) mevcut doğru eşleşmeleri bozar | Orta       | Orta   | T-12'nin test altyapısı önce kurulmalı; anlık görüntü (snapshot) testi ile korunmalı                    |
+| Kapsam kayması — "bir de şunu yapayım"                            | **Yüksek** | Yüksek | Her talimatta _Kapsam Dışı_ bölümü zorunlu                                                              |
 
 ---
 
@@ -471,13 +482,13 @@ Plan ancak aşağıdakilerin tamamı doğruysa kapatılabilir:
 
 ### Kapsam dışı bırakılanlar ve gerekçesi
 
-| Konu | Gerekçe |
-|---|---|
-| **Yayın (T-14 · Bölüm B)** | Proje sahibinin kararı: uygulama bir web sitesi değil, **yerel çalıştırılan normal bir uygulama**. Barındırma hesabı, alan adı ve arama motoru kaydı yapılmadı. Yayınla ilgili tüm yapılandırma (SPA fallback, `og:*`, manifest, service worker, 366 adresli `sitemap.xml`) depoda hazır bekliyor |
-| O-10, O-11, O-12, O-13 | Sırasıyla: tasarım dili kararı gerektiriyor · kaynak veri süzgeci gerektiriyor · şema + bileşen değişikliği gerektiriyor · kırılma içeren `react-router` 6→7 yükseltmesi gerektiriyor |
-| m-7, m-8 | Biri yeni özellik (yazdırma düzeni), diğeri kullanıcıya yansımayan ölü kod eşiği |
-| İçerik tembel yüklemesi | T-10 kendi kararıyla erteledi (paket eşiği altında kalındı); T-13'ün ≥%15 küçülme hedefinin karşılanamamasının tek nedeni bu |
-| Backend, kullanıcı hesabı, i18n, tasarım dili değişikliği | Planın kendi *Kapsam Dışı* tablosunda baştan dışarıda bırakılmıştı |
+| Konu                                                      | Gerekçe                                                                                                                                                                                                                                                                                           |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Yayın (T-14 · Bölüm B)**                                | Proje sahibinin kararı: uygulama bir web sitesi değil, **yerel çalıştırılan normal bir uygulama**. Barındırma hesabı, alan adı ve arama motoru kaydı yapılmadı. Yayınla ilgili tüm yapılandırma (SPA fallback, `og:*`, manifest, service worker, 366 adresli `sitemap.xml`) depoda hazır bekliyor |
+| O-10, O-11, O-12, O-13                                    | Sırasıyla: tasarım dili kararı gerektiriyor · kaynak veri süzgeci gerektiriyor · şema + bileşen değişikliği gerektiriyor · kırılma içeren `react-router` 6→7 yükseltmesi gerektiriyor                                                                                                             |
+| m-7, m-8                                                  | Biri yeni özellik (yazdırma düzeni), diğeri kullanıcıya yansımayan ölü kod eşiği                                                                                                                                                                                                                  |
+| İçerik tembel yüklemesi                                   | T-10 kendi kararıyla erteledi (paket eşiği altında kalındı); T-13'ün ≥%15 küçülme hedefinin karşılanamamasının tek nedeni bu                                                                                                                                                                      |
+| Backend, kullanıcı hesabı, i18n, tasarım dili değişikliği | Planın kendi _Kapsam Dışı_ tablosunda baştan dışarıda bırakılmıştı                                                                                                                                                                                                                                |
 
 ### PLAN-02'ye devredilenler
 
@@ -489,7 +500,7 @@ Plan ancak aşağıdakilerin tamamı doğruysa kapatılabilir:
 
 ### Öğrenilenler
 
-1. **jsdom'un düzen motoru yok — bu bir test boşluğu değil, bir *sınıf* boşluğu.**
+1. **jsdom'un düzen motoru yok — bu bir test boşluğu değil, bir _sınıf_ boşluğu.**
    K-5 (birincil gün gezinmesinin hem görünmez hem tıklanamaz olması) 203 testin,
    her talimatın "canlı doğrulama" adımının ve on ayrı oturumun içinden geçip
    **10 talimat boyunca** ayakta kaldı; çünkü `button.click()` DOM olay akışını

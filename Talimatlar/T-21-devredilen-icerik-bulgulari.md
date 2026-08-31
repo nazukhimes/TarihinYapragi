@@ -1,13 +1,13 @@
 # T-21 · Devredilen İçerik Bulguları
 
-| Alan | Değer |
-|---|---|
-| **Faz** | FAZ 4 — Devir ve Temizlik |
-| **Öncelik** | 🟢 Düşük |
-| **Tahmini süre** | ~2 saat |
-| **Bağımlılık** | Yok — bağımsız, herhangi bir sırada yapılabilir |
-| **İlgili bulgu** | O-11, O-12, m-7, m-8 |
-| **Durum** | ⬜ Bekliyor |
+| Alan             | Değer                                           |
+| ---------------- | ----------------------------------------------- |
+| **Faz**          | FAZ 4 — Devir ve Temizlik                       |
+| **Öncelik**      | 🟢 Düşük                                        |
+| **Tahmini süre** | ~2 saat                                         |
+| **Bağımlılık**   | Yok — bağımsız, herhangi bir sırada yapılabilir |
+| **İlgili bulgu** | O-11, O-12, m-7, m-8                            |
+| **Durum**        | ⬜ Bekliyor                                     |
 
 ---
 
@@ -102,11 +102,13 @@ isterse koyu zemin, sabit üst bar ve dekoratif katmanlar çıktıya gidiyor.
 
 2. **`allScience`'a `matchKeys` koruması ekle** (`useGunVerisi.ts:143-157`).
    `mergedEvents`'teki korumanın **aynısı** kullanılır:
+
    ```ts
    const cur = curated?.science || [];
    // ... auto üretiminde:
    if (cur.some((cs) => /* matchKeys eşleşmesi */)) return;
    ```
+
    `ScienceMilestone` tipinde `matchKeys` alanı yok — eklenmesi gerekir
    (isteğe bağlı alan, mevcut kayıtları bozmaz).
 
@@ -131,13 +133,13 @@ isterse koyu zemin, sabit üst bar ve dekoratif katmanlar çıktıya gidiyor.
 
 ## 🚫 Kapsam Dışı
 
-| Konu | Hangi talimata ait |
-|---|---|
-| `excerpt` → `extract` | **T-16** |
-| Karanlık dosya rozetleri | **T-17** |
+| Konu                                      | Hangi talimata ait                                   |
+| ----------------------------------------- | ---------------------------------------------------- |
+| `excerpt` → `extract`                     | **T-16**                                             |
+| Karanlık dosya rozetleri                  | **T-17**                                             |
 | `src/lib/rekor.ts` içindeki `sureTahmini` | **Hiçbiri — dokunulmayacak** (eşikleri erişilebilir) |
-| Editör içeriğinin genişletilmesi | Plan §2 — kapsam dışı |
-| `react-router` yükseltmesi | **T-22** |
+| Editör içeriğinin genişletilmesi          | Plan §2 — kapsam dışı                                |
+| `react-router` yükseltmesi                | **T-22**                                             |
 
 ---
 
@@ -168,11 +170,11 @@ edilmezse ekran dışı bölümler boş çıkar.
 
 **Tarayıcıda (üç gün):**
 
-| Gün | Beklenen |
-|---|---|
-| **29 Ekim** | "Bugünün anlamı" temiz; Bilim & Keşif'te mükerrer yok |
-| **7 Mart** | Şerit ya dolu ya hiç yok — çöp kayıt yok |
-| **29 Şubat** | Yazdırma önizlemesi bozulmuyor |
+| Gün          | Beklenen                                              |
+| ------------ | ----------------------------------------------------- |
+| **29 Ekim**  | "Bugünün anlamı" temiz; Bilim & Keşif'te mükerrer yok |
+| **7 Mart**   | Şerit ya dolu ya hiç yok — çöp kayıt yok              |
+| **29 Şubat** | Yazdırma önizlemesi bozulmuyor                        |
 
 ```bash
 npm run kontrol

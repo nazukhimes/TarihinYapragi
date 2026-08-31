@@ -41,11 +41,11 @@ Talimatlar/
 
 ### Kural
 
-| Klasör | Anlamı |
-|---|---|
-| `Talimatlar/` **kökü** | Yapılacak iş. Burada dosya varsa iş bitmemiştir. |
-| `Talimatlar/Tamamlandı/` | Bitmiş talimatlar. Geçmiş kaydı — silinmez. |
-| `Talimatlar/Plan/` | Tamamen bitmiş planlar. Proje tarihçesi. |
+| Klasör                   | Anlamı                                           |
+| ------------------------ | ------------------------------------------------ |
+| `Talimatlar/` **kökü**   | Yapılacak iş. Burada dosya varsa iş bitmemiştir. |
+| `Talimatlar/Tamamlandı/` | Bitmiş talimatlar. Geçmiş kaydı — silinmez.      |
+| `Talimatlar/Plan/`       | Tamamen bitmiş planlar. Proje tarihçesi.         |
 
 > **Kökte hiç `T-*.md` kalmadığında** plan tamamlanmıştır → plan dosyası `Plan/` klasörüne taşınır.
 
@@ -101,14 +101,14 @@ Talimatlar/
 
 ## 4. Adlandırma Kuralları
 
-| Tür | Kalıp | Örnek |
-|---|---|---|
-| Plan | `PLAN-NN-kisa-slug.md` | `PLAN-01-temel-duzeltme-ve-tamamlama.md` |
-| Talimat | `T-NN-kisa-slug.md` | `T-03-takvim-tarih-dogrulugu.md` |
+| Tür     | Kalıp                  | Örnek                                    |
+| ------- | ---------------------- | ---------------------------------------- |
+| Plan    | `PLAN-NN-kisa-slug.md` | `PLAN-01-temel-duzeltme-ve-tamamlama.md` |
+| Talimat | `T-NN-kisa-slug.md`    | `T-03-takvim-tarih-dogrulugu.md`         |
 
 - `NN` iki haneli, sıfır dolgulu (`01`, `02`, … `14`).
 - Slug **ASCII**: Türkçe karakter yok, boşluk yok, küçük harf, tire ayraçlı.
-  (Dosya *içeriği* Türkçe'dir — yalnızca dosya **adı** ASCII.)
+  (Dosya _içeriği_ Türkçe'dir — yalnızca dosya **adı** ASCII.)
 - Numara **asla yeniden kullanılmaz.** T-05 tamamlandıysa, yeni bir iş T-15 olur.
 - Plan içindeki talimat sırası = uygulama sırası değildir; bağımlılıklar plan tablosunda yazılıdır.
 
@@ -121,37 +121,45 @@ Her `T-NN-*.md` dosyası şu bölümleri **eksiksiz** taşır:
 ```markdown
 # T-NN · [Başlık]
 
-| Alan | Değer |
-|---|---|
-| **Faz** | FAZ n — [ad] |
-| **Öncelik** | Kritik / Yüksek / Orta / Düşük |
-| **Tahmini süre** | ~n saat |
-| **Bağımlılık** | T-xx tamamlanmış olmalı / Yok |
-| **İlgili bulgu** | K-n, O-n, U-n |
-| **Durum** | ⬜ Bekliyor |
+| Alan             | Değer                          |
+| ---------------- | ------------------------------ |
+| **Faz**          | FAZ n — [ad]                   |
+| **Öncelik**      | Kritik / Yüksek / Orta / Düşük |
+| **Tahmini süre** | ~n saat                        |
+| **Bağımlılık**   | T-xx tamamlanmış olmalı / Yok  |
+| **İlgili bulgu** | K-n, O-n, U-n                  |
+| **Durum**        | ⬜ Bekliyor                    |
 
 ## 🎯 Amaç
+
 [Tek paragraf: bu talimat bitince ne değişmiş olacak]
 
 ## 📍 Mevcut Durum
+
 [Sorunun kanıtı — dosya:satır, kod parçası, ekran çıktısı]
 
 ## ✅ Yapılacaklar
+
 [Numaralı, atomik adımlar. Her adım tek bir değişiklik.]
 
 ## 🚫 Kapsam Dışı
+
 [Bu talimatta KESİNLİKLE dokunulmayacaklar — hangi talimata ait olduğuyla]
 
 ## ☑️ Kabul Kriterleri
+
 - [ ] Doğrulanabilir madde
 - [ ] `npm run typecheck` hatasız
 - [ ] `npm run build` hatasız
 
 ## 🧪 Doğrulama
+
 [Kriterlerin nasıl test edileceği — komut, tıklama adımı, beklenen çıktı]
 
 ## 📝 Tamamlanma Kaydı
+
 > Talimat bitince doldurulur.
+
 - **Tamamlanma tarihi:**
 - **Değişen dosyalar:**
 - **Sapmalar / notlar:**
@@ -170,7 +178,7 @@ Talimatı uygularken başka bir eksik fark ederseniz:
 
 - ❌ Düzeltmeyin.
 - ✅ İlgili talimatın dosyasına bir not düşün veya plana yeni bir talimat ekleyin.
-- ✅ Kendi talimatınızın *Tamamlanma Kaydı → Sonraki talimata not* alanına yazın.
+- ✅ Kendi talimatınızın _Tamamlanma Kaydı → Sonraki talimata not_ alanına yazın.
 
 Sebebi: kapsam kayması, incelemeyi imkânsızlaştırır ve "neyin neyi bozduğu" izini yok eder.
 
@@ -217,15 +225,15 @@ Arayüze dokunan her talimat, tarayıcıda **en az 3 farklı günde** denenir:
 - [ ] `npm run typecheck` yeşil
 - [ ] `npm run build` yeşil
 - [ ] 3 günde görsel doğrulama yapıldı
-- [ ] *Tamamlanma Kaydı* dolduruldu
+- [ ] _Tamamlanma Kaydı_ dolduruldu
 - [ ] Dosya `Talimatlar/Tamamlandı/` klasörüne taşındı
 - [ ] `PLAN-NN` içindeki ilerleme tablosunda durum `✅` yapıldı
 
 ### Bir plan kapatılırken
 
 - [ ] `Talimatlar/` kökünde hiç `T-*.md` kalmadı
-- [ ] Plan dosyasının *Kapanış Özeti* bölümü dolduruldu
-- [ ] `Dokumanlar/BAGLAM.md` → *Mevcut Durum* bölümü güncellendi
+- [ ] Plan dosyasının _Kapanış Özeti_ bölümü dolduruldu
+- [ ] `Dokumanlar/BAGLAM.md` → _Mevcut Durum_ bölümü güncellendi
 - [ ] `Dokumanlar/ANALIZ-RAPORU.md` → çözülen bulgular işaretlendi
 - [ ] `Dokumanlar/KULLANIM-KILAVUZU.md` → yeni özellikler ve düzelen sorunlar yazıldı
 - [ ] Plan dosyası `Talimatlar/Plan/` klasörüne taşındı

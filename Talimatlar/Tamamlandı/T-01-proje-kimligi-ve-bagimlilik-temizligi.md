@@ -1,13 +1,13 @@
 # T-01 · Proje Kimliği ve Bağımlılık Temizliği
 
-| Alan | Değer |
-|---|---|
-| **Faz** | FAZ 0 — Temizlik ve Zemin |
-| **Öncelik** | 🔴 Kritik |
-| **Tahmini süre** | ~2 saat |
-| **Bağımlılık** | Yok — **bu ilk talimattır** |
-| **İlgili bulgu** | O-1, O-2, O-3, K-4, m-2 |
-| **Durum** | ✅ Tamamlandı — 2026-08-21 |
+| Alan             | Değer                       |
+| ---------------- | --------------------------- |
+| **Faz**          | FAZ 0 — Temizlik ve Zemin   |
+| **Öncelik**      | 🔴 Kritik                   |
+| **Tahmini süre** | ~2 saat                     |
+| **Bağımlılık**   | Yok — **bu ilk talimattır** |
+| **İlgili bulgu** | O-1, O-2, O-3, K-4, m-2     |
+| **Durum**        | ✅ Tamamlandı — 2026-08-21  |
 
 ---
 
@@ -135,20 +135,20 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
-    host: true,          // ağdaki diğer cihazlardan erişim
-    port: 3000,          // tercih edilen port
-    strictPort: false,   // meşgulse bir sonrakine geç
+    host: true, // ağdaki diğer cihazlardan erişim
+    port: 3000, // tercih edilen port
+    strictPort: false, // meşgulse bir sonrakine geç
   },
 });
 ```
 
 **Kritik değişiklikler:**
 
-| Değişiklik | Neden |
-|---|---|
+| Değişiklik                           | Neden                                                      |
+| ------------------------------------ | ---------------------------------------------------------- |
 | `hmr: { port: 3000 }` **kaldırıldı** | Vite otomatik olarak sunucu portunu kullanır — K-4 çözülür |
-| `strictPort: false` | 3000 meşgulse 3001'e geçer, hata verip çıkmaz |
-| `host: "0.0.0.0"` → `host: true` | Aynı davranış, Vite'ın önerdiği yazım |
+| `strictPort: false`                  | 3000 meşgulse 3001'e geçer, hata verip çıkmaz              |
+| `host: "0.0.0.0"` → `host: true`     | Aynı davranış, Vite'ın önerdiği yazım                      |
 
 Eski `vite.config.js` dosyasını **sil**.
 
@@ -197,15 +197,15 @@ rm -rf node_modules package-lock.json && npm install
 
 ## 🚫 Kapsam Dışı
 
-| Dokunma | Neden / Hangi talimat |
-|---|---|
-| `react-router-dom` paketi | T-06'da kullanılacak — **silme** |
-| `lint` / `format` / `test` betikleri | T-12 |
-| `src/` altındaki hiçbir dosya | Bu talimat yalnızca yapılandırma |
-| `başlat.bat` | T-02 |
-| `index.html` içeriği | T-08 |
-| `README.md` | T-14 |
-| Yeni bağımlılık **ekleme** | Her talimat kendi paketini ekler |
+| Dokunma                              | Neden / Hangi talimat            |
+| ------------------------------------ | -------------------------------- |
+| `react-router-dom` paketi            | T-06'da kullanılacak — **silme** |
+| `lint` / `format` / `test` betikleri | T-12                             |
+| `src/` altındaki hiçbir dosya        | Bu talimat yalnızca yapılandırma |
+| `başlat.bat`                         | T-02                             |
+| `index.html` içeriği                 | T-08                             |
+| `README.md`                          | T-14                             |
+| Yeni bağımlılık **ekleme**           | Her talimat kendi paketini ekler |
 
 ---
 
@@ -220,7 +220,7 @@ rm -rf node_modules package-lock.json && npm install
 - [x] `.gitignore` içinde `.next/` **yok**, `.vite/` ve `.env` **var**
 - [x] `npm run typecheck` hatasız
 - [x] `npm run build` hatasız
-- [x] Üretim paketi boyutu **artmadı** — JS 253.623 B → **253.623 B** (bayt bayt aynı), CSS 50.776 B → **50.776 B**. Kontrollü deneyde derleme, temizlik öncesiyle **aynı dosya adlarını** (`index-B-Hpy04e.js` / `index-BaNBOqcK.css`) üretti. Ayrıntı için aşağıdaki *Sapmalar* maddesine bakın.
+- [x] Üretim paketi boyutu **artmadı** — JS 253.623 B → **253.623 B** (bayt bayt aynı), CSS 50.776 B → **50.776 B**. Kontrollü deneyde derleme, temizlik öncesiyle **aynı dosya adlarını** (`index-B-Hpy04e.js` / `index-BaNBOqcK.css`) üretti. Ayrıntı için aşağıdaki _Sapmalar_ maddesine bakın.
 
 ---
 
@@ -279,13 +279,13 @@ npm run build
 
 - **Değişen dosyalar:**
 
-  | Dosya | İşlem |
-  |---|---|
-  | `package.json` | Kimlik alanları dolduruldu, `preview` betiği eklendi, 12 bağımlılık çıkarıldı |
-  | `package-lock.json` | Sıfırdan yeniden üretildi (temiz kurulum) |
-  | `vite.config.js` | **Silindi** |
-  | `vite.config.ts` | **Yeni** — `hmr` bloğu yok, `strictPort: false`, `host: true` |
-  | `.gitignore` | Yeniden yazıldı; `.next/` çıktı, Vite/editör/ortam blokları girdi |
+  | Dosya               | İşlem                                                                         |
+  | ------------------- | ----------------------------------------------------------------------------- |
+  | `package.json`      | Kimlik alanları dolduruldu, `preview` betiği eklendi, 12 bağımlılık çıkarıldı |
+  | `package-lock.json` | Sıfırdan yeniden üretildi (temiz kurulum)                                     |
+  | `vite.config.js`    | **Silindi**                                                                   |
+  | `vite.config.ts`    | **Yeni** — `hmr` bloğu yok, `strictPort: false`, `host: true`                 |
+  | `.gitignore`        | Yeniden yazıldı; `.next/` çıktı, Vite/editör/ortam blokları girdi             |
 
   `src/` altındaki hiçbir dosyaya dokunulmadı — HMR testi için `App.tsx`'e atılan geçici
   satır geri alındı ve dosya `git show HEAD:src/App.tsx` ile **bayt bayt** karşılaştırılarak
@@ -310,30 +310,29 @@ npm run build
      eklenen belge klasörlerinden geliyor. Düzeltmesi `src/index.css` gerektirdiği için
      kapsam dışı bırakıldı ve **T-13 · Adım 10** olarak yazıldı.
   3. **`npm audit`** temiz kurulum sonrası 2 orta seviye uyarı bildiriyor. `audit fix --force`
-     kırıcı sürüm yükseltmesi istediği için dokunulmadı — bu bir bağımlılık *bakımı* konusu,
-     T-01'in kapsamı olan *temizlik* değil.
+     kırıcı sürüm yükseltmesi istediği için dokunulmadı — bu bir bağımlılık _bakımı_ konusu,
+     T-01'in kapsamı olan _temizlik_ değil.
   4. **Doğrulama için `.claude/launch.json`'a** geçici sunucu tanımları eklendi
      (HMR-5199, port çakışması, preview); iş bitince dosya orijinal hâline geri yüklendi.
 
 - **Doğrulama kanıtları:**
 
-  | Test | Sonuç |
-  |---|---|
-  | Bağımlılık sayımı | `deps: 3 · dev: 7` — beklenenle birebir |
-  | Kullanılmayan import taraması | `grep` çıktısı boş (`src/` + `index.html`) |
-  | K-4 · HMR | Sunucu 5199'da: konsolda `[vite] connected.`, `ws://localhost:3000` hatası **yok**. `/@vite/client` içinde `hmrPort = null`, soket sayfanın kendi portunu kullanıyor (tek "3000" geçişi `hmrTimeout = 30000`). |
-  | K-4 · canlı HMR | `App.tsx` metni değiştirildi → tarayıcı **elle yenilenmeden** güncellendi; sayfada önceden tanımlanan `window` değişkeni hayatta kaldı, yani tam sayfa yenilemesi olmadı. |
-  | `strictPort: false` | 3000 doluyken `Port 3000 is in use, trying another one...` → 3001'de açıldı, hata vermedi. Bu, K-4'ün **orijinal arıza senaryosu**; o portta da WebSocket hatası çıkmadı. |
-  | `host: true` | Vite 3 ağ adresi yayımladı (192.168.x.x) |
-  | `npm run preview` | 4173'te üretim derlemesi servis edildi, sayfa doğru açıldı |
-  | Görsel tur (3 gün) | **29 Ekim** (özel dosya · 32 kayıt, kategori dağılımı doğru), **7 Mart** (sıradan gün), **29 Şubat** (kenar durum) — üçünde de 6 bölüm eksiksiz, konsolda hata yok |
+  | Test                          | Sonuç                                                                                                                                                                                                          |
+  | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | Bağımlılık sayımı             | `deps: 3 · dev: 7` — beklenenle birebir                                                                                                                                                                        |
+  | Kullanılmayan import taraması | `grep` çıktısı boş (`src/` + `index.html`)                                                                                                                                                                     |
+  | K-4 · HMR                     | Sunucu 5199'da: konsolda `[vite] connected.`, `ws://localhost:3000` hatası **yok**. `/@vite/client` içinde `hmrPort = null`, soket sayfanın kendi portunu kullanıyor (tek "3000" geçişi `hmrTimeout = 30000`). |
+  | K-4 · canlı HMR               | `App.tsx` metni değiştirildi → tarayıcı **elle yenilenmeden** güncellendi; sayfada önceden tanımlanan `window` değişkeni hayatta kaldı, yani tam sayfa yenilemesi olmadı.                                      |
+  | `strictPort: false`           | 3000 doluyken `Port 3000 is in use, trying another one...` → 3001'de açıldı, hata vermedi. Bu, K-4'ün **orijinal arıza senaryosu**; o portta da WebSocket hatası çıkmadı.                                      |
+  | `host: true`                  | Vite 3 ağ adresi yayımladı (192.168.x.x)                                                                                                                                                                       |
+  | `npm run preview`             | 4173'te üretim derlemesi servis edildi, sayfa doğru açıldı                                                                                                                                                     |
+  | Görsel tur (3 gün)            | **29 Ekim** (özel dosya · 32 kayıt, kategori dağılımı doğru), **7 Mart** (sıradan gün), **29 Şubat** (kenar durum) — üçünde de 6 bölüm eksiksiz, konsolda hata yok                                             |
 
 - **Sonraki talimata not:**
 
   - **T-02 →** `vite.config.ts` artık boş portu kendi buluyor (`strictPort: false`,
     canlı olarak doğrulandı). `başlat.bat` içindeki PowerShell port arama bloğu artık
-    tamamen gereksiz — güvenle kaldırılabilir. `preview` betiği hazır, menünün
-    2. seçeneği doğrudan `npm run preview` çağırabilir.
+    tamamen gereksiz — güvenle kaldırılabilir. `preview` betiği hazır, menünün 2. seçeneği doğrudan `npm run preview` çağırabilir.
   - **T-03 →** Doğrulama sırasında görüldü: Şubat takvimi **2026'da (artık yıl değil)
     29 gün** gösteriyor ve 29 Şubat "Yılın 60. günü / PAZAR" olarak açılıyor. Bu K-1'in
     canlı görünümü — düzeltirken 366 günlük arşiv mantığının bilinçli mi yoksa hata mı

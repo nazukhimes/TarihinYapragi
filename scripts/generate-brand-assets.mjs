@@ -64,10 +64,7 @@ function maskableIconSvg() {
 
 async function rasterize(svgString, baseViewBox, size, outPath) {
   const density = 72 * (size / baseViewBox);
-  await sharp(Buffer.from(svgString), { density })
-    .resize(size, size)
-    .png()
-    .toFile(outPath);
+  await sharp(Buffer.from(svgString), { density }).resize(size, size).png().toFile(outPath);
 }
 
 await rasterize(squareIconSvg(), 24, 180, path.join(PUBLIC, "apple-touch-icon.png"));
@@ -109,8 +106,10 @@ console.log("… og-image için yazı tipleri indiriliyor (Fraunces, IBM Plex Mo
 // Fraunces ve IBM Plex Mono, google/fonts deposundaki tam (alt kümesiz) statik dosyalar —
 // Türkçe karakterler (İ, Ğ, Ş, Ö, Ü, Ç, ı) Google Fonts CSS2'nin "latin"/"latin-ext" alt küme
 // ayrımına takılmasın diye tek parça, tüm karakter setini içeren dosyalar tercih edildi.
-const FRAUNCES_URL = "https://raw.githubusercontent.com/google/fonts/main/ofl/fraunces/Fraunces%5BSOFT%2CWONK%2Copsz%2Cwght%5D.ttf";
-const PLEXMONO_URL = "https://raw.githubusercontent.com/google/fonts/main/ofl/ibmplexmono/IBMPlexMono-SemiBold.ttf";
+const FRAUNCES_URL =
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/fraunces/Fraunces%5BSOFT%2CWONK%2Copsz%2Cwght%5D.ttf";
+const PLEXMONO_URL =
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/ibmplexmono/IBMPlexMono-SemiBold.ttf";
 
 const frauncesPath = await fetchFont(FRAUNCES_URL, "Fraunces-Variable.ttf");
 const plexMonoPath = await fetchFont(PLEXMONO_URL, "IBMPlexMono-SemiBold.ttf");

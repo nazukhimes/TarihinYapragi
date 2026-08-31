@@ -1,13 +1,13 @@
 # T-03 · Takvim ve Tarih Doğruluğu
 
-| Alan | Değer |
-|---|---|
-| **Faz** | FAZ 1 — Kritik Hata Düzeltmeleri |
-| **Öncelik** | 🔴 Kritik |
-| **Tahmini süre** | ~2 saat |
-| **Bağımlılık** | T-01 |
-| **İlgili bulgu** | K-1 |
-| **Durum** | ✅ Tamamlandı — 2026-08-21 |
+| Alan             | Değer                            |
+| ---------------- | -------------------------------- |
+| **Faz**          | FAZ 1 — Kritik Hata Düzeltmeleri |
+| **Öncelik**      | 🔴 Kritik                        |
+| **Tahmini süre** | ~2 saat                          |
+| **Bağımlılık**   | T-01                             |
+| **İlgili bulgu** | K-1                              |
+| **Durum**        | ✅ Tamamlandı — 2026-08-21       |
 
 ---
 
@@ -27,13 +27,13 @@ gösteriliyor — bu, uygulamanın en görünür yerindeki yanlış bilgi.
 
 ```ts
 export function dayOfYear(month: number, day: number): number {
-  const d = new Date(2024, month - 1, day);      // ← 2024 = ARTIK YIL
+  const d = new Date(2024, month - 1, day); // ← 2024 = ARTIK YIL
   const start = new Date(2024, 0, 1);
   return Math.floor((d.getTime() - start.getTime()) / 86400000) + 1;
 }
 
 export function daysInMonth(month: number): number {
-  return new Date(2024, month, 0).getDate();      // ← Şubat her zaman 29
+  return new Date(2024, month, 0).getDate(); // ← Şubat her zaman 29
 }
 ```
 
@@ -41,10 +41,10 @@ export function daysInMonth(month: number): number {
 
 Ekranda: **"Yılın 234. günü"**
 
-| | Ocak | Şubat | Mart–Tem | 21 Ağu | Toplam |
-|---|---|---|---|---|---|
-| 2024 (artık) | 31 | **29** | 31+30+31+30+31 | +21 | **234** |
-| 2026 (normal) | 31 | **28** | 31+30+31+30+31 | +21 | **233** ✅ |
+|               | Ocak | Şubat  | Mart–Tem       | 21 Ağu | Toplam     |
+| ------------- | ---- | ------ | -------------- | ------ | ---------- |
+| 2024 (artık)  | 31   | **29** | 31+30+31+30+31 | +21    | **234**    |
+| 2026 (normal) | 31   | **28** | 31+30+31+30+31 | +21    | **233** ✅ |
 
 Fark, 29 Şubat'ın referans yılda var olmasından geliyor. **1 Mart – 31 Aralık arası
 tüm günler, artık olmayan yıllarda +1 kayıyor.** Bu, yılın 306 günü demek.
@@ -55,7 +55,7 @@ tüm günler, artık olmayan yıllarda +1 kayıyor.** Bu, yılın 306 günü dem
 
 ```ts
 const weekday = useMemo(() => {
-  const refYear = new Date().getFullYear();                    // ← gerçek yıl
+  const refYear = new Date().getFullYear(); // ← gerçek yıl
   return WEEKDAYS_TR[new Date(refYear, month - 1, day).getDay()];
 }, [day, month]);
 ```
@@ -111,7 +111,11 @@ export function dayOfYear(month: number, day: number, year = new Date().getFullY
  * Haftanın günü indeksi (0 = Pazar).
  * 29 Şubat, artık olmayan bir yılda taşma yapacağı için en yakın artık yıla düşer.
  */
-export function weekdayIndex(month: number, day: number, year = new Date().getFullYear()): number | null {
+export function weekdayIndex(
+  month: number,
+  day: number,
+  year = new Date().getFullYear()
+): number | null {
   if (month === 2 && day === 29 && !isLeapYear(year)) return null;
   return new Date(year, month - 1, day).getDay();
 }
@@ -197,14 +201,14 @@ const shift = (delta: number) => {
 
 ## 🚫 Kapsam Dışı
 
-| Dokunma | Neden / Hangi talimat |
-|---|---|
-| `CountUp` / `Reveal` bileşenleri | T-04 |
-| Klavye ile gün geçişi (`←` `→`) | T-07 |
-| URL'de gün taşıma | T-06 |
-| Hicri / Rumi takvim desteği | Kapsam dışı — ürün kararı gerekir |
-| Tarih fonksiyonları için test yazımı | T-12 (altyapı orada kuruluyor) |
-| `date-fns` gibi kütüphane ekleme | Gereksiz — 40 satır kod yeter |
+| Dokunma                              | Neden / Hangi talimat             |
+| ------------------------------------ | --------------------------------- |
+| `CountUp` / `Reveal` bileşenleri     | T-04                              |
+| Klavye ile gün geçişi (`←` `→`)      | T-07                              |
+| URL'de gün taşıma                    | T-06                              |
+| Hicri / Rumi takvim desteği          | Kapsam dışı — ürün kararı gerekir |
+| Tarih fonksiyonları için test yazımı | T-12 (altyapı orada kuruluyor)    |
+| `date-fns` gibi kütüphane ekleme     | Gereksiz — 40 satır kod yeter     |
 
 ---
 
@@ -214,7 +218,7 @@ const shift = (delta: number) => {
 - [x] `leaf.tsx` içinde 2024 sabiti **hiç geçmiyor** (`grep -n "2024" src/components/leaf.tsx` boş)
 - [x] 21 Ağustos 2026 için yaprakta **"Yılın 233. günü"** yazıyor
 - [x] 1 Ocak → 1. gün, 31 Aralık → 365. gün (2026'da)
-- [x] Artık yılda 31 Aralık → 366. gün *(Node ile doğrulandı — canlı uygulama her zaman gerçek/güncel yılı kullandığından 2028 senaryosu tarayıcıda değil, formül düzeyinde test edildi; bkz. Tamamlanma Kaydı)*
+- [x] Artık yılda 31 Aralık → 366. gün _(Node ile doğrulandı — canlı uygulama her zaman gerçek/güncel yılı kullandığından 2028 senaryosu tarayıcıda değil, formül düzeyinde test edildi; bkz. Tamamlanma Kaydı)_
 - [x] 29 Şubat seçilebiliyor, "ARTIK GÜN" bilgisi görünüyor, haftanın günü uydurulmuyor
 - [x] Mini takvim ızgarası içinde bulunulan yıla göre hizalanıyor
 - [x] Gün geçişi ay ve yıl sınırlarını doğru aşıyor
@@ -233,22 +237,22 @@ node -e "const{dayOfYear}=await import('./src/lib/date.ts')" 2>/dev/null || echo
 
 Tarayıcı konsolunda beklenen değerler:
 
-| Tarih | 2026 (normal) | 2028 (artık) |
-|---|---|---|
-| 1 Ocak | 1 | 1 |
-| 28 Şubat | 59 | 59 |
-| 1 Mart | 60 | **61** |
-| 21 Ağustos | **233** | **234** |
-| 31 Aralık | **365** | **366** |
+| Tarih      | 2026 (normal) | 2028 (artık) |
+| ---------- | ------------- | ------------ |
+| 1 Ocak     | 1             | 1            |
+| 28 Şubat   | 59            | 59           |
+| 1 Mart     | 60            | **61**       |
+| 21 Ağustos | **233**       | **234**      |
+| 31 Aralık  | **365**       | **366**      |
 
 ### 2. Görsel kontrol — 5 gün
 
-| Gün | Beklenen |
-|---|---|
-| **1 Ocak** | "Yılın 1. günü", geriye git → 31 Aralık |
-| **28 Şubat** | "Yılın 59. günü", ileriye git → **29 Şubat** |
-| **29 Şubat** | "ARTIK GÜN" bilgisi, haftanın günü uydurulmamış |
-| **1 Mart** | 2026'da "Yılın 60. günü" |
+| Gün           | Beklenen                                        |
+| ------------- | ----------------------------------------------- |
+| **1 Ocak**    | "Yılın 1. günü", geriye git → 31 Aralık         |
+| **28 Şubat**  | "Yılın 59. günü", ileriye git → **29 Şubat**    |
+| **29 Şubat**  | "ARTIK GÜN" bilgisi, haftanın günü uydurulmamış |
+| **1 Mart**    | 2026'da "Yılın 60. günü"                        |
 | **31 Aralık** | 2026'da "Yılın 365. günü", ileriye git → 1 Ocak |
 
 ### 3. Mini takvim hizası
@@ -269,15 +273,15 @@ normal çalışmaya devam etmeli — bu talimat yalnızca yaprağa dokunur.
 
 - **Değişen dosyalar:**
 
-  | Dosya | İşlem |
-  |---|---|
-  | `src/lib/date.ts` | Yeni — `isLeapYear`, `daysInMonth`, `dayOfYear`, `weekdayIndex` |
-  | `src/components/leaf.tsx` | Eski `dayOfYear`/`daysInMonth` (2024 sabitli) silindi, `../lib/date`'ten içe aktarılıyor; `CalendarLeaf` haftanın günü hesaplaması `weekdayIndex` + `null` durumunda "ARTIK GÜN" gösterimine geçti; "Yılın X. günü" satırı `year` parametresi alıyor; artık olmayan yılda 29 Şubat için "{yıl} artık yıl değil" notu eklendi; `prev`/`next` iç içe üçlü koşullar okunur bir `shift(delta)` fonksiyonuna dönüştürüldü; `MiniCalendar` `year` prop'u almaya başladı, `firstOffset` gerçek yıla bağlandı, 29 Şubat hücresine artık olmayan yıllarda kesikli çerçeve + `title="Artık gün"` eklendi |
-  | `Dokumanlar/ANALIZ-RAPORU.md` | K-1 `✅ ÇÖZÜLDÜ (T-03)` işaretlendi + Çözüm bloğu eklendi; genel sağlık tablosu ve öncelik sıralaması güncellendi; yeni bölüm 6 → K-5 bulgusu eklendi |
-  | `Dokumanlar/BAGLAM.md` | Dosya haritasına `date.ts` eklendi; plan ilerlemesi 3/14; "Eksik/hatalı" listesinde K-1 çözüldü işaretlendi, K-5 eklendi |
-  | `Dokumanlar/MIMARI.md` | Yeni bölüm 2.6 (`date.ts` modül tablosu); `leaf.tsx` ihracat tablosundan eski `dayOfYear`/`daysInMonth` satırları kaldırıldı; teknik borç tablosunda K-1 çözüldü işaretlendi, K-5 eklendi |
-  | `Dokumanlar/KULLANIM-KILAVUZU.md` | Sorun giderme tablosunda K-1 satırı "düzeltildi" olarak güncellendi; K-5 için yeni satır eklendi |
-  | `Talimatlar/PLAN-01-temel-duzeltme-ve-tamamlama.md` | Durum 3/14, T-03 satırı ✅ + `Tamamlandı/` bağlantısına güncellendi, Kesin kurallar'a T-03 notu eklendi, ilerleme tablosu ve yüzdesi güncellendi, 2 başarı ölçütü işaretlendi |
+  | Dosya                                               | İşlem                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+  | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | `src/lib/date.ts`                                   | Yeni — `isLeapYear`, `daysInMonth`, `dayOfYear`, `weekdayIndex`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+  | `src/components/leaf.tsx`                           | Eski `dayOfYear`/`daysInMonth` (2024 sabitli) silindi, `../lib/date`'ten içe aktarılıyor; `CalendarLeaf` haftanın günü hesaplaması `weekdayIndex` + `null` durumunda "ARTIK GÜN" gösterimine geçti; "Yılın X. günü" satırı `year` parametresi alıyor; artık olmayan yılda 29 Şubat için "{yıl} artık yıl değil" notu eklendi; `prev`/`next` iç içe üçlü koşullar okunur bir `shift(delta)` fonksiyonuna dönüştürüldü; `MiniCalendar` `year` prop'u almaya başladı, `firstOffset` gerçek yıla bağlandı, 29 Şubat hücresine artık olmayan yıllarda kesikli çerçeve + `title="Artık gün"` eklendi |
+  | `Dokumanlar/ANALIZ-RAPORU.md`                       | K-1 `✅ ÇÖZÜLDÜ (T-03)` işaretlendi + Çözüm bloğu eklendi; genel sağlık tablosu ve öncelik sıralaması güncellendi; yeni bölüm 6 → K-5 bulgusu eklendi                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+  | `Dokumanlar/BAGLAM.md`                              | Dosya haritasına `date.ts` eklendi; plan ilerlemesi 3/14; "Eksik/hatalı" listesinde K-1 çözüldü işaretlendi, K-5 eklendi                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+  | `Dokumanlar/MIMARI.md`                              | Yeni bölüm 2.6 (`date.ts` modül tablosu); `leaf.tsx` ihracat tablosundan eski `dayOfYear`/`daysInMonth` satırları kaldırıldı; teknik borç tablosunda K-1 çözüldü işaretlendi, K-5 eklendi                                                                                                                                                                                                                                                                                                                                                                                                      |
+  | `Dokumanlar/KULLANIM-KILAVUZU.md`                   | Sorun giderme tablosunda K-1 satırı "düzeltildi" olarak güncellendi; K-5 için yeni satır eklendi                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+  | `Talimatlar/PLAN-01-temel-duzeltme-ve-tamamlama.md` | Durum 3/14, T-03 satırı ✅ + `Tamamlandı/` bağlantısına güncellendi, Kesin kurallar'a T-03 notu eklendi, ilerleme tablosu ve yüzdesi güncellendi, 2 başarı ölçütü işaretlendi                                                                                                                                                                                                                                                                                                                                                                                                                  |
 
 - **Sapmalar / notlar:**
 
@@ -308,7 +312,7 @@ normal çalışmaya devam etmeli — bu talimat yalnızca yaprağa dokunur.
      Canlı doğrulama sırasında "Önceki gün" / "Sonraki gün" / "Bugüne dön"
      düğmelerinin gerçek bir fare tıklamasıyla **hiç tetiklenmediği** ortaya
      çıktı: dekoratif "arkadaki yapraklar" katmanları (`position: absolute;
-     inset: 0`) CSS yığılım kurallarınca `position: static` olan gezinme
+inset: 0`) CSS yığılım kurallarınca `position: static` olan gezinme
      satırının **her zaman üzerinde** boyanıyor ve tıklamayı yakalıyor
      (`document.elementsFromPoint` ile doğrulandı). Bu, T-03'ün kapsamındaki
      bir tarih-hesaplama hatası değil, ayrı bir CSS/yerleşim hatası olduğu için
@@ -320,21 +324,21 @@ normal çalışmaya devam etmeli — bu talimat yalnızca yaprağa dokunur.
 
 - **Doğrulama kanıtları:**
 
-  | Test | Sonuç |
-  |---|---|
-  | `grep -n "2024" src/components/leaf.tsx` | Boş — hiç eşleşme yok |
-  | `npm run typecheck` | Temiz, hata yok |
-  | `npm run build` | Temiz, `dist/` üretti (254 kB JS / 82 kB gzip, 53 kB CSS) |
-  | Node formül testi — `dayOfYear` | 10/10 örnek doğru: 2026 (normal) ve 2028 (artık) için 1 Ocak, 28 Şubat, 1 Mart, 21 Ağustos, 31 Aralık — tamamı beklenen değerle eşleşti (bkz. beklenti tablosu, `dev doğrulama` adımı) |
-  | Canlı — 21 Ağustos 2026 | Yaprakta **"Yılın 233. günü"** ve **"CUMA"** göründü (önceden 234/hatalı gün) |
-  | Canlı — 31 Aralık → Sonraki gün | **"1 Ocak"**, "Yılın 1. günü" |
-  | Canlı — 1 Ocak → Önceki gün | **"31 Aralık"**, "Yılın 365. günü" |
-  | Canlı — 29 Şubat seçimi (mini takvim) | **"ARTIK GÜN"**, "2026 artık yıl değil" notu, gün sayısı "60" |
-  | Canlı — 29 Şubat → Sonraki gün | **"1 Mart"**, "PAZAR", "Yılın 60. günü" — haftanın günü uydurulmadı |
-  | Mini takvim ızgara hizası (DOM ölçümü) | Ağustos 2026: 5 boş hücre + gün "1" tam olarak **`Ct`** (Cumartesi) sütununda — `firstOffset=5` matematiksel olarak da doğrulandı |
-  | Mini takvim — 29 Şubat hücresi (Şubat 2026 görünümü) | `title="Artık gün"` + kesikli çerçeve sınıfı DOM'da doğrulandı |
-  | Bugüne dön / isToday mantığı | Dokunulmadı, regresyon yok — canlı testlerde normal çalıştığı gözlendi |
-  | Zaman tüneli / kişi kartları / karanlık dosyalar | Gün geçişlerinde (29 Şubat dahil) normal veri geldiği canlı olarak gözlendi — regresyon yok |
+  | Test                                                 | Sonuç                                                                                                                                                                                  |
+  | ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | `grep -n "2024" src/components/leaf.tsx`             | Boş — hiç eşleşme yok                                                                                                                                                                  |
+  | `npm run typecheck`                                  | Temiz, hata yok                                                                                                                                                                        |
+  | `npm run build`                                      | Temiz, `dist/` üretti (254 kB JS / 82 kB gzip, 53 kB CSS)                                                                                                                              |
+  | Node formül testi — `dayOfYear`                      | 10/10 örnek doğru: 2026 (normal) ve 2028 (artık) için 1 Ocak, 28 Şubat, 1 Mart, 21 Ağustos, 31 Aralık — tamamı beklenen değerle eşleşti (bkz. beklenti tablosu, `dev doğrulama` adımı) |
+  | Canlı — 21 Ağustos 2026                              | Yaprakta **"Yılın 233. günü"** ve **"CUMA"** göründü (önceden 234/hatalı gün)                                                                                                          |
+  | Canlı — 31 Aralık → Sonraki gün                      | **"1 Ocak"**, "Yılın 1. günü"                                                                                                                                                          |
+  | Canlı — 1 Ocak → Önceki gün                          | **"31 Aralık"**, "Yılın 365. günü"                                                                                                                                                     |
+  | Canlı — 29 Şubat seçimi (mini takvim)                | **"ARTIK GÜN"**, "2026 artık yıl değil" notu, gün sayısı "60"                                                                                                                          |
+  | Canlı — 29 Şubat → Sonraki gün                       | **"1 Mart"**, "PAZAR", "Yılın 60. günü" — haftanın günü uydurulmadı                                                                                                                    |
+  | Mini takvim ızgara hizası (DOM ölçümü)               | Ağustos 2026: 5 boş hücre + gün "1" tam olarak **`Ct`** (Cumartesi) sütununda — `firstOffset=5` matematiksel olarak da doğrulandı                                                      |
+  | Mini takvim — 29 Şubat hücresi (Şubat 2026 görünümü) | `title="Artık gün"` + kesikli çerçeve sınıfı DOM'da doğrulandı                                                                                                                         |
+  | Bugüne dön / isToday mantığı                         | Dokunulmadı, regresyon yok — canlı testlerde normal çalıştığı gözlendi                                                                                                                 |
+  | Zaman tüneli / kişi kartları / karanlık dosyalar     | Gün geçişlerinde (29 Şubat dahil) normal veri geldiği canlı olarak gözlendi — regresyon yok                                                                                            |
 
 - **Sonraki talimata not:**
 

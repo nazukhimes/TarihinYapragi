@@ -1,13 +1,13 @@
 # T-09 · Hata Sınırı ve Durum Ekranları
 
-| Alan | Değer |
-|---|---|
-| **Faz** | FAZ 2 — Ürün Kabuğu |
-| **Öncelik** | 🟠 Yüksek |
-| **Tahmini süre** | ~3 saat |
-| **Bağımlılık** | T-05 (`DayError` tipi), T-06 (yönlendirici) |
-| **İlgili bulgu** | O-5, O-9, m-3, m-6 |
-| **Durum** | ✅ Tamamlandı |
+| Alan             | Değer                                       |
+| ---------------- | ------------------------------------------- |
+| **Faz**          | FAZ 2 — Ürün Kabuğu                         |
+| **Öncelik**      | 🟠 Yüksek                                   |
+| **Tahmini süre** | ~3 saat                                     |
+| **Bağımlılık**   | T-05 (`DayError` tipi), T-06 (yönlendirici) |
+| **İlgili bulgu** | O-5, O-9, m-3, m-6                          |
+| **Durum**        | ✅ Tamamlandı                               |
 
 ---
 
@@ -66,8 +66,12 @@ sınıf bileşen bu olacak, bu bir istisna değil zorunluluktur.
 ```tsx
 import { Component, type ErrorInfo, type ReactNode } from "react";
 
-interface Props { children: ReactNode }
-interface State { hata: Error | null }
+interface Props {
+  children: ReactNode;
+}
+interface State {
+  hata: Error | null;
+}
 
 export class ErrorBoundary extends Component<Props, State> {
   state: State = { hata: null };
@@ -89,9 +93,7 @@ export class ErrorBoundary extends Component<Props, State> {
           <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-brand">
             Arşivde bir sorun çıktı
           </p>
-          <h1 className="font-display font-bold text-3xl text-inkpaper mt-4">
-            Yaprak yırtıldı
-          </h1>
+          <h1 className="font-display font-bold text-3xl text-inkpaper mt-4">Yaprak yırtıldı</h1>
           <p className="mt-3 text-inkpaper-dim text-[15px] leading-relaxed">
             Beklenmeyen bir hata oluştu. Sayfayı yenilemek çoğu zaman yeterli olur.
           </p>
@@ -105,7 +107,10 @@ export class ErrorBoundary extends Component<Props, State> {
               Sayfayı yenile
             </button>
             <button
-              onClick={() => { localStorage.clear(); location.reload(); }}
+              onClick={() => {
+                localStorage.clear();
+                location.reload();
+              }}
               className="px-5 py-3 rounded-sm border border-inkpaper-dim/50 text-inkpaper
                          font-mono text-[12px] tracking-[0.2em] uppercase"
             >
@@ -114,8 +119,10 @@ export class ErrorBoundary extends Component<Props, State> {
           </div>
 
           {import.meta.env.DEV && (
-            <pre className="mt-6 text-left text-[11px] text-brand-deep overflow-auto
-                            max-h-40 p-3 bg-paper-2 rounded-sm">
+            <pre
+              className="mt-6 text-left text-[11px] text-brand-deep overflow-auto
+                            max-h-40 p-3 bg-paper-2 rounded-sm"
+            >
               {this.state.hata.stack}
             </pre>
           )}
@@ -158,33 +165,35 @@ Altı bölümün hepsine uygula.
 Mevcut çevrimdışı bloğu tek mesaj gösteriyor. `data.error.kind`'a göre ayır:
 
 ```tsx
-{data?.error && mergedEvents.length === 0 && (
-  <div className="py-8">
-    <p className="font-display italic text-2xl text-ink">{BASLIK[data.error.kind]}</p>
-    <p className="mt-3 text-ink-dim max-w-xl text-[15px] leading-relaxed">
-      {data.error.message}
-    </p>
-    <div className="mt-6 flex gap-3 flex-wrap">
-      {data.error.retryable && (
-        <button onClick={reload} className="...gold...">Yeniden dene</button>
-      )}
-      <button onClick={() => setDate(bugun.getDate(), bugun.getMonth() + 1)} className="...">
-        Bugüne dön
-      </button>
+{
+  data?.error && mergedEvents.length === 0 && (
+    <div className="py-8">
+      <p className="font-display italic text-2xl text-ink">{BASLIK[data.error.kind]}</p>
+      <p className="mt-3 text-ink-dim max-w-xl text-[15px] leading-relaxed">{data.error.message}</p>
+      <div className="mt-6 flex gap-3 flex-wrap">
+        {data.error.retryable && (
+          <button onClick={reload} className="...gold...">
+            Yeniden dene
+          </button>
+        )}
+        <button onClick={() => setDate(bugun.getDate(), bugun.getMonth() + 1)} className="...">
+          Bugüne dön
+        </button>
+      </div>
     </div>
-  </div>
-)}
+  );
+}
 ```
 
 Başlık eşlemesi:
 
-| `kind` | Başlık |
-|---|---|
-| `network` | "İnternet bağlantısı yok." |
-| `notfound` | "Bu gün için kayıt bulunamadı." |
-| `ratelimit` | "Arşiv şu an çok yoğun." |
-| `server` | "Arşiv sunucusu yanıt vermiyor." |
-| `unknown` | "Beklenmeyen bir sorun oluştu." |
+| `kind`      | Başlık                           |
+| ----------- | -------------------------------- |
+| `network`   | "İnternet bağlantısı yok."       |
+| `notfound`  | "Bu gün için kayıt bulunamadı."  |
+| `ratelimit` | "Arşiv şu an çok yoğun."         |
+| `server`    | "Arşiv sunucusu yanıt vermiyor." |
+| `unknown`   | "Beklenmeyen bir sorun oluştu."  |
 
 ### Adım 4 — Arama sonuç sayacı (m-6)
 
@@ -195,17 +204,18 @@ const aramaSonuclari = useMemo(() => {
   if (!searching) return null;
   const say = (n: number) => n;
   return {
-    olay:    mergedEvents.filter((e) => matchQuery(query, e.text, e.detail, e.page?.excerpt, formatYear(e.year))).length,
-    dogum:   births.filter((p) => matchQuery(query, p.name, p.excerpt)).length,
-    vefat:   deaths.filter((p) => matchQuery(query, p.name, p.excerpt)).length,
-    dosya:   allCases.filter((c) => matchQuery(query, c.title, c.summary, c.detail, c.tags.join(" "))).length,
-    bilim:   allScience.filter((s) => matchQuery(query, s.title, s.summary, s.field)).length,
+    olay: mergedEvents.filter((e) =>
+      matchQuery(query, e.text, e.detail, e.page?.excerpt, formatYear(e.year))
+    ).length,
+    dogum: births.filter((p) => matchQuery(query, p.name, p.excerpt)).length,
+    vefat: deaths.filter((p) => matchQuery(query, p.name, p.excerpt)).length,
+    dosya: allCases.filter((c) => matchQuery(query, c.title, c.summary, c.detail, c.tags.join(" ")))
+      .length,
+    bilim: allScience.filter((s) => matchQuery(query, s.title, s.summary, s.field)).length,
   };
 }, [searching, query, mergedEvents, births, deaths, allCases, allScience]);
 
-const toplamSonuc = aramaSonuclari
-  ? Object.values(aramaSonuclari).reduce((a, b) => a + b, 0)
-  : 0;
+const toplamSonuc = aramaSonuclari ? Object.values(aramaSonuclari).reduce((a, b) => a + b, 0) : 0;
 ```
 
 > **Not:** Bu, bölümlerin kendi içindeki süzme mantığını **tekrarlıyor**.
@@ -216,23 +226,26 @@ const toplamSonuc = aramaSonuclari
 Arama kutusunun altına bir şerit ekle:
 
 ```tsx
-{searching && (
-  <div className="max-w-7xl mx-auto px-4 md:px-8 py-2.5 flex items-center gap-3 flex-wrap
-                  border-b border-line/60 font-mono text-[12px]">
-    <span className="text-gold">"{query}"</span>
-    <span className="text-ink-dim">
-      {toplamSonuc > 0 ? `${toplamSonuc} sonuç` : "sonuç yok"}
-    </span>
-    {toplamSonuc > 0 && (
-      <span className="text-ink-faint">
-        {aramaSonuclari!.olay} olay · {aramaSonuclari!.dogum} doğum ·
-        {aramaSonuclari!.vefat} vefat · {aramaSonuclari!.dosya} dosya ·
-        {aramaSonuclari!.bilim} bilim
-      </span>
-    )}
-    <button onClick={() => setQuery("")} className="ml-auto text-brand">✕ temizle</button>
-  </div>
-)}
+{
+  searching && (
+    <div
+      className="max-w-7xl mx-auto px-4 md:px-8 py-2.5 flex items-center gap-3 flex-wrap
+                  border-b border-line/60 font-mono text-[12px]"
+    >
+      <span className="text-gold">"{query}"</span>
+      <span className="text-ink-dim">{toplamSonuc > 0 ? `${toplamSonuc} sonuç` : "sonuç yok"}</span>
+      {toplamSonuc > 0 && (
+        <span className="text-ink-faint">
+          {aramaSonuclari!.olay} olay · {aramaSonuclari!.dogum} doğum ·{aramaSonuclari!.vefat} vefat
+          · {aramaSonuclari!.dosya} dosya ·{aramaSonuclari!.bilim} bilim
+        </span>
+      )}
+      <button onClick={() => setQuery("")} className="ml-auto text-brand">
+        ✕ temizle
+      </button>
+    </div>
+  );
+}
 ```
 
 Sonuç yoksa, sayfanın gövdesinde bölümler yerine tek bir boş durum göster:
@@ -250,24 +263,29 @@ T-07'deki `aria-live` kabına da bu sayıyı bağla.
 `holidays` verisini görünür kıl. Zaman Tüneli'nin **üstüne**, kısa bir şerit olarak:
 
 ```tsx
-{data && data.holidays.length > 0 && (
-  <Reveal className="mt-8">
-    <div className="rounded-sm border border-gold/40 bg-gold/[0.06] px-5 py-4">
-      <p className="font-mono text-[11px] tracking-[0.24em] uppercase text-gold mb-2">
-        Bugünün anlamı
-      </p>
-      <ul className="space-y-1.5">
-        {data.holidays.map((h) => (
-          <li key={h.id} className="text-[14.5px] text-ink-dim leading-relaxed
-                                     flex gap-2.5">
-            <span className="text-gold shrink-0">◆</span>
-            <span>{h.text}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </Reveal>
-)}
+{
+  data && data.holidays.length > 0 && (
+    <Reveal className="mt-8">
+      <div className="rounded-sm border border-gold/40 bg-gold/[0.06] px-5 py-4">
+        <p className="font-mono text-[11px] tracking-[0.24em] uppercase text-gold mb-2">
+          Bugünün anlamı
+        </p>
+        <ul className="space-y-1.5">
+          {data.holidays.map((h) => (
+            <li
+              key={h.id}
+              className="text-[14.5px] text-ink-dim leading-relaxed
+                                     flex gap-2.5"
+            >
+              <span className="text-gold shrink-0">◆</span>
+              <span>{h.text}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </Reveal>
+  );
+}
 ```
 
 > **Bölüm değil şerit** olarak konumlandırılıyor: `NAV` dizisine eklenmez,
@@ -285,14 +303,18 @@ const LIMIT = 6;
 const gosterilecek = hepsi ? visible : visible.slice(0, LIMIT);
 
 // ... kartlardan sonra
-{!hepsi && visible.length > LIMIT && (
-  <button onClick={() => setHepsi(true)}
-          className="md:col-span-2 border border-dashed border-line rounded-sm py-4
+{
+  !hepsi && visible.length > LIMIT && (
+    <button
+      onClick={() => setHepsi(true)}
+      className="md:col-span-2 border border-dashed border-line rounded-sm py-4
                      font-mono text-[12px] tracking-widest uppercase text-ink-faint
-                     hover:text-brand hover:border-brand/60 transition-colors">
-    {visible.length - LIMIT} dosya daha göster
-  </button>
-)}
+                     hover:text-brand hover:border-brand/60 transition-colors"
+    >
+      {visible.length - LIMIT} dosya daha göster
+    </button>
+  );
+}
 ```
 
 Aynı desen `ScienceSection`'da da uygulanabilir (`slice(0, 3)` sınırı için).
@@ -303,25 +325,25 @@ Mevcut `SkeletonLines` / `SkeletonCards` iyi. Tek eksik: uzun süren yüklemede
 kullanıcıya bilgi. 4 saniyeyi geçerse ek satır göster:
 
 ```tsx
-{loading && gecikti && (
-  <p className="mt-3 font-mono text-[12px] text-copper">
-    Arşiv beklenenden yavaş yanıt veriyor…
-  </p>
-)}
+{
+  loading && gecikti && (
+    <p className="mt-3 font-mono text-[12px] text-copper">Arşiv beklenenden yavaş yanıt veriyor…</p>
+  );
+}
 ```
 
 ---
 
 ## 🚫 Kapsam Dışı
 
-| Dokunma | Neden / Hangi talimat |
-|---|---|
-| Hata izleme servisi (Sentry vb.) | Kapsam dışı — gizlilik kararı |
-| `DayError` üretim mantığı | T-05 (burada yalnızca **gösteriliyor**) |
-| 404 sayfası | T-06'da yapıldı |
-| Yeni bölüm ekleme (`NAV` dizisi) | "Bugünün anlamı" bilinçli olarak şerit |
-| Arama mantığının refaktörü | Not T-13'e düşüldü |
-| Service worker çevrimdışı sayfası | T-08 |
+| Dokunma                           | Neden / Hangi talimat                   |
+| --------------------------------- | --------------------------------------- |
+| Hata izleme servisi (Sentry vb.)  | Kapsam dışı — gizlilik kararı           |
+| `DayError` üretim mantığı         | T-05 (burada yalnızca **gösteriliyor**) |
+| 404 sayfası                       | T-06'da yapıldı                         |
+| Yeni bölüm ekleme (`NAV` dizisi)  | "Bugünün anlamı" bilinçli olarak şerit  |
+| Arama mantığının refaktörü        | Not T-13'e düşüldü                      |
+| Service worker çevrimdışı sayfası | T-08                                    |
 
 ---
 
@@ -353,6 +375,7 @@ if (cases.length > 0) throw new Error("test hatası");
 ```
 
 Beklenen:
+
 - Karanlık Dosyalar bölümünde hata kartı
 - **Diğer beş bölüm normal çalışıyor**
 - Konsolda `[Tarih Yaprağı] beklenmeyen hata:` kaydı
@@ -367,19 +390,19 @@ Testten sonra **sil**.
 
 ### 3. Hata türü ekranları
 
-| Test | Nasıl | Beklenen |
-|---|---|---|
-| `network` | DevTools → Offline, hiç açılmamış gün | "İnternet bağlantısı yok." + Yeniden dene |
-| `notfound` | `.env` ile geçersiz API tabanı | Uygun başlık, **Yeniden dene yok** |
-| `ratelimit` | DevTools → isteği 429 ile override et | "Arşiv şu an çok yoğun." + Yeniden dene |
+| Test        | Nasıl                                 | Beklenen                                  |
+| ----------- | ------------------------------------- | ----------------------------------------- |
+| `network`   | DevTools → Offline, hiç açılmamış gün | "İnternet bağlantısı yok." + Yeniden dene |
+| `notfound`  | `.env` ile geçersiz API tabanı        | Uygun başlık, **Yeniden dene yok**        |
+| `ratelimit` | DevTools → isteği 429 ile override et | "Arşiv şu an çok yoğun." + Yeniden dene   |
 
 ### 4. Arama sayacı
 
-| Sorgu | Beklenen |
-|---|---|
-| `atatürk` (29 Ekim'de) | Toplam > 0, bölüm dağılımı görünür |
-| `zzzqqq` | "sonuç yok" + boş durum ekranı + iki düğme |
-| boş | Şerit hiç görünmemeli |
+| Sorgu                  | Beklenen                                   |
+| ---------------------- | ------------------------------------------ |
+| `atatürk` (29 Ekim'de) | Toplam > 0, bölüm dağılımı görünür         |
+| `zzzqqq`               | "sonuç yok" + boş durum ekranı + iki düğme |
+| boş                    | Şerit hiç görünmemeli                      |
 
 Ekran okuyucuda "N sonuç bulundu" duyulmalı (T-07 `aria-live`).
 
@@ -441,7 +464,7 @@ düzen (layout) bozmamalı.
     güvenlik ağı. Düzeltmeden sonra aynı test doğru Türkçe hata ekranını verdi.
   - **Bölüm-seviyesi hata kartı kompakt varyant aldı:** Talimatın Adım 1 kod
     parçasındaki tek fallback görünümü (`glowfield min-h-screen grid
-    place-items-center`) kökte doğru ama bir bölümü sarmak için kullanılırsa
+place-items-center`) kökte doğru ama bir bölümü sarmak için kullanılırsa
     Doğrulama Adım 7'nin kendi beklentisiyle ("ErrorBoundary sarmalayıcıları
     düzen bozmamalı") çelişirdi — 100vh yüksekliğinde boş bir kutu sayfanın
     ortasında açılırdı. `ErrorBoundary`'ye `variant` prop'u eklendi: `"page"`
@@ -460,17 +483,17 @@ düzen (layout) bozmamalı.
   compositing engelli değildi, `preview_start` + `read_page`/`javascript_tool`/
   `read_console_messages` kullanıldı):**
   - **Hata sınırı testi:** `CasesSection`'ın başına geçici `throw new
-    Error("test hatası")` eklendi → yalnızca Karanlık Dosyalar bölümünde
+Error("test hatası")` eklendi → yalnızca Karanlık Dosyalar bölümünde
     "Arşivde bir sorun çıktı / Yaprak yırtıldı" kartı çıktı, diğer beş bölüm
     (Zaman Tüneli, Doğanlar, Kaybettiklerimiz, Bilim & Keşif, Sohbet Kartları)
     normal render edildi, konsolda `[Tarih Yaprağı] beklenmeyen hata:` kaydı
     görüldü. Test satırı silindi.
   - **Kök hata sınırı testi:** `App.tsx`'in başına geçici `throw new
-    Error("kök test")` eklendi → düzeltmeden ÖNCE react-router'ın jenerik
+Error("kök test")` eklendi → düzeltmeden ÖNCE react-router'ın jenerik
     ekranı, düzeltmeden SONRA projenin "Sayfayı yenile"/"Önbelleği temizle"
     düğmeli Türkçe ekranı + dev modunda hata yığını çıktı. Test satırı silindi.
   - **Arama sayacı:** 29 Ekim'de `"cumhuriyet"` yazıldı → şerit `"cumhuriyet" 4
-    sonuç · 4 olay · 0 doğum · 0 vefat · 0 dosya · 0 bilim` gösterdi,
+sonuç · 4 olay · 0 doğum · 0 vefat · 0 dosya · 0 bilim` gösterdi,
     `aria-live` kabı `"4 sonuç bulundu"` içeriyordu (DOM'dan `javascript_tool`
     ile doğrulandı). `"zzzqqq"` yazıldığında altı bölüm/nav kayboldu, tek boş
     durum ekranı (`"zzzqqq" için bu günde sonuç yok."` + iki düğme) çıktı,

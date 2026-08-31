@@ -20,13 +20,13 @@
 
 **Asgari sözleşme — her gün için:**
 
-| Alan | Asgari | İdeal |
-|---|---|---|
-| `spotlight` | 1 (zorunlu) | 1 |
-| `events` | 1 | 2–3 |
-| `cases` | 1 | 2 |
-| `science` | 1 | 2 |
-| `talk` | 2 | 3–4 |
+| Alan        | Asgari      | İdeal |
+| ----------- | ----------- | ----- |
+| `spotlight` | 1 (zorunlu) | 1     |
+| `events`    | 1           | 2–3   |
+| `cases`     | 1           | 2     |
+| `science`   | 1           | 2     |
+| `talk`      | 2           | 3–4   |
 
 **Kalite ölçütleri:**
 
@@ -47,8 +47,8 @@ yeni gün bu nesneye bir anahtar olarak eklenir:
 
 ```ts
 export const MART: Record<string, CuratedDay> = {
-  "03-08": { /* mevcut gün */ },
-  "03-18": { /* yeni gün buraya */ },
+  "03-08": {/* mevcut gün */},
+  "03-18": {/* yeni gün buraya */},
 };
 ```
 
@@ -171,7 +171,6 @@ kaynak: `src/data/types.ts`.
 3. Editör olayının otomatik (Vikipedi) sürümüyle zaman tünelinde **iki kez**
    görünmediğini doğrula.
 
-
 ---
 
 ## 8. Rekorlar Kasası — `src/data/rekorlar.ts` (T-23)
@@ -208,11 +207,11 @@ ise her yıl o gün yanlış bilgi gösterir.
 
 ### 8.4 `status` — bayatlamaya karşı
 
-| Değer | Ne zaman |
-|---|---|
-| `GÜNCEL` | Bugün hâlâ geçerli |
-| `KIRILDI` | Sonradan aşıldı — `brokenBy` **zorunlu** (test bunu denetler) |
-| `EMEKLİ` | Kategori artık kabul edilmiyor (genelde güvenlik gerekçesiyle) |
+| Değer     | Ne zaman                                                       |
+| --------- | -------------------------------------------------------------- |
+| `GÜNCEL`  | Bugün hâlâ geçerli                                             |
+| `KIRILDI` | Sonradan aşıldı — `brokenBy` **zorunlu** (test bunu denetler)  |
+| `EMEKLİ`  | Kategori artık kabul edilmiyor (genelde güvenlik gerekçesiyle) |
 
 Sürekli kırılan rekorlarda (sırıkla atlama, sprint) kaydı `GÜNCEL` bırakmak
 bayat bir rakamı geçerliymiş gibi gösterir. Duplantis kaydı bu yüzden `KIRILDI`
@@ -228,12 +227,12 @@ ve `brokenBy: "Yine kendisi — rekoru düzenli olarak bir santim artırıyor"`.
 
 Bunlar kasayı bir ansiklopediden ayıran şey — boş bırakılabilir ama bırakılmamalı:
 
-| Alan | Ne yazılır |
-|---|---|
-| `story` | Rekorun kendisini değil, **ardındaki hikâyeyi**. En az 3 cümle (test denetler). Kim bu insan, neden yaptı, sonra ne oldu |
-| `compare` | Rakamı hayal edilebilir kılan kıyas: "üst üste dizilmiş 14 otobüs kadar" |
-| `opener` | Yayında konuya girerken okunacak tek cümle. **Soru işareti olmadan** (test denetler) |
-| `question` | İzleyiciye sorulabilecek tartışma sorusu |
+| Alan       | Ne yazılır                                                                                                               |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `story`    | Rekorun kendisini değil, **ardındaki hikâyeyi**. En az 3 cümle (test denetler). Kim bu insan, neden yaptı, sonra ne oldu |
+| `compare`  | Rakamı hayal edilebilir kılan kıyas: "üst üste dizilmiş 14 otobüs kadar"                                                 |
+| `opener`   | Yayında konuya girerken okunacak tek cümle. **Soru işareti olmadan** (test denetler)                                     |
+| `question` | İzleyiciye sorulabilecek tartışma sorusu                                                                                 |
 
 `opener` yazılmayan rekor Sohbet Kartı'na dönüşmez — kasada durur ama Yayın
 Modu'na girmez.

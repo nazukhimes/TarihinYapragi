@@ -20,14 +20,14 @@ sessizce yok ettiğini tespit ediyor.
 **Tek cümlelik hüküm:** Uygulama Vikipedi'den her gün yüz binlerce karakterlik gerçek, kaynaklı
 metin indiriyor ve **%100'ünü kullanmadan atıyor** — çünkü kod API'de var olmayan bir alan adı okuyor.
 
-| Ölçüt | Durum | Not |
-|---|---|---|
-| `npm run test` | ✅ 203/203 geçiyor | Ancak K-6'yı yakalayamıyor — sebebi m-9 |
-| `npm run typecheck` | ✅ Geçiyor | Alan adı hatası tip sistemine takılmıyor (isteğe bağlı alan) |
-| Kullanıcıya gösterilen içerik | 🔴 Ciddi kayıp | 24 Ağustos'ta 38/38 "Detayı aç" paneli **boş** |
-| Kişi adlarının doğruluğu | 🔴 Bozuk | Sayfada **141 isim** ham HTML olarak görünüyor |
-| Kaynak bağlantısı isabeti | 🟠 Zayıf | Olay bağlantıları çoğu zaman genel varlığa (ülke/şehir) gidiyor |
-| Editör kapsamı | 🟡 %16 | 366 günün 60'ında editör içeriği var |
+| Ölçüt                         | Durum              | Not                                                             |
+| ----------------------------- | ------------------ | --------------------------------------------------------------- |
+| `npm run test`                | ✅ 203/203 geçiyor | Ancak K-6'yı yakalayamıyor — sebebi m-9                         |
+| `npm run typecheck`           | ✅ Geçiyor         | Alan adı hatası tip sistemine takılmıyor (isteğe bağlı alan)    |
+| Kullanıcıya gösterilen içerik | 🔴 Ciddi kayıp     | 24 Ağustos'ta 38/38 "Detayı aç" paneli **boş**                  |
+| Kişi adlarının doğruluğu      | 🔴 Bozuk           | Sayfada **141 isim** ham HTML olarak görünüyor                  |
+| Kaynak bağlantısı isabeti     | 🟠 Zayıf           | Olay bağlantıları çoğu zaman genel varlığa (ülke/şehir) gidiyor |
+| Editör kapsamı                | 🟡 %16             | 366 günün 60'ında editör içeriği var                            |
 
 **Yeni bulgu sayısı:** 2 kritik, 3 orta, 1 ürün/içerik boşluğu, 1 küçük not.
 
@@ -49,7 +49,7 @@ export interface WikiPage {
   title: string;
   displaytitle?: string;
   description?: string;
-  excerpt?: string;          // ← API'de böyle bir alan YOK
+  excerpt?: string; // ← API'de böyle bir alan YOK
   thumbnail?: { source: string };
   originalimage?: { source: string };
   content_urls?: { desktop?: { page?: string } };
@@ -70,11 +70,11 @@ description_source, content_urls, extract, extract_html, normalizedtitle
 
 **Kanıt — kaybedilen içeriğin hacmi** (24 Ağustos, TR beslemesi):
 
-| Bölüm | Öğe | `extract` dolu | `description` dolu | Görsel var |
-|---|---|---|---|---|
-| Olaylar | 39 | **39 (%100)** | 32 | 37 |
-| Doğumlar | 93 | **93 (%100)** | 58 | 83 |
-| Vefatlar | 48 | **48 (%100)** | 30 | 38 |
+| Bölüm    | Öğe | `extract` dolu | `description` dolu | Görsel var |
+| -------- | --- | -------------- | ------------------ | ---------- |
+| Olaylar  | 39  | **39 (%100)**  | 32                 | 37         |
+| Doğumlar | 93  | **93 (%100)**  | 58                 | 83         |
+| Vefatlar | 48  | **48 (%100)**  | 30                 | 38         |
 
 Olaylardaki `extract` metinlerinin **ortalama uzunluğu 469 karakter.** Yani uygulama her gün
 yaklaşık **80.000 karakterlik** gerçek, kaynaklı Vikipedi metnini indirip çöpe atıyor.
@@ -83,24 +83,24 @@ yaklaşık **80.000 karakterlik** gerçek, kaynaklı Vikipedi metnini indirip ç
 
 Sayfadaki 38 "Detayı aç" düğmesinden ilk beşi tek tek açıldı ve açılan panelin metin uzunluğu ölçüldü:
 
-| Olay yılı | Panel içerik uzunluğu |
-|---|---|
-| 79 (Vezüv) | **0 karakter** |
-| 410 (Roma) | **0 karakter** |
-| 1516 | **0 karakter** |
-| 1572 | **0 karakter** |
-| 1814 (Washington) | **0 karakter** |
+| Olay yılı         | Panel içerik uzunluğu |
+| ----------------- | --------------------- |
+| 79 (Vezüv)        | **0 karakter**        |
+| 410 (Roma)        | **0 karakter**        |
+| 1516              | **0 karakter**        |
+| 1572              | **0 karakter**        |
+| 1814 (Washington) | **0 karakter**        |
 
 **Etkilenen davranışlar — hepsi aynı kökten:**
 
-| Görünen sorun | Kod yolu |
-|---|---|
-| "Detayı aç" boş panel açıyor | `sections.tsx:170` → `{e.detail \|\| e.page?.excerpt}` — ikisi de `undefined` |
-| "Dosyayı aç" özeti tekrar ediyor | `useGunVerisi.ts:112` → `detail: item.pages?.[0]?.excerpt \|\| item.text` — hep `item.text` |
-| Kişi modallarında biyografi yok | `sections.tsx:249` → `excerpt: p.excerpt` |
-| Sohbet kartlarında doğum/vefat kartı hiç üretilmiyor | `wiki.ts:341,352` → `find((p) => p.thumbnail && p.excerpt)` hiç eşleşmiyor |
-| Spotlight metni hep boş | `useGunVerisi.ts:152` → `featured.pages[0].excerpt` |
-| Bilim kartı özeti ham metne düşüyor | `useGunVerisi.ts:131` → `e.pages?.[0]?.excerpt \|\| truncate(e.text, 260)` |
+| Görünen sorun                                        | Kod yolu                                                                                    |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| "Detayı aç" boş panel açıyor                         | `sections.tsx:170` → `{e.detail \|\| e.page?.excerpt}` — ikisi de `undefined`               |
+| "Dosyayı aç" özeti tekrar ediyor                     | `useGunVerisi.ts:112` → `detail: item.pages?.[0]?.excerpt \|\| item.text` — hep `item.text` |
+| Kişi modallarında biyografi yok                      | `sections.tsx:249` → `excerpt: p.excerpt`                                                   |
+| Sohbet kartlarında doğum/vefat kartı hiç üretilmiyor | `wiki.ts:341,352` → `find((p) => p.thumbnail && p.excerpt)` hiç eşleşmiyor                  |
+| Spotlight metni hep boş                              | `useGunVerisi.ts:152` → `featured.pages[0].excerpt`                                         |
+| Bilim kartı özeti ham metne düşüyor                  | `useGunVerisi.ts:131` → `e.pages?.[0]?.excerpt \|\| truncate(e.text, 260)`                  |
 
 Canlı doğrulama son ikisini de teyit etti: sayfada `"'de bugün doğan:"` ve `"'de bugün veda etti:"`
 kartları **hiç yok**, `"Arşivden öne çıkan"` spotlight'ı **hiç görünmüyor**.
@@ -190,24 +190,24 @@ Sayfa başlığı ve açıklamasına göre "özgüllük" puanlayan bir prototip 
 24 Ağustos'un çok sayfalı 28 olayına uygulandı; 11'inde farklı sayfa seçti.
 Sonuçlar **karışık**, net bir iyileşme yok:
 
-| Olay | Eski seçim | Puanlamanın seçimi | Değerlendirme |
-|---|---|---|---|
-| 1925 Şapka Devrimi | Kastamonu | Mustafa Kemal Atatürk | ✅ daha iyi |
-| 1814 Washington | İngiltere | Washington, DC | 🟡 daha iyi ama Beyaz Saray daha doğruydu |
-| 1932 Amelia Earhart | Amelia Earhart | Newark, New Jersey | ❌ **bozuyor** |
-| 1912 Alaska | Alaska | Amerika Birleşik Devletleri | ❌ **bozuyor** |
-| 1993 Keşmir | Keşmir | Müslüman | ❌ **bozuyor** |
+| Olay                | Eski seçim     | Puanlamanın seçimi          | Değerlendirme                             |
+| ------------------- | -------------- | --------------------------- | ----------------------------------------- |
+| 1925 Şapka Devrimi  | Kastamonu      | Mustafa Kemal Atatürk       | ✅ daha iyi                               |
+| 1814 Washington     | İngiltere      | Washington, DC              | 🟡 daha iyi ama Beyaz Saray daha doğruydu |
+| 1932 Amelia Earhart | Amelia Earhart | Newark, New Jersey          | ❌ **bozuyor**                            |
+| 1912 Alaska         | Alaska         | Amerika Birleşik Devletleri | ❌ **bozuyor**                            |
+| 1993 Keşmir         | Keşmir         | Müslüman                    | ❌ **bozuyor**                            |
 
 **Denenen ve KISMEN çalışan ikinci yol — Vikipedi araması.**
 Olay metninden anahtar kelime çıkarıp `api.wikimedia.org/core/v1/wikipedia/tr/search/page`'e sorulduğunda:
 
-| Olay | Aramanın bulduğu | Değerlendirme |
-|---|---|---|
-| 1925 Şapka | **Şapka Devrimi** (1. sıra) | ✅ tam isabet |
-| 1814 Washington | **Washington Yangını** (2. sıra) | ✅ doğru makale var |
-| 1992 Çin–Güney Kore | **Çin-Güney Kore ilişkileri** (3. sıra) | ✅ |
-| 1958 Bursa | "1958'de Türkiye" | ❌ gürültü |
-| 79 Vezüv | "Volkan kemeri" | ❌ gürültü |
+| Olay                | Aramanın bulduğu                        | Değerlendirme       |
+| ------------------- | --------------------------------------- | ------------------- |
+| 1925 Şapka          | **Şapka Devrimi** (1. sıra)             | ✅ tam isabet       |
+| 1814 Washington     | **Washington Yangını** (2. sıra)        | ✅ doğru makale var |
+| 1992 Çin–Güney Kore | **Çin-Güney Kore ilişkileri** (3. sıra) | ✅                  |
+| 1958 Bursa          | "1958'de Türkiye"                       | ❌ gürültü          |
+| 79 Vezüv            | "Volkan kemeri"                         | ❌ gürültü          |
 
 **Üçüncü yol — İngilizce besleme çapraz eşlemesi (doğrulandı, çalışıyor).**
 EN beslemesi aynı gün için 76 olay içeriyor (TR: 39) ve olay makalelerine doğrudan bağlanıyor:
@@ -238,10 +238,10 @@ auto.push({
   year: item.year,
   type,
   title: firstClause(item.text),
-  location: "Arşiv taraması — otomatik tespit",   // ← her dosyada sabit
-  status: "KAPANDI",                              // ← her dosyada sabit
+  location: "Arşiv taraması — otomatik tespit", // ← her dosyada sabit
+  status: "KAPANDI", // ← her dosyada sabit
   summary: truncate(item.text, 240),
-  detail: item.pages?.[0]?.excerpt || item.text,  // ← K-6 nedeniyle hep item.text
+  detail: item.pages?.[0]?.excerpt || item.text, // ← K-6 nedeniyle hep item.text
   tags: [theme.toLocaleLowerCase("tr-TR"), formatYear(item.year)],
 });
 ```
@@ -250,7 +250,7 @@ auto.push({
 
 1. **`status: "KAPANDI"` bir editör hükmüdür ve uydurmadır.** Otomatik regex taramasıyla tespit
    edilmiş bir kayıt hakkında "dosya kapandı" demek, kullanıcıya olayın çözüldüğü izlenimi verir.
-   Kullanıcı bunu doğrudan sordu: *"kapandı yazıyor, yani kapandıdan kastı olay çözüldü mü?"*
+   Kullanıcı bunu doğrudan sordu: _"kapandı yazıyor, yani kapandıdan kastı olay çözüldü mü?"_
    Bu, `BAGLAM.md` §1'deki 3. ürün ilkesine (**"Kaynağı gizleme"** — otomatik içerik ile editör
    içeriği görsel olarak ayrılmalı) aykırıdır. Karanlık dosyalarda otomatik/editör ayrımını
    gösteren **hiçbir rozet yok** — Zaman Tüneli'nde "Editör notu", Bilim'de "Editör" rozeti varken.
@@ -283,8 +283,8 @@ const probe = `${p.title} ${p.description || ""} ${p.excerpt || ""} ${it.text}`;
 //                          ^^^^^^^^^^^^^^ sınıflandırmaya giriyor, ekrana çıkmıyor
 ```
 
-`description` alanı Vikipedi'nin kısa tanımıdır: *"Norveçli müzik yapımcısı"*,
-*"ABD'li kadın basketbolcu"*, *"Karadağlı hentbolcu"*. 24 Ağustos'ta doğumların 58'inde,
+`description` alanı Vikipedi'nin kısa tanımıdır: _"Norveçli müzik yapımcısı"_,
+_"ABD'li kadın basketbolcu"_, _"Karadağlı hentbolcu"_. 24 Ağustos'ta doğumların 58'inde,
 vefatların 30'unda, olayların 32'sinde dolu.
 
 Kişi kartlarında ad ile açıklama arasında bir alt başlık olarak gösterilebilecekken hiç kullanılmıyor.
@@ -307,35 +307,35 @@ Kod tabanında `normalizedtitle` **0 kez**, `extract_html` **0 kez**, `wikibase_
 
 **Mevcut durum üç katmanda eksik:**
 
-| Katman | Durum |
-|---|---|
-| Editör içeriği | 366 günün **60'ında** var (%16). 24 Ağustos'ta **yok** |
-| Vikipedi özeti | İndiriliyor ama gösterilmiyor (K-6) |
+| Katman           | Durum                                                                |
+| ---------------- | -------------------------------------------------------------------- |
+| Editör içeriği   | 366 günün **60'ında** var (%16). 24 Ağustos'ta **yok**               |
+| Vikipedi özeti   | İndiriliyor ama gösterilmiyor (K-6)                                  |
 | Harici araştırma | Tek çıkış Vikipedi bağlantısı, o da çoğu zaman yanlış sayfaya (O-14) |
 
 K-6 düzeltilince ikinci katman açılır ve boşluğun büyük kısmı kapanır. Ancak kullanıcı bunun
 ötesinde **o anda, uygulama içinde, olaya özel bir açıklama ve serbest soru sorabilme** istiyor.
 
-**Yapay zekâ değerlendirmesi.** PLAN-01 bu konuyu *"Ayrı değerlendirme"* notuyla ertelemişti
+**Yapay zekâ değerlendirmesi.** PLAN-01 bu konuyu _"Ayrı değerlendirme"_ notuyla ertelemişti
 ve `ICERIK-SABLONU.md` §0 **"Yapay zekâ ile toplu içerik üretimi yasaktır"** diyor.
 Kullanıcı 2026-08-24'te bu değerlendirmeyi açıkça istedi ve çalışma zamanı YZ yönünde karar verdi.
 
 **Teknik fizibilite — canlı test edildi (tarayıcıdan, sahte anahtarla):**
 
-| Servis | CORS | Yanıt |
-|---|---|---|
+| Servis                                                                                | CORS     | Yanıt                        |
+| ------------------------------------------------------------------------------------- | -------- | ---------------------------- |
 | `api.anthropic.com/v1/messages` (+ `anthropic-dangerous-direct-browser-access: true`) | ✅ geçti | HTTP 401 `invalid x-api-key` |
-| `generativelanguage.googleapis.com` (Gemini) | ✅ geçti | HTTP 400 `API key not valid` |
+| `generativelanguage.googleapis.com` (Gemini)                                          | ✅ geçti | HTTP 400 `API key not valid` |
 
 Yani **backend gerekmiyor**; tarayıcıdan doğrudan çağrı yapılabiliyor.
 
 **Sağlayıcı karşılaştırması (2026-08-24 itibarıyla, resmî fiyatlandırma sayfalarından):**
 
-| | Claude | Gemini ücretsiz katman |
-|---|---|---|
-| Model çağrısı | Ücretli (Haiku 4.5: $1/$5 MTok) | **Ücretsiz** (Flash / Flash-Lite) |
-| Web arama | $10 / 1.000 arama, **kaynak atıflı** | ❌ ücretsiz katmanda **yok** |
-| Veri kullanımı | Eğitimde kullanılmaz | ⚠️ "Google'ın ürünlerini geliştirmek için" kullanılır |
+|                | Claude                               | Gemini ücretsiz katman                                |
+| -------------- | ------------------------------------ | ----------------------------------------------------- |
+| Model çağrısı  | Ücretli (Haiku 4.5: $1/$5 MTok)      | **Ücretsiz** (Flash / Flash-Lite)                     |
+| Web arama      | $10 / 1.000 arama, **kaynak atıflı** | ❌ ücretsiz katmanda **yok**                          |
+| Veri kullanımı | Eğitimde kullanılmaz                 | ⚠️ "Google'ın ürünlerini geliştirmek için" kullanılır |
 
 **Karar (kullanıcı, 2026-08-24):** Ücretsiz katman nedeniyle **Gemini**.
 
@@ -382,25 +382,25 @@ konur ve testler ondan beslenir. Böylece alan adı sözleşmesi kırıldığın
 
 ## 5. Bulgu Durum Tablosu
 
-| Kod | Bulgu | Ağırlık | Talimat |
-|---|---|---|---|
-| K-6 | `excerpt`/`extract` alan adı hatası — tüm detay içeriği kayboluyor | 🔴 Kritik | T-16 |
-| K-7 | Kişi adları ham HTML gösteriliyor | 🔴 Kritik | T-16 |
-| O-14 | Olay bağlantısı genel varlığa gidiyor | 🟠 Orta | T-18 |
-| O-15 | Otomatik karanlık dosyada uydurma "KAPANDI" + detay tekrarı | 🟠 Orta | T-17 |
-| O-16 | `description` alanı hiç gösterilmiyor | 🟠 Orta | T-16 |
-| U-6 | Derinlik yok — uygulama içi araştırma katmanı gerekiyor | 🟡 Ürün | T-19, T-20 |
-| m-9 | Test kümesi gerçek API yanıtıyla beslenmiyor | ⚪ Küçük | T-16 |
+| Kod  | Bulgu                                                              | Ağırlık   | Talimat    |
+| ---- | ------------------------------------------------------------------ | --------- | ---------- |
+| K-6  | `excerpt`/`extract` alan adı hatası — tüm detay içeriği kayboluyor | 🔴 Kritik | T-16       |
+| K-7  | Kişi adları ham HTML gösteriliyor                                  | 🔴 Kritik | T-16       |
+| O-14 | Olay bağlantısı genel varlığa gidiyor                              | 🟠 Orta   | T-18       |
+| O-15 | Otomatik karanlık dosyada uydurma "KAPANDI" + detay tekrarı        | 🟠 Orta   | T-17       |
+| O-16 | `description` alanı hiç gösterilmiyor                              | 🟠 Orta   | T-16       |
+| U-6  | Derinlik yok — uygulama içi araştırma katmanı gerekiyor            | 🟡 Ürün   | T-19, T-20 |
+| m-9  | Test kümesi gerçek API yanıtıyla beslenmiyor                       | ⚪ Küçük  | T-16       |
 
 **PLAN-01'den devredilenler** (bu planda ele alınacak):
 
-| Kod | Bulgu | Talimat |
-|---|---|---|
-| O-10 | `text-brand` kontrast yetersizliği (karanlık dosyalar bölümü) | T-17 |
-| O-11 | `holidays` alanında Vikipedi şablon artığı çöp kayıtlar | T-21 |
-| O-12 | `allScience` editör/otomatik mükerrerliğini ayıklamıyor | T-21 |
-| O-13 | `react-router` güvenlik danışma kayıtları (kırıcı yükseltme) | T-22 |
-| m-7, m-8 | Zararsız küçük notlar | T-21 |
+| Kod      | Bulgu                                                         | Talimat |
+| -------- | ------------------------------------------------------------- | ------- |
+| O-10     | `text-brand` kontrast yetersizliği (karanlık dosyalar bölümü) | T-17    |
+| O-11     | `holidays` alanında Vikipedi şablon artığı çöp kayıtlar       | T-21    |
+| O-12     | `allScience` editör/otomatik mükerrerliğini ayıklamıyor       | T-21    |
+| O-13     | `react-router` güvenlik danışma kayıtları (kırıcı yükseltme)  | T-22    |
+| m-7, m-8 | Zararsız küçük notlar                                         | T-21    |
 
 ---
 

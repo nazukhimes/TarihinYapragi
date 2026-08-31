@@ -79,8 +79,8 @@ Tüm bu bileşenler (+ `ui.tsx`, ortak parçalar) `src/components/` altında ya�
 kendisi de artık `App.tsx`'in kendi state'i değil** — `react-router-dom`'un URL
 state'i (T-06, bkz. 2.8). **T-13'te** veri türetme (`useMemo` katmanı) ve
 sunum, `App.tsx`'ten `src/hooks/useGunVerisi.ts` ile 9 yeni `components/*.tsx`
-dosyasına ayrıştırıldı; `App.tsx`'in kendisi artık yalnızca *düzen + durum +
-efekt* kabuğu — tek durum sahibi olma ilkesi bozulmadı, yalnızca JSX/hesaplama
+dosyasına ayrıştırıldı; `App.tsx`'in kendisi artık yalnızca _düzen + durum +
+efekt_ kabuğu — tek durum sahibi olma ilkesi bozulmadı, yalnızca JSX/hesaplama
 hacmi dışarı taşındı (bkz. 4.1, 4.6).
 
 ---
@@ -178,26 +178,26 @@ kanıtlar (`suikast`, `katliam`, `idam edil`, can kaybı belirtilen `deprem`…)
 tek başına yeterli (puan 3). Dönen etiket `App.tsx` içinde `CaseType`'a
 haritalanır:
 
-| Tema etiketi | `CaseType` |
-|---|---|
-| Suikast | `suikast` |
-| İnfaz & İdam | `idam` |
-| Kayıp & Gizem | `kayıp` |
-| Felaket | `felaket` |
-| *(diğer / Şiddet)* | `katliam` |
+| Tema etiketi       | `CaseType` |
+| ------------------ | ---------- |
+| Suikast            | `suikast`  |
+| İnfaz & İdam       | `idam`     |
+| Kayıp & Gizem      | `kayıp`    |
+| Felaket            | `felaket`  |
+| _(diğer / Şiddet)_ | `katliam`  |
 
 ### 2.4 Otomatik sohbet kartı üretimi — `buildAutoTalk()`
 
 En fazla 5 kart üretir, sabit bir sırayla:
 
-| id | Koşul | İçerik |
-|---|---|---|
-| `auto-lead` | `selected[0]` ya da `events[0]` var | Günün manşeti |
-| `auto-contrast` | ≥2 olay | En eski ile en yeni arasındaki yıl farkı |
-| `auto-birth` | Küçük resimli + özetli doğum | Portre kartı |
-| `auto-death` | Özetli vefat | Veda kartı |
-| `auto-dark` | Vefatlarda karanlık tema | Karanlık arşiv kartı |
-| `auto-holiday` | `holidays` dolu | Bugünün anlamı |
+| id              | Koşul                               | İçerik                                   |
+| --------------- | ----------------------------------- | ---------------------------------------- |
+| `auto-lead`     | `selected[0]` ya da `events[0]` var | Günün manşeti                            |
+| `auto-contrast` | ≥2 olay                             | En eski ile en yeni arasındaki yıl farkı |
+| `auto-birth`    | Küçük resimli + özetli doğum        | Portre kartı                             |
+| `auto-death`    | Özetli vefat                        | Veda kartı                               |
+| `auto-dark`     | Vefatlarda karanlık tema            | Karanlık arşiv kartı                     |
+| `auto-holiday`  | `holidays` dolu                     | Bugünün anlamı                           |
 
 `minutes` alanı gövde uzunluğundan tahmin edilir: `<240` → 1 dk, `<460` → 2 dk, üstü → 3 dk.
 
@@ -210,19 +210,19 @@ efekt yeni bir `AbortController` kurar, temizlik fonksiyonu `ctrl.abort()` çağ
 `fetchDayData`'ya `ctrl.signal` iletilir. Geç dönen eski istek artık yalnızca
 yok sayılmaz — **ağ düzeyinde iptal edilir** (bkz. ANALIZ-RAPORU O-4, ✅ T-05).
 `AbortError` `isAbortError()` ile ayırt edilip sessizce yutulur; `error` state'i
-yalnızca *beklenmeyen* (abort dışı) bir promise reddi için bir güvenlik ağıdır.
+yalnızca _beklenmeyen_ (abort dışı) bir promise reddi için bir güvenlik ağıdır.
 
 ### 2.6 Tarih yardımcıları — `src/lib/date.ts`
 
 Saf, bileşenden bağımsız tarih hesaplama fonksiyonları (T-03). `leaf.tsx`'te
 2024'e sabitlenmiş eski `dayOfYear`/`daysInMonth` tanımlarının yerini aldı:
 
-| Fonksiyon | İş |
-|---|---|
-| `isLeapYear(year)` | Gregoryen artık yıl kuralı |
-| `daysInMonth(month, year?)` | Aydaki gün sayısı; `year` verilmezse Şubat **29** kabul edilir (arşiv modu — mini takvimde 29 Şubat her zaman seçilebilir kalır) |
-| `dayOfYear(month, day, year?)` | Yılın kaçıncı günü; `year` verilmezse `new Date().getFullYear()` |
-| `weekdayIndex(month, day, year?)` | Haftanın günü (0=Pazar); 29 Şubat artık olmayan bir yılda **`null`** döner |
+| Fonksiyon                         | İş                                                                                                                               |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `isLeapYear(year)`                | Gregoryen artık yıl kuralı                                                                                                       |
+| `daysInMonth(month, year?)`       | Aydaki gün sayısı; `year` verilmezse Şubat **29** kabul edilir (arşiv modu — mini takvimde 29 Şubat her zaman seçilebilir kalır) |
+| `dayOfYear(month, day, year?)`    | Yılın kaçıncı günü; `year` verilmezse `new Date().getFullYear()`                                                                 |
+| `weekdayIndex(month, day, year?)` | Haftanın günü (0=Pazar); 29 Şubat artık olmayan bir yılda **`null`** döner                                                       |
 
 `leaf.tsx` bu dört fonksiyonu içe aktarır; kendi içinde tarih hesaplaması
 **tanımlamaz**. `weekdayIndex` `null` döndüğünde yaprak "ARTIK GÜN" bilgisini
@@ -235,9 +235,9 @@ kurulum) ve bunu paylaşan `useInView<T>(fallbackMs = 1200)` hook'u (T-04).
 Eskiden her `Reveal`/`CountUp` kendi gözlemcisini kuruyordu (181 örnek); artık
 hepsi aynı gözlemciyi ve bir `WeakMap<Element, callback>` kaydını paylaşıyor.
 
-| Parça | İş |
-|---|---|
-| `getObserver()` | Gözlemciyi tembel oluşturur; `IntersectionObserver` yoksa `null` döner |
+| Parça                   | İş                                                                                                                |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `getObserver()`         | Gözlemciyi tembel oluşturur; `IntersectionObserver` yoksa `null` döner                                            |
 | `useInView(fallbackMs)` | `{ ref, inView }` döner; eleman görünür olunca **veya** `fallbackMs` (vars. 1200 ms) dolunca `inView = true` olur |
 
 **Güvenlik ağı ilkesi:** `inView`, üç yoldan biriyle `true` olabilir — (1) gerçek
@@ -389,14 +389,14 @@ olarak ertelendi; paket boyutu artışı (+64,64 kB gzip) talimatın kendi eşi�
 
 ### 4.1 `src/hooks/useGunVerisi.ts` — birleştirme (useMemo) katmanı (T-13'te `App.tsx`'ten taşındı)
 
-| useMemo | Girdi | Çıktı | Kural |
-|---|---|---|---|
-| `mergedEvents` | CURATED.events + API events | `MergedEvent[]` | matchKeys ile ayıkla, yıla göre **artan** sırala |
-| `births` / `deaths` | API | `PersonCard[]` | `pages[0]` olmayan atlanır |
-| `allCases` | CURATED.cases + tarama | `CaseFile[]` | otomatik olanlar `slice(0, 6)` |
-| `allScience` | CURATED.science + bilim/keşif olaylar | `ScienceMilestone[]` | otomatik `slice(0, 3)`, yıla göre **azalan** |
-| `talkCards` | CURATED.talk + buildAutoTalk | `TalkCard[]` | toplam `slice(0, 9)` |
-| `spotlight` | CURATED.spotlight ya da `selected[0]` | manşet | editör varsa o kazanır |
+| useMemo             | Girdi                                 | Çıktı                | Kural                                            |
+| ------------------- | ------------------------------------- | -------------------- | ------------------------------------------------ |
+| `mergedEvents`      | CURATED.events + API events           | `MergedEvent[]`      | matchKeys ile ayıkla, yıla göre **artan** sırala |
+| `births` / `deaths` | API                                   | `PersonCard[]`       | `pages[0]` olmayan atlanır                       |
+| `allCases`          | CURATED.cases + tarama                | `CaseFile[]`         | otomatik olanlar `slice(0, 6)`                   |
+| `allScience`        | CURATED.science + bilim/keşif olaylar | `ScienceMilestone[]` | otomatik `slice(0, 3)`, yıla göre **azalan**     |
+| `talkCards`         | CURATED.talk + buildAutoTalk          | `TalkCard[]`         | toplam `slice(0, 9)`                             |
+| `spotlight`         | CURATED.spotlight ya da `selected[0]` | manşet               | editör varsa o kazanır                           |
 
 Ayrıca `tickerItems` (14 öğeye seyreltilmiş bant) ve `ambientYears` (arka plandaki
 dev yıl rakamları) türetilir. `useGunVerisi(data, curated)` bu yediyi tek bir
@@ -420,30 +420,30 @@ döner (ucuz kısayol).
 
 ### 4.2 `components/leaf.tsx`
 
-| Export | İş |
-|---|---|
-| `MONTHS_TR`, `WEEKDAYS_TR`, `WEEKDAYS_SHORT` | Türkçe sabitler |
-| `LiveClock` | Saniyelik `setInterval`, `md` altında gizli |
-| `CalendarLeaf` | Yaprak + önceki/sonraki/bugün + picker tetikleyici |
-| `MiniCalendar` *(dosya içi)* | Pazartesi başlangıçlı ay ızgarası |
-| `Ticker` | CSS `@keyframes tickerSlide` ile sonsuz bant, hover'da durur |
+| Export                                       | İş                                                           |
+| -------------------------------------------- | ------------------------------------------------------------ |
+| `MONTHS_TR`, `WEEKDAYS_TR`, `WEEKDAYS_SHORT` | Türkçe sabitler                                              |
+| `LiveClock`                                  | Saniyelik `setInterval`, `md` altında gizli                  |
+| `CalendarLeaf`                               | Yaprak + önceki/sonraki/bugün + picker tetikleyici           |
+| `MiniCalendar` _(dosya içi)_                 | Pazartesi başlangıçlı ay ızgarası                            |
+| `Ticker`                                     | CSS `@keyframes tickerSlide` ile sonsuz bant, hover'da durur |
 
 Yaprak `key={`${day}-${month}`}` ile yeniden bağlanır → `.leaf-flip` animasyonu
 her gün değişiminde tekrar oynar. Bu bilinçli bir hiledir.
 
 ### 4.3 `components/sections.tsx`
 
-| Export | İş |
-|---|---|
-| `matchQuery(q, ...texts)` | Türkçe duyarlı arama; boş sorgu **her zaman true** |
-| `formatYear(y)` | `-480` → `MÖ 480` |
-| `centuryOf(y)` *(dosya içi)* | Zaman tünelinde yüzyıl ayracı |
-| `TimelineSection` | Kategori çipleri + dikey zaman çizgisi + genişleyen detay |
-| `itemToPeople()` | `OtdItem[]` → `PersonCard[]` |
-| `PeopleRow` | Yatay kaydırmalı kart şeridi + modal |
-| `CasesSection` | 2 sütunlu dosya kartları, damgalı durum etiketi |
-| `ScienceSection` | 3 sütunlu dönüm noktası kartları |
-| `SectionShell` | `id` + `scroll-mt-28` + `.section-shell` (`content-visibility:auto`, T-13) sarmalayıcı (yapışkan nav için) |
+| Export                       | İş                                                                                                         |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `matchQuery(q, ...texts)`    | Türkçe duyarlı arama; boş sorgu **her zaman true**                                                         |
+| `formatYear(y)`              | `-480` → `MÖ 480`                                                                                          |
+| `centuryOf(y)` _(dosya içi)_ | Zaman tünelinde yüzyıl ayracı                                                                              |
+| `TimelineSection`            | Kategori çipleri + dikey zaman çizgisi + genişleyen detay                                                  |
+| `itemToPeople()`             | `OtdItem[]` → `PersonCard[]`                                                                               |
+| `PeopleRow`                  | Yatay kaydırmalı kart şeridi + modal                                                                       |
+| `CasesSection`               | 2 sütunlu dosya kartları, damgalı durum etiketi                                                            |
+| `ScienceSection`             | 3 sütunlu dönüm noktası kartları                                                                           |
+| `SectionShell`               | `id` + `scroll-mt-28` + `.section-shell` (`content-visibility:auto`, T-13) sarmalayıcı (yapışkan nav için) |
 
 **T-13 API değişikliği:** `TimelineSection`/`PeopleRow`/`CasesSection`/
 `ScienceSection` artık bir `query: string` prop'u **almaz** — bunun yerine
@@ -462,7 +462,7 @@ ayrıntıydı (arama açıkken bile çip sayaçları günün toplamını göster
 - `BroadcastMode` — tam ekran teleprompter; `←` `→` `Space` `Esc` klavye desteği,
   ilerleme çubuğu, nokta göstergeleri, `scanlines` efekti — **`broadcast.tsx`**
   dosyasına taşındı, `App.tsx`'te `React.lazy(() => import("./components/
-  broadcast"))` ile yükleniyor (T-13 Adım 1). Çoğu ziyaretçi Yayın Modu'nu hiç
+broadcast"))` ile yükleniyor (T-13 Adım 1). Çoğu ziyaretçi Yayın Modu'nu hiç
   açmadığı için bu içerik ilk pakete girmiyor; `Suspense` geri dönüşü
   (`YayinYukleniyor`, `App.tsx`) tam ekran koyu zemin + yanıp sönen nokta.
 
@@ -474,15 +474,15 @@ verir, tekrar paketlemez).
 
 ### 4.5 `components/ui.tsx`
 
-| Export | İş |
-|---|---|
-| `Reveal` | Giriş animasyonu; görünürlük `useInView` (2.7) üzerinden — güvenlik ağlı *(K-3 ✅ T-04)* |
-| `CountUp` | Sayaç animasyonu; `useInView`'dan gelen `inView` her `to` değişiminde yeniden tetikler, önceki değerden geçiş yapar *(K-2 ✅ T-04)* |
-| `SectionHead` | "BÖLÜM 01 · Kronoloji" başlık bloğu |
-| `Modal` | Esc ile kapanır, `body` kaydırmasını kilitler, Tab döngüsü (odak tuzağı) + kapanışta odağı çağırana iade eder, isteğe bağlı `titleId` prop ile `aria-labelledby` *(odak tuzağı T-07'de eklendi)* |
-| `toast()` / `Toaster` | `window` CustomEvent tabanlı, en fazla 3 bildirim, kap `role="status"`/`aria-live="polite"` taşır *(T-07)* |
-| `copyText()` | `navigator.clipboard` → `execCommand` yedeği |
-| `IconXxx` (11 adet) | Elle çizilmiş SVG; `currentColor` kullanır |
+| Export                | İş                                                                                                                                                                                               |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `Reveal`              | Giriş animasyonu; görünürlük `useInView` (2.7) üzerinden — güvenlik ağlı _(K-3 ✅ T-04)_                                                                                                         |
+| `CountUp`             | Sayaç animasyonu; `useInView`'dan gelen `inView` her `to` değişiminde yeniden tetikler, önceki değerden geçiş yapar _(K-2 ✅ T-04)_                                                              |
+| `SectionHead`         | "BÖLÜM 01 · Kronoloji" başlık bloğu                                                                                                                                                              |
+| `Modal`               | Esc ile kapanır, `body` kaydırmasını kilitler, Tab döngüsü (odak tuzağı) + kapanışta odağı çağırana iade eder, isteğe bağlı `titleId` prop ile `aria-labelledby` _(odak tuzağı T-07'de eklendi)_ |
+| `toast()` / `Toaster` | `window` CustomEvent tabanlı, en fazla 3 bildirim, kap `role="status"`/`aria-live="polite"` taşır _(T-07)_                                                                                       |
+| `copyText()`          | `navigator.clipboard` → `execCommand` yedeği                                                                                                                                                     |
+| `IconXxx` (11 adet)   | Elle çizilmiş SVG; `currentColor` kullanır                                                                                                                                                       |
 
 **Not:** İkon kütüphanesi yok — hepsi 24×24 viewBox'ta elle çizilmiş.
 Yeni ikon eklerken aynı kalıbı izleyin: `viewBox="0 0 24 24"`, `fill="none"`,
@@ -494,18 +494,18 @@ Yeni ikon eklerken aynı kalıbı izleyin: `viewBox="0 0 24 24"`, `fill="none"`,
 göre yapıldı — her parça `App.tsx`'in JSX'inde neyin karşılığıysa onu taşıyor,
 davranış **birebir aynı** kaldı:
 
-| Dosya | Karşılık geldiği eski JSX | Not |
-|---|---|---|
-| `UstBar.tsx` | Üst bar: logo, arama (masaüstü+mobil), canlı saat, Yayın Modu düğmesi, arama sonuç şeridi | `aramaRef`/`aramaMobilRef` `App.tsx`'te kalır (klavye kısayolu `/` bunlara odaklanır), prop olarak geçirilir |
-| `AcilisBolumu.tsx` | Açılış `<section>`: dev ambiyans yılları + takvim yaprağı + paylaş düğmesi + `GunOzeti` + `OzelGunler` + haber bandı | `veri: GunVerisi`'i tek prop olarak alır (bkz. 4.1) |
-| `GunOzeti.tsx` | Spotlight başlığı + sayaçlar + zaman aralığı + yükleniyor/hata durumları | `HATA_BASLIK` haritası buraya taşındı; `stats` dizisi burada kurulur (`hedef` alanıyla, m-1 düzeltmesi) |
-| `OzelGunler.tsx` | "Özel dosyalı günler" pill şeridi | `CURATED`'ı doğrudan içe aktarır |
-| `BolumNav.tsx` | Yapışkan bölüm navigasyonu | `NAV` dizisi artık burada tanımlı (eskiden `App.tsx`'te); `visible` prop'u `false` ise `null` döner |
-| `Bolumler.tsx` | Yedi içerik bölümü (`SectionShell`×7) + "Bugünün anlamı" şeridi + arama boş durumu | `arama: AramaSonuclari`'ni her bölüme `matched` olarak dağıtır (bkz. 4.1, 4.3) |
-| `AltBilgi.tsx` | Footer | Durumsuz, saf statik JSX |
-| `KisayolYardimi.tsx` | Klavye kısayolları modalı (`?` ile açılır) | `Modal`'ı sarar, kısayol listeleri sabit dizi |
-| `Iskeletler.tsx` | `SkeletonLines`/`SkeletonCards` | Değişmedi, yalnızca taşındı |
-| `src/hooks/useKlavyeKisayollari.ts` | Global `←/→/T///?/Esc` `keydown` dinleyicisi | `aktif` prop'u eski `if (broadcast) return;` kontrolünün yerini alır |
+| Dosya                               | Karşılık geldiği eski JSX                                                                                            | Not                                                                                                          |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `UstBar.tsx`                        | Üst bar: logo, arama (masaüstü+mobil), canlı saat, Yayın Modu düğmesi, arama sonuç şeridi                            | `aramaRef`/`aramaMobilRef` `App.tsx`'te kalır (klavye kısayolu `/` bunlara odaklanır), prop olarak geçirilir |
+| `AcilisBolumu.tsx`                  | Açılış `<section>`: dev ambiyans yılları + takvim yaprağı + paylaş düğmesi + `GunOzeti` + `OzelGunler` + haber bandı | `veri: GunVerisi`'i tek prop olarak alır (bkz. 4.1)                                                          |
+| `GunOzeti.tsx`                      | Spotlight başlığı + sayaçlar + zaman aralığı + yükleniyor/hata durumları                                             | `HATA_BASLIK` haritası buraya taşındı; `stats` dizisi burada kurulur (`hedef` alanıyla, m-1 düzeltmesi)      |
+| `OzelGunler.tsx`                    | "Özel dosyalı günler" pill şeridi                                                                                    | `CURATED`'ı doğrudan içe aktarır                                                                             |
+| `BolumNav.tsx`                      | Yapışkan bölüm navigasyonu                                                                                           | `NAV` dizisi artık burada tanımlı (eskiden `App.tsx`'te); `visible` prop'u `false` ise `null` döner          |
+| `Bolumler.tsx`                      | Yedi içerik bölümü (`SectionShell`×7) + "Bugünün anlamı" şeridi + arama boş durumu                                   | `arama: AramaSonuclari`'ni her bölüme `matched` olarak dağıtır (bkz. 4.1, 4.3)                               |
+| `AltBilgi.tsx`                      | Footer                                                                                                               | Durumsuz, saf statik JSX                                                                                     |
+| `KisayolYardimi.tsx`                | Klavye kısayolları modalı (`?` ile açılır)                                                                           | `Modal`'ı sarar, kısayol listeleri sabit dizi                                                                |
+| `Iskeletler.tsx`                    | `SkeletonLines`/`SkeletonCards`                                                                                      | Değişmedi, yalnızca taşındı                                                                                  |
+| `src/hooks/useKlavyeKisayollari.ts` | Global `←/→/T///?/Esc` `keydown` dinleyicisi                                                                         | `aktif` prop'u eski `if (broadcast) return;` kontrolünün yerini alır                                         |
 
 `App.tsx`'te kalanlar: `useParams`/URL ayrıştırma, tüm `useState`, `useDayData`,
 `useGunVerisi`/`useAramaSonuclari` çağrıları, `setDate`/`gunKaydir`/
@@ -521,30 +521,30 @@ gün bazlı meta `useEffect`'i (2.9) ve yukarıdaki bileşenleri saran düzen JS
 Tailwind v4'te renkler CSS değişkeni olarak tanımlanır ve otomatik olarak
 `bg-*`, `text-*`, `border-*` yardımcılarına dönüşür.
 
-| Grup | Değişkenler |
-|---|---|
-| Zemin (koyu) | `night` `night-2` `panel` `panel-2` `line` |
-| Metin (koyu üzerine) | `ink` `ink-dim` `ink-faint` |
-| Kâğıt (açık) | `paper` `paper-2` `inkpaper` `inkpaper-dim` |
-| Vurgu | `brand` (kırmızı) `brand-deep` `gold` `teal` `sky` `copper` `lilac` `leaf` `slate` |
-| Font | `--font-display` (Fraunces) `--font-body` (IBM Plex Sans) `--font-mono` (IBM Plex Mono) |
+| Grup                 | Değişkenler                                                                             |
+| -------------------- | --------------------------------------------------------------------------------------- |
+| Zemin (koyu)         | `night` `night-2` `panel` `panel-2` `line`                                              |
+| Metin (koyu üzerine) | `ink` `ink-dim` `ink-faint`                                                             |
+| Kâğıt (açık)         | `paper` `paper-2` `inkpaper` `inkpaper-dim`                                             |
+| Vurgu                | `brand` (kırmızı) `brand-deep` `gold` `teal` `sky` `copper` `lilac` `leaf` `slate`      |
+| Font                 | `--font-display` (Fraunces) `--font-body` (IBM Plex Sans) `--font-mono` (IBM Plex Mono) |
 
 **İki paletli sistem:** Koyu arayüz + açık "kâğıt" yüzeyleri. Kâğıt yüzeylerde
 (`paper` sınıfı) metin rengi `inkpaper` olmalı, `ink` değil.
 
 ### 5.2 Özel sınıflar
 
-| Sınıf | Etki |
-|---|---|
-| `.glowfield` | 3 katmanlı radyal ışıma + dikey gradyan |
-| `.gridlines` | 44px ızgara, radyal maske ile üstte söner |
-| `.noise` | SVG `feTurbulence` grenli doku, `z-70`, `opacity .05` |
-| `.paper` / `.paper-grain` | Kâğıt gradyanı + gren |
-| `.torn-edge` | `::after` ile testere dişi yırtık kenar |
-| `.ruled` | Çizgili defter satırları (28px aralık) |
-| `.outline-num` | İçi boş dev rakamlar (`-webkit-text-stroke`) |
-| `.scanlines` | Yayın modu tarama çizgileri |
-| `.row-scroll` | İnce özel kaydırma çubuğu |
+| Sınıf                     | Etki                                                  |
+| ------------------------- | ----------------------------------------------------- |
+| `.glowfield`              | 3 katmanlı radyal ışıma + dikey gradyan               |
+| `.gridlines`              | 44px ızgara, radyal maske ile üstte söner             |
+| `.noise`                  | SVG `feTurbulence` grenli doku, `z-70`, `opacity .05` |
+| `.paper` / `.paper-grain` | Kâğıt gradyanı + gren                                 |
+| `.torn-edge`              | `::after` ile testere dişi yırtık kenar               |
+| `.ruled`                  | Çizgili defter satırları (28px aralık)                |
+| `.outline-num`            | İçi boş dev rakamlar (`-webkit-text-stroke`)          |
+| `.scanlines`              | Yayın modu tarama çizgileri                           |
+| `.row-scroll`             | İnce özel kaydırma çubuğu                             |
 
 ### 5.3 Animasyonlar
 
@@ -558,13 +558,13 @@ Hepsi dosya sonundaki `@media (prefers-reduced-motion: reduce)` bloğuyla 0.01ms
 
 ## 6. Genişletme Noktaları
 
-| Yapmak istediğiniz | Adımlar |
-|---|---|
-| **Yeni bölüm** | 1) `BolumNav.tsx` → `NAV` dizisine `{id, label}` ekle · 2) `SectionShell` + `SectionHead` ile blok yaz · 3) veri için yeni `useMemo` · 4) `SkeletonCards` yükleme durumu |
-| **Yeni kategori** | 1) `data/types.ts` → `CategoryId` birleşimine ekle · 2) `CATEGORIES`'e `{label, color}` · 3) `classification.ts` → `KURALLAR`'a puanlı kural(lar) + `PRIORITY`'ye ekle · 4) `npm run siniflandirma` ile doğrula |
-| **Yeni dosya türü** | 1) `data/types.ts` → `CaseType` birleşimi · 2) `CASE_LABELS` · 3) `App.tsx` tema→tür haritası |
-| **Yeni gün içeriği** | İlgili ay dosyasına (`data/gunler/MM-ad.ts`) `"MM-DD": { spotlight?, events?, cases, science, talk }` ekle — şablon ve kalite ölçütleri için [`ICERIK-SABLONU.md`](ICERIK-SABLONU.md) |
-| **Yeni dil** | `wiki.ts` → `load()` çağrılarını ve `pick()` mantığını genişlet; `sources` tipini güncelle |
+| Yapmak istediğiniz   | Adımlar                                                                                                                                                                                                         |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Yeni bölüm**       | 1) `BolumNav.tsx` → `NAV` dizisine `{id, label}` ekle · 2) `SectionShell` + `SectionHead` ile blok yaz · 3) veri için yeni `useMemo` · 4) `SkeletonCards` yükleme durumu                                        |
+| **Yeni kategori**    | 1) `data/types.ts` → `CategoryId` birleşimine ekle · 2) `CATEGORIES`'e `{label, color}` · 3) `classification.ts` → `KURALLAR`'a puanlı kural(lar) + `PRIORITY`'ye ekle · 4) `npm run siniflandirma` ile doğrula |
+| **Yeni dosya türü**  | 1) `data/types.ts` → `CaseType` birleşimi · 2) `CASE_LABELS` · 3) `App.tsx` tema→tür haritası                                                                                                                   |
+| **Yeni gün içeriği** | İlgili ay dosyasına (`data/gunler/MM-ad.ts`) `"MM-DD": { spotlight?, events?, cases, science, talk }` ekle — şablon ve kalite ölçütleri için [`ICERIK-SABLONU.md`](ICERIK-SABLONU.md)                           |
+| **Yeni dil**         | `wiki.ts` → `load()` çağrılarını ve `pick()` mantığını genişlet; `sources` tipini güncelle                                                                                                                      |
 
 ---
 
@@ -581,8 +581,7 @@ Yayın Modu açılınca iner**, `React.lazy`). İlk yük (`react`+`index`) =
 
 **T-13 öncesi (T-12 sonrası, tek parça, 59 modül):** 537,97 kB JS
 (174,38 kB gzip), 55,01 kB CSS (10,44 kB gzip, belge klasörleri dahil
-taranmış). **İlk yük neredeyse değişmedi** (174,38→175,54 kB gzip, kod bölme
-+`manualChunks` sayesinde parça sayısı arttı ama toplam gzip bayt hafifçe
+taranmış). **İlk yük neredeyse değişmedi** (174,38→175,54 kB gzip, kod bölme +`manualChunks` sayesinde parça sayısı arttı ama toplam gzip bayt hafifçe
 arttı bile — çoklu parça gzip sıkıştırmasının bağlam paylaşamamasının
 beklenen bedeli). **Kök neden:** `rollup-plugin-visualizer` (`npm run
 analyze`, T-13 Adım 9) ile incelenince `src/data/gunler/` (60 günlük editör
@@ -597,11 +596,11 @@ yüklemeyi gerektiriyor (bkz. Bilinen maliyet kalemleri, aşağı).
 Bash üzerinden, Browser pane'den bağımsız, T-13):** İlk kez Performans,
 Erişilebilirlik ve SEO **aynı üretim derlemesine karşı, birlikte** ölçüldü.
 
-| Kategori | Puan | Not |
-|---|---|---|
-| Performans | **92** | LCP 2,3 s · CLS 0,009 · TBT 240 ms · FCP 2,1 s (29 Ekim, temiz ölçüm) |
-| Erişilebilirlik | **96** | T-07'deki 96 ile birebir aynı, regresyon yok |
-| SEO | **100** | T-08'deki 100 ile birebir aynı, regresyon yok |
+| Kategori        | Puan    | Not                                                                   |
+| --------------- | ------- | --------------------------------------------------------------------- |
+| Performans      | **92**  | LCP 2,3 s · CLS 0,009 · TBT 240 ms · FCP 2,1 s (29 Ekim, temiz ölçüm) |
+| Erişilebilirlik | **96**  | T-07'deki 96 ile birebir aynı, regresyon yok                          |
+| SEO             | **100** | T-08'deki 100 ile birebir aynı, regresyon yok                         |
 
 **Ölçüm sapmaları (T-13 Tamamlanma Kaydı'nda ayrıntılı):** (1) dev sunucusuna
 (`npm run dev`) karşı ölçülen ilk deneme Performans **42** verdi — bu bir
@@ -628,7 +627,7 @@ Bilinen maliyet kalemleri:
   önbellek parçasında (`manualChunks`).
 - **`data/gunler/*.ts` hâlâ hiç tembel yüklenmiyor** — 60 günün tamamı (T-10)
   ana pakete giriyor; kullanıcı tek bir günü görüyor. T-13'ün `rollup-plugin-
-  visualizer` ölçümü bunun artık paketin **baskın** kalemi olduğunu doğruladı
+visualizer` ölçümü bunun artık paketin **baskın** kalemi olduğunu doğruladı
   (~300 kB kaynak). T-10'un kendi A3 adımı bu amaçla ay bazlı `import()`
   tasarladı ama uygulamadı; T-13 de kendi Kapsam Dışı tablosu gereği
   dokunmadı — 366 güne çıkılırsa (PLAN-02) artık **zorunlu** bir adım.
@@ -672,26 +671,26 @@ kalitesi açısından önemli değişiklikler:
 Tam liste ve kanıtlar → [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md)
 Üstü çizili satırlar tamamlanan talimatlarla kapanmıştır.
 
-| Kod | Özet | Talimat |
-|---|---|---|
-| ~~K-1~~ | ~~`dayOfYear` / `daysInMonth` 2024'e sabit~~ **✅ çözüldü** (tarih mantığı `src/lib/date.ts`'e taşındı) | T-03 · 2026-08-21 |
-| ~~K-2~~ | ~~`CountUp` gün değişiminde tetiklenmiyor~~ **✅ çözüldü** (`useInView` + `[to,duration,inView]` bağımlılığı) | T-04 · 2026-08-21 |
-| ~~K-3~~ | ~~`Reveal` için IO yedeği yok~~ **✅ çözüldü** (paylaşılan gözlemci + `setTimeout` güvenlik ağı) | T-04 · 2026-08-21 |
-| ~~K-4~~ | ~~HMR sabit port~~ **✅ çözüldü** | T-01 · 2026-08-21 |
-| ~~K-5~~ | ~~Gün gezinme düğmeleri (Önceki/Sonraki/Bugüne dön) dekoratif katman yüzünden fare/dokunmatikle tıklanamıyor~~ | **✅ ÇÖZÜLDÜ (T-15)** — dekoratif katmanlar kartın kendi `relative` sarmalayıcısına alındı (`inset-0` artık kartın kutusunu ifade ediyor), `pointer-events-none` + `aria-hidden` eklendi, gezinme satırı `relative` yapıldı. Düğmeler hem görünür hem tıklanabilir |
-| ~~O-1~~ | ~~10 kullanılmayan bağımlılık~~ **✅ çözüldü** (11 paket kaldırıldı, `react-router-dom` korundu) | T-01 · 2026-08-21 |
-| ~~O-4~~ | ~~Ağ isteği iptali yok, TR doluyken de EN çekiliyordu~~ **✅ çözüldü** (`AbortController` + TR-önce/EN-tamamlayıcı + 429/5xx için sınırlı deneme) | T-05 · 2026-08-21 |
-| ~~O-8~~ | ~~Önbellek stratejisi yarım (TTL/sınır yok)~~ **✅ çözüldü** (`savedAt`/`stale`, `pruneCache()` 60 kayıt, `memSet()` 40 kayıt FIFO) | T-05 · 2026-08-21 |
-| ~~O-6~~ | ~~Erişilebilirlik boşlukları (odak tuzağı, `aria-live`, skip link, arama etiketi, kontrast, `aria-pressed`)~~ **✅ çözüldü** | T-07 · 2026-08-21 |
-| ~~O-7~~ | ~~Klavye kısayolları yalnızca Yayın Modu'nda~~ **✅ çözüldü** (`←`/`→`/`T`/`/`/`?`/`Esc` + Kısayol Yardımı) | T-07 · 2026-08-21 |
-| O-5 | ErrorBoundary yok | T-09 |
-| O-10 | `text-brand` koyu zeminde metin/simge olarak yetersiz kontrast (Ticker başlığı, Karanlık Dosyalar rozeti/düğmesi) — T-07 sırasında gerçek bir Lighthouse denetimiyle keşfedildi | Henüz atanmadı |
-| O-12 | `allScience`, editör kaydını Vikipedi'nin aynı olayına karşı ayıklamıyor (`ScienceMilestone`'da `matchKeys` yok) — T-10 sırasında keşfedildi, bkz. `ANALIZ-RAPORU.md` §9 | Henüz atanmadı |
-| ~~U-1~~ | ~~Yönlendirme / paylaşılabilir URL yok~~ **✅ çözüldü** (`createBrowserRouter` + `src/lib/slug.ts`, URL tek doğruluk kaynağı) | T-06 · 2026-08-21 |
-| ~~U-2~~ | ~~İçerik 10/366 gün~~ **✅ çözüldü** (60/366 güne çıkarıldı, `curated.ts` 12 ay dosyasına bölündü, bkz. 3) | T-10 · 2026-08-22 |
-| ~~U-3~~ | ~~Otomatik sınıflandırma "ilk eşleşen kazanır", ölçülmemiş, yanlış pozitif tuzakları var~~ **✅ çözüldü** (puanlama + öncelik sırası + karanlık eşiği + altın küme, bkz. 2.2/2.3) | T-11 · 2026-08-22 |
-| ~~U-4~~ | ~~Favicon, PWA, SEO, paylaşım kartı eksik~~ **✅ çözüldü** (favicon/manifest/`og:*`/`twitter:*`/JSON-LD/sitemap/service worker, bkz. 9) | T-08 · 2026-08-21 |
-| U-5 | Test/lint altyapısı yok | T-12 |
+| Kod     | Özet                                                                                                                                                                              | Talimat                                                                                                                                                                                                                                                            |
+| ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| ~~K-1~~ | ~~`dayOfYear` / `daysInMonth` 2024'e sabit~~ **✅ çözüldü** (tarih mantığı `src/lib/date.ts`'e taşındı)                                                                           | T-03 · 2026-08-21                                                                                                                                                                                                                                                  |
+| ~~K-2~~ | ~~`CountUp` gün değişiminde tetiklenmiyor~~ **✅ çözüldü** (`useInView` + `[to,duration,inView]` bağımlılığı)                                                                     | T-04 · 2026-08-21                                                                                                                                                                                                                                                  |
+| ~~K-3~~ | ~~`Reveal` için IO yedeği yok~~ **✅ çözüldü** (paylaşılan gözlemci + `setTimeout` güvenlik ağı)                                                                                  | T-04 · 2026-08-21                                                                                                                                                                                                                                                  |
+| ~~K-4~~ | ~~HMR sabit port~~ **✅ çözüldü**                                                                                                                                                 | T-01 · 2026-08-21                                                                                                                                                                                                                                                  |
+| ~~K-5~~ | ~~Gün gezinme düğmeleri (Önceki/Sonraki/Bugüne dön) dekoratif katman yüzünden fare/dokunmatikle tıklanamıyor~~                                                                    | **✅ ÇÖZÜLDÜ (T-15)** — dekoratif katmanlar kartın kendi `relative` sarmalayıcısına alındı (`inset-0` artık kartın kutusunu ifade ediyor), `pointer-events-none` + `aria-hidden` eklendi, gezinme satırı `relative` yapıldı. Düğmeler hem görünür hem tıklanabilir |
+| ~~O-1~~ | ~~10 kullanılmayan bağımlılık~~ **✅ çözüldü** (11 paket kaldırıldı, `react-router-dom` korundu)                                                                                  | T-01 · 2026-08-21                                                                                                                                                                                                                                                  |
+| ~~O-4~~ | ~~Ağ isteği iptali yok, TR doluyken de EN çekiliyordu~~ **✅ çözüldü** (`AbortController` + TR-önce/EN-tamamlayıcı + 429/5xx için sınırlı deneme)                                 | T-05 · 2026-08-21                                                                                                                                                                                                                                                  |
+| ~~O-8~~ | ~~Önbellek stratejisi yarım (TTL/sınır yok)~~ **✅ çözüldü** (`savedAt`/`stale`, `pruneCache()` 60 kayıt, `memSet()` 40 kayıt FIFO)                                               | T-05 · 2026-08-21                                                                                                                                                                                                                                                  |
+| ~~O-6~~ | ~~Erişilebilirlik boşlukları (odak tuzağı, `aria-live`, skip link, arama etiketi, kontrast, `aria-pressed`)~~ **✅ çözüldü**                                                      | T-07 · 2026-08-21                                                                                                                                                                                                                                                  |
+| ~~O-7~~ | ~~Klavye kısayolları yalnızca Yayın Modu'nda~~ **✅ çözüldü** (`←`/`→`/`T`/`/`/`?`/`Esc` + Kısayol Yardımı)                                                                       | T-07 · 2026-08-21                                                                                                                                                                                                                                                  |
+| O-5     | ErrorBoundary yok                                                                                                                                                                 | T-09                                                                                                                                                                                                                                                               |
+| O-10    | `text-brand` koyu zeminde metin/simge olarak yetersiz kontrast (Ticker başlığı, Karanlık Dosyalar rozeti/düğmesi) — T-07 sırasında gerçek bir Lighthouse denetimiyle keşfedildi   | Henüz atanmadı                                                                                                                                                                                                                                                     |
+| O-12    | `allScience`, editör kaydını Vikipedi'nin aynı olayına karşı ayıklamıyor (`ScienceMilestone`'da `matchKeys` yok) — T-10 sırasında keşfedildi, bkz. `ANALIZ-RAPORU.md` §9          | Henüz atanmadı                                                                                                                                                                                                                                                     |
+| ~~U-1~~ | ~~Yönlendirme / paylaşılabilir URL yok~~ **✅ çözüldü** (`createBrowserRouter` + `src/lib/slug.ts`, URL tek doğruluk kaynağı)                                                     | T-06 · 2026-08-21                                                                                                                                                                                                                                                  |
+| ~~U-2~~ | ~~İçerik 10/366 gün~~ **✅ çözüldü** (60/366 güne çıkarıldı, `curated.ts` 12 ay dosyasına bölündü, bkz. 3)                                                                        | T-10 · 2026-08-22                                                                                                                                                                                                                                                  |
+| ~~U-3~~ | ~~Otomatik sınıflandırma "ilk eşleşen kazanır", ölçülmemiş, yanlış pozitif tuzakları var~~ **✅ çözüldü** (puanlama + öncelik sırası + karanlık eşiği + altın küme, bkz. 2.2/2.3) | T-11 · 2026-08-22                                                                                                                                                                                                                                                  |
+| ~~U-4~~ | ~~Favicon, PWA, SEO, paylaşım kartı eksik~~ **✅ çözüldü** (favicon/manifest/`og:*`/`twitter:*`/JSON-LD/sitemap/service worker, bkz. 9)                                           | T-08 · 2026-08-21                                                                                                                                                                                                                                                  |
+| U-5     | Test/lint altyapısı yok                                                                                                                                                           | T-12                                                                                                                                                                                                                                                               |
 
 ---
 
@@ -747,11 +746,11 @@ Manifest elle yazılmış statik bir dosya (`vite-plugin-pwa`'ya `manifest: fals
 verildi — kendi dosyamız kullanılıyor). Service worker `vite-plugin-pwa`
 (`registerType: "autoUpdate"`, `generateSW` modu) ile üretiliyor:
 
-| Rota | Strateji | Neden |
-|---|---|---|
-| `api.wikimedia.org/*` | `NetworkFirst` (5s zaman aşımı) | Tarihsel veri nadiren değişir ama güncel veri önceliklidir |
-| `upload.wikimedia.org/*` | `CacheFirst` | Görseller değişmez |
-| Statik varlıklar (`js/css/html/svg/png/ico/woff2`) | precache (`globPatterns`) | Uygulama kabuğu çevrimdışı açılsın diye |
+| Rota                                               | Strateji                        | Neden                                                      |
+| -------------------------------------------------- | ------------------------------- | ---------------------------------------------------------- |
+| `api.wikimedia.org/*`                              | `NetworkFirst` (5s zaman aşımı) | Tarihsel veri nadiren değişir ama güncel veri önceliklidir |
+| `upload.wikimedia.org/*`                           | `CacheFirst`                    | Görseller değişmez                                         |
+| Statik varlıklar (`js/css/html/svg/png/ico/woff2`) | precache (`globPatterns`)       | Uygulama kabuğu çevrimdışı açılsın diye                    |
 
 `registerSW.js` (üretim derlemesinde `index.html`'e otomatik enjekte edilir)
 sayfa yüklenince `navigator.serviceWorker.register('/sw.js')` çağırır — yalnızca
@@ -831,7 +830,7 @@ ertelendi" biçimindeki en yaygın örnek için can kaybı/yaralanma sözcüğü
 yakınlığı şartı eklenerek düzeltildi (bkz. `classification.ts` → `KARANLIK`
 "Felaket" majör kural); daha nadir örnekler (ör. "X faciası" bir olayı
 tarihlemek için kullanılıyor) çözülmeden bırakıldı — gömme (embedding)
-tabanlı bir yaklaşım gerektirir, T-11'in kendi *Kapsam Dışı* tablosunda
+tabanlı bir yaklaşım gerektirir, T-11'in kendi _Kapsam Dışı_ tablosunda
 bilinçli olarak dışarıda bırakılmış.
 
 ---
@@ -906,12 +905,12 @@ ayrı bir `useState` yoktur; seçili gün her zaman adres çubuğundan okunur.
 
 ### 12.1 URL şeması
 
-| Biçim | Örnek | Davranış |
-|---|---|---|
-| Kanonik ad biçimi | `/21-agustos` | Doğrudan açılır |
-| Sayısal biçim | `/08-21` | Kanonik biçime `replace` ile yönlendirilir |
-| Kök | `/` | Bugünün adresine `replace` ile yönlendirilir |
-| Geçersiz | `/olmayan-gun` | `<NotFound/>` (404 ekranı) |
+| Biçim             | Örnek          | Davranış                                     |
+| ----------------- | -------------- | -------------------------------------------- |
+| Kanonik ad biçimi | `/21-agustos`  | Doğrudan açılır                              |
+| Sayısal biçim     | `/08-21`       | Kanonik biçime `replace` ile yönlendirilir   |
+| Kök               | `/`            | Bugünün adresine `replace` ile yönlendirilir |
+| Geçersiz          | `/olmayan-gun` | `<NotFound/>` (404 ekranı)                   |
 
 Sayısal biçimin korunmasının nedeni, elle yazılan/eski bağlantıların kırılmaması;
 `replace` kullanılması ise geri tuşunun bir yönlendirme döngüsüne düşmemesi içindir.
@@ -930,7 +929,7 @@ Ay adları `MONTHS_TR`'den türetilir ve `asciify()` ile URL güvenli hâle geli
 ç/ğ/ı/ö/ş/ü → c/g/i/o/s/u eşlemesi, sonra ASCII olmayan her şey tireye dönüşür.
 
 **29 Şubat bilinçli olarak geçerlidir.** `isValidDay()` gün sayısını `daysInMonth(month)`
-ile *yıl vermeden* karşılaştırır — uygulama bir takvim değil bir **arşiv**;
+ile _yıl vermeden_ karşılaştırır — uygulama bir takvim değil bir **arşiv**;
 "29 Şubat'ta tarihte ne oldu?" sorusunun içinde bulunulan yıldan bağımsız bir
 cevabı vardır.
 
@@ -958,10 +957,10 @@ yalnızca rota render'ının dışında kalan hatalar için son çare olarak dur
 İstemci tarafı yönlendirme, `/29-ekim` gibi bir adrese **doğrudan** girildiğinde
 sunucunun `index.html` döndürmesini gerektirir. Depoda iki hazır yapılandırma var:
 
-| Dosya | Hedef |
-|---|---|
+| Dosya               | Hedef                                               |
+| ------------------- | --------------------------------------------------- |
 | `public/_redirects` | Netlify / Cloudflare Pages — `/*  /index.html  200` |
-| `vercel.json` | Vercel — tüm yolları `/index.html`'e rewrite |
+| `vercel.json`       | Vercel — tüm yolları `/index.html`'e rewrite        |
 
 `npm run dev` ve `npm run preview` bunu kendiliğinden yapar; ek yapılandırma
 gerekmez. (Uygulama şu an yayına alınmamıştır — bkz. `BAGLAM.md` §7.)
@@ -972,20 +971,20 @@ gerekmez. (Uygulama şu an yayına alınmamıştır — bkz. `BAGLAM.md` §7.)
 
 ### 13.1 Neyi test ediyoruz, neden
 
-Testler **saf mantığa** odaklanır: yanlış olduğunda kullanıcının yanlış *bilgi*
+Testler **saf mantığa** odaklanır: yanlış olduğunda kullanıcının yanlış _bilgi_
 gördüğü kod. Görsel düzen, ağ katmanı ve React yaşam döngüsü bilinçli olarak
 kapsam dışıdır — bunların bakım maliyeti, yakaladıkları hatadan yüksektir.
 
-| Dosya | Test | Neden bu dosya |
-|---|---|---|
-| `src/lib/date.test.ts` | 14 | **K-1 regresyonu** — artık yıl / gün sayısı hatası buradan çıkmıştı |
-| `src/lib/slug.test.ts` | 5 | 366 günün tamamında gidiş-dönüş çevrimi; kırılırsa her adres kırılır |
-| `src/lib/classification.test.ts` | 132 | T-11'in altın kümesi (`it.each`) + karanlık dosya kesinliği |
-| `src/lib/wiki.test.ts` | 12 | `normalize`, `classifyStatus`, `buildAutoTalk` — saf dönüşümler |
-| `src/components/sections.test.ts` | 7 | Türkçe duyarlı `matchQuery` (arama) |
-| `src/data/data.test.ts` | 7 | `CURATED` bütünlüğü — anahtar biçimi, çakışma, zorunlu alanlar |
-| `src/components/ui.test.tsx` | 1 | **K-2 regresyonu** — `CountUp` gün değişiminde güncelleniyor mu |
-| **Toplam** | **203** | `src/lib` satır kapsamı **%78,78** (eşik: 70) |
+| Dosya                             | Test    | Neden bu dosya                                                       |
+| --------------------------------- | ------- | -------------------------------------------------------------------- |
+| `src/lib/date.test.ts`            | 14      | **K-1 regresyonu** — artık yıl / gün sayısı hatası buradan çıkmıştı  |
+| `src/lib/slug.test.ts`            | 5       | 366 günün tamamında gidiş-dönüş çevrimi; kırılırsa her adres kırılır |
+| `src/lib/classification.test.ts`  | 132     | T-11'in altın kümesi (`it.each`) + karanlık dosya kesinliği          |
+| `src/lib/wiki.test.ts`            | 12      | `normalize`, `classifyStatus`, `buildAutoTalk` — saf dönüşümler      |
+| `src/components/sections.test.ts` | 7       | Türkçe duyarlı `matchQuery` (arama)                                  |
+| `src/data/data.test.ts`           | 7       | `CURATED` bütünlüğü — anahtar biçimi, çakışma, zorunlu alanlar       |
+| `src/components/ui.test.tsx`      | 1       | **K-2 regresyonu** — `CountUp` gün değişiminde güncelleniyor mu      |
+| **Toplam**                        | **203** | `src/lib` satır kapsamı **%78,78** (eşik: 70)                        |
 
 ### 13.2 Yapılandırma
 
@@ -1031,7 +1030,6 @@ npm run kontrol     # typecheck → lint → test → build
 Aynı komut her push'ta `.github/workflows/kontrol.yml` içinde koşar. Bir talimat
 bu zincir yeşil olmadan kapatılmaz (`CALISMA-SISTEMI.md` §6.2).
 
-
 ---
 
 ## 14. Rekorlar Kasası (T-23)
@@ -1042,13 +1040,13 @@ yoktur" (`BAGLAM.md` §1, ürün ilkesi 4). Bu gerilim rotasyonla çözülür.
 
 ### 14.1 Neden Guinness'ten veri çekilmiyor
 
-| Yol | Durum |
-|---|---|
-| GWR resmî API | **Yok.** Halka açık bir uç nokta yayımlamıyorlar |
-| GWR sitesini kazımak | **Yasak.** Kullanım şartları içeriğin kopyalanmasını, yeniden yayımlanmasını ve başka bir siteye konmasını açıkça yasaklıyor |
-| Üçüncü parti "Guinness API"leri | Kaynağı belirsiz, büyük olasılıkla kazımaya dayalı — aynı yasağın türevi |
-| **Wikidata `P1000`** | **CC0 (kamu malı).** Kullanılan yol |
-| **Vikipedi metni** | CC BY-SA. `rekor-avi` scriptinin aday kaynağı |
+| Yol                             | Durum                                                                                                                        |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| GWR resmî API                   | **Yok.** Halka açık bir uç nokta yayımlamıyorlar                                                                             |
+| GWR sitesini kazımak            | **Yasak.** Kullanım şartları içeriğin kopyalanmasını, yeniden yayımlanmasını ve başka bir siteye konmasını açıkça yasaklıyor |
+| Üçüncü parti "Guinness API"leri | Kaynağı belirsiz, büyük olasılıkla kazımaya dayalı — aynı yasağın türevi                                                     |
+| **Wikidata `P1000`**            | **CC0 (kamu malı).** Kullanılan yol                                                                                          |
+| **Vikipedi metni**              | CC BY-SA. `rekor-avi` scriptinin aday kaynağı                                                                                |
 
 Ayrım şudur: **rekorun kendisi bir olgudur**, telifli olan GWR'ın yazdığı metin ve
 çektiği fotoğraftır. Kasadaki her kayıt elle, kendi cümlelerimizle yazılır; `official`

@@ -1,13 +1,13 @@
 # T-18 · İlgili Sayfalar ve Kaynak Çıkışları
 
-| Alan | Değer |
-|---|---|
-| **Faz** | FAZ 2 — Kaynak ve Bağlantı |
-| **Öncelik** | 🟠 Yüksek |
-| **Tahmini süre** | ~3 saat |
-| **Bağımlılık** | **T-16 tamamlanmış olmalı** (`description` alanı buna bağlı) |
-| **İlgili bulgu** | O-14 |
-| **Durum** | ⬜ Bekliyor |
+| Alan             | Değer                                                        |
+| ---------------- | ------------------------------------------------------------ |
+| **Faz**          | FAZ 2 — Kaynak ve Bağlantı                                   |
+| **Öncelik**      | 🟠 Yüksek                                                    |
+| **Tahmini süre** | ~3 saat                                                      |
+| **Bağımlılık**   | **T-16 tamamlanmış olmalı** (`description` alanı buna bağlı) |
+| **İlgili bulgu** | O-14                                                         |
+| **Durum**        | ⬜ Bekliyor                                                  |
 
 ---
 
@@ -54,9 +54,9 @@ geçen varlık genellikle bir ülke ya da şehirdir.
 
 Bağlantının gerçek `href`'i: `https://tr.wikipedia.org/wiki/İngiltere`
 
-Kullanıcının ifadesiyle: *"Vikipedi'ye yönlendirmesi çok geniş."*
+Kullanıcının ifadesiyle: _"Vikipedi'ye yönlendirmesi çok geniş."_
 
-### Kanıt 1b — yıl maddeleri de `pages` içine karışıyor *(T-16'da gözlendi)*
+### Kanıt 1b — yıl maddeleri de `pages` içine karışıyor _(T-16'da gözlendi)_
 
 T-16'nın fixture'ında (31 Ağustos, TR beslemesi) `deaths` öğelerinin ikinci/üçüncü
 sayfası düzenli olarak bir **yıl maddesi**:
@@ -133,7 +133,7 @@ pages: (r.pages || []).slice(0, 3),
 ### Katman 3 — EN çapraz eşlemesi
 
 5. EN beslemesinde aynı yıla ait bir **olay makalesi** varsa, `langlinks` ile TR
-   karşılığı çözülür ve çiplerin başında *"Bu olay hakkında"* olarak öne çıkarılır.
+   karşılığı çözülür ve çiplerin başında _"Bu olay hakkında"_ olarak öne çıkarılır.
 
    Doğrulanmış örnek: `Burning_of_Washington` → `Washington Yangını`
 
@@ -148,14 +148,14 @@ pages: (r.pages || []).slice(0, 3),
 
 ## 🚫 Kapsam Dışı
 
-| Konu | Hangi talimata ait |
-|---|---|
-| Otomatik "en doğru sayfa" puanlaması | **Hiçbiri — reddedildi** (O-14, yukarıda) |
-| `extract` metninin gösterimi | **T-16** (önce yapılmış olmalı) |
-| Karanlık dosya rozetleri ve damgası | **T-17** |
-| Panelin ortak bileşene taşınması, `page/summary` çağrısı | **T-19** |
-| Yapay zekâ | **T-20** |
-| Ayrı detay rotası (`/24-agustos/olay/...`) | Plan §2 — kapsam dışı |
+| Konu                                                     | Hangi talimata ait                        |
+| -------------------------------------------------------- | ----------------------------------------- |
+| Otomatik "en doğru sayfa" puanlaması                     | **Hiçbiri — reddedildi** (O-14, yukarıda) |
+| `extract` metninin gösterimi                             | **T-16** (önce yapılmış olmalı)           |
+| Karanlık dosya rozetleri ve damgası                      | **T-17**                                  |
+| Panelin ortak bileşene taşınması, `page/summary` çağrısı | **T-19**                                  |
+| Yapay zekâ                                               | **T-20**                                  |
+| Ayrı detay rotası (`/24-agustos/olay/...`)               | Plan §2 — kapsam dışı                     |
 
 ---
 
@@ -188,11 +188,11 @@ curl -s "https://tr.wikipedia.org/w/api.php?action=query&prop=langlinks&lltang=t
 
 **Tarayıcıda (üç gün):**
 
-| Gün | Beklenen |
-|---|---|
+| Gün            | Beklenen                                                                       |
+| -------------- | ------------------------------------------------------------------------------ |
 | **24 Ağustos** | 1814 olayında üç çip, açıklamalarıyla; "Bu olay hakkında → Washington Yangını" |
-| **7 Mart** | Tek sayfalı olaylarda tek çip + "Vikipedi'de ara" düğmesi |
-| **29 Şubat** | Çip alanı boş olaylarda bozulmuyor |
+| **7 Mart**     | Tek sayfalı olaylarda tek çip + "Vikipedi'de ara" düğmesi                      |
+| **29 Şubat**   | Çip alanı boş olaylarda bozulmuyor                                             |
 
 ```bash
 npm run kontrol

@@ -9,8 +9,7 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    process.env.ANALYZE &&
-      visualizer({ open: true, gzipSize: true, filename: "dist/analiz.html" }),
+    process.env.ANALYZE && visualizer({ open: true, gzipSize: true, filename: "dist/analiz.html" }),
     VitePWA({
       registerType: "autoUpdate",
       manifest: false, // kendi manifest.webmanifest dosyamızı kullanıyoruz
@@ -52,9 +51,9 @@ export default defineConfig({
     },
   },
   server: {
-    host: true,          // ağdaki diğer cihazlardan erişim
-    port: 3000,          // tercih edilen port
-    strictPort: false,   // meşgulse bir sonrakine geç
+    host: true, // ağdaki diğer cihazlardan erişim
+    port: 3000, // tercih edilen port
+    strictPort: false, // meşgulse bir sonrakine geç
   },
   test: {
     environment: "jsdom",

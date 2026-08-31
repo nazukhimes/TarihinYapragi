@@ -28,12 +28,12 @@ Proje klasöründeki **`başlat.bat`** dosyasına **çift tıklayın.**
 
 Açılan pencerede bir menü çıkar:
 
-| Seçenek | Ne yapar | Ne zaman kullanılır |
-|---|---|---|
-| **1** — Geliştirme sunucusu | Canlı yenilemeli sunucu | Normal kullanım ve geliştirme *(varsayılan)* |
-| **2** — Üretim önizlemesi | Önce derler, sonra sunar | Yayına çıkmadan önce son kontrol |
-| **3** — Sadece build al | `dist/` klasörünü üretir | Siteyi bir sunucuya yükleyeceksiniz |
-| **4** — Tip kontrolü | TypeScript hatalarını tarar | Kod değişikliğinden sonra |
+| Seçenek                     | Ne yapar                    | Ne zaman kullanılır                          |
+| --------------------------- | --------------------------- | -------------------------------------------- |
+| **1** — Geliştirme sunucusu | Canlı yenilemeli sunucu     | Normal kullanım ve geliştirme _(varsayılan)_ |
+| **2** — Üretim önizlemesi   | Önce derler, sonra sunar    | Yayına çıkmadan önce son kontrol             |
+| **3** — Sadece build al     | `dist/` klasörünü üretir    | Siteyi bir sunucuya yükleyeceksiniz          |
+| **4** — Tip kontrolü        | TypeScript hatalarını tarar | Kod değişikliğinden sonra                    |
 
 Enter'a basmanız yeterli — **1** varsayılandır. Tarayıcı otomatik açılır.
 
@@ -116,12 +116,12 @@ vardır — bkz. [Paylaşım](#paylaşım).
 Dört kutu, o güne ait kayıt sayılarını gösterir. Her kutuya tıklayınca
 ilgili bölüme kayar.
 
-| Kutu | Ne sayar |
-|---|---|
-| Tarihî olay | Zaman tünelindeki toplam kayıt |
-| Bugün doğan | O tarihte doğan kişi sayısı |
-| Kaybettiklerimiz | O tarihte vefat eden kişi sayısı |
-| Karanlık dosya | Suikast, infaz, felaket, kayıp dosyası sayısı |
+| Kutu             | Ne sayar                                      |
+| ---------------- | --------------------------------------------- |
+| Tarihî olay      | Zaman tünelindeki toplam kayıt                |
+| Bugün doğan      | O tarihte doğan kişi sayısı                   |
+| Kaybettiklerimiz | O tarihte vefat eden kişi sayısı              |
+| Karanlık dosya   | Suikast, infaz, felaket, kayıp dosyası sayısı |
 
 ### Kayan bant (ticker)
 
@@ -139,13 +139,13 @@ yanında **"◆ dosya açık"** yazar.
 
 ## 3. Gün Seçme — 5 Farklı Yol
 
-| Yol | Nasıl |
-|---|---|
-| **Önceki / Sonraki** | Yaprağın altındaki `◀ ÖNCEKİ GÜN` / `SONRAKİ GÜN ▶` düğmeleri. Ay sınırını otomatik aşar (31 Ocak → 1 Şubat). |
-| **Bugüne dön** | Başka bir gündeyken ortadaki `BUGÜNE DÖN` düğmesi. Bugündeyseniz yerine yanıp sönen **● Bugün** yazar. |
-| **Ay takvimi** | Yaprağın üzerindeki `AĞUSTOS TAKVİMİ ▾` düğmesi → tam ay ızgarası açılır. Ok tuşlarıyla ay değiştirin, bir güne tıklayın. |
-| **Özel dosyalı gün** | Kısayol düğmelerinden birine tıklayın; sayfa yukarı kayar. |
-| **Adres çubuğu** | Her günün kendi adresi var: `localhost:3000/21-agustos`. Adresi doğrudan yazıp Enter'a basabilir, yer imine ekleyebilir veya bir bağlantı olarak paylaşabilirsiniz. (Uygulama internette yayınlanırsa aynı adres `siteadresi.com/21-agustos` biçiminde çalışır.) |
+| Yol                  | Nasıl                                                                                                                                                                                                                                                            |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Önceki / Sonraki** | Yaprağın altındaki `◀ ÖNCEKİ GÜN` / `SONRAKİ GÜN ▶` düğmeleri. Ay sınırını otomatik aşar (31 Ocak → 1 Şubat).                                                                                                                                                    |
+| **Bugüne dön**       | Başka bir gündeyken ortadaki `BUGÜNE DÖN` düğmesi. Bugündeyseniz yerine yanıp sönen **● Bugün** yazar.                                                                                                                                                           |
+| **Ay takvimi**       | Yaprağın üzerindeki `AĞUSTOS TAKVİMİ ▾` düğmesi → tam ay ızgarası açılır. Ok tuşlarıyla ay değiştirin, bir güne tıklayın.                                                                                                                                        |
+| **Özel dosyalı gün** | Kısayol düğmelerinden birine tıklayın; sayfa yukarı kayar.                                                                                                                                                                                                       |
+| **Adres çubuğu**     | Her günün kendi adresi var: `localhost:3000/21-agustos`. Adresi doğrudan yazıp Enter'a basabilir, yer imine ekleyebilir veya bir bağlantı olarak paylaşabilirsiniz. (Uygulama internette yayınlanırsa aynı adres `siteadresi.com/21-agustos` biçiminde çalışır.) |
 
 > **Ay takviminde:** Seçili gün **kırmızı**, bugün **altın çerçeveli**tir.
 > Hafta Pazartesi'den başlar.
@@ -208,13 +208,13 @@ Suikastlar, infazlar, katliamlar, kayıplar ve felaketler — **adli dosya** gö
 
 Her kartta:
 
-| Öğe | Anlamı |
-|---|---|
-| Üst bant | Dosya türü — `SUİKAST`, `İNFAZ`, `KATLİAM`, `KAYIP DOSYASI`, `FELAKET` |
-| Eğik damga | Dosya durumu — `FAİLİ MEÇHUL` (kırmızı), `SÜRÜYOR` (altın), `ÇÖZÜLDÜ` / `KAPANDI` (gri) |
-| Bakır renkli satır | Olayın geçtiği yer |
-| `#etiketler` | Konu etiketleri |
-| `DOSYAYI AÇ` | Uzun anlatımı açar |
+| Öğe                | Anlamı                                                                                  |
+| ------------------ | --------------------------------------------------------------------------------------- |
+| Üst bant           | Dosya türü — `SUİKAST`, `İNFAZ`, `KATLİAM`, `KAYIP DOSYASI`, `FELAKET`                  |
+| Eğik damga         | Dosya durumu — `FAİLİ MEÇHUL` (kırmızı), `SÜRÜYOR` (altın), `ÇÖZÜLDÜ` / `KAPANDI` (gri) |
+| Bakır renkli satır | Olayın geçtiği yer                                                                      |
+| `#etiketler`       | Konu etiketleri                                                                         |
+| `DOSYAYI AÇ`       | Uzun anlatımı açar                                                                      |
 
 > **Not:** `Arşiv taraması — otomatik tespit` yazan dosyalar, Vikipedi metninden
 > anahtar kelimeyle bulunmuştur ve **yanılabilir.** Editör dosyaları yer bilgisi
@@ -297,7 +297,7 @@ Zaman Tüneli · Doğanlar · Kaybettiklerimiz · Karanlık Dosyalar · Bilim & 
 Yazdığınız anda üst barın altında bir şerit çıkar: aradığınız kelime, **toplam
 kaç sonuç** bulunduğu ve bölüm bazlı dağılım (`4 olay · 0 doğum · 0 vefat · 0
 dosya · 0 bilim` gibi). Hiçbir bölümde eşleşme yoksa altı boş bölümü tek tek
-görmek yerine tek bir ekran çıkar: *"… için bu günde sonuç yok"* + aramayı
+görmek yerine tek bir ekran çıkar: _"… için bu günde sonuç yok"_ + aramayı
 temizleme ve bugüne dönme düğmeleri.
 
 ---
@@ -308,14 +308,14 @@ Uygulama artık **fareye hiç dokunmadan** kullanılabilir.
 
 ### Ana sayfada
 
-| Tuş | İşlev |
-|---|---|
-| `→` | Sonraki gün |
-| `←` | Önceki gün |
-| `T` | Bugüne dön |
-| `/` | Arama kutusuna odaklan |
-| `?` | Kısayol yardımı penceresini aç |
-| `Esc` | Açık pencereyi/yardımı kapat |
+| Tuş   | İşlev                          |
+| ----- | ------------------------------ |
+| `→`   | Sonraki gün                    |
+| `←`   | Önceki gün                     |
+| `T`   | Bugüne dön                     |
+| `/`   | Arama kutusuna odaklan         |
+| `?`   | Kısayol yardımı penceresini aç |
+| `Esc` | Açık pencereyi/yardımı kapat   |
 
 > Bu kısayollar **arama kutusuna yazarken** ve **Yayın Modu açıkken** çalışmaz —
 > aksi hâlde yazdığınız harfler veya yayın kartları arasında gezinme
@@ -333,18 +333,18 @@ odaklandığınız öğenin etrafında **altın (kâğıt yüzeylerde kırmızı
 
 ### Yayın Modu içinde
 
-| Tuş | İşlev |
-|---|---|
-| `→` veya `Boşluk` | Sonraki kart |
-| `←` | Önceki kart |
-| `Esc` | Yayın modundan çık |
+| Tuş               | İşlev              |
+| ----------------- | ------------------ |
+| `→` veya `Boşluk` | Sonraki kart       |
+| `←`               | Önceki kart        |
+| `Esc`             | Yayın modundan çık |
 
 ### Dosya penceresi (modal) içinde
 
-| Tuş | İşlev |
-|---|---|
+| Tuş                 | İşlev                                                                      |
+| ------------------- | -------------------------------------------------------------------------- |
 | `Tab` / `Shift+Tab` | Pencere içindeki öğeler arasında dolaş — odak pencerenin **dışına çıkmaz** |
-| `Esc` | Pencereyi kapat, odak açtığınız karta geri döner |
+| `Esc`               | Pencereyi kapat, odak açtığınız karta geri döner                           |
 
 > **Ekran okuyucu kullanıyorsanız:** bir kartı kopyaladığınızda ("Kart panoya
 > kopyalandı" gibi) bildirimler otomatik olarak duyulur; kategori çiplerinde
@@ -391,14 +391,15 @@ Bu yedek 24 saatten eskiyse (ör. bir haftadır internetsizseniz) atılmaz, yine
 gösterilir — ama kaynak etiketi **"önbellekten · 24 saatten eski"** yazar ve
 bakır renge döner, böylece gördüğünüz bilginin güncel olmayabileceğini
 anlarsınız. Hiç açmadığınız bir gün için, sorunun türüne göre ayrı bir başlık
-çıkar — *"İnternet bağlantısı yok."*, *"Arşiv şu an çok yoğun."*, *"Arşiv
-sunucusu yanıt vermiyor."* gibi — ve mümkünse yanında bir **`YENİDEN DENE`**
+çıkar — _"İnternet bağlantısı yok."_, _"Arşiv şu an çok yoğun."_, _"Arşiv
+sunucusu yanıt vermiyor."_ gibi — ve mümkünse yanında bir **`YENİDEN DENE`**
 düğmesi olur (kalıcı bir hatada, ör. o gün için hiç kayıt yoksa, bu düğme hiç
 çıkmaz). Arşiv sunucusu yoğunsa (çok sık istek) uygulama birkaç saniye içinde
 otomatik olarak bir kez daha dener; siz bir şey yapmanıza gerek kalmaz.
 
 **S: Uygulamayı telefonuma veya bilgisayarıma yükleyebilir miyim?**
 Evet. Tarih Yaprağı bir PWA (Progressive Web App) olarak kurulabilir:
+
 - **Android / masaüstü Chrome:** Adres çubuğunun sağındaki **"Yükle"** simgesine
   (veya menüdeki "Uygulamayı yükle" seçeneğine) tıklayın.
 - **iPhone / iPad (Safari):** Paylaş düğmesine, ardından **"Ana Ekrana Ekle"**ye
@@ -419,17 +420,17 @@ Evet, arayüz mobil uyumludur. Kart şeritleri dokunmatik kaydırılır.
 
 ## 9. Sorun Giderme
 
-| Belirti | Sebep | Çözüm |
-|---|---|---|
-| `başlat.bat` açılıp hemen kapanıyor | Node.js kurulu değil | [nodejs.org](https://nodejs.org)'dan LTS kurun, bilgisayarı yeniden başlatın |
-| `[HATA] npm install basarisiz oldu` | Ağ / izin sorunu | İnterneti kontrol edin; `node_modules` klasörünü silip tekrar deneyin |
-| `./baslat.sh` çalışmıyor: `Permission denied` | Çalıştırma izni yok | `chmod +x baslat.sh` çalıştırıp tekrar deneyin |
-| Sayfa açılıyor ama boş | Tarayıcı çok eski | Güncel Chrome, Edge veya Firefox kullanın |
-| *"İnternet bağlantısı yok." / "Arşiv şu an çok yoğun." / "Arşiv sunucusu yanıt vermiyor."* | Vikipedi'ye erişilemiyor, sorunun türü ekranda ayrı başlıkla belirtiliyor | Varsa `YENİDEN DENE`'ye basın; yoksa (ör. o gün için kayıt yok) internet sorunu değildir |
-| Bir bölüm "Arşivde bir sorun çıktı / Yaprak yırtıldı" kartı gösteriyor | O bölümde beklenmeyen bir hata oldu (T-09) | Diğer bölümler etkilenmez, normal kullanmaya devam edebilirsiniz. Düzelmezse `SAYFAYI YENİLE`, olmazsa `ÖNBELLEĞİ TEMİZLE`'ye basın |
-| Kod değişikliği tarayıcıya yansımıyor | Geliştirme sunucusunun canlı yenileme bağlantısı koptu | Sayfayı yenileyin. (Bu yalnızca `npm run dev` ile çalışırken görülür.) |
-| Kopyala çalışmıyor | Tarayıcı pano izni vermedi | Adres çubuğundaki izin simgesinden panoya erişime izin verin |
-| Port 3000 meşgul | Başka uygulama kullanıyor | Vite kendiliğinden bir sonraki boş porta geçer (3001, 3002…) ve adresi konsola yazar. Belirli bir port isterseniz: `npm run dev -- --port 3005` |
+| Belirti                                                                                    | Sebep                                                                     | Çözüm                                                                                                                                           |
+| ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `başlat.bat` açılıp hemen kapanıyor                                                        | Node.js kurulu değil                                                      | [nodejs.org](https://nodejs.org)'dan LTS kurun, bilgisayarı yeniden başlatın                                                                    |
+| `[HATA] npm install basarisiz oldu`                                                        | Ağ / izin sorunu                                                          | İnterneti kontrol edin; `node_modules` klasörünü silip tekrar deneyin                                                                           |
+| `./baslat.sh` çalışmıyor: `Permission denied`                                              | Çalıştırma izni yok                                                       | `chmod +x baslat.sh` çalıştırıp tekrar deneyin                                                                                                  |
+| Sayfa açılıyor ama boş                                                                     | Tarayıcı çok eski                                                         | Güncel Chrome, Edge veya Firefox kullanın                                                                                                       |
+| _"İnternet bağlantısı yok." / "Arşiv şu an çok yoğun." / "Arşiv sunucusu yanıt vermiyor."_ | Vikipedi'ye erişilemiyor, sorunun türü ekranda ayrı başlıkla belirtiliyor | Varsa `YENİDEN DENE`'ye basın; yoksa (ör. o gün için kayıt yok) internet sorunu değildir                                                        |
+| Bir bölüm "Arşivde bir sorun çıktı / Yaprak yırtıldı" kartı gösteriyor                     | O bölümde beklenmeyen bir hata oldu (T-09)                                | Diğer bölümler etkilenmez, normal kullanmaya devam edebilirsiniz. Düzelmezse `SAYFAYI YENİLE`, olmazsa `ÖNBELLEĞİ TEMİZLE`'ye basın             |
+| Kod değişikliği tarayıcıya yansımıyor                                                      | Geliştirme sunucusunun canlı yenileme bağlantısı koptu                    | Sayfayı yenileyin. (Bu yalnızca `npm run dev` ile çalışırken görülür.)                                                                          |
+| Kopyala çalışmıyor                                                                         | Tarayıcı pano izni vermedi                                                | Adres çubuğundaki izin simgesinden panoya erişime izin verin                                                                                    |
+| Port 3000 meşgul                                                                           | Başka uygulama kullanıyor                                                 | Vite kendiliğinden bir sonraki boş porta geçer (3001, 3002…) ve adresi konsola yazar. Belirli bir port isterseniz: `npm run dev -- --port 3005` |
 
 > **Bu tabloda artık çözülmemiş bir "bilinen sorun" yok.** PLAN-01 kapsamında
 > raporlanan beş kritik hatanın (K-1 … K-5) hepsi düzeltildi; kayıtları

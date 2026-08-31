@@ -102,7 +102,9 @@ for (const kat of KATEGORILER) {
   console.log(`${pad(kat, 10)}  ${pad(`${dogru}/${toplam}`, 8)} ${yuzde(dogru, toplam)}`);
 }
 console.log("─".repeat(40));
-console.log(`${pad("TOPLAM", 10)}  ${pad(`${toplamDogru}/${toplamOrnek}`, 8)} ${yuzde(toplamDogru, toplamOrnek)}`);
+console.log(
+  `${pad("TOPLAM", 10)}  ${pad(`${toplamDogru}/${toplamOrnek}`, 8)} ${yuzde(toplamDogru, toplamOrnek)}`
+);
 
 console.log("\nKARANLIK TESPİT");
 console.log("─".repeat(40));
@@ -130,7 +132,9 @@ if (karanlikHatali.length > 0) {
   }
 }
 
-console.log(`\nPERFORMANS: 100 öğe sınıflandırma+karanlık taraması ${perfMs.toFixed(2)} ms sürdü (hedef: <5 ms)`);
+console.log(
+  `\nPERFORMANS: 100 öğe sınıflandırma+karanlık taraması ${perfMs.toFixed(2)} ms sürdü (hedef: <5 ms)`
+);
 
 const kategoriGecti = toplamDogru / toplamOrnek >= 0.85;
 const karanlikGecti = dFP === 0 && kesinlik >= 0.9;

@@ -1,13 +1,13 @@
 # T-17 · Karanlık Dosyalarda Kaynak Dürüstlüğü ve Kontrast
 
-| Alan | Değer |
-|---|---|
-| **Faz** | FAZ 1 — Veri Onarımı |
-| **Öncelik** | 🟠 Yüksek |
-| **Tahmini süre** | ~2 saat |
-| **Bağımlılık** | **T-16 tamamlanmış olmalı** (`detail`/`summary` karşılaştırması `extract`e bağlı) |
-| **İlgili bulgu** | O-15, O-10 |
-| **Durum** | ✅ **Tamamlandı** — 2026-08-31 |
+| Alan             | Değer                                                                             |
+| ---------------- | --------------------------------------------------------------------------------- |
+| **Faz**          | FAZ 1 — Veri Onarımı                                                              |
+| **Öncelik**      | 🟠 Yüksek                                                                         |
+| **Tahmini süre** | ~2 saat                                                                           |
+| **Bağımlılık**   | **T-16 tamamlanmış olmalı** (`detail`/`summary` karşılaştırması `extract`e bağlı) |
+| **İlgili bulgu** | O-15, O-10                                                                        |
+| **Durum**        | ✅ **Tamamlandı** — 2026-08-31                                                    |
 
 ---
 
@@ -34,18 +34,18 @@ auto.push({
   year: item.year,
   type,
   title: firstClause(item.text),
-  location: "Arşiv taraması — otomatik tespit",   // ← 130
-  status: "KAPANDI",                              // ← 131 · UYDURMA HÜKÜM
+  location: "Arşiv taraması — otomatik tespit", // ← 130
+  status: "KAPANDI", // ← 131 · UYDURMA HÜKÜM
   summary: truncate(item.text, 240),
-  detail: item.pages?.[0]?.extract || item.text,  // ← 133 · T-16 sonrası extract DOLU geliyor
+  detail: item.pages?.[0]?.extract || item.text, // ← 133 · T-16 sonrası extract DOLU geliyor
   tags: [theme.toLocaleLowerCase("tr-TR"), formatYear(item.year)],
 });
 ```
 
 Üç ayrı sorun:
 
-1. **`status: "KAPANDI"`** — kullanıcının sorusu tam buydu: *"Kapandı yazıyor,
-   olay çözüldü mü demek?"* Hayır. Bu kayıt bir arama sonucudur; dosyanın
+1. **`status: "KAPANDI"`** — kullanıcının sorusu tam buydu: _"Kapandı yazıyor,
+   olay çözüldü mü demek?"_ Hayır. Bu kayıt bir arama sonucudur; dosyanın
    akıbeti hakkında hiçbir bilgi taşımaz. Ekranda ise editör dosyalarıyla aynı
    damga biçiminde görünüyor.
 2. **`location` sabiti** — her otomatik dosya aynı metni taşıyor, üstelik
@@ -54,8 +54,8 @@ auto.push({
    (2026-08-31).** `excerpt` → `extract` yeniden adlandırmasından sonra
    `item.pages[0].extract` gerçekten dolu geliyor; `detail` artık `item.text`e
    düşmüyor, Vikipedi'nin kendi özet metnini gösteriyor. 7 Mart'ta canlı
-   doğrulandı. Kullanıcının *"dosyayı aç dediğimde aynı şey altta tekrar
-   yazıyor"* şikâyeti bu talimatın kapsamından **düşmüştür**.
+   doğrulandı. Kullanıcının _"dosyayı aç dediğimde aynı şey altta tekrar
+   yazıyor"_ şikâyeti bu talimatın kapsamından **düşmüştür**.
 
    > **T-17 için sonuç:** Üç sorundan yalnızca **ikisi** (1 ve 2 —
    > `status: "KAPANDI"` ve sabit `location`) açık kaldı. Tahmini süre buna göre
@@ -80,21 +80,23 @@ Bu, `BAGLAM.md` §1 ürün ilkesi 3'ün ("kaynağı gizleme") ihlalidir.
 
 Gerçek Lighthouse/axe denetimi üç noktada `color-contrast` hatası verdi:
 
-| Yer | Renk çifti | Ölçülen | AA eşiği |
-|---|---|---|---|
-| `Ticker` "Bugün Tarihte" etiketi | `text-paper` #f2ead9 / `bg-brand` #d23b2e | **3,98:1** | 4,5:1 |
-| `CasesSection` dosya türü rozeti | `text-brand` #d23b2e / panel ~#171d29 | **≈3,54:1** | 4,5:1 |
-| `CasesSection` "Dosyayı aç/kapat" | `text-brand` #d23b2e / panel | **≈3,54:1** | 4,5:1 |
+| Yer                               | Renk çifti                                | Ölçülen     | AA eşiği |
+| --------------------------------- | ----------------------------------------- | ----------- | -------- |
+| `Ticker` "Bugün Tarihte" etiketi  | `text-paper` #f2ead9 / `bg-brand` #d23b2e | **3,98:1**  | 4,5:1    |
+| `CasesSection` dosya türü rozeti  | `text-brand` #d23b2e / panel ~#171d29     | **≈3,54:1** | 4,5:1    |
+| `CasesSection` "Dosyayı aç/kapat" | `text-brand` #d23b2e / panel              | **≈3,54:1** | 4,5:1    |
 
 ---
 
 ## ✅ Yapılacaklar
 
 1. **`CaseFile` tipine kaynak alanı ekle** (`src/data/types.ts`):
+
    ```ts
    /** Kayıt elle mi yazıldı, Vikipedi taramasından mı geldi. */
    curated?: boolean;
    ```
+
    Editör kayıtları `useGunVerisi`'de `curated: true` ile işaretlenir
    (`gunler/*.ts` dosyalarına **dokunmadan**, `base` haritalanırken).
 
@@ -114,9 +116,11 @@ Gerçek Lighthouse/axe denetimi üç noktada `color-contrast` hatası verdi:
 5. **`detail === summary` ise detay bölümünü hiç açma.** `CasesSection` kartında
    "Dosyayı aç" düğmesi yalnızca `detail` gerçekten yeni bilgi taşıyorsa
    render edilir:
+
    ```ts
    const detayVar = !!c.detail && c.detail.trim() !== c.summary.trim();
    ```
+
    T-16'dan sonra `extract` dolacağı için bu durum azalacak ama sıfırlanmayacak.
 
 6. **Kontrastı AA'ya çıkar** (`src/index.css` `@theme`):
@@ -134,14 +138,14 @@ Gerçek Lighthouse/axe denetimi üç noktada `color-contrast` hatası verdi:
 
 ## 🚫 Kapsam Dışı
 
-| Konu | Hangi talimata ait |
-|---|---|
-| `excerpt` → `extract` yeniden adlandırması | **T-16** (önce yapılmış olmalı) |
-| `src/data/gunler/*.ts` içindeki 41 editör `KAPANDI` kaydı | **Hiçbiri — dokunulmayacak** |
-| İlgili sayfa çipleri, kaynak bağlantıları | **T-18** |
-| Ortak detay paneli | **T-19** |
-| `holidays` çöp kayıtları | **T-21** |
-| Renk paletinin genel olarak değiştirilmesi | Plan §2 — kapsam dışı |
+| Konu                                                      | Hangi talimata ait              |
+| --------------------------------------------------------- | ------------------------------- |
+| `excerpt` → `extract` yeniden adlandırması                | **T-16** (önce yapılmış olmalı) |
+| `src/data/gunler/*.ts` içindeki 41 editör `KAPANDI` kaydı | **Hiçbiri — dokunulmayacak**    |
+| İlgili sayfa çipleri, kaynak bağlantıları                 | **T-18**                        |
+| Ortak detay paneli                                        | **T-19**                        |
+| `holidays` çöp kayıtları                                  | **T-21**                        |
+| Renk paletinin genel olarak değiştirilmesi                | Plan §2 — kapsam dışı           |
 
 ---
 
@@ -171,11 +175,11 @@ npm run kontrol
 
 **Tarayıcıda (üç gün):**
 
-| Gün | Beklenen |
-|---|---|
-| **29 Ekim** | Editör dosyaları altın "Editör" rozetli, gerçek `status` damgasıyla |
-| **7 Mart** | Otomatik dosyalar "Otomatik" rozetli, damga "ARŞİV KAYDI", konum uydurulmuyor |
-| **29 Şubat** | Bölüm çalışıyor, boş durum metni bozulmamış |
+| Gün          | Beklenen                                                                      |
+| ------------ | ----------------------------------------------------------------------------- |
+| **29 Ekim**  | Editör dosyaları altın "Editör" rozetli, gerçek `status` damgasıyla           |
+| **7 Mart**   | Otomatik dosyalar "Otomatik" rozetli, damga "ARŞİV KAYDI", konum uydurulmuyor |
+| **29 Şubat** | Bölüm çalışıyor, boş durum metni bozulmamış                                   |
 
 **Kontrast ölçümü:** Tarayıcı geliştirici araçlarında ya da axe eklentisiyle
 `color-contrast` denetimi çalıştırın; O-10'daki üç kayıt da temiz dönmeli.
@@ -188,14 +192,14 @@ npm run kontrol
 
 - **Değişen dosyalar:**
 
-  | Dosya | Ne değişti |
-  |---|---|
-  | `src/data/types.ts` | `CaseFile`'a `curated?: boolean`; `status` birleşimine `"ARŞİV KAYDI"` |
-  | `src/hooks/useGunVerisi.ts` | Editör kayıtları `curated: true` ile işaretleniyor; otomatik kayıtta `location: ""`, `status: "ARŞİV KAYDI"`, `curated: false` |
-  | `src/components/sections.tsx` | Kaynak rozeti, arşiv damgası ayrımı, boş konum satırı gizleme, `dosyaDetayiVar` kapısı, AA renkleri |
-  | `src/components/sections.test.ts` | `dosyaDetayiVar` için 6 test |
-  | `src/components/leaf.tsx` | `Ticker` etiketi `bg-brand-label`, elmas `text-brand-text` |
-  | `src/index.css` | `--color-brand-text` ve `--color-brand-label` token'ları |
+  | Dosya                             | Ne değişti                                                                                                                     |
+  | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+  | `src/data/types.ts`               | `CaseFile`'a `curated?: boolean`; `status` birleşimine `"ARŞİV KAYDI"`                                                         |
+  | `src/hooks/useGunVerisi.ts`       | Editör kayıtları `curated: true` ile işaretleniyor; otomatik kayıtta `location: ""`, `status: "ARŞİV KAYDI"`, `curated: false` |
+  | `src/components/sections.tsx`     | Kaynak rozeti, arşiv damgası ayrımı, boş konum satırı gizleme, `dosyaDetayiVar` kapısı, AA renkleri                            |
+  | `src/components/sections.test.ts` | `dosyaDetayiVar` için 6 test                                                                                                   |
+  | `src/components/leaf.tsx`         | `Ticker` etiketi `bg-brand-label`, elmas `text-brand-text`                                                                     |
+  | `src/index.css`                   | `--color-brand-text` ve `--color-brand-label` token'ları                                                                       |
 
   `src/data/gunler/` altında **hiçbir değişiklik yok** — `git diff --stat src/data/gunler/` boş döndü.
 
@@ -203,15 +207,15 @@ npm run kontrol
   renklerden (alfa katmanları zemine karıştırılarak) WCAG göreli parlaklık
   formülüyle ölçüldü. Kapalı kart en açık zemini verdiği için en zor durumdur.
 
-  | Yer | Önce | Sonra | Ölçüm zemini |
-  |---|---|---|---|
-  | `Ticker` "Bugün Tarihte" etiketi | 3,98:1 ❌ | **5,00:1** ✅ | #f2ead9 / #b83127 |
-  | `CasesSection` dosya türü rozeti | ≈3,54:1 ❌ | **5,40:1** ✅ | #e35f52 / #0e1119 |
-  | `CasesSection` "Dosyayı aç/kapat" | ≈3,54:1 ❌ | **4,84:1** ✅ | #e35f52 / #171d29 |
-  | `Ticker` ◆ ayracı *(listede yoktu)* | 3,90:1 ❌ | **5,34:1** ✅ | #e35f52 / #1a1014 |
-  | "Editör" rozeti *(yeni)* | — | **9,82:1** ✅ | #e8b04b / #0c0f15 |
-  | "Otomatik" rozeti *(yeni)* | — | **5,89:1** ✅ | #8b909c / #0e1119 |
-  | "ARŞİV KAYDI" damgası *(yeni)* | — | **5,28:1** ✅ | #8b909c / #171d29 |
+  | Yer                                 | Önce       | Sonra         | Ölçüm zemini      |
+  | ----------------------------------- | ---------- | ------------- | ----------------- |
+  | `Ticker` "Bugün Tarihte" etiketi    | 3,98:1 ❌  | **5,00:1** ✅ | #f2ead9 / #b83127 |
+  | `CasesSection` dosya türü rozeti    | ≈3,54:1 ❌ | **5,40:1** ✅ | #e35f52 / #0e1119 |
+  | `CasesSection` "Dosyayı aç/kapat"   | ≈3,54:1 ❌ | **4,84:1** ✅ | #e35f52 / #171d29 |
+  | `Ticker` ◆ ayracı _(listede yoktu)_ | 3,90:1 ❌  | **5,34:1** ✅ | #e35f52 / #1a1014 |
+  | "Editör" rozeti _(yeni)_            | —          | **9,82:1** ✅ | #e8b04b / #0c0f15 |
+  | "Otomatik" rozeti _(yeni)_          | —          | **5,89:1** ✅ | #8b909c / #0e1119 |
+  | "ARŞİV KAYDI" damgası _(yeni)_      | —          | **5,28:1** ✅ | #8b909c / #171d29 |
 
 - **Sapmalar / notlar:**
 
@@ -241,11 +245,11 @@ npm run kontrol
 - **Sonraki talimata not:**
 
   - **Otomatik kartlarda başlık ile özet birbirinin aynısı.** 29 Şubat'ta net
-     görülüyor: başlık `firstClause(item.text)`, özet `truncate(item.text, 240)`
-     — kısa kayıtlarda ikisi de aynı cümle çıkıyor, kartta üst üste iki kez
-     yazıyor. T-17'nin kapsamı `detail`/`summary` çiftiydi, bu ayrı bir çift.
-     **T-21'e (devredilen içerik bulguları) aday.**
+    görülüyor: başlık `firstClause(item.text)`, özet `truncate(item.text, 240)`
+    — kısa kayıtlarda ikisi de aynı cümle çıkıyor, kartta üst üste iki kez
+    yazıyor. T-17'nin kapsamı `detail`/`summary` çiftiydi, bu ayrı bir çift.
+    **T-21'e (devredilen içerik bulguları) aday.**
   - `CaseFile.curated` artık var; T-18'in kaynak bağlantısı çipleri "yalnızca
-     otomatik kayıtlarda göster" ayrımını bu bayrakla yapabilir.
+    otomatik kayıtlarda göster" ayrımını bu bayrakla yapabilir.
   - `--color-brand-text` token'ı hazır: T-18/T-19'da koyu panel üzerine kırmızı
-     metin koyacaksanız `text-brand` değil bunu kullanın.
+    metin koyacaksanız `text-brand` değil bunu kullanın.

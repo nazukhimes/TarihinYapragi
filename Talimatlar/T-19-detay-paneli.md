@@ -1,13 +1,13 @@
 # T-19 · Zengin Detay Paneli (Vikipedi Tabanlı)
 
-| Alan | Değer |
-|---|---|
-| **Faz** | FAZ 3 — Derinlik |
-| **Öncelik** | 🟡 Orta |
-| **Tahmini süre** | ~4 saat |
-| **Bağımlılık** | **T-16 ve T-18 tamamlanmış olmalı** |
-| **İlgili bulgu** | U-6 |
-| **Durum** | ⬜ Bekliyor |
+| Alan             | Değer                               |
+| ---------------- | ----------------------------------- |
+| **Faz**          | FAZ 3 — Derinlik                    |
+| **Öncelik**      | 🟡 Orta                             |
+| **Tahmini süre** | ~4 saat                             |
+| **Bağımlılık**   | **T-16 ve T-18 tamamlanmış olmalı** |
+| **İlgili bulgu** | U-6                                 |
+| **Durum**        | ⬜ Bekliyor                         |
 
 ---
 
@@ -26,11 +26,11 @@ ayrılmadan görebilecek. T-20'nin yapay zekâ bölümü bu panelin içine otura
 
 ### Kanıt 1 — üç ayrı detay uygulaması var
 
-| Yer | Dosya | Biçim |
-|---|---|---|
-| Zaman Tüneli "Detayı aç" | `sections.tsx:163-175` | Satır içi, sol kenarlıklı blok |
-| Karanlık Dosyalar "Dosyayı aç" | `sections.tsx:~570` | Kart içinde açılan bölüm |
-| Kişi kartı modalı | `sections.tsx:440-455` | `Modal` bileşeni |
+| Yer                            | Dosya                  | Biçim                          |
+| ------------------------------ | ---------------------- | ------------------------------ |
+| Zaman Tüneli "Detayı aç"       | `sections.tsx:163-175` | Satır içi, sol kenarlıklı blok |
+| Karanlık Dosyalar "Dosyayı aç" | `sections.tsx:~570`    | Kart içinde açılan bölüm       |
+| Kişi kartı modalı              | `sections.tsx:440-455` | `Modal` bileşeni               |
 
 Üçü de aynı işi yapıyor, üçü de farklı görünüyor ve farklı alanları okuyor.
 Bir iyileştirme (örn. T-18'in çipleri) üç yere ayrı ayrı yazılmak zorunda.
@@ -40,7 +40,9 @@ Bir iyileştirme (örn. T-18'in çipleri) üç yere ayrı ayrı yazılmak zorund
 Zaman Tüneli detayı bugün tek satır:
 
 ```tsx
-{e.detail || e.page?.extract}
+{
+  e.detail || e.page?.extract;
+}
 ```
 
 > **T-16 notu (2026-08-31):** Alan adı düzeltildi ve `extract` **artık dolu
@@ -50,7 +52,7 @@ Zaman Tüneli detayı bugün tek satır:
 Panel hâlâ yalnızca düz metin gösteriyor: görsel yok, kaynak yok, daha fazlasını
 okuma yolu yok.
 
-Kullanıcının ifadesi: *"Daha detaylı öğrenebileceğim bir yer lazım."*
+Kullanıcının ifadesi: _"Daha detaylı öğrenebileceğim bir yer lazım."_
 
 ### Kanıt 3 — daha uzun özet çekilebiliyor
 
@@ -72,11 +74,11 @@ istek demektir.
    ```ts
    interface DetayPaneliProps {
      baslik: string;
-     metin?: string;                    // extract / detail
-     gorsel?: string;                   // thumbnail.source
-     sayfalar?: WikiPage[];             // T-18'in çipleri
-     aramaMetni?: string;               // "Vikipedi'de ara" için ham olay metni
-     kaynak: "editor" | "otomatik";     // rozet (T-17 ile aynı biçim)
+     metin?: string; // extract / detail
+     gorsel?: string; // thumbnail.source
+     sayfalar?: WikiPage[]; // T-18'in çipleri
+     aramaMetni?: string; // "Vikipedi'de ara" için ham olay metni
+     kaynak: "editor" | "otomatik"; // rozet (T-17 ile aynı biçim)
    }
    ```
 
@@ -111,14 +113,14 @@ istek demektir.
 
 ## 🚫 Kapsam Dışı
 
-| Konu | Hangi talimata ait |
-|---|---|
-| Yapay zekâ düğmesi ve soru kutusu | **T-20** (bu panelin içine oturacak) |
-| Kaynak çiplerinin üretimi | **T-18** (önce yapılmış olmalı) |
-| `extract` alanının okunması | **T-16** (önce yapılmış olmalı) |
-| Karanlık dosya rozetinin tanımlanması | **T-17** (burada yalnızca kullanılır) |
-| Ayrı detay rotası / sayfası | Plan §2 — kapsam dışı (yerinde panel kararı) |
-| Tasarım dilinin değiştirilmesi | Plan §2 — kapsam dışı |
+| Konu                                  | Hangi talimata ait                           |
+| ------------------------------------- | -------------------------------------------- |
+| Yapay zekâ düğmesi ve soru kutusu     | **T-20** (bu panelin içine oturacak)         |
+| Kaynak çiplerinin üretimi             | **T-18** (önce yapılmış olmalı)              |
+| `extract` alanının okunması           | **T-16** (önce yapılmış olmalı)              |
+| Karanlık dosya rozetinin tanımlanması | **T-17** (burada yalnızca kullanılır)        |
+| Ayrı detay rotası / sayfası           | Plan §2 — kapsam dışı (yerinde panel kararı) |
+| Tasarım dilinin değiştirilmesi        | Plan §2 — kapsam dışı                        |
 
 ---
 
@@ -143,11 +145,11 @@ bir günü yükleyin. `page/summary` isteği **sayfa yüklenirken çıkmamalı**
 
 **Tarayıcıda (üç gün):**
 
-| Gün | Beklenen |
-|---|---|
-| **29 Ekim** | Editör olayında panel "Editör" rozetli; kaynak çipleri görünüyor |
-| **7 Mart** | Otomatik olayda panel "Otomatik" rozetli; görselli olayda görsel var |
-| **29 Şubat** | Panel açılıyor, boş alanlarda düzen bozulmuyor |
+| Gün          | Beklenen                                                             |
+| ------------ | -------------------------------------------------------------------- |
+| **29 Ekim**  | Editör olayında panel "Editör" rozetli; kaynak çipleri görünüyor     |
+| **7 Mart**   | Otomatik olayda panel "Otomatik" rozetli; görselli olayda görsel var |
+| **29 Şubat** | Panel açılıyor, boş alanlarda düzen bozulmuyor                       |
 
 ```bash
 npm run kontrol

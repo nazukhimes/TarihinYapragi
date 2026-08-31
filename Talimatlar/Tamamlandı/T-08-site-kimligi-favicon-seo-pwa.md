@@ -1,13 +1,13 @@
 # T-08 · Site Kimliği: Favicon, SEO ve PWA
 
-| Alan | Değer |
-|---|---|
-| **Faz** | FAZ 2 — Ürün Kabuğu |
-| **Öncelik** | 🟠 Yüksek |
-| **Tahmini süre** | ~3 saat |
-| **Bağımlılık** | **T-06 zorunlu** (URL şeması olmadan meta etiketleri yazılamaz) |
-| **İlgili bulgu** | U-4 |
-| **Durum** | ✅ Tamamlandı |
+| Alan             | Değer                                                           |
+| ---------------- | --------------------------------------------------------------- |
+| **Faz**          | FAZ 2 — Ürün Kabuğu                                             |
+| **Öncelik**      | 🟠 Yüksek                                                       |
+| **Tahmini süre** | ~3 saat                                                         |
+| **Bağımlılık**   | **T-06 zorunlu** (URL şeması olmadan meta etiketleri yazılamaz) |
+| **İlgili bulgu** | U-4                                                             |
+| **Durum**        | ✅ Tamamlandı                                                   |
 
 ---
 
@@ -23,22 +23,22 @@ simgesi olan, WhatsApp'ta önizlemesi çıkan, telefona eklenebilen bir ürün.
 
 `index.html` içinde bugün olanlar ✅ / olmayanlar ❌:
 
-| Öğe | Durum |
-|---|---|
-| `lang="tr"` | ✅ |
-| `<title>` | ✅ |
-| `meta description` | ✅ |
-| `meta theme-color` | ✅ |
-| **favicon** | ❌ — tarayıcı varsayılan simgeyi gösteriyor |
-| `og:title` / `og:description` / `og:image` | ❌ — sosyal medyada çıplak bağlantı |
-| `twitter:card` | ❌ |
-| `canonical` | ❌ |
-| `manifest.json` | ❌ — telefona eklenemiyor |
-| `apple-touch-icon` | ❌ |
-| `robots.txt` | ❌ |
-| `sitemap.xml` | ❌ — 366 sayfa var, hiçbiri arama motoruna bildirilmiyor |
-| Service worker | ❌ — `localStorage` yedeği varken çevrimdışı açılış yok |
-| Gün bazlı dinamik `<title>` | ❌ — her gün aynı başlık |
+| Öğe                                        | Durum                                                    |
+| ------------------------------------------ | -------------------------------------------------------- |
+| `lang="tr"`                                | ✅                                                       |
+| `<title>`                                  | ✅                                                       |
+| `meta description`                         | ✅                                                       |
+| `meta theme-color`                         | ✅                                                       |
+| **favicon**                                | ❌ — tarayıcı varsayılan simgeyi gösteriyor              |
+| `og:title` / `og:description` / `og:image` | ❌ — sosyal medyada çıplak bağlantı                      |
+| `twitter:card`                             | ❌                                                       |
+| `canonical`                                | ❌                                                       |
+| `manifest.json`                            | ❌ — telefona eklenemiyor                                |
+| `apple-touch-icon`                         | ❌                                                       |
+| `robots.txt`                               | ❌                                                       |
+| `sitemap.xml`                              | ❌ — 366 sayfa var, hiçbiri arama motoruna bildirilmiyor |
+| Service worker                             | ❌ — `localStorage` yedeği varken çevrimdışı açılış yok  |
+| Gün bazlı dinamik `<title>`                | ❌ — her gün aynı başlık                                 |
 
 ---
 
@@ -51,15 +51,15 @@ kırmızı bantlı, yırtık alt kenarlı yaprak. Kaynak SVG'yi `ui.tsx`'ten al�
 
 `public/` altına:
 
-| Dosya | Boyut | Kullanım |
-|---|---|---|
-| `favicon.svg` | vektör | Modern tarayıcılar |
-| `favicon.ico` | 32×32 | Eski tarayıcılar |
-| `apple-touch-icon.png` | 180×180 | iOS ana ekran |
-| `icon-192.png` | 192×192 | Android / PWA |
-| `icon-512.png` | 512×512 | PWA splash |
-| `icon-maskable-512.png` | 512×512 | Android adaptif (güvenli alan: %80 iç daire) |
-| `og-image.png` | 1200×630 | Sosyal medya önizleme |
+| Dosya                   | Boyut    | Kullanım                                     |
+| ----------------------- | -------- | -------------------------------------------- |
+| `favicon.svg`           | vektör   | Modern tarayıcılar                           |
+| `favicon.ico`           | 32×32    | Eski tarayıcılar                             |
+| `apple-touch-icon.png`  | 180×180  | iOS ana ekran                                |
+| `icon-192.png`          | 192×192  | Android / PWA                                |
+| `icon-512.png`          | 512×512  | PWA splash                                   |
+| `icon-maskable-512.png` | 512×512  | Android adaptif (güvenli alan: %80 iç daire) |
+| `og-image.png`          | 1200×630 | Sosyal medya önizleme                        |
 
 **`og-image.png` içeriği:** koyu zemin, ortada takvim yaprağı görseli,
 `TARİH YAPRAĞI` başlığı, altında `Bugün tarihte ne oldu?` — fontlar Fraunces + IBM Plex Mono.
@@ -81,7 +81,10 @@ kırmızı bantlı, yırtık alt kenarlı yaprak. Kaynak SVG'yi `ui.tsx`'ten al�
 <meta property="og:site_name" content="Tarih Yaprağı" />
 <meta property="og:locale" content="tr_TR" />
 <meta property="og:title" content="Tarih Yaprağı — Bugün Tarihte Ne Oldu?" />
-<meta property="og:description" content="Seçtiğin gün için tarihteki olaylar, doğanlar, kaybettiklerimiz, karanlık dosyalar ve bilim dönüm noktaları — yayıncılar için hazır sohbet kartlarıyla." />
+<meta
+  property="og:description"
+  content="Seçtiğin gün için tarihteki olaylar, doğanlar, kaybettiklerimiz, karanlık dosyalar ve bilim dönüm noktaları — yayıncılar için hazır sohbet kartlarıyla."
+/>
 <meta property="og:image" content="/og-image.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
@@ -155,7 +158,12 @@ useEffect(() => {
   "icons": [
     { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
-    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }
 ```
@@ -178,22 +186,38 @@ Sitemap: /sitemap.xml
 ```js
 import { writeFileSync } from "node:fs";
 
-const AY_SLUG = ["ocak","subat","mart","nisan","mayis","haziran",
-                 "temmuz","agustos","eylul","ekim","kasim","aralik"];
-const GUN = [31,29,31,30,31,30,31,31,30,31,30,31];   // 29 Şubat dahil
+const AY_SLUG = [
+  "ocak",
+  "subat",
+  "mart",
+  "nisan",
+  "mayis",
+  "haziran",
+  "temmuz",
+  "agustos",
+  "eylul",
+  "ekim",
+  "kasim",
+  "aralik",
+];
+const GUN = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; // 29 Şubat dahil
 const TABAN = process.env.SITE_URL || "https://tarihyapragi.example";
 
 const url = [];
 for (let m = 0; m < 12; m++)
   for (let d = 1; d <= GUN[m]; d++)
-    url.push(`  <url><loc>${TABAN}/${d}-${AY_SLUG[m]}</loc><changefreq>yearly</changefreq><priority>0.7</priority></url>`);
+    url.push(
+      `  <url><loc>${TABAN}/${d}-${AY_SLUG[m]}</loc><changefreq>yearly</changefreq><priority>0.7</priority></url>`
+    );
 
-writeFileSync("public/sitemap.xml",
-`<?xml version="1.0" encoding="UTF-8"?>
+writeFileSync(
+  "public/sitemap.xml",
+  `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${url.join("\n")}
 </urlset>
-`);
+`
+);
 console.log(`sitemap.xml yazıldı — ${url.length} adres`);
 ```
 
@@ -215,14 +239,14 @@ console.log(`sitemap.xml yazıldı — ${url.length} adres`);
 
 ```html
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "Tarih Yaprağı",
-  "url": "/",
-  "inLanguage": "tr-TR",
-  "description": "Her güne bir arşiv: tarihî olaylar, doğanlar, kaybettiklerimiz, karanlık dosyalar ve bilim dönüm noktaları."
-}
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Tarih Yaprağı",
+    "url": "/",
+    "inLanguage": "tr-TR",
+    "description": "Her güne bir arşiv: tarihî olaylar, doğanlar, kaybettiklerimiz, karanlık dosyalar ve bilim dönüm noktaları."
+  }
 </script>
 ```
 
@@ -244,7 +268,7 @@ plugins: [
   tailwindcss(),
   VitePWA({
     registerType: "autoUpdate",
-    manifest: false,                      // kendi manifest.webmanifest dosyamızı kullanıyoruz
+    manifest: false, // kendi manifest.webmanifest dosyamızı kullanıyoruz
     includeAssets: ["favicon.svg", "favicon.ico", "apple-touch-icon.png", "og-image.png"],
     workbox: {
       globPatterns: ["**/*.{js,css,html,svg,png,ico,woff2}"],
@@ -270,7 +294,7 @@ plugins: [
       ],
     },
   }),
-]
+];
 ```
 
 > **`NetworkFirst`** seçimi bilinçli: tarihsel veri nadiren değişir ama kullanıcının
@@ -281,14 +305,14 @@ plugins: [
 
 ## 🚫 Kapsam Dışı
 
-| Dokunma | Neden / Hangi talimat |
-|---|---|
-| Ön-işleme (prerender) / SSR | PLAN-02 — statik SPA kararı bu planda korunuyor |
-| Gün bazlı **statik** `og:image` üretimi | PLAN-02 |
-| Analitik / izleme kodu | Kapsam dışı — gizlilik kararı |
-| Çerez / onay bandı | Gerek yok — çerez kullanılmıyor |
-| Dağıtım (deploy) | T-14 |
-| Tasarım dilinin değişmesi | Simgeler mevcut ikonografiyi izler |
+| Dokunma                                 | Neden / Hangi talimat                           |
+| --------------------------------------- | ----------------------------------------------- |
+| Ön-işleme (prerender) / SSR             | PLAN-02 — statik SPA kararı bu planda korunuyor |
+| Gün bazlı **statik** `og:image` üretimi | PLAN-02                                         |
+| Analitik / izleme kodu                  | Kapsam dışı — gizlilik kararı                   |
+| Çerez / onay bandı                      | Gerek yok — çerez kullanılmıyor                 |
+| Dağıtım (deploy)                        | T-14                                            |
+| Tasarım dilinin değişmesi               | Simgeler mevcut ikonografiyi izler              |
 
 ---
 
@@ -338,7 +362,7 @@ Alan adı yayındaysa:
 `/1-ocak`'a geç → başlık değişmeli.
 
 ```js
-document.querySelector('link[rel="canonical"]').href
+document.querySelector('link[rel="canonical"]').href;
 ```
 
 → `http://localhost:3000/1-ocak`
@@ -436,7 +460,7 @@ DevTools → Lighthouse → SEO + PWA → **SEO ≥ 95**, PWA kurulabilir.
     Workbox çıktısı (15 önbellek girdisi, 1085 KiB, `NetworkFirst`/`CacheFirst` rotaları doğru
     kurulu). Ama Browser pane'in **sandbox'lanmış** tarayıcısında
     `navigator.serviceWorker.register(...)` her zaman `"An unknown error occurred when
-    fetching the script."` ile başarısız oldu — kendi `sw.js`'imle **ve** `dist/`'e elle
+fetching the script."` ile başarısız oldu — kendi `sw.js`'imle **ve** `dist/`'e elle
     konan tek satırlık, tamamen ilgisiz bir kontrol script'iyle **birebir aynı hata**
     (bkz. Doğrulama), yani kendi kodumdaki bir kusur değil, bu ortamın service worker
     kaydını genel olarak engellediğinin kanıtı. Hesaba bağlı gerçek Chrome (`list_connected_browsers`)

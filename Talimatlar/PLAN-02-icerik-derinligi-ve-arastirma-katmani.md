@@ -1,15 +1,15 @@
 # PLAN-02 · İçerik Derinliği ve Araştırma Katmanı
 
-| Alan | Değer |
-|---|---|
-| **Oluşturulma** | 2026-08-24 |
-| **Durum** | 🟡 **Sürüyor — 2 / 7** (FAZ 1 tamamlandı) |
-| **Son hareket** | 2026-08-31 · **T-17 tamamlandı** — karanlık dosyalarda kaynak dürüstlüğü ve AA kontrastı (O-15, O-10 kapandı) |
-| **Talimat sayısı** | 7 (T-16 … T-22) |
-| **Faz sayısı** | 4 |
-| **Dayanak** | [`../Dokumanlar/ANALIZ-RAPORU-02.md`](../Dokumanlar/ANALIZ-RAPORU-02.md) |
-| **İş akışı** | [`../Dokumanlar/CALISMA-SISTEMI.md`](../Dokumanlar/CALISMA-SISTEMI.md) |
-| **Tetikleyen** | Kullanıcı geri bildirimi, 2026-08-24 |
+| Alan               | Değer                                                                                                         |
+| ------------------ | ------------------------------------------------------------------------------------------------------------- |
+| **Oluşturulma**    | 2026-08-24                                                                                                    |
+| **Durum**          | 🟡 **Sürüyor — 2 / 7** (FAZ 1 tamamlandı)                                                                     |
+| **Son hareket**    | 2026-08-31 · **T-17 tamamlandı** — karanlık dosyalarda kaynak dürüstlüğü ve AA kontrastı (O-15, O-10 kapandı) |
+| **Talimat sayısı** | 7 (T-16 … T-22)                                                                                               |
+| **Faz sayısı**     | 4                                                                                                             |
+| **Dayanak**        | [`../Dokumanlar/ANALIZ-RAPORU-02.md`](../Dokumanlar/ANALIZ-RAPORU-02.md)                                      |
+| **İş akışı**       | [`../Dokumanlar/CALISMA-SISTEMI.md`](../Dokumanlar/CALISMA-SISTEMI.md)                                        |
+| **Tetikleyen**     | Kullanıcı geri bildirimi, 2026-08-24                                                                          |
 
 ---
 
@@ -39,16 +39,16 @@ Plan bittiğinde:
 
 ## 2. Kapsam Dışı (bu planda yapılmayacak)
 
-| Konu | Neden | Ne zaman |
-|---|---|---|
-| Backend / veritabanı | YZ katmanı dahil her şey istemci taraflı çözülüyor (CORS doğrulandı) | Yayına alınırsa |
-| Uygulamanın yayına alınması | Bilinçli karar — yerel kullanılıyor | Kullanıcı isterse |
-| Editör içeriğinin 60 günden fazlaya çıkarılması | Elle yazım işi, ayrı bir plan konusu | PLAN-03 |
-| **Yapay zekâ ile toplu içerik üretimi** | `ICERIK-SABLONU.md` §0 yasağı **yürürlükte kalıyor** — bkz. §5 | — |
-| Ayrı detay sayfası / rota (`/24-agustos/olay/...`) | Yerinde panel tercih edildi (kullanıcı kararı) | PLAN-03 |
-| Kullanıcı hesabı, favori, not | Ürün henüz gerektirmiyor | — |
-| Çoklu dil arayüzü (i18n) | Hedef kitle Türkçe | — |
-| Tasarım dilinin değiştirilmesi | Mevcut tasarım güçlü, korunacak | — |
+| Konu                                               | Neden                                                                | Ne zaman          |
+| -------------------------------------------------- | -------------------------------------------------------------------- | ----------------- |
+| Backend / veritabanı                               | YZ katmanı dahil her şey istemci taraflı çözülüyor (CORS doğrulandı) | Yayına alınırsa   |
+| Uygulamanın yayına alınması                        | Bilinçli karar — yerel kullanılıyor                                  | Kullanıcı isterse |
+| Editör içeriğinin 60 günden fazlaya çıkarılması    | Elle yazım işi, ayrı bir plan konusu                                 | PLAN-03           |
+| **Yapay zekâ ile toplu içerik üretimi**            | `ICERIK-SABLONU.md` §0 yasağı **yürürlükte kalıyor** — bkz. §5       | —                 |
+| Ayrı detay sayfası / rota (`/24-agustos/olay/...`) | Yerinde panel tercih edildi (kullanıcı kararı)                       | PLAN-03           |
+| Kullanıcı hesabı, favori, not                      | Ürün henüz gerektirmiyor                                             | —                 |
+| Çoklu dil arayüzü (i18n)                           | Hedef kitle Türkçe                                                   | —                 |
+| Tasarım dilinin değiştirilmesi                     | Mevcut tasarım güçlü, korunacak                                      | —                 |
 
 ---
 
@@ -59,10 +59,10 @@ Plan bittiğinde:
 > Uygulamanın zaten indirdiği veriyi ekrana çıkarmak. Bu faz tek başına kullanıcının
 > altı şikayetinden dördünü çözer ve sonraki iki fazın girdisini üretir.
 
-| Talimat | Başlık | Bulgular | Öncelik | Süre |
-|---|---|---|---|---|
-| ~~**T-16**~~ | ~~Vikipedi veri sözleşmesi düzeltmesi~~ ✅ | K-6, K-7, O-16, m-9 | 🔴 Kritik | ~3s |
-| ~~**T-17**~~ | ~~Karanlık dosyalarda kaynak dürüstlüğü ve kontrast~~ ✅ | O-15, O-10 | 🟠 Yüksek | ~2s |
+| Talimat      | Başlık                                                   | Bulgular            | Öncelik   | Süre |
+| ------------ | -------------------------------------------------------- | ------------------- | --------- | ---- |
+| ~~**T-16**~~ | ~~Vikipedi veri sözleşmesi düzeltmesi~~ ✅               | K-6, K-7, O-16, m-9 | 🔴 Kritik | ~3s  |
+| ~~**T-17**~~ | ~~Karanlık dosyalarda kaynak dürüstlüğü ve kontrast~~ ✅ | O-15, O-10          | 🟠 Yüksek | ~2s  |
 
 > ✅ **T-16 kapandı (2026-08-31).** `extract` artık okunuyor: Sohbet Kartları'nda
 > "Bugün Doğanlar" ve "Aramızdan Ayrılanlar" üretiliyor, kişi adları düz metin,
@@ -92,9 +92,9 @@ detay bölümü hiç açılmaz · `text-brand` kontrast oranı AA eşiğine (4,5
 
 ### FAZ 2 — Kaynak ve Bağlantı
 
-| Talimat | Başlık | Bulgular | Öncelik | Süre |
-|---|---|---|---|---|
-| **T-18** | İlgili sayfalar ve kaynak çıkışları | O-14 | 🟠 Yüksek | ~3s |
+| Talimat  | Başlık                              | Bulgular | Öncelik   | Süre |
+| -------- | ----------------------------------- | -------- | --------- | ---- |
+| **T-18** | İlgili sayfalar ve kaynak çıkışları | O-14     | 🟠 Yüksek | ~3s  |
 
 **Yaklaşım — tahmin etme, seçenek sun.** ANALİZ-RAPORU-02 §O-14'te puanlama sezgiseli
 prototiplendi ve **reddedildi** (11 değişiklikten 3'ü bozuyordu). Bunun yerine üç katman:
@@ -103,17 +103,17 @@ prototiplendi ve **reddedildi** (11 değişiklikten 3'ü bozuyordu). Bunun yerin
    `Beyaz Saray · ABD başkanının resmî konutu` / `Washington, DC · ABD'nin başkenti` / `İngiltere · …`
 2. **"Vikipedi'de ara"** düğmesi — olay metniyle gerçek arama sayfasını açar.
 3. **EN çapraz eşlemesi** — EN beslemesinde aynı yıla ait olay makalesi varsa `langlinks` ile
-   TR karşılığı çözülür ve *"Bu olay hakkında"* olarak öne çıkarılır (doğrulandı: `Burning_of_Washington`
+   TR karşılığı çözülür ve _"Bu olay hakkında"_ olarak öne çıkarılır (doğrulandı: `Burning_of_Washington`
    → `Washington Yangını`). İsabet etmezse sessizce atlanır, uydurma yapılmaz.
 
 ---
 
 ### FAZ 3 — Derinlik
 
-| Talimat | Başlık | Bulgular | Öncelik | Süre |
-|---|---|---|---|---|
-| **T-19** | Zengin detay paneli (Vikipedi tabanlı) | U-6 | 🟡 Orta | ~4s |
-| **T-20** | Yapay zekâ araştırma katmanı | U-6 | 🟡 Orta | ~5s |
+| Talimat  | Başlık                                 | Bulgular | Öncelik | Süre |
+| -------- | -------------------------------------- | -------- | ------- | ---- |
+| **T-19** | Zengin detay paneli (Vikipedi tabanlı) | U-6      | 🟡 Orta | ~4s  |
+| **T-20** | Yapay zekâ araştırma katmanı           | U-6      | 🟡 Orta | ~5s  |
 
 **T-19 kapsamı:** "Detayı aç" / "Dosyayı aç" panelleri ortak bir `DetayPaneli` bileşenine
 taşınır. Panel şunları gösterir: `extract` metni · görsel (`thumbnail`) · T-18'in kaynak çipleri ·
@@ -122,15 +122,15 @@ T-20'nin YZ bölümü bu panelin içine oturacak.
 
 **T-20 kapsamı:** Panelin altında **"Yapay zekâya sor"** düğmesi ve serbest soru kutusu.
 
-| Karar | Değer | Gerekçe |
-|---|---|---|
-| Sağlayıcı | **Google Gemini** (Flash / Flash-Lite) | Ücretsiz katman — kullanıcı kararı |
-| Mimari | Tarayıcıdan doğrudan çağrı, backend yok | CORS canlı doğrulandı |
-| Anahtar | Kullanıcının kendi anahtarı, `localStorage` | Uygulama yerel çalışıyor; XSS yüzeyi yok (`dangerouslySetInnerHTML`/`innerHTML`/`eval` kod tabanında hiç geçmiyor) |
-| Tetikleme | **Sadece kullanıcı basınca** | Otomatik çağrı = günde 40+ boşuna istek |
-| Bağlam | Vikipedi `extract` metni isteme gömülür | Halüsinasyon azaltma — bkz. §5 |
-| Kod yapısı | Sağlayıcıdan bağımsız arayüz (`src/lib/yapayzeka/`) | İleride arama destekli bir sağlayıcı eklemek küçük iş kalsın |
-| Etiketleme | Çıktı görsel olarak "YZ üretimi" işaretlenir | 3. ürün ilkesi: kaynağı gizleme |
+| Karar      | Değer                                               | Gerekçe                                                                                                            |
+| ---------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Sağlayıcı  | **Google Gemini** (Flash / Flash-Lite)              | Ücretsiz katman — kullanıcı kararı                                                                                 |
+| Mimari     | Tarayıcıdan doğrudan çağrı, backend yok             | CORS canlı doğrulandı                                                                                              |
+| Anahtar    | Kullanıcının kendi anahtarı, `localStorage`         | Uygulama yerel çalışıyor; XSS yüzeyi yok (`dangerouslySetInnerHTML`/`innerHTML`/`eval` kod tabanında hiç geçmiyor) |
+| Tetikleme  | **Sadece kullanıcı basınca**                        | Otomatik çağrı = günde 40+ boşuna istek                                                                            |
+| Bağlam     | Vikipedi `extract` metni isteme gömülür             | Halüsinasyon azaltma — bkz. §5                                                                                     |
+| Kod yapısı | Sağlayıcıdan bağımsız arayüz (`src/lib/yapayzeka/`) | İleride arama destekli bir sağlayıcı eklemek küçük iş kalsın                                                       |
+| Etiketleme | Çıktı görsel olarak "YZ üretimi" işaretlenir        | 3. ürün ilkesi: kaynağı gizleme                                                                                    |
 
 **Anahtar girişi kullanıcı tarafından yapılır.** Uygulamaya bir ayarlar ekranı eklenir;
 anahtarı kullanıcı kendisi yapıştırır. Anahtar hiçbir zaman depoya, sürüm kontrolüne veya
@@ -142,10 +142,10 @@ belgelere yazılmaz; `.env`'e de konmaz (istemci taraflı derlemede `.env` gizli
 
 > PLAN-01'den devredilen dört bulgu.
 
-| Talimat | Başlık | Bulgular | Öncelik | Süre |
-|---|---|---|---|---|
-| **T-21** | Devredilen içerik bulguları | O-11, O-12, m-7, m-8 | 🟢 Düşük | ~2s |
-| **T-22** | `react-router` güvenlik yükseltmesi | O-13 | 🟢 Düşük | ~2s |
+| Talimat  | Başlık                              | Bulgular             | Öncelik  | Süre |
+| -------- | ----------------------------------- | -------------------- | -------- | ---- |
+| **T-21** | Devredilen içerik bulguları         | O-11, O-12, m-7, m-8 | 🟢 Düşük | ~2s  |
+| **T-22** | `react-router` güvenlik yükseltmesi | O-13                 | 🟢 Düşük | ~2s  |
 
 **T-21:** `holidays` alanındaki Vikipedi şablon artığı kayıtların ayıklanması (`namespace.id !== 0`
 olanlar + tek harflik metinler) · `allScience`'ın editör kayıtlarını `matchKeys` ile ayıklaması
@@ -183,16 +183,16 @@ T-21, T-22  ── bağımsız, herhangi bir sırada; T-22 en sona önerilir
 > **"Yapay zekâ ile toplu içerik üretimi yasaktır.** Editör kalitesi korunmalı; her gün elle
 > yazılır, her olgu Vikipedi TR + EN karşılaştırmasıyla doğrulanır."
 
-PLAN-01 de yapay zekâyı *"Ayrı değerlendirme"* notuyla kapsam dışı bırakmıştı.
+PLAN-01 de yapay zekâyı _"Ayrı değerlendirme"_ notuyla kapsam dışı bırakmıştı.
 
 **Bu plan §0 yasağını kaldırmıyor.** T-20 farklı bir şey yapıyor:
 
-| §0'ın yasakladığı | T-20'nin yaptığı |
-|---|---|
-| `src/data/gunler/*.ts` içine YZ ile toplu içerik yazmak | Depoya hiçbir YZ metni yazılmaz |
-| Editör içeriği gibi görünen üretilmiş olgular | Çıktı açıkça "YZ üretimi" etiketli, editör rozetinden ayrı |
-| Doğrulanmamış olgu üretimi | Model, önüne konan Vikipedi metnini açıklar; kaynağı ekranda durur |
-| Kalıcı, sürüm kontrollü içerik | Geçici, isteğe bağlı, kullanıcı tetiklemeli |
+| §0'ın yasakladığı                                       | T-20'nin yaptığı                                                   |
+| ------------------------------------------------------- | ------------------------------------------------------------------ |
+| `src/data/gunler/*.ts` içine YZ ile toplu içerik yazmak | Depoya hiçbir YZ metni yazılmaz                                    |
+| Editör içeriği gibi görünen üretilmiş olgular           | Çıktı açıkça "YZ üretimi" etiketli, editör rozetinden ayrı         |
+| Doğrulanmamış olgu üretimi                              | Model, önüne konan Vikipedi metnini açıklar; kaynağı ekranda durur |
+| Kalıcı, sürüm kontrollü içerik                          | Geçici, isteğe bağlı, kullanıcı tetiklemeli                        |
 
 **Halüsinasyon riski ve azaltma.** Gemini ücretsiz katmanında web araması yoktur; model yalnızca
 kendi hafızasından konuşur. Niş Türkiye tarihi konularında (örn. 1958 Bursa Kapalı Çarşı yangını)
@@ -219,15 +219,15 @@ Vikipedi içeriğinin otomatik, YZ'nin istek üzerine çalışmasını onayladı
 
 ## 6. İlerleme Tablosu
 
-| # | Talimat dosyası | Faz | Bulgular | Durum | Tarih |
-|---|---|---|---|---|---|
-| ~~T-16~~ ✅ | [`T-16-vikipedi-veri-sozlesmesi.md`](Tamamland%C4%B1/T-16-vikipedi-veri-sozlesmesi.md) | 1 | K-6, K-7, O-16, m-9 | ✅ **Tamamlandı** | 2026-08-31 |
-| ~~T-17~~ ✅ | [`T-17-karanlik-dosya-durustlugu.md`](Tamamland%C4%B1/T-17-karanlik-dosya-durustlugu.md) | 1 | O-15, O-10 | ✅ **Tamamlandı** | 2026-08-31 |
-| T-18 | [`T-18-kaynak-ve-ilgili-sayfalar.md`](T-18-kaynak-ve-ilgili-sayfalar.md) | 2 | O-14 | ⬜ Bekliyor | — |
-| T-19 | [`T-19-detay-paneli.md`](T-19-detay-paneli.md) | 3 | U-6 | ⬜ Bekliyor | — |
-| T-20 | [`T-20-yapay-zeka-katmani.md`](T-20-yapay-zeka-katmani.md) | 3 | U-6 | ⬜ Bekliyor | — |
-| T-21 | [`T-21-devredilen-icerik-bulgulari.md`](T-21-devredilen-icerik-bulgulari.md) | 4 | O-11, O-12, m-7, m-8 | ⬜ Bekliyor | — |
-| T-22 | [`T-22-react-router-yukseltmesi.md`](T-22-react-router-yukseltmesi.md) | 4 | O-13 | ⬜ Bekliyor | — |
+| #           | Talimat dosyası                                                                          | Faz | Bulgular             | Durum             | Tarih      |
+| ----------- | ---------------------------------------------------------------------------------------- | --- | -------------------- | ----------------- | ---------- |
+| ~~T-16~~ ✅ | [`T-16-vikipedi-veri-sozlesmesi.md`](Tamamland%C4%B1/T-16-vikipedi-veri-sozlesmesi.md)   | 1   | K-6, K-7, O-16, m-9  | ✅ **Tamamlandı** | 2026-08-31 |
+| ~~T-17~~ ✅ | [`T-17-karanlik-dosya-durustlugu.md`](Tamamland%C4%B1/T-17-karanlik-dosya-durustlugu.md) | 1   | O-15, O-10           | ✅ **Tamamlandı** | 2026-08-31 |
+| T-18        | [`T-18-kaynak-ve-ilgili-sayfalar.md`](T-18-kaynak-ve-ilgili-sayfalar.md)                 | 2   | O-14                 | ⬜ Bekliyor       | —          |
+| T-19        | [`T-19-detay-paneli.md`](T-19-detay-paneli.md)                                           | 3   | U-6                  | ⬜ Bekliyor       | —          |
+| T-20        | [`T-20-yapay-zeka-katmani.md`](T-20-yapay-zeka-katmani.md)                               | 3   | U-6                  | ⬜ Bekliyor       | —          |
+| T-21        | [`T-21-devredilen-icerik-bulgulari.md`](T-21-devredilen-icerik-bulgulari.md)             | 4   | O-11, O-12, m-7, m-8 | ⬜ Bekliyor       | —          |
+| T-22        | [`T-22-react-router-yukseltmesi.md`](T-22-react-router-yukseltmesi.md)                   | 4   | O-13                 | ⬜ Bekliyor       | —          |
 
 > **Uygulama sırası:** T-16 → T-17 → T-18 → T-19 → T-20 → T-21 → T-22.
 > T-16 zorunlu ilk adımdır (§4). T-21 bağımsızdır, araya alınabilir.
@@ -239,15 +239,15 @@ Vikipedi içeriğinin otomatik, YZ'nin istek üzerine çalışmasını onayladı
 
 ## 7. Riskler ve Karşı Önlemler
 
-| Risk | Olasılık | Karşı önlem |
-|---|---|---|
-| ~~`excerpt` → `extract` yeniden adlandırması bir noktayı atlar~~ ✅ | Orta | **Gerçekleşmedi.** 31 noktanın tamamı güncellendi; üretim kodunda `grep` sıfır sonuç veriyor. Kalan geçişler yalnızca sözleşme testinin kendi iddiasında (bkz. T-16 Sapmalar §2) |
-| Gerçek API fixture'ı büyük olur, test yavaşlar | Düşük | Yanıt kırpılır: her bölümden 3 öğe, ~15 kB |
-| API alan sözleşmesi ileride yine değişir | Düşük | Gerçek yanıttan beslenen fixture + alan varlığını doğrulayan test |
-| YZ anahtarı yanlışlıkla depoya girer | Düşük | `.gitignore` kontrolü + anahtar yalnızca `localStorage`, hiç dosyaya yazılmaz (kabul kriteri) |
-| YZ çıktısı yanlış olgu üretir | **Orta** | Vikipedi bağlamlı istem + "YZ üretimi" etiketi + kaynak metnin panelde görünür kalması |
-| Gemini ücretsiz katman kotası dolar | Orta | Hata durumu kullanıcıya Türkçe açıklanır; panel Vikipedi içeriğiyle çalışmaya devam eder |
-| T-22 yönlendirmeyi kırar | Orta | En sona alındı; ayrı dalda, 3 günde görsel doğrulama |
+| Risk                                                                | Olasılık | Karşı önlem                                                                                                                                                                      |
+| ------------------------------------------------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ~~`excerpt` → `extract` yeniden adlandırması bir noktayı atlar~~ ✅ | Orta     | **Gerçekleşmedi.** 31 noktanın tamamı güncellendi; üretim kodunda `grep` sıfır sonuç veriyor. Kalan geçişler yalnızca sözleşme testinin kendi iddiasında (bkz. T-16 Sapmalar §2) |
+| Gerçek API fixture'ı büyük olur, test yavaşlar                      | Düşük    | Yanıt kırpılır: her bölümden 3 öğe, ~15 kB                                                                                                                                       |
+| API alan sözleşmesi ileride yine değişir                            | Düşük    | Gerçek yanıttan beslenen fixture + alan varlığını doğrulayan test                                                                                                                |
+| YZ anahtarı yanlışlıkla depoya girer                                | Düşük    | `.gitignore` kontrolü + anahtar yalnızca `localStorage`, hiç dosyaya yazılmaz (kabul kriteri)                                                                                    |
+| YZ çıktısı yanlış olgu üretir                                       | **Orta** | Vikipedi bağlamlı istem + "YZ üretimi" etiketi + kaynak metnin panelde görünür kalması                                                                                           |
+| Gemini ücretsiz katman kotası dolar                                 | Orta     | Hata durumu kullanıcıya Türkçe açıklanır; panel Vikipedi içeriğiyle çalışmaya devam eder                                                                                         |
+| T-22 yönlendirmeyi kırar                                            | Orta     | En sona alındı; ayrı dalda, 3 günde görsel doğrulama                                                                                                                             |
 
 ---
 

@@ -1,13 +1,13 @@
 # T-16 · Vikipedi Veri Sözleşmesi Düzeltmesi
 
-| Alan | Değer |
-|---|---|
-| **Faz** | FAZ 1 — Veri Onarımı |
-| **Öncelik** | 🔴 Kritik |
-| **Tahmini süre** | ~3 saat |
-| **Bağımlılık** | Yok — **planın ilk adımı, diğer beşinin girdisi** |
-| **İlgili bulgu** | K-6, K-7, O-16, m-9 |
-| **Durum** | ✅ **Tamamlandı** — 2026-08-31 |
+| Alan             | Değer                                             |
+| ---------------- | ------------------------------------------------- |
+| **Faz**          | FAZ 1 — Veri Onarımı                              |
+| **Öncelik**      | 🔴 Kritik                                         |
+| **Tahmini süre** | ~3 saat                                           |
+| **Bağımlılık**   | Yok — **planın ilk adımı, diğer beşinin girdisi** |
+| **İlgili bulgu** | K-6, K-7, O-16, m-9                               |
+| **Durum**        | ✅ **Tamamlandı** — 2026-08-31                    |
 
 > ⚠️ **Bu talimat T-17, T-18, T-19 ve T-20'den önce yapılmalıdır.** Dördü de bu
 > talimatın açtığı `extract` metnine dayanır; T-16 olmadan hiçbiri çalışamaz.
@@ -78,7 +78,7 @@ normalizedtitle : 'Jang Wonyoung'
 name: p.displaytitle || p.title,
 ```
 
-Bu, kullanıcının *"hâlâ tam ismi yazmıyor, HTML kodu olarak yazıyor"* şikâyetidir (K-7).
+Bu, kullanıcının _"hâlâ tam ismi yazmıyor, HTML kodu olarak yazıyor"_ şikâyetidir (K-7).
 
 ### Kanıt 3 — `excerpt`in geçtiği 31 nokta
 
@@ -86,12 +86,12 @@ Bu, kullanıcının *"hâlâ tam ismi yazmıyor, HTML kodu olarak yazıyor"* şi
 grep -rn "excerpt" src/ --include=*.ts --include=*.tsx | wc -l   # → 31
 ```
 
-| Dosya | Satırlar |
-|---|---|
-| `src/lib/wiki.ts` | 12, 338, 340, 345, 346, 350, 352, 357, 358 |
-| `src/hooks/useGunVerisi.ts` | 85, 93, 133, 153, 180, 181, 185, 255, 258, 261 |
+| Dosya                         | Satırlar                                        |
+| ----------------------------- | ----------------------------------------------- |
+| `src/lib/wiki.ts`             | 12, 338, 340, 345, 346, 350, 352, 357, 358      |
+| `src/hooks/useGunVerisi.ts`   | 85, 93, 133, 153, 180, 181, 185, 255, 258, 261  |
 | `src/components/sections.tsx` | 38, 141, 170, 237, 248, 254, 386, 388, 449, 450 |
-| `src/lib/wiki.test.ts` | 103, 115 |
+| `src/lib/wiki.test.ts`        | 103, 115                                        |
 
 `displaytitle` 5 noktada: `wiki.ts:10, 344, 356`, `sections.tsx:251`, `wiki.test.ts:102`.
 
@@ -125,10 +125,12 @@ alanları kuruyor. Testler yeşil, çünkü gerçek API sözleşmesini hiç gör
    küçük puntoyla render eder. Boşsa satır hiç çıkmaz.
 
 6. **Gerçek API yanıtından fixture üret:**
+
    ```bash
    curl -s "https://api.wikimedia.org/feed/v1/wikipedia/tr/onthisday/all/08/31" \
      > src/lib/__fixtures__/otd-tr-08-31.json
    ```
+
    Yanıtı kırp: `events`, `births`, `deaths`, `holidays`, `selected`
    bölümlerinin her birinden **3 öğe**, hedef ~15 kB.
 
@@ -148,15 +150,15 @@ alanları kuruyor. Testler yeşil, çünkü gerçek API sözleşmesini hiç gör
 
 ## 🚫 Kapsam Dışı
 
-| Konu | Hangi talimata ait |
-|---|---|
-| Karanlık dosyalardaki `KAPANDI` damgası, `location` sabiti, Otomatik/Editör rozeti | **T-17** |
-| İlgili sayfa çipleri, "Vikipedi'de ara" düğmesi, EN çapraz eşleme | **T-18** |
-| Ortak `DetayPaneli` bileşeni, `page/summary` çağrısı | **T-19** |
-| Yapay zekâ katmanı | **T-20** |
-| `holidays` çöp kayıtları, `allScience` ayıklaması | **T-21** |
-| `text-brand` kontrastı | **T-17** |
-| Tasarımın değiştirilmesi | Plan §2 — kapsam dışı |
+| Konu                                                                               | Hangi talimata ait    |
+| ---------------------------------------------------------------------------------- | --------------------- |
+| Karanlık dosyalardaki `KAPANDI` damgası, `location` sabiti, Otomatik/Editör rozeti | **T-17**              |
+| İlgili sayfa çipleri, "Vikipedi'de ara" düğmesi, EN çapraz eşleme                  | **T-18**              |
+| Ortak `DetayPaneli` bileşeni, `page/summary` çağrısı                               | **T-19**              |
+| Yapay zekâ katmanı                                                                 | **T-20**              |
+| `holidays` çöp kayıtları, `allScience` ayıklaması                                  | **T-21**              |
+| `text-brand` kontrastı                                                             | **T-17**              |
+| Tasarımın değiştirilmesi                                                           | Plan §2 — kapsam dışı |
 
 > Bu talimat bir **yeniden adlandırma + bir alan gösterimi**dir. Metin akışını,
 > kırpma uzunluklarını, kart düzenini değiştirmeyin.
@@ -195,11 +197,11 @@ npm run kontrol
 
 **Tarayıcıda (CALISMA-SISTEMI §6.3 — üç gün):**
 
-| Gün | Beklenen |
-|---|---|
+| Gün                               | Beklenen                                                                                      |
+| --------------------------------- | --------------------------------------------------------------------------------------------- |
 | **29 Ekim** (editör içeriği dolu) | Doğanlar/Kaybettiklerimiz kartlarında gerçek özet metni; adların altında `description` satırı |
-| **7 Mart** (yalnızca otomatik) | Zaman Tüneli'nde "Detayı aç" gerçek metin gösteriyor, boş açılmıyor |
-| **29 Şubat** (kenar durum) | Sayfa çalışıyor, kart üretimi bozulmuyor |
+| **7 Mart** (yalnızca otomatik)    | Zaman Tüneli'nde "Detayı aç" gerçek metin gösteriyor, boş açılmıyor                           |
+| **29 Şubat** (kenar durum)        | Sayfa çalışıyor, kart üretimi bozulmuyor                                                      |
 
 **Ek kontrol — K-6'nın asıl belirtisi:** Herhangi bir günde Sohbet Kartları
 bölümünde **"Bugün Doğanlar"** ve **"Aramızdan Ayrılanlar"** kartlarının artık
@@ -213,41 +215,43 @@ bölümünde **"Bugün Doğanlar"** ve **"Aramızdan Ayrılanlar"** kartlarını
 
 - **Değişen dosyalar:**
 
-  | Dosya | İşlem |
-  |---|---|
-  | `src/lib/wiki.ts` | `WikiPage` arayüzü gerçek API sözleşmesine eşitlendi: `excerpt` → `extract`, `displaytitle` → `normalizedtitle`; `description` olduğu gibi kaldı. `buildAutoTalk` içindeki `auto-birth` / `auto-death` koşulları ve kancaları yeni adlarla güncellendi (9 `extract` + 3 `normalizedtitle` noktası). **Mantık değişmedi** — yalnızca alan adları |
-  | `src/hooks/useGunVerisi.ts` | 10 nokta: `mergedEvents`in sayfa seçimi, `allCases.detail`, `allScience.summary`, `spotlight` (yerel `excerpt` değişkeni de `extract` oldu) ve arama süzgeçlerindeki üç `matchQuery` alanı |
-  | `src/components/sections.tsx` | 10 `extract` + 1 `normalizedtitle` noktası: `MergedEvent.page` şekli, Zaman Tüneli "Detayı aç" paneli, `PersonCard`, `itemToPeople`'ın `probe` dizesi ve `name` alanı, kişi kartı gövdesi, kişi modalı. **Ayrıca (O-16):** `PersonCard`'a `description?: string` eklendi, `itemToPeople` dolduruyor, `PeopleRow` kart gövdesinde adın hemen altında `text-[12px] text-ink-faint line-clamp-2` ile basıyor — alan boşsa `{p.description && …}` sayesinde satır hiç render edilmiyor |
-  | `src/lib/__fixtures__/otd-tr-08-31.json` | **YENİ.** `api.wikimedia.org/feed/v1/wikipedia/tr/onthisday/all/08/31` yanıtının kırpılmış hâli. Her bölümden 3 öğe (`selected`/`births`/`deaths`/`events`/`holidays`), her öğeden en fazla 3 `pages` — bu ikinci sınır `normalize()`'ın kendi sınırıyla aynı, dolayısıyla uygulamanın okuyabildiği hiçbir şey kaybolmadı. **Sayfa nesnelerinden tek bir alan bile silinmedi** (`displaytitle`, `extract_html`, `tid` dahil hepsi duruyor) |
-  | `src/lib/wiki.test.ts` | Fixture'dan besleniyor (m-9). Uydurma `excerpt`/`displaytitle` alanları silindi; kart sınırı testindeki sayfa nesneleri artık `gercekSayfa()` ile **fixture'dan** çekiliyor, elle kurulmuyor. Üç yeni sözleşme testi + iki yeni davranış testi eklendi (18 → **23 test**) |
-  | `tsconfig.json` | `resolveJsonModule: true` — fixture'ı testten içe aktarabilmek için gerekli tek yapılandırma değişikliği |
-  | `Talimatlar/T-17…T-19` | T-16'nın değiştirdiği kod alıntıları güncellendi + devir notları (aşağıda "Sonraki talimata not") |
+  | Dosya                                    | İşlem                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+  | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | `src/lib/wiki.ts`                        | `WikiPage` arayüzü gerçek API sözleşmesine eşitlendi: `excerpt` → `extract`, `displaytitle` → `normalizedtitle`; `description` olduğu gibi kaldı. `buildAutoTalk` içindeki `auto-birth` / `auto-death` koşulları ve kancaları yeni adlarla güncellendi (9 `extract` + 3 `normalizedtitle` noktası). **Mantık değişmedi** — yalnızca alan adları                                                                                                                                    |
+  | `src/hooks/useGunVerisi.ts`              | 10 nokta: `mergedEvents`in sayfa seçimi, `allCases.detail`, `allScience.summary`, `spotlight` (yerel `excerpt` değişkeni de `extract` oldu) ve arama süzgeçlerindeki üç `matchQuery` alanı                                                                                                                                                                                                                                                                                         |
+  | `src/components/sections.tsx`            | 10 `extract` + 1 `normalizedtitle` noktası: `MergedEvent.page` şekli, Zaman Tüneli "Detayı aç" paneli, `PersonCard`, `itemToPeople`'ın `probe` dizesi ve `name` alanı, kişi kartı gövdesi, kişi modalı. **Ayrıca (O-16):** `PersonCard`'a `description?: string` eklendi, `itemToPeople` dolduruyor, `PeopleRow` kart gövdesinde adın hemen altında `text-[12px] text-ink-faint line-clamp-2` ile basıyor — alan boşsa `{p.description && …}` sayesinde satır hiç render edilmiyor |
+  | `src/lib/__fixtures__/otd-tr-08-31.json` | **YENİ.** `api.wikimedia.org/feed/v1/wikipedia/tr/onthisday/all/08/31` yanıtının kırpılmış hâli. Her bölümden 3 öğe (`selected`/`births`/`deaths`/`events`/`holidays`), her öğeden en fazla 3 `pages` — bu ikinci sınır `normalize()`'ın kendi sınırıyla aynı, dolayısıyla uygulamanın okuyabildiği hiçbir şey kaybolmadı. **Sayfa nesnelerinden tek bir alan bile silinmedi** (`displaytitle`, `extract_html`, `tid` dahil hepsi duruyor)                                         |
+  | `src/lib/wiki.test.ts`                   | Fixture'dan besleniyor (m-9). Uydurma `excerpt`/`displaytitle` alanları silindi; kart sınırı testindeki sayfa nesneleri artık `gercekSayfa()` ile **fixture'dan** çekiliyor, elle kurulmuyor. Üç yeni sözleşme testi + iki yeni davranış testi eklendi (18 → **23 test**)                                                                                                                                                                                                          |
+  | `tsconfig.json`                          | `resolveJsonModule: true` — fixture'ı testten içe aktarabilmek için gerekli tek yapılandırma değişikliği                                                                                                                                                                                                                                                                                                                                                                           |
+  | `Talimatlar/T-17…T-19`                   | T-16'nın değiştirdiği kod alıntıları güncellendi + devir notları (aşağıda "Sonraki talimata not")                                                                                                                                                                                                                                                                                                                                                                                  |
 
 - **Kanıt (önce / sonra):**
 
-  | Ölçüm | Önce | Sonra |
-  |---|---|---|
-  | `grep -rn "excerpt" src/` (üretim kodu) | **31** | **0** |
-  | `grep -rn "displaytitle" src/` (üretim kodu) | **5** | **0** |
-  | Sohbet Kartları · 29 Ekim | Teknoloji, Ekonomi, Tarih, Havacılık, Rekorlar ×2, Tarih, Zaman Atlaması, Karanlık Tarih — **"Bugün Doğanlar" yok, "Aramızdan Ayrılanlar" yok** | … + **"Bugün Doğanlar"** (KART 09: *"1998'de bugün doğan: Lance Stroll"*) |
-  | Sohbet Kartları · 7 Mart | (aynı eksiklik) | **hem "Bugün Doğanlar" hem "Aramızdan Ayrılanlar"** üretiliyor |
-  | Kişi kartı adı (29 Ekim, ilk doğum) | `<span lang="tr" dir="ltr"><span class="mw-page-title-main">Lance Stroll</span></span>` | `Lance Stroll` |
-  | Ham HTML ad sayısı (29 Ekim, 128 kart) | **128 / 128** | **0 / 128** |
-  | Kişi kartında özet paragrafı (29 Ekim) | `<p>` sayısı **0** | `description` + `extract` iki ayrı satır |
-  | `description` alt başlığı görünen kart | — (alan hiç okunmuyordu) | 29 Ekim 55/76 doğum · 39/52 vefat; 7 Mart 52/74 · 32/57; **kalanlarda satır hiç çıkmıyor** |
-  | Zaman Tüneli "Detayı aç" (7 Mart, 4 örnek) | `e.detail` ve `e.page.excerpt` ikisi de `undefined` → boş | 4/4'ünde gerçek Vikipedi metni (*"Marcus Aurelius Antoninus, 161 ile 180 yılları arasında Roma imparatoru olan Stoacı bir filozoftur…"*) |
-  | Arama `"futbolcu"` (29 Şubat) | 0 sonuç (`p.excerpt` hep `undefined`, yalnızca ad taranıyordu) | **5 sonuç** · 4 doğum · 1 vefat |
-  | `wiki.test.ts` test sayısı | 18 | **23** |
-  | Test paketi toplamı | 239 | **244** |
-  | **Eski testler, düzeltilmiş kodda** | — | **kırmızı** (aşağıya bakınız) |
+  | Ölçüm                                        | Önce                                                                                                                                            | Sonra                                                                                                                                    |
+  | -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+  | `grep -rn "excerpt" src/` (üretim kodu)      | **31**                                                                                                                                          | **0**                                                                                                                                    |
+  | `grep -rn "displaytitle" src/` (üretim kodu) | **5**                                                                                                                                           | **0**                                                                                                                                    |
+  | Sohbet Kartları · 29 Ekim                    | Teknoloji, Ekonomi, Tarih, Havacılık, Rekorlar ×2, Tarih, Zaman Atlaması, Karanlık Tarih — **"Bugün Doğanlar" yok, "Aramızdan Ayrılanlar" yok** | … + **"Bugün Doğanlar"** (KART 09: _"1998'de bugün doğan: Lance Stroll"_)                                                                |
+  | Sohbet Kartları · 7 Mart                     | (aynı eksiklik)                                                                                                                                 | **hem "Bugün Doğanlar" hem "Aramızdan Ayrılanlar"** üretiliyor                                                                           |
+  | Kişi kartı adı (29 Ekim, ilk doğum)          | `<span lang="tr" dir="ltr"><span class="mw-page-title-main">Lance Stroll</span></span>`                                                         | `Lance Stroll`                                                                                                                           |
+  | Ham HTML ad sayısı (29 Ekim, 128 kart)       | **128 / 128**                                                                                                                                   | **0 / 128**                                                                                                                              |
+  | Kişi kartında özet paragrafı (29 Ekim)       | `<p>` sayısı **0**                                                                                                                              | `description` + `extract` iki ayrı satır                                                                                                 |
+  | `description` alt başlığı görünen kart       | — (alan hiç okunmuyordu)                                                                                                                        | 29 Ekim 55/76 doğum · 39/52 vefat; 7 Mart 52/74 · 32/57; **kalanlarda satır hiç çıkmıyor**                                               |
+  | Zaman Tüneli "Detayı aç" (7 Mart, 4 örnek)   | `e.detail` ve `e.page.excerpt` ikisi de `undefined` → boş                                                                                       | 4/4'ünde gerçek Vikipedi metni (_"Marcus Aurelius Antoninus, 161 ile 180 yılları arasında Roma imparatoru olan Stoacı bir filozoftur…"_) |
+  | Arama `"futbolcu"` (29 Şubat)                | 0 sonuç (`p.excerpt` hep `undefined`, yalnızca ad taranıyordu)                                                                                  | **5 sonuç** · 4 doğum · 1 vefat                                                                                                          |
+  | `wiki.test.ts` test sayısı                   | 18                                                                                                                                              | **23**                                                                                                                                   |
+  | Test paketi toplamı                          | 239                                                                                                                                             | **244**                                                                                                                                  |
+  | **Eski testler, düzeltilmiş kodda**          | —                                                                                                                                               | **kırmızı** (aşağıya bakınız)                                                                                                            |
 
   Render edilen kart gövdesi (29 Ekim, ilk doğum kartı):
 
   ```html
   <h3 class="font-display font-semibold text-[17px] …">Lance Stroll</h3>
   <p class="mt-1 text-[12px] leading-snug text-ink-faint line-clamp-2">Kanadalı yarış pilotu</p>
-  <p class="mt-2 text-[13px] leading-relaxed text-ink-dim line-clamp-3">Lance Strulovitch ya da
-     bilinen ismiyle Lance Stroll, Kanadalı yarış pilotu. Formula 1 takımlarından…</p>
+  <p class="mt-2 text-[13px] leading-relaxed text-ink-dim line-clamp-3">
+    Lance Strulovitch ya da bilinen ismiyle Lance Stroll, Kanadalı yarış pilotu. Formula 1
+    takımlarından…
+  </p>
   ```
 
   **m-9'un canlı gösterimi.** Eski `wiki.test.ts` (HEAD sürümü) düzeltilmiş kodun
@@ -269,11 +273,11 @@ bölümünde **"Bugün Doğanlar"** ve **"Aramızdan Ayrılanlar"** kartlarını
 
 - **Görsel doğrulama (3 gün, `CALISMA-SISTEMI.md` §6.3):**
 
-  | Gün | Sonuç |
-  |---|---|
+  | Gün                               | Sonuç                                                                                                                                  |
+  | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
   | **29 Ekim** (editör içeriği dolu) | Doğanlar/Kaybettiklerimiz kartlarında gerçek özet + adın altında `description` satırı ✅ · "Bugün Doğanlar" sohbet kartı üretiliyor ✅ |
-  | **7 Mart** (yalnızca otomatik) | "Detayı aç" gerçek metin gösteriyor, boş açılmıyor ✅ · **iki kart da** (Doğanlar + Ayrılanlar) üretiliyor ✅ |
-  | **29 Şubat** (kenar durum) | Sayfa çalışıyor, "Artık gün" bilgisi bozulmadı, 28 doğum / 14 vefat kartı, 0 ham HTML ad ✅ |
+  | **7 Mart** (yalnızca otomatik)    | "Detayı aç" gerçek metin gösteriyor, boş açılmıyor ✅ · **iki kart da** (Doğanlar + Ayrılanlar) üretiliyor ✅                          |
+  | **29 Şubat** (kenar durum)        | Sayfa çalışıyor, "Artık gün" bilgisi bozulmadı, 28 doğum / 14 vefat kartı, 0 ham HTML ad ✅                                            |
 
 - **Sapmalar / notlar:**
 
@@ -308,7 +312,7 @@ bölümünde **"Bugün Doğanlar"** ve **"Aramızdan Ayrılanlar"** kartlarını
      17.167 px yüksekliğinde ve T-13'ün `content-visibility: auto` optimizasyonunu
      kullanıyor; önizleme paneli `scrollY > 0`'da tamamen siyah kare veriyor.
      Sayfanın gerçekten boyandığı `document.elementFromPoint(innerWidth/2,
-     innerHeight/2)` ile doğrulandı (`div.reveal.in-view` → "19. YÜZYIL"). Bu
+innerHeight/2)` ile doğrulandı (`div.reveal.in-view` → "19. YÜZYIL"). Bu
      yüzden tüm ölçümler DOM üzerinden alındı. T-08, T-13 ve T-15'in Tamamlanma
      Kayıtlarındaki aynı ortam sınırının bir başka görünümü.
   6. **İlgisiz, önceden var olan hata gözlendi:** `query.wikidata.org/sparql`

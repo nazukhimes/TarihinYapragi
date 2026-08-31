@@ -16,16 +16,16 @@ tarihî olayları, doğanları, kaybettiklerimizi, karanlık dosyaları ve bilim
 noktalarını tek sayfada sunar.
 
 **Ayırt edici özellik:** İçerik yalnızca "listelenmez"; **yayıncılar için hazır konuşma
-malzemesine** dönüştürülür. *Sohbet Kartları* ve *Yayın Modu* (teleprompter) bölümleri
+malzemesine** dönüştürülür. _Sohbet Kartları_ ve _Yayın Modu_ (teleprompter) bölümleri
 bu amaca hizmet eder.
 
 ### Hedef kitle
 
-| Kitle | Beklentisi |
-|---|---|
-| Genel ziyaretçi | Günün ilginç tarihini hızlıca okumak |
+| Kitle                                    | Beklentisi                                 |
+| ---------------------------------------- | ------------------------------------------ |
+| Genel ziyaretçi                          | Günün ilginç tarihini hızlıca okumak       |
 | İçerik üreticisi / YouTuber / podcast'çi | Yayında okunacak, kanca cümleli hazır kart |
-| Öğrenci / meraklı | Kaynağa (Vikipedi) hızlı sıçrama |
+| Öğrenci / meraklı                        | Kaynağa (Vikipedi) hızlı sıçrama           |
 
 ### Ürün ilkeleri
 
@@ -39,16 +39,16 @@ bu amaca hizmet eder.
 
 ## 2. Teknoloji Yığını
 
-| Katman | Seçim | Not |
-|---|---|---|
-| Çatı | React 18 + TypeScript 5.7 (`strict: true`) | Sınıf bileşeni yok, hepsi fonksiyon + hook |
-| Derleyici | Vite 6 | `npm run dev` / `build` / `preview` / `typecheck` · yapılandırma `vite.config.ts` |
-| Stil | Tailwind CSS **v4** (`@tailwindcss/vite`) | Config dosyası **yok**; tema `src/index.css` içindeki `@theme` bloğunda |
-| Yönlendirme | `react-router-dom` v6 (`createBrowserRouter`) | Her gün kendi URL'sinde: `/21-agustos` biçimi (T-06). `src/lib/slug.ts` ↔ URL çevrimi yapar |
-| Durum yönetimi | React `useState` / `useMemo` | Redux/Zustand yok, gerek de yok |
-| Veri | Wikimedia REST "On this day" API | Sunucu/backend **yok**, tamamen istemci taraflı |
-| Kalıcılık | `localStorage` (çevrimdışı yedek) + bellek içi `Map` | Veritabanı yok |
-| Kalite | Vitest (`jsdom`) + Testing Library, ESLint (flat config), Prettier | `npm run test` / `lint` / `format` / `kontrol` (T-12) · CI: `.github/workflows/kontrol.yml` |
+| Katman         | Seçim                                                              | Not                                                                                         |
+| -------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------- |
+| Çatı           | React 18 + TypeScript 5.7 (`strict: true`)                         | Sınıf bileşeni yok, hepsi fonksiyon + hook                                                  |
+| Derleyici      | Vite 6                                                             | `npm run dev` / `build` / `preview` / `typecheck` · yapılandırma `vite.config.ts`           |
+| Stil           | Tailwind CSS **v4** (`@tailwindcss/vite`)                          | Config dosyası **yok**; tema `src/index.css` içindeki `@theme` bloğunda                     |
+| Yönlendirme    | `react-router-dom` v6 (`createBrowserRouter`)                      | Her gün kendi URL'sinde: `/21-agustos` biçimi (T-06). `src/lib/slug.ts` ↔ URL çevrimi yapar |
+| Durum yönetimi | React `useState` / `useMemo`                                       | Redux/Zustand yok, gerek de yok                                                             |
+| Veri           | Wikimedia REST "On this day" API                                   | Sunucu/backend **yok**, tamamen istemci taraflı                                             |
+| Kalıcılık      | `localStorage` (çevrimdışı yedek) + bellek içi `Map`               | Veritabanı yok                                                                              |
+| Kalite         | Vitest (`jsdom`) + Testing Library, ESLint (flat config), Prettier | `npm run test` / `lint` / `format` / `kontrol` (T-12) · CI: `.github/workflows/kontrol.yml` |
 
 > **Önemli:** Bu proje **backend'siz, statik bir SPA**'dır. Derleme çıktısı (`dist/`)
 > herhangi bir statik sunucuya konulabilir. Gizli anahtar gerektiren bir `.env` yoktur;
@@ -100,10 +100,10 @@ değişkeniyle geçersiz kılınabilir (bkz. `.env.example`). Koda gömülü URL
 
 ### İki içerik türü — asla karıştırma
 
-| Tür | Kaynak | Rozet | Dosya |
-|---|---|---|---|
-| **Editör içeriği** | Elle yazılır, güvenilir | `Editör notu` / `Editör` | `src/data/gunler/*.ts` (T-10'dan önce tek dosya: `curated.ts`) |
-| **Otomatik içerik** | Vikipedi + regex sınıflandırma | rozet yok | `src/lib/classification.ts` |
+| Tür                 | Kaynak                         | Rozet                    | Dosya                                                          |
+| ------------------- | ------------------------------ | ------------------------ | -------------------------------------------------------------- |
+| **Editör içeriği**  | Elle yazılır, güvenilir        | `Editör notu` / `Editör` | `src/data/gunler/*.ts` (T-10'dan önce tek dosya: `curated.ts`) |
+| **Otomatik içerik** | Vikipedi + regex sınıflandırma | rozet yok                | `src/lib/classification.ts`                                    |
 
 Otomatik sınıflandırma anahtar kelime tabanlıdır ve **yanılabilir**. Bu yüzden
 alt bilgide bir uyarı notu vardır ve her karta Vikipedi bağlantısı konur.
@@ -218,19 +218,19 @@ TarihinYapragi/
 
 ### Nerede ne var? (hızlı referans)
 
-| Ne yapmak istiyorum | Hangi dosya |
-|---|---|
-| Yeni bir güne özel dosya eklemek | İlgili ay dosyası, `src/data/gunler/MM-ad.ts` → şablon: [`ICERIK-SABLONU.md`](ICERIK-SABLONU.md) |
-| Yeni renk / font eklemek | `src/index.css` → `@theme` bloğu |
-| Yeni bölüm eklemek | `src/components/BolumNav.tsx` → `NAV` dizisi · `src/components/Bolumler.tsx` → yeni `SectionShell` bloğu (T-13) |
-| Sınıflandırma kuralı değiştirmek | `src/lib/classification.ts` → `KURALLAR` / `KARANLIK`, sonra `npm run siniflandirma` ile doğrula |
-| Yeni ikon eklemek | `src/components/ui.tsx` → `IconXxx` fonksiyonu |
-| Yayın modunu değiştirmek | `src/components/broadcast.tsx` → `BroadcastMode` (T-13'te ayrıldı, `App.tsx`'te `React.lazy`) |
-| API tabanını değiştirmek | `.env` içine `VITE_WIKI_API_BASE=...` (örnek: `.env.example`) |
-| URL şemasını değiştirmek | `src/lib/slug.ts` → `toDaySlug`/`parseDaySlug`; rotalar `src/main.tsx` |
-| Favicon/PWA simgelerini yeniden üretmek | `npm run icons` → `scripts/generate-brand-assets.mjs` (kaynak: `ui.tsx` → `IconLeafMark`) |
-| SEO/OG/manifest etiketlerini değiştirmek | `index.html` `<head>` + `App.tsx`'teki gün bazlı `useEffect` + `public/manifest.webmanifest` |
-| Service worker önbellek kurallarını değiştirmek | `vite.config.ts` → `VitePWA({ workbox: {...} })` |
+| Ne yapmak istiyorum                             | Hangi dosya                                                                                                     |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Yeni bir güne özel dosya eklemek                | İlgili ay dosyası, `src/data/gunler/MM-ad.ts` → şablon: [`ICERIK-SABLONU.md`](ICERIK-SABLONU.md)                |
+| Yeni renk / font eklemek                        | `src/index.css` → `@theme` bloğu                                                                                |
+| Yeni bölüm eklemek                              | `src/components/BolumNav.tsx` → `NAV` dizisi · `src/components/Bolumler.tsx` → yeni `SectionShell` bloğu (T-13) |
+| Sınıflandırma kuralı değiştirmek                | `src/lib/classification.ts` → `KURALLAR` / `KARANLIK`, sonra `npm run siniflandirma` ile doğrula                |
+| Yeni ikon eklemek                               | `src/components/ui.tsx` → `IconXxx` fonksiyonu                                                                  |
+| Yayın modunu değiştirmek                        | `src/components/broadcast.tsx` → `BroadcastMode` (T-13'te ayrıldı, `App.tsx`'te `React.lazy`)                   |
+| API tabanını değiştirmek                        | `.env` içine `VITE_WIKI_API_BASE=...` (örnek: `.env.example`)                                                   |
+| URL şemasını değiştirmek                        | `src/lib/slug.ts` → `toDaySlug`/`parseDaySlug`; rotalar `src/main.tsx`                                          |
+| Favicon/PWA simgelerini yeniden üretmek         | `npm run icons` → `scripts/generate-brand-assets.mjs` (kaynak: `ui.tsx` → `IconLeafMark`)                       |
+| SEO/OG/manifest etiketlerini değiştirmek        | `index.html` `<head>` + `App.tsx`'teki gün bazlı `useEffect` + `public/manifest.webmanifest`                    |
+| Service worker önbellek kurallarını değiştirmek | `vite.config.ts` → `VitePWA({ workbox: {...} })`                                                                |
 
 ---
 
@@ -243,7 +243,7 @@ TarihinYapragi/
   (Sebebi: `I → ı`, `İ → i` dönüşümü.)
 - **Yıl biçimi:** Negatif yıllar için `formatYear()` kullan → `MÖ 480`.
 - **Bileşen dosyaları:** Tek dosyada birden çok `export function` olabilir; her dosya bir
-  *tema* (bölümler, kâğıt/takvim, yayın, temel UI) etrafında toplanır.
+  _tema_ (bölümler, kâğıt/takvim, yayın, temel UI) etrafında toplanır.
 - **Animasyon:** CSS sınıfları (`reveal`, `leaf-flip`, `rise-in`, `stamp-in`) `index.css`
   içinde. JS animasyon kütüphanesi kullanılmıyor.
 - **Erişilebilirlik:** `prefers-reduced-motion` desteklenir (`index.css` sonu).
@@ -288,14 +288,14 @@ Aynı komut her push'ta GitHub Actions'ta da koşar (`.github/workflows/kontrol.
 
 Tek tek çalıştırmak isterseniz:
 
-| Komut | Ne yapar |
-|---|---|
-| `npm run lint` / `npm run lint:fix` | ESLint (flat config; `rules-of-hooks` + `exhaustive-deps`) |
-| `npm run format` / `npm run format:check` | Prettier |
-| `npm test` / `npm run test:watch` / `npm run test:cov` | Vitest — 203 test, `src/lib` satır kapsamı %78,78 |
-| `npm run sitemap` | 366 adresli `public/sitemap.xml` (`build` bunu zaten çağırır) |
-| `npm run icons` | Favicon + PWA simgeleri + `og-image.png` (kaynak: `ui.tsx` → `IconLeafMark`) |
-| `npm run analyze` | `rollup-plugin-visualizer` ile paket içeriği haritası (T-13) |
+| Komut                                                  | Ne yapar                                                                     |
+| ------------------------------------------------------ | ---------------------------------------------------------------------------- |
+| `npm run lint` / `npm run lint:fix`                    | ESLint (flat config; `rules-of-hooks` + `exhaustive-deps`)                   |
+| `npm run format` / `npm run format:check`              | Prettier                                                                     |
+| `npm test` / `npm run test:watch` / `npm run test:cov` | Vitest — 203 test, `src/lib` satır kapsamı %78,78                            |
+| `npm run sitemap`                                      | 366 adresli `public/sitemap.xml` (`build` bunu zaten çağırır)                |
+| `npm run icons`                                        | Favicon + PWA simgeleri + `og-image.png` (kaynak: `ui.tsx` → `IconLeafMark`) |
+| `npm run analyze`                                      | `rollup-plugin-visualizer` ile paket içeriği haritası (T-13)                 |
 
 ```bash
 npm run siniflandirma
@@ -494,7 +494,7 @@ Bu projede çalışırken:
 2. Görev al: `Talimatlar/` klasöründeki bir `T-xx-*.md` dosyası senin görev tanımındır.
    Talimatın **Kabul Kriterleri** bölümünü karşılamadan bitmiş sayma.
 3. Bitirince talimat dosyasını `Talimatlar/Tamamlandı/` klasörüne taşı ve dosyanın
-   sonundaki *Tamamlanma Kaydı* bölümünü doldur.
+   sonundaki _Tamamlanma Kaydı_ bölümünü doldur.
 4. Türkçe karakterleri bozma. Dosyaları UTF-8 (BOM'suz) yaz. `.bat` dosyaları CRLF olmalı.
 5. `npm run kontrol` (typecheck+lint+test+build, T-12) yeşil kalmadan hiçbir talimatı kapatma.
 6. Bir talimat başka bir talimatın işine giriyorsa **girme** — kapsamı koru, notu

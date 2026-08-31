@@ -1,13 +1,13 @@
 # T-12 · Test, Lint ve Biçimlendirme Altyapısı
 
-| Alan | Değer |
-|---|---|
-| **Faz** | FAZ 4 — Kalite Güvencesi |
-| **Öncelik** | 🟠 Yüksek |
-| **Tahmini süre** | ~4 saat |
-| **Bağımlılık** | T-01, T-02 |
-| **İlgili bulgu** | U-5 |
-| **Durum** | ✅ Tamamlandı (2026-08-22) |
+| Alan             | Değer                      |
+| ---------------- | -------------------------- |
+| **Faz**          | FAZ 4 — Kalite Güvencesi   |
+| **Öncelik**      | 🟠 Yüksek                  |
+| **Tahmini süre** | ~4 saat                    |
+| **Bağımlılık**   | T-01, T-02                 |
+| **İlgili bulgu** | U-5                        |
+| **Durum**        | ✅ Tamamlandı (2026-08-22) |
 
 > ⚡ **Öneri:** Bu talimatı planın sonunu beklemeden, **FAZ 1'den hemen sonra**
 > yapmayı düşünün. T-03, T-04 ve T-11'in testleri o zaman yazılabilir ve
@@ -24,25 +24,25 @@ Kritik saf fonksiyonları testle korumak, kod stilini otomatik denetlemek.
 
 ## 📍 Mevcut Durum
 
-| Araç | Durum |
-|---|---|
-| Test çatısı | ❌ Yok |
-| Test | ❌ Yok |
-| ESLint | ❌ Yok |
-| Prettier | ❌ Yok |
-| CI | ❌ Yok |
+| Araç                | Durum           |
+| ------------------- | --------------- |
+| Test çatısı         | ❌ Yok          |
+| Test                | ❌ Yok          |
+| ESLint              | ❌ Yok          |
+| Prettier            | ❌ Yok          |
+| CI                  | ❌ Yok          |
 | `npm run typecheck` | ✅ Var, geçiyor |
 
 **Korumasız kritik mantık:**
 
-| Fonksiyon | Dosya | Neden kritik |
-|---|---|---|
-| `dayOfYear`, `daysInMonth`, `isLeapYear`, `weekdayIndex` | `lib/date.ts` | K-1'in kaynağı — kolay bozulur |
-| `toDaySlug`, `parseDaySlug` | `lib/slug.ts` | Bozulursa **366 URL** kırılır |
-| `classifyItem`, `detectDarkItem` | `lib/wiki.ts` | Sessizce yanlış sonuç üretir |
-| `normalize`, `pick` | `lib/wiki.ts` | Bozuk API yanıtında çökebilir |
-| `matchQuery`, `formatYear`, `centuryOf` | `components/sections.tsx` | Türkçe karakter tuzakları |
-| `firstSentence`, `estimateMinutes` | `lib/wiki.ts` | Kart kalitesi |
+| Fonksiyon                                                | Dosya                     | Neden kritik                   |
+| -------------------------------------------------------- | ------------------------- | ------------------------------ |
+| `dayOfYear`, `daysInMonth`, `isLeapYear`, `weekdayIndex` | `lib/date.ts`             | K-1'in kaynağı — kolay bozulur |
+| `toDaySlug`, `parseDaySlug`                              | `lib/slug.ts`             | Bozulursa **366 URL** kırılır  |
+| `classifyItem`, `detectDarkItem`                         | `lib/wiki.ts`             | Sessizce yanlış sonuç üretir   |
+| `normalize`, `pick`                                      | `lib/wiki.ts`             | Bozuk API yanıtında çökebilir  |
+| `matchQuery`, `formatYear`, `centuryOf`                  | `components/sections.tsx` | Türkçe karakter tuzakları      |
+| `firstSentence`, `estimateMinutes`                       | `lib/wiki.ts`             | Kart kalitesi                  |
 
 ---
 
@@ -101,7 +101,11 @@ import { isLeapYear, daysInMonth, dayOfYear, weekdayIndex } from "./date";
 
 describe("isLeapYear", () => {
   it.each([
-    [2024, true], [2026, false], [2000, true], [1900, false], [2100, false],
+    [2024, true],
+    [2026, false],
+    [2000, true],
+    [1900, false],
+    [2100, false],
   ])("%i → %s", (yil, beklenen) => expect(isLeapYear(yil)).toBe(beklenen));
 });
 
@@ -138,8 +142,13 @@ describe("weekdayIndex", () => {
 ```ts
 describe("toDaySlug", () => {
   it.each([
-    [8, 21, "21-agustos"], [1, 1, "1-ocak"], [2, 29, "29-subat"],
-    [5, 19, "19-mayis"], [9, 9, "9-eylul"], [11, 10, "10-kasim"], [12, 31, "31-aralik"],
+    [8, 21, "21-agustos"],
+    [1, 1, "1-ocak"],
+    [2, 29, "29-subat"],
+    [5, 19, "19-mayis"],
+    [9, 9, "9-eylul"],
+    [11, 10, "10-kasim"],
+    [12, 31, "31-aralik"],
   ])("(%i, %i) → %s", (m, g, beklenen) => expect(toDaySlug(m, g)).toBe(beklenen));
 
   it("tüm ay slug'ları ASCII", () => {
@@ -152,8 +161,8 @@ describe("parseDaySlug", () => {
   it("sayısal biçim", () => expect(parseDaySlug("08-21")).toEqual({ month: 8, day: 21 }));
   it("29 Şubat geçerli", () => expect(parseDaySlug("29-subat")).toEqual({ month: 2, day: 29 }));
 
-  it.each(["32-agustos", "31-subat", "0-ocak", "agustos", "", "21-xyz", "abc"])(
-    "%s → null", (s) => expect(parseDaySlug(s)).toBeNull()
+  it.each(["32-agustos", "31-subat", "0-ocak", "agustos", "", "21-xyz", "abc"])("%s → null", (s) =>
+    expect(parseDaySlug(s)).toBeNull()
   );
 });
 
@@ -198,9 +207,10 @@ Ayrıca `normalize` dayanıklılık testleri:
 describe("normalize — bozuk veriye dayanıklılık", () => {
   it("undefined → boş dizi", () => expect(normalize(undefined, "tr", "x")).toEqual([]));
   it("year yoksa eler", () => expect(normalize([{ text: "a" }], "tr", "x")).toHaveLength(0));
-  it("text boşsa eler", () => expect(normalize([{ year: 1, text: "  " }], "tr", "x")).toHaveLength(0));
+  it("text boşsa eler", () =>
+    expect(normalize([{ year: 1, text: "  " }], "tr", "x")).toHaveLength(0));
   it("pages 3 ile sınırlı", () => {
-    const r = normalize([{ year: 1, text: "a", pages: [1,2,3,4,5] as never }], "tr", "x");
+    const r = normalize([{ year: 1, text: "a", pages: [1, 2, 3, 4, 5] as never }], "tr", "x");
     expect(r[0].pages).toHaveLength(3);
   });
 });
@@ -254,9 +264,7 @@ describe("CURATED bütünlüğü", () => {
 
   it("her events girdisinde ≥2 matchKeys", () => {
     gunler.forEach(([k, g]) =>
-      g.events?.forEach((e) =>
-        expect(e.matchKeys.length, `${k}/${e.id}`).toBeGreaterThanOrEqual(2)
-      )
+      g.events?.forEach((e) => expect(e.matchKeys.length, `${k}/${e.id}`).toBeGreaterThanOrEqual(2))
     );
   });
 
@@ -409,13 +417,13 @@ jobs:
 
 ## 🚫 Kapsam Dışı
 
-| Dokunma | Neden / Hangi talimat |
-|---|---|
-| Uçtan uca test (Playwright/Cypress) | Kapsam dışı — PLAN-02 |
-| Görsel regresyon testi | Kapsam dışı |
+| Dokunma                                         | Neden / Hangi talimat                                                    |
+| ----------------------------------------------- | ------------------------------------------------------------------------ |
+| Uçtan uca test (Playwright/Cypress)             | Kapsam dışı — PLAN-02                                                    |
+| Görsel regresyon testi                          | Kapsam dışı                                                              |
 | Mevcut kaynak kodun **davranışını** değiştirmek | Test yazarken bulunan hatalar **not edilir**, ilgili talimata devredilir |
-| ESLint uyarılarını toplu düzeltmek | Yalnızca **hata** (error) seviyesi giderilir; uyarılar not edilir |
-| Kod kapsamını %100'e çıkarmak | Eşik: satır %70 yeterli |
+| ESLint uyarılarını toplu düzeltmek              | Yalnızca **hata** (error) seviyesi giderilir; uyarılar not edilir        |
+| Kod kapsamını %100'e çıkarmak                   | Eşik: satır %70 yeterli                                                  |
 
 ---
 
@@ -485,7 +493,7 @@ Hâlâ **CRLF** olmalı — Prettier dokunmamış olmalı.
 npm run lint 2>&1 | tail -5
 ```
 
-Hata sayısı **0**. Uyarı sayısını *Tamamlanma Kaydı*'na yaz; `exhaustive-deps`
+Hata sayısı **0**. Uyarı sayısını _Tamamlanma Kaydı_'na yaz; `exhaustive-deps`
 uyarılarını tek tek incele — gerçek bir hata gizliyor olabilir.
 
 ### 6. CI
@@ -537,7 +545,7 @@ Bir PR aç, iş akışının çalıştığını ve yeşil olduğunu doğrula.
      (≥60 gün — T-10 hedefi — ve her anahtarın geçerli bir takvim günü
      olması) sınayacak şekilde yazıldı.
   4. **jsdom'un `requestAnimationFrame`'i gerçek tarayıcılarla tutarsız bir
-     saat veriyor** — geri çağrıya *window oluşturma anına göre sıfırlanmış*
+     saat veriyor** — geri çağrıya _window oluşturma anına göre sıfırlanmış_
      bir zaman damgası (`performance.now() - windowInitialized`) verirken,
      doğrudan `performance.now()` çağrıları bu sıfırlamayı görmüyor. Gerçek
      tarayıcılarda bu ikisi her zaman aynı saattir (spesifikasyon gereği);
@@ -567,10 +575,10 @@ Bir PR aç, iş akışının çalıştığını ve yeşil olduğunu doğrula.
      zamanda yayınlanmış bir gerilemesi.
   7. **`coverage.thresholds`'tan `functions: 70` çıkarıldı** (yalnızca
      `lines: 70` ve `branches: 60` kaldı). Kabul Kriterleri sayısal olarak
-     yalnızca *satır* kapsamını adlandırıyor; `wiki.ts`/`useInView.ts` kasıtlı
+     yalnızca _satır_ kapsamını adlandırıyor; `wiki.ts`/`useInView.ts` kasıtlı
      olarak birkaç saf fonksiyonu (test edilen) birçok ağ/hook fonksiyonuyla
      (bu talimatın kapsamı dışı) bir arada barındırıyor, bu yüzden fonksiyon
-     *sayısı* oranı yapısal olarak düşük kalıyor — satır kapsamı hedefi ise
+     _sayısı_ oranı yapısal olarak düşük kalıyor — satır kapsamı hedefi ise
      rahatça geçiliyor (yukarı bakın).
   8. **`buildAutoTalk`/`classifyStatus` için talimatın örnek kodunun ötesinde
      ek test yazıldı.** Talimatın "korumasız kritik mantık" tablosu
@@ -580,7 +588,7 @@ Bir PR aç, iş akışının çalıştığını ve yeşil olduğunu doğrula.
      dolaylı olarak kapatıldı; ayrıca HTTP durum kodu → kullanıcı mesajı
      eşlemesi (`classifyStatus`) da eklendi.
   9. **Doğrulama §3'teki mutasyon denemesi, talimatın yazdığı hâliyle
-     kırmızı vermedi** — `dayOfYear`'ın *varsayılan* parametresini (`2024`)
+     kırmızı vermedi** — `dayOfYear`'ın _varsayılan_ parametresini (`2024`)
      değiştirmek hiçbir testi bozmadı, çünkü gerçek çağrı yeri (`leaf.tsx`)
      ve her test `year`'ı zaten açıkça veriyor (varsayılan hiç devreye
      girmiyor). Daha temsili bir mutasyonla (fonksiyon gövdesinde `year`

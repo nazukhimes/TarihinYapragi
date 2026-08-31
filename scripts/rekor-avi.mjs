@@ -175,7 +175,9 @@ for (const kalip of KALIPLAR) {
 const liste = [...adaylar.values()].sort((a, b) => a.baslik.localeCompare(b.baslik, "tr"));
 
 console.log("");
-console.log(`Ham sonuç: ${toplamHam} · Elenen: ${toplamHam - liste.length} · Aday: ${liste.length}`);
+console.log(
+  `Ham sonuç: ${toplamHam} · Elenen: ${toplamHam - liste.length} · Aday: ${liste.length}`
+);
 console.log("");
 
 for (const a of liste.slice(0, 15)) {
@@ -203,7 +205,7 @@ const satirlar = [
   "1. Maddeyi aç, rekorun **rakamını** ve **yılını** kaynakta doğrula.",
   "2. Rekor hâlâ geçerli mi? Sonradan kırılmış olabilir — `status` alanını buna göre yaz.",
   "3. Guinness'in resmen onayladığı bir unvan mı? Değilse `official: false`.",
-  "4. Kırılma günü kesin biliniyorsa `date: \"MM-DD\"` ekle; **emin değilsen ekleme.**",
+  '4. Kırılma günü kesin biliniyorsa `date: "MM-DD"` ekle; **emin değilsen ekleme.**',
   "5. `value` alanına yalnızca kaynakta açıkça geçen rakamı yaz.",
   "",
   "---",

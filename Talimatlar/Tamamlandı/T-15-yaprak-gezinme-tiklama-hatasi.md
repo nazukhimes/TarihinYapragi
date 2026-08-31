@@ -1,13 +1,13 @@
 # T-15 · Yaprak Gezinme Satırının Dekoratif Katmanla Örtülmesi
 
-| Alan | Değer |
-|---|---|
-| **Faz** | FAZ 1 — Kritik Hata Düzeltmeleri *(plan yürürken eklendi, en son uygulanıyor)* |
-| **Öncelik** | 🔴 Kritik |
-| **Tahmini süre** | ~1 saat |
-| **Bağımlılık** | Yok — `leaf.tsx` T-13'ten beri kararlı |
-| **İlgili bulgu** | K-5 |
-| **Durum** | ✅ Tamamlandı — 2026-08-24 |
+| Alan             | Değer                                                                          |
+| ---------------- | ------------------------------------------------------------------------------ |
+| **Faz**          | FAZ 1 — Kritik Hata Düzeltmeleri _(plan yürürken eklendi, en son uygulanıyor)_ |
+| **Öncelik**      | 🔴 Kritik                                                                      |
+| **Tahmini süre** | ~1 saat                                                                        |
+| **Bağımlılık**   | Yok — `leaf.tsx` T-13'ten beri kararlı                                         |
+| **İlgili bulgu** | K-5                                                                            |
+| **Durum**        | ✅ Tamamlandı — 2026-08-24                                                     |
 
 > ⚠️ **Bu talimat T-14'ten (kapanış) önce yapılmalıdır.** K-5, uygulamanın
 > birincil gün gezinme mekanizmasını devre dışı bırakan kritik bir hatadır;
@@ -58,7 +58,7 @@ mini takvim**.
 
 CSS boyama sırasına göre, `z-index: auto` taşıyan **konumlanmış** öğeler,
 DOM sırasından bağımsız olarak konumlanmamış (`static`) öğelerin **üzerinde**
-boyanır. Gezinme satırı `static` olduğu için, kod içinde dekordan *sonra*
+boyanır. Gezinme satırı `static` olduğu için, kod içinde dekordan _sonra_
 gelmesine rağmen **altında** kalıyor. Mini takvim ise kendi `className`'inde
 `relative` taşıdığı için etkilenmiyor — bu yüzden bugüne kadar günü yalnızca
 mini takvimden değiştirmek mümkün oldu.
@@ -77,24 +77,24 @@ mini takvimden değiştirmek mümkün oldu.
 
 Aynı ölçüm üç düğme için de aynı sonucu verdi:
 
-| Hedef | `elementFromPoint` sonucu |
-|---|---|
-| Önceki gün | dekoratif `div` |
-| Bugüne dön | dekoratif `div` |
-| Sonraki gün | dekoratif `div` |
+| Hedef       | `elementFromPoint` sonucu |
+| ----------- | ------------------------- |
+| Önceki gün  | dekoratif `div`           |
+| Bugüne dön  | dekoratif `div`           |
+| Sonraki gün | dekoratif `div`           |
 
 ### Kanıt 2 — geometri
 
 29 Ekim'de, mini takvim açıkken (piksel, viewport):
 
-| Öğe | `position` | üst | alt |
-|---|---|---|---|
-| Dış sarmalayıcı | relative | 155 | 1119 |
-| Dekor 1 | **absolute** | 157 | 1128 |
-| Dekor 2 | **absolute** | 160 | 1138 |
-| Kart (`.paper`) | relative | 155 | 603 |
-| **Gezinme satırı** | **static** | **630** | **688** |
-| Mini takvim | relative | 714 | 1129 |
+| Öğe                | `position`   | üst     | alt     |
+| ------------------ | ------------ | ------- | ------- |
+| Dış sarmalayıcı    | relative     | 155     | 1119    |
+| Dekor 1            | **absolute** | 157     | 1128    |
+| Dekor 2            | **absolute** | 160     | 1138    |
+| Kart (`.paper`)    | relative     | 155     | 603     |
+| **Gezinme satırı** | **static**   | **630** | **688** |
+| Mini takvim        | relative     | 714     | 1129    |
 
 Dekor kutuları 1128/1138'e kadar iniyor; gezinme satırı (630-688) tamamen
 onların içinde kalıyor.
@@ -107,7 +107,7 @@ altındaki bölge bu yüzden boş bir krem blok olarak boyanıyor: "ÖNCEKİ GÜ
 ok simgesi soluk biçimde seçiliyor.
 
 > **Not — bulgunun kayıtlı hâlinden farkı:** `ANALIZ-RAPORU.md`'deki K-5 kaydı
-> yalnızca *tıklanamama* üzerine yazılmıştı. Bu talimat hazırlanırken alınan
+> yalnızca _tıklanamama_ üzerine yazılmıştı. Bu talimat hazırlanırken alınan
 > gerçek tarayıcı görüntüsü, satırın aynı zamanda **görsel olarak da örtüldüğünü**
 > gösterdi. Düzeltme her iki belirtiyi birden gidermelidir; bulgu kaydı
 > Adım 5'te bu gerçeğe göre güncellenecek.
@@ -185,8 +185,10 @@ neden kart sarmalayıcısının içinde olduğunu söyleyecek biçimde güncelle
 bir sonraki geliştirici sarmalayıcıyı "gereksiz" görüp silmesin:
 
 ```tsx
-{/* arkadaki yapraklar — kendi relative sarmalayıcısında durmalılar:
-    dış sarmalayıcıya bağlanırlarsa inset-0 gezinme satırını da kaplar (K-5) */}
+{
+  /* arkadaki yapraklar — kendi relative sarmalayıcısında durmalılar:
+    dış sarmalayıcıya bağlanırlarsa inset-0 gezinme satırını da kaplar (K-5) */
+}
 ```
 
 ### Adım 5 — Bulgu kaydını kapat
@@ -200,15 +202,15 @@ kısa bir kapanış notu ekle ve **Kanıt 3'teki görsel belirtiyi** kayda geçi
 
 ## 🚫 Kapsam Dışı
 
-| Dokunma | Neden |
-|---|---|
-| Kartın içi (`.paper` gövdesi, zımba delikleri, kırmızı bant, `leaf-flip`) | Bu talimat yalnızca **dekor katmanının kutusunu** düzeltir |
-| `MiniCalendar` | Zaten `relative`, hatadan etkilenmiyor |
-| Paylaş düğmesinin yeri (`App.tsx`) | T-06'nın bilinçli kararı, ayrı konu |
-| O-10 (`text-brand` kontrastı), O-11 (`holidays` çöp kayıt), O-12 (Bilim & Keşif mükerrer) | Ayrı bulgular, PLAN-02 adayı |
-| O-13 (`react-router` güvenlik danışmaları) | Kırılma içeren 6→7 yükseltmesi gerektiriyor, ayrı talimat |
-| Otomatik tıklama-denetimi betiği yazmak | Değerli ama ayrı iş — *Sonraki talimata not*'a yazılacak |
-| `npm run kontrol` dışında test altyapısına dokunmak | T-12'nin kapsamı |
+| Dokunma                                                                                   | Neden                                                      |
+| ----------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| Kartın içi (`.paper` gövdesi, zımba delikleri, kırmızı bant, `leaf-flip`)                 | Bu talimat yalnızca **dekor katmanının kutusunu** düzeltir |
+| `MiniCalendar`                                                                            | Zaten `relative`, hatadan etkilenmiyor                     |
+| Paylaş düğmesinin yeri (`App.tsx`)                                                        | T-06'nın bilinçli kararı, ayrı konu                        |
+| O-10 (`text-brand` kontrastı), O-11 (`holidays` çöp kayıt), O-12 (Bilim & Keşif mükerrer) | Ayrı bulgular, PLAN-02 adayı                               |
+| O-13 (`react-router` güvenlik danışmaları)                                                | Kırılma içeren 6→7 yükseltmesi gerektiriyor, ayrı talimat  |
+| Otomatik tıklama-denetimi betiği yazmak                                                   | Değerli ama ayrı iş — _Sonraki talimata not_'a yazılacak   |
+| `npm run kontrol` dışında test altyapısına dokunmak                                       | T-12'nin kapsamı                                           |
 
 ---
 
@@ -237,16 +239,17 @@ kısa bir kapanış notu ekle ve **Kanıt 3'teki görsel belirtiyi** kayda geçi
 ```js
 (() => {
   const out = [];
-  document.querySelectorAll('button').forEach((el) => {
+  document.querySelectorAll("button").forEach((el) => {
     const r = el.getBoundingClientRect();
     if (!r.width || !r.height) return;
-    const x = r.left + r.width / 2, y = r.top + r.height / 2;
+    const x = r.left + r.width / 2,
+      y = r.top + r.height / 2;
     if (y < 0 || y > innerHeight) return;
     const top = document.elementFromPoint(x, y);
     if (top && top !== el && !el.contains(top))
-      out.push((el.getAttribute('aria-label') || el.textContent.trim()).slice(0, 24));
+      out.push((el.getAttribute("aria-label") || el.textContent.trim()).slice(0, 24));
   });
-  return out.length ? 'ENGELLENEN: ' + out.join(', ') : 'temiz';
+  return out.length ? "ENGELLENEN: " + out.join(", ") : "temiz";
 })();
 ```
 
@@ -260,11 +263,11 @@ kısa bir kapanış notu ekle ve **Kanıt 3'teki görsel belirtiyi** kayda geçi
 
 ### 2. Görsel doğrulama — 3 gün (`CALISMA-SISTEMI.md` §6.3)
 
-| Gün | Adres | Bakılacak |
-|---|---|---|
-| Özel dosyalı | `/29-ekim` | Üç düğme de okunuyor ve tıklanıyor |
-| Sıradan | `/7-mart` | Aynısı |
-| Kenar durum | `/29-subat` | Aynısı + "artık yıl değil" satırı bozulmamış |
+| Gün          | Adres       | Bakılacak                                    |
+| ------------ | ----------- | -------------------------------------------- |
+| Özel dosyalı | `/29-ekim`  | Üç düğme de okunuyor ve tıklanıyor           |
+| Sıradan      | `/7-mart`   | Aynısı                                       |
+| Kenar durum  | `/29-subat` | Aynısı + "artık yıl değil" satırı bozulmamış |
 
 Her günde ayrıca: mini takvimi aç/kapat, dekoratif yaprakların kartın
 arkasından taşması korunuyor mu bak.
@@ -292,26 +295,26 @@ npm run kontrol
 
 - **Değişen dosyalar:**
 
-  | Dosya | İşlem |
-  |---|---|
-  | `src/components/leaf.tsx` | Kart ve iki dekoratif katman yeni bir `<div className="relative">` sarmalayıcısının içine alındı — `inset-0` artık dış sütunun değil **kartın** kutusunu ifade ediyor. İki dekor `div`'ine `pointer-events-none` ve `aria-hidden="true"` eklendi. Gezinme satırı `flex …` → `relative flex …` yapıldı. Yorum satırı, sarmalayıcının neden gerekli olduğunu (K-5) söyleyecek biçimde güncellendi. Kartın içine hiç dokunulmadı |
-  | `Dokumanlar/ANALIZ-RAPORU.md` | K-5 başlığı `✅ ÇÖZÜLDÜ (T-15)` işaretlendi; genel sağlık tablosunda kritik hatalar 4/5 → **5/5**; K-5 gövdesine çözüm notu, kayda geçmemiş ikinci belirti (görsel örtme) ve düzeltme sonrası geometri ölçümü eklendi |
-  | `Dokumanlar/BAGLAM.md` | "Mevcut Durum"daki açık K-5 maddesi üstü çizili + `✅ T-15` yapıldı; plan ilerlemesi 13/14 → **14/15**; son güncelleme tarihi 2026-08-24 (T-15) |
-  | `Dokumanlar/MIMARI.md` | §8 Bilinen Teknik Borç tablosundaki K-5 satırı üstü çizili + çözüm açıklaması |
-  | `Dokumanlar/KULLANIM-KILAVUZU.md` | §9 Sorun Giderme'deki K-5 satırı, K-1…K-4 ile aynı üslupta "düzeltildi" hâline getirildi |
-  | `Talimatlar/PLAN-01-temel-duzeltme-ve-tamamlama.md` | Talimat sayısı 14 → 15; FAZ 1 tablosuna T-15 satırı; bağımlılık haritasına T-15; Kesin kurallar'a T-15 notu; ilerleme tablosuna T-15 satırı; durum 14/15 |
+  | Dosya                                               | İşlem                                                                                                                                                                                                                                                                                                                                                                                                                         |
+  | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | `src/components/leaf.tsx`                           | Kart ve iki dekoratif katman yeni bir `<div className="relative">` sarmalayıcısının içine alındı — `inset-0` artık dış sütunun değil **kartın** kutusunu ifade ediyor. İki dekor `div`'ine `pointer-events-none` ve `aria-hidden="true"` eklendi. Gezinme satırı `flex …` → `relative flex …` yapıldı. Yorum satırı, sarmalayıcının neden gerekli olduğunu (K-5) söyleyecek biçimde güncellendi. Kartın içine hiç dokunulmadı |
+  | `Dokumanlar/ANALIZ-RAPORU.md`                       | K-5 başlığı `✅ ÇÖZÜLDÜ (T-15)` işaretlendi; genel sağlık tablosunda kritik hatalar 4/5 → **5/5**; K-5 gövdesine çözüm notu, kayda geçmemiş ikinci belirti (görsel örtme) ve düzeltme sonrası geometri ölçümü eklendi                                                                                                                                                                                                         |
+  | `Dokumanlar/BAGLAM.md`                              | "Mevcut Durum"daki açık K-5 maddesi üstü çizili + `✅ T-15` yapıldı; plan ilerlemesi 13/14 → **14/15**; son güncelleme tarihi 2026-08-24 (T-15)                                                                                                                                                                                                                                                                               |
+  | `Dokumanlar/MIMARI.md`                              | §8 Bilinen Teknik Borç tablosundaki K-5 satırı üstü çizili + çözüm açıklaması                                                                                                                                                                                                                                                                                                                                                 |
+  | `Dokumanlar/KULLANIM-KILAVUZU.md`                   | §9 Sorun Giderme'deki K-5 satırı, K-1…K-4 ile aynı üslupta "düzeltildi" hâline getirildi                                                                                                                                                                                                                                                                                                                                      |
+  | `Talimatlar/PLAN-01-temel-duzeltme-ve-tamamlama.md` | Talimat sayısı 14 → 15; FAZ 1 tablosuna T-15 satırı; bağımlılık haritasına T-15; Kesin kurallar'a T-15 notu; ilerleme tablosuna T-15 satırı; durum 14/15                                                                                                                                                                                                                                                                      |
 
 - **Kanıt (önce / sonra):**
 
-  | Ölçüm | Önce | Sonra |
-  |---|---|---|
-  | Dekor katmanının kutusu (29 Şubat, mini takvim açık) | 157-1128 · **tüm sütun** | 157-645 · **yalnızca kart** |
-  | Gezinme satırı | `static`, dekorun içinde (630-688) | `relative`, dekorun altında (654-712) |
-  | Dekor `pointer-events` | `auto` | `none` |
-  | `elementFromPoint` (üç düğmenin merkezi) | dekoratif `div` | **düğmenin kendisi** |
-  | Sayfadaki engellenen denetim sayısı | 3 | **0** (148 görünür denetim tarandı) |
-  | Gerçek fare tıklaması | tetiklenmiyor | 29 Ekim → 30 Ekim → 29 Ekim → bugün |
-  | Düğme yazıları | okunmuyor (opak krem blok) | okunuyor |
+  | Ölçüm                                                | Önce                               | Sonra                                 |
+  | ---------------------------------------------------- | ---------------------------------- | ------------------------------------- |
+  | Dekor katmanının kutusu (29 Şubat, mini takvim açık) | 157-1128 · **tüm sütun**           | 157-645 · **yalnızca kart**           |
+  | Gezinme satırı                                       | `static`, dekorun içinde (630-688) | `relative`, dekorun altında (654-712) |
+  | Dekor `pointer-events`                               | `auto`                             | `none`                                |
+  | `elementFromPoint` (üç düğmenin merkezi)             | dekoratif `div`                    | **düğmenin kendisi**                  |
+  | Sayfadaki engellenen denetim sayısı                  | 3                                  | **0** (148 görünür denetim tarandı)   |
+  | Gerçek fare tıklaması                                | tetiklenmiyor                      | 29 Ekim → 30 Ekim → 29 Ekim → bugün   |
+  | Düğme yazıları                                       | okunmuyor (opak krem blok)         | okunuyor                              |
 
 - **Yeşil kapı:** `npm run kontrol` → typecheck ✅ · lint ✅ · **203 test** ✅ · build ✅
   (`sitemap.xml` 366 adres, PWA 17 girdi).

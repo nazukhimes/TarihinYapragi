@@ -1,13 +1,13 @@
 # T-04 · Sayaç ve Görünürlük Hataları
 
-| Alan | Değer |
-|---|---|
-| **Faz** | FAZ 1 — Kritik Hata Düzeltmeleri |
-| **Öncelik** | 🔴 Kritik |
-| **Tahmini süre** | ~2,5 saat |
-| **Bağımlılık** | T-01 |
-| **İlgili bulgu** | K-2, K-3 |
-| **Durum** | ✅ Tamamlandı — 2026-08-21 |
+| Alan             | Değer                            |
+| ---------------- | -------------------------------- |
+| **Faz**          | FAZ 1 — Kritik Hata Düzeltmeleri |
+| **Öncelik**      | 🔴 Kritik                        |
+| **Tahmini süre** | ~2,5 saat                        |
+| **Bağımlılık**   | T-01                             |
+| **İlgili bulgu** | K-2, K-3                         |
+| **Durum**        | ✅ Tamamlandı — 2026-08-21       |
 
 ---
 
@@ -62,8 +62,14 @@ Kaybettiklerimiz / Karanlık dosya) ikinci günden itibaren **yanlış**.
 `src/components/ui.tsx:4-42` (`Reveal`) + `src/index.css:170-178`
 
 ```css
-.reveal          { opacity: 0; transform: translateY(26px); }
-.reveal.in-view  { opacity: 1; transform: translateY(0); }
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+}
+.reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
 ```
 
 **Canlı kanıt:** Sayfada **181** `.reveal` elemanı var. Sekme gizliyken
@@ -128,7 +134,7 @@ export function useInView<T extends Element>(fallbackMs = 1200) {
 
     const obs = getObserver();
     if (!obs) {
-      setInView(true);          // gözlemci desteklenmiyor → hemen göster
+      setInView(true); // gözlemci desteklenmiyor → hemen göster
       return;
     }
 
@@ -194,7 +200,12 @@ Mevcut `prefers-reduced-motion` bloğunun **içine** ya da hemen ardına ekle.
 
 ```html
 <noscript>
-  <style>.reveal { opacity: 1 !important; transform: none !important; }</style>
+  <style>
+    .reveal {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  </style>
 </noscript>
 ```
 
@@ -202,9 +213,20 @@ Mevcut `prefers-reduced-motion` bloğunun **içine** ya da hemen ardına ekle.
 
 ```css
 @media print {
-  .reveal { opacity: 1 !important; transform: none !important; }
-  .noise, .gridlines, .ticker-track, .scanlines { display: none !important; }
-  header, nav { position: static !important; }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .noise,
+  .gridlines,
+  .ticker-track,
+  .scanlines {
+    display: none !important;
+  }
+  header,
+  nav {
+    position: static !important;
+  }
 }
 ```
 
@@ -241,12 +263,12 @@ export function CountUp({ to, duration = 900 }: { to: number; duration?: number 
 
 **Değişenler:**
 
-| Önce | Sonra |
-|---|---|
+| Önce                                            | Sonra                                   |
+| ----------------------------------------------- | --------------------------------------- |
 | `started` ref'i animasyonu bir kez kilitliyordu | Kilit yok; `to` değişince yeniden oynar |
-| Her zaman 0'dan başlıyordu | Önceki değerden yeni değere geçiyor |
-| `requestAnimationFrame` iptal edilmiyordu | `cancelAnimationFrame` ile temizleniyor |
-| Kendi gözlemcisini kuruyordu | Paylaşılan gözlemciyi kullanıyor |
+| Her zaman 0'dan başlıyordu                      | Önceki değerden yeni değere geçiyor     |
+| `requestAnimationFrame` iptal edilmiyordu       | `cancelAnimationFrame` ile temizleniyor |
+| Kendi gözlemcisini kuruyordu                    | Paylaşılan gözlemciyi kullanıyor        |
 
 ### Adım 5 — Eski gözlemci kodunu temizle
 
@@ -262,14 +284,14 @@ Beklenen: **boş** (yalnızca `src/lib/useInView.ts` içinde geçmeli).
 
 ## 🚫 Kapsam Dışı
 
-| Dokunma | Neden / Hangi talimat |
-|---|---|
-| Tarih hesaplamaları | T-03 |
-| `Modal` odak tuzağı, `Toaster` `aria-live` | T-07 |
-| `ErrorBoundary` | T-09 |
+| Dokunma                                                | Neden / Hangi talimat |
+| ------------------------------------------------------ | --------------------- |
+| Tarih hesaplamaları                                    | T-03                  |
+| `Modal` odak tuzağı, `Toaster` `aria-live`             | T-07                  |
+| `ErrorBoundary`                                        | T-09                  |
 | Diğer animasyonlar (`leaf-flip`, `stamp-in`, `ticker`) | Çalışıyorlar, dokunma |
-| Kod bölme / `React.lazy` | T-13 |
-| Yeni animasyon **ekleme** | Kapsam dışı |
+| Kod bölme / `React.lazy`                               | T-13                  |
+| Yeni animasyon **ekleme**                              | Kapsam dışı           |
 
 ---
 
@@ -278,12 +300,12 @@ Beklenen: **boş** (yalnızca `src/lib/useInView.ts` içinde geçmeli).
 - [x] `src/lib/useInView.ts` var; tek paylaşılan gözlemci + `setTimeout` güvenlik ağı içeriyor
 - [x] `Reveal` ve `CountUp` bu hook'u kullanıyor; `ui.tsx` içinde `new IntersectionObserver` **yok**
 - [x] `Reveal`'ın dış arayüzü (props) değişmedi — çağıran dosyalarda değişiklik gerekmedi
-- [x] Gün değiştirildiğinde dört sayaç da **doğru yeni değere** geçiyor (K-2 çözüldü) *(kod incelemesi + `inView` durum geçişinin canlı kanıtı; rAF ile piksel düzeyinde animasyon bu oturumda ayrıca izlenemedi — bkz. Sapmalar)*
-- [x] Sayaç geçişi eski değerden yenisine yumuşak, sıfıra düşmüyor *(kod incelemesiyle doğrulandı — bkz. Sapmalar)*
+- [x] Gün değiştirildiğinde dört sayaç da **doğru yeni değere** geçiyor (K-2 çözüldü) _(kod incelemesi + `inView` durum geçişinin canlı kanıtı; rAF ile piksel düzeyinde animasyon bu oturumda ayrıca izlenemedi — bkz. Sapmalar)_
+- [x] Sayaç geçişi eski değerden yenisine yumuşak, sıfıra düşmüyor _(kod incelemesiyle doğrulandı — bkz. Sapmalar)_
 - [x] Sekme arka planda açılıp öne getirildiğinde içerik görünüyor (K-3 çözüldü)
-- [x] `prefers-reduced-motion: reduce` açıkken tüm içerik anında ve tam görünür *(kod incelemesiyle doğrulandı — bkz. Sapmalar)*
+- [x] `prefers-reduced-motion: reduce` açıkken tüm içerik anında ve tam görünür _(kod incelemesiyle doğrulandı — bkz. Sapmalar)_
 - [x] `<noscript>` stili `index.html` içinde
-- [x] `@media print` bloğu var; yazdırma önizlemesinde içerik görünüyor *(kod incelemesiyle doğrulandı — bkz. Sapmalar)*
+- [x] `@media print` bloğu var; yazdırma önizlemesinde içerik görünüyor _(kod incelemesiyle doğrulandı — bkz. Sapmalar)_
 - [x] `npm run typecheck` hatasız
 - [x] `npm run build` hatasız
 
@@ -308,8 +330,8 @@ Beklenen: **boş** (yalnızca `src/lib/useInView.ts` içinde geçmeli).
 Konsolda doğrula:
 
 ```js
-const t = document.querySelectorAll('.reveal').length;
-const v = document.querySelectorAll('.reveal.in-view').length;
+const t = document.querySelectorAll(".reveal").length;
+const v = document.querySelectorAll(".reveal.in-view").length;
 console.log(`${v} / ${t} görünür`);
 ```
 
@@ -325,7 +347,8 @@ DevTools → Rendering → **Emulate CSS `prefers-reduced-motion: reduce`**
 Konsolda gözlemciyi devre dışı bırak, sonra yenile:
 
 ```js
-delete window.IntersectionObserver; location.reload();
+delete window.IntersectionObserver;
+location.reload();
 ```
 
 Sayfa yine de tamamen görünür olmalı.
@@ -348,17 +371,17 @@ Gözlemci sayısı 181'den **1**'e inmiş olmalı (Memory → Heap snapshot'ta d
 
 - **Değişen dosyalar:**
 
-  | Dosya | İşlem |
-  |---|---|
-  | `src/lib/useInView.ts` | Yeni — modül seviyesinde tek paylaşılan `IntersectionObserver` (`getObserver()`, tembel kurulum) + `useInView<T>(fallbackMs=1200)` hook'u. Üç güvenlik yolu: gerçek kesişim, `setTimeout` zaman aşımı, `IntersectionObserver` yoksa senkron `true` |
-  | `src/components/ui.tsx` | `Reveal` ve `CountUp` artık `useInView`'ı kullanıyor; ikisinin de kendi `new IntersectionObserver` kurulumu kaldırıldı. `CountUp`'taki `started` kilidi (bir daha sıfırlanmayan `useRef`) tamamen kaldırıldı; yerine `inView` (bağımlılık dizisinde) ve `prev` referansı (önceki değerden yumuşak geçiş) geldi. Her iki bileşenin dışa aktarılan props arayüzü **değişmedi** |
-  | `src/index.css` | `@media (prefers-reduced-motion: reduce)` bloğunun içine `.reveal { opacity:1 !important; transform:none !important; }` eklendi; yeni `@media print` bloğu (`.reveal` tam görünür, `.noise`/`.gridlines`/`.ticker-track`/`.scanlines` gizli, `header`/`nav` `position:static`) eklendi |
-  | `index.html` | `<body>` başına `<noscript><style>.reveal{opacity:1 !important;transform:none !important;}</style></noscript>` eklendi |
-  | `Dokumanlar/ANALIZ-RAPORU.md` | K-2 ve K-3 `✅ ÇÖZÜLDÜ (T-04)` işaretlendi + Çözüm blokları eklendi; güncelleme kaydı tablosu, genel sağlık tablosu (4/5 kritik çözüldü) ve öncelik sıralaması güncellendi; K-5 için "önerilen talimat" notu, T-04'ün bilinçli olarak dokunmadığını belirtecek şekilde güncellendi |
-  | `Dokumanlar/BAGLAM.md` | Dosya haritasına `useInView.ts` eklendi; plan ilerlemesi 4/14; "Çalışan" özetine tek paylaşılan gözlemci notu eklendi; "Eksik/hatalı" listesinde K-2/K-3 çözüldü işaretlendi, K-5 notu güncellendi |
-  | `Dokumanlar/MIMARI.md` | Yeni bölüm 2.7 (`useInView.ts` modül tablosu); `ui.tsx` ihracat tablosunda `Reveal`/`CountUp` satırları K-2/K-3 çözüldü olarak güncellendi; Performans Notları'nda "181 IntersectionObserver örneği" maddesi çözüldü işaretlendi; teknik borç tablosunda K-2, K-3 üstü çizili + çözüldü, K-5 notu güncellendi |
-  | `Dokumanlar/KULLANIM-KILAVUZU.md` | Sorun giderme tablosunda K-2 ve K-3 satırları "düzeltildi" olarak güncellendi (K-1/K-4 ile aynı üslup) |
-  | `Talimatlar/PLAN-01-temel-duzeltme-ve-tamamlama.md` | Durum 4/14, T-04 satırı ✅ + `Tamamlandı/` bağlantısına güncellendi, Kesin kurallar'a T-04 notu eklendi, ilerleme tablosu ve yüzdesi (%29) güncellendi, 2 başarı ölçütü işaretlendi |
+  | Dosya                                               | İşlem                                                                                                                                                                                                                                                                                                                                                                        |
+  | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | `src/lib/useInView.ts`                              | Yeni — modül seviyesinde tek paylaşılan `IntersectionObserver` (`getObserver()`, tembel kurulum) + `useInView<T>(fallbackMs=1200)` hook'u. Üç güvenlik yolu: gerçek kesişim, `setTimeout` zaman aşımı, `IntersectionObserver` yoksa senkron `true`                                                                                                                           |
+  | `src/components/ui.tsx`                             | `Reveal` ve `CountUp` artık `useInView`'ı kullanıyor; ikisinin de kendi `new IntersectionObserver` kurulumu kaldırıldı. `CountUp`'taki `started` kilidi (bir daha sıfırlanmayan `useRef`) tamamen kaldırıldı; yerine `inView` (bağımlılık dizisinde) ve `prev` referansı (önceki değerden yumuşak geçiş) geldi. Her iki bileşenin dışa aktarılan props arayüzü **değişmedi** |
+  | `src/index.css`                                     | `@media (prefers-reduced-motion: reduce)` bloğunun içine `.reveal { opacity:1 !important; transform:none !important; }` eklendi; yeni `@media print` bloğu (`.reveal` tam görünür, `.noise`/`.gridlines`/`.ticker-track`/`.scanlines` gizli, `header`/`nav` `position:static`) eklendi                                                                                       |
+  | `index.html`                                        | `<body>` başına `<noscript><style>.reveal{opacity:1 !important;transform:none !important;}</style></noscript>` eklendi                                                                                                                                                                                                                                                       |
+  | `Dokumanlar/ANALIZ-RAPORU.md`                       | K-2 ve K-3 `✅ ÇÖZÜLDÜ (T-04)` işaretlendi + Çözüm blokları eklendi; güncelleme kaydı tablosu, genel sağlık tablosu (4/5 kritik çözüldü) ve öncelik sıralaması güncellendi; K-5 için "önerilen talimat" notu, T-04'ün bilinçli olarak dokunmadığını belirtecek şekilde güncellendi                                                                                           |
+  | `Dokumanlar/BAGLAM.md`                              | Dosya haritasına `useInView.ts` eklendi; plan ilerlemesi 4/14; "Çalışan" özetine tek paylaşılan gözlemci notu eklendi; "Eksik/hatalı" listesinde K-2/K-3 çözüldü işaretlendi, K-5 notu güncellendi                                                                                                                                                                           |
+  | `Dokumanlar/MIMARI.md`                              | Yeni bölüm 2.7 (`useInView.ts` modül tablosu); `ui.tsx` ihracat tablosunda `Reveal`/`CountUp` satırları K-2/K-3 çözüldü olarak güncellendi; Performans Notları'nda "181 IntersectionObserver örneği" maddesi çözüldü işaretlendi; teknik borç tablosunda K-2, K-3 üstü çizili + çözüldü, K-5 notu güncellendi                                                                |
+  | `Dokumanlar/KULLANIM-KILAVUZU.md`                   | Sorun giderme tablosunda K-2 ve K-3 satırları "düzeltildi" olarak güncellendi (K-1/K-4 ile aynı üslup)                                                                                                                                                                                                                                                                       |
+  | `Talimatlar/PLAN-01-temel-duzeltme-ve-tamamlama.md` | Durum 4/14, T-04 satırı ✅ + `Tamamlandı/` bağlantısına güncellendi, Kesin kurallar'a T-04 notu eklendi, ilerleme tablosu ve yüzdesi (%29) güncellendi, 2 başarı ölçütü işaretlendi                                                                                                                                                                                          |
 
 - **Gözlemci sayısı (önce / sonra):** 181 ayrı `IntersectionObserver` → **1** paylaşılan örnek
   (canlı doğrulandı: `getObserver()`'ın tembel kurduğu tekil örnek, tüm `Reveal`/`CountUp`
@@ -395,12 +418,12 @@ Gözlemci sayısı 181'den **1**'e inmiş olmalı (Memory → Heap snapshot'ta d
        örüntü), bu spesifik oturumda **görsel** ilerlemesi ekranda izlenemedi — bu,
        gerçek kullanıcı tarayıcılarını etkilemeyen, yalnızca bu otomasyon oturumunun
        panel-görünürlüğü kısıtından kaynaklanan bir durum.
-     Her iki neden de `useInView`/`CountUp`/`Reveal` kodunun kendisinde bir hata
-     olmadığını gösteriyor: `Reveal`'ın `inView` durum geçişi (rAF'a bağlı değil, salt
-     React state + `setTimeout`) tam da bu zorlu koşullar altında (gizli panel VE
-     gözlemci hiç yokken) iki kez kanıtlandı (aşağıya bkz.) — `CountUp` da aynı
-     `useInView` hook'unu kullandığı için aynı durum-geçiş garantisine sahip;
-     eksik kalan yalnızca rAF'ın kendi görsel karesini bu oturumda gözlemleyebilmekti.
+       Her iki neden de `useInView`/`CountUp`/`Reveal` kodunun kendisinde bir hata
+       olmadığını gösteriyor: `Reveal`'ın `inView` durum geçişi (rAF'a bağlı değil, salt
+       React state + `setTimeout`) tam da bu zorlu koşullar altında (gizli panel VE
+       gözlemci hiç yokken) iki kez kanıtlandı (aşağıya bkz.) — `CountUp` da aynı
+       `useInView` hook'unu kullandığı için aynı durum-geçiş garantisine sahip;
+       eksik kalan yalnızca rAF'ın kendi görsel karesini bu oturumda gözlemleyebilmekti.
 
   3. **Bu nedenle K-2'nin sayısal "yumuşak geçiş" ve "yeni değere ulaşma" kabul
      kriterleri canlı ekran görüntüsüyle değil, kod incelemesi + `inView` durum
@@ -434,17 +457,17 @@ Gözlemci sayısı 181'den **1**'e inmiş olmalı (Memory → Heap snapshot'ta d
 
 - **Doğrulama kanıtları:**
 
-  | Test | Sonuç |
-  |---|---|
-  | `grep -n "IntersectionObserver" src/components/ui.tsx` | Boş — hiç eşleşme yok (yalnızca `useInView.ts`'te geçiyor) |
-  | `npm run typecheck` | Temiz, hata yok |
-  | `npm run build` | Temiz, `dist/` üretti (254,39 kB JS / 82,27 kB gzip, 52,92 kB CSS) — T-03 sonrası boyutla aynı |
-  | Canlı — K-3, sekme paneli görüntülenmezken (`document.hidden===true`) | **181/181** `.reveal` elemanı `in-view` (önceki bulguda 0/181 idi) |
-  | Canlı — K-3, `IntersectionObserver` tamamen `undefined` iken (`index.html`'e geçici test betiğiyle) | **181/181** `.reveal` elemanı **anında** `in-view` — hook'un senkron yedek dalı doğrulandı |
-  | Canlı — `useInView`'ın `inView` durum geçişi (`Reveal` üzerinden) | Yukarıdaki iki testle iki kez, zorlu koşullar altında (gizli panel + gözlemcisiz) kanıtlandı; `CountUp` aynı hook'u kullandığından aynı garantiye sahip |
-  | Canlı — `CountUp` sayısal animasyonun rAF ile görsel ilerlemesi | **İzlenemedi** — bu oturumda Browser paneli görüntülenmediği için `requestAnimationFrame` hiç ateşlenmedi (taze bir test rAF çağrısıyla ayrıca doğrulandı); bkz. Sapmalar #2b |
-  | Kod incelemesi — `CountUp` geçiş mantığı | `prev.current` başlangıçta 0, animasyon tamamlanınca `to`'ya güncelleniyor; sonraki `to` değişiminde `from = prev.current` ile önceki değerden başlıyor — sıfıra düşme yok |
-  | `Reveal`/`CountUp` çağıran dosyaları (`talk.tsx`, `sections.tsx`, `App.tsx`) | Props arayüzü değişmediği için **hiçbiri güncellenmedi** — `grep` ile doğrulandı |
+  | Test                                                                                                | Sonuç                                                                                                                                                                         |
+  | --------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | `grep -n "IntersectionObserver" src/components/ui.tsx`                                              | Boş — hiç eşleşme yok (yalnızca `useInView.ts`'te geçiyor)                                                                                                                    |
+  | `npm run typecheck`                                                                                 | Temiz, hata yok                                                                                                                                                               |
+  | `npm run build`                                                                                     | Temiz, `dist/` üretti (254,39 kB JS / 82,27 kB gzip, 52,92 kB CSS) — T-03 sonrası boyutla aynı                                                                                |
+  | Canlı — K-3, sekme paneli görüntülenmezken (`document.hidden===true`)                               | **181/181** `.reveal` elemanı `in-view` (önceki bulguda 0/181 idi)                                                                                                            |
+  | Canlı — K-3, `IntersectionObserver` tamamen `undefined` iken (`index.html`'e geçici test betiğiyle) | **181/181** `.reveal` elemanı **anında** `in-view` — hook'un senkron yedek dalı doğrulandı                                                                                    |
+  | Canlı — `useInView`'ın `inView` durum geçişi (`Reveal` üzerinden)                                   | Yukarıdaki iki testle iki kez, zorlu koşullar altında (gizli panel + gözlemcisiz) kanıtlandı; `CountUp` aynı hook'u kullandığından aynı garantiye sahip                       |
+  | Canlı — `CountUp` sayısal animasyonun rAF ile görsel ilerlemesi                                     | **İzlenemedi** — bu oturumda Browser paneli görüntülenmediği için `requestAnimationFrame` hiç ateşlenmedi (taze bir test rAF çağrısıyla ayrıca doğrulandı); bkz. Sapmalar #2b |
+  | Kod incelemesi — `CountUp` geçiş mantığı                                                            | `prev.current` başlangıçta 0, animasyon tamamlanınca `to`'ya güncelleniyor; sonraki `to` değişiminde `from = prev.current` ile önceki değerden başlıyor — sıfıra düşme yok    |
+  | `Reveal`/`CountUp` çağıran dosyaları (`talk.tsx`, `sections.tsx`, `App.tsx`)                        | Props arayüzü değişmediği için **hiçbiri güncellenmedi** — `grep` ile doğrulandı                                                                                              |
 
 - **Sonraki talimata not:**
 

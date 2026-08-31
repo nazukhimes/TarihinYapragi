@@ -5,37 +5,37 @@
 
 > **Güncelleme kaydı**
 >
-> | Tarih | Talimat | Çözülen bulgular |
-> |---|---|---|
-> | 2026-08-21 | [T-01](../Talimatlar/Tamamland%C4%B1/T-01-proje-kimligi-ve-bagimlilik-temizligi.md) | K-4, O-1, O-2, O-3, m-2 |
-> | 2026-08-21 | [T-03](../Talimatlar/Tamamland%C4%B1/T-03-takvim-tarih-dogrulugu.md) | K-1 |
-> | 2026-08-21 | [T-04](../Talimatlar/Tamamland%C4%B1/T-04-sayac-ve-gorunurluk-hatalari.md) | K-2, K-3 |
-> | 2026-08-21 | [T-05](../Talimatlar/Tamamland%C4%B1/T-05-ag-katmani-saglamlastirma.md) | O-4, O-8 |
-> | 2026-08-21 | [T-06](../Talimatlar/Tamamland%C4%B1/T-06-yonlendirme-ve-paylasilabilir-baglanti.md) | U-1 |
-> | 2026-08-21 | [T-07](../Talimatlar/Tamamland%C4%B1/T-07-erisilebilirlik-ve-klavye.md) | O-6, O-7 |
-> | 2026-08-21 | [T-08](../Talimatlar/Tamamland%C4%B1/T-08-site-kimligi-favicon-seo-pwa.md) | U-4 |
-> | 2026-08-22 | [T-09](../Talimatlar/Tamamland%C4%B1/T-09-hata-siniri-ve-durum-ekranlari.md) | O-5, O-9, m-3, m-6 |
-> | 2026-08-22 | [T-10](../Talimatlar/Tamamland%C4%B1/T-10-icerik-mimarisi-ve-kapsam.md) | U-2 |
-> | 2026-08-22 | [T-11](../Talimatlar/Tamamland%C4%B1/T-11-siniflandirma-dogrulugu.md) | U-3 |
-> | 2026-08-22 | [T-12](../Talimatlar/Tamamland%C4%B1/T-12-test-lint-bicimlendirme.md) | U-5 |
-> | 2026-08-23 | [T-13](../Talimatlar/Tamamland%C4%B1/T-13-performans-ve-derleme.md) | m-1, m-4 |
+> | Tarih      | Talimat                                                                              | Çözülen bulgular        |
+> | ---------- | ------------------------------------------------------------------------------------ | ----------------------- |
+> | 2026-08-21 | [T-01](../Talimatlar/Tamamland%C4%B1/T-01-proje-kimligi-ve-bagimlilik-temizligi.md)  | K-4, O-1, O-2, O-3, m-2 |
+> | 2026-08-21 | [T-03](../Talimatlar/Tamamland%C4%B1/T-03-takvim-tarih-dogrulugu.md)                 | K-1                     |
+> | 2026-08-21 | [T-04](../Talimatlar/Tamamland%C4%B1/T-04-sayac-ve-gorunurluk-hatalari.md)           | K-2, K-3                |
+> | 2026-08-21 | [T-05](../Talimatlar/Tamamland%C4%B1/T-05-ag-katmani-saglamlastirma.md)              | O-4, O-8                |
+> | 2026-08-21 | [T-06](../Talimatlar/Tamamland%C4%B1/T-06-yonlendirme-ve-paylasilabilir-baglanti.md) | U-1                     |
+> | 2026-08-21 | [T-07](../Talimatlar/Tamamland%C4%B1/T-07-erisilebilirlik-ve-klavye.md)              | O-6, O-7                |
+> | 2026-08-21 | [T-08](../Talimatlar/Tamamland%C4%B1/T-08-site-kimligi-favicon-seo-pwa.md)           | U-4                     |
+> | 2026-08-22 | [T-09](../Talimatlar/Tamamland%C4%B1/T-09-hata-siniri-ve-durum-ekranlari.md)         | O-5, O-9, m-3, m-6      |
+> | 2026-08-22 | [T-10](../Talimatlar/Tamamland%C4%B1/T-10-icerik-mimarisi-ve-kapsam.md)              | U-2                     |
+> | 2026-08-22 | [T-11](../Talimatlar/Tamamland%C4%B1/T-11-siniflandirma-dogrulugu.md)                | U-3                     |
+> | 2026-08-22 | [T-12](../Talimatlar/Tamamland%C4%B1/T-12-test-lint-bicimlendirme.md)                | U-5                     |
+> | 2026-08-23 | [T-13](../Talimatlar/Tamamland%C4%B1/T-13-performans-ve-derleme.md)                  | m-1, m-4                |
 >
 > Bu rapor **ilk analiz anının** fotoğrafıdır; metin korunur, çözülen bulguların
-> başlığına `✅ ÇÖZÜLDÜ` işareti ve bir *Çözüm* bloğu eklenir.
+> başlığına `✅ ÇÖZÜLDÜ` işareti ve bir _Çözüm_ bloğu eklenir.
 
 ---
 
 ## 0. Genel Sağlık Tablosu
 
-| Ölçüt | Durum | Not |
-|---|---|---|
-| `npm run typecheck` | ✅ Geçiyor | Hata yok |
-| `npm run build` | ✅ Geçiyor | react 206 kB + uygulama 331 kB + yayın modu 4,7 kB · gzip toplam ~177 kB · 54,7 kB CSS (T-13 sonrası, 3 parça) |
-| Uygulama açılıyor mu | ✅ Evet | Veri geliyor · `npm run kontrol` (typecheck+lint+203 test+build) yeşil |
-| Kritik hata | ✅ 5 adet · **5 çözüldü** | K-1…K-5 · K-1 ✅ T-03, K-2 ✅ T-04, K-3 ✅ T-04, K-4 ✅ T-01, K-5 ✅ T-15 |
-| Orta seviye eksik | ⚠️ 13 adet · **9 çözüldü** | O-1, O-2, O-3 ✅ T-01 · O-4, O-8 ✅ T-05 · O-5, O-9 ✅ T-09 · O-6, O-7 ✅ T-07 · **O-10, O-11, O-12, O-13 ⏭️ PLAN-02'ye devredildi** (gerekçeler → §11) |
-| Ürün/içerik boşluğu | ✅ 5 adet · **5 çözüldü** | U-1 ✅ T-06 · U-4 ✅ T-08 · U-2 ✅ T-10 · U-3 ✅ T-11 · U-5 ✅ T-12 |
-| Küçük not | ⚠️ 8 adet · **6 çözüldü** | m-2 ✅ T-01 · m-3, m-6 ✅ T-09 · m-5 ✅ T-07 · m-1, m-4 ✅ T-13 · **m-7, m-8 ⏭️ PLAN-02** (ikisi de zararsız) |
+| Ölçüt                | Durum                      | Not                                                                                                                                                     |
+| -------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run typecheck`  | ✅ Geçiyor                 | Hata yok                                                                                                                                                |
+| `npm run build`      | ✅ Geçiyor                 | react 206 kB + uygulama 331 kB + yayın modu 4,7 kB · gzip toplam ~177 kB · 54,7 kB CSS (T-13 sonrası, 3 parça)                                          |
+| Uygulama açılıyor mu | ✅ Evet                    | Veri geliyor · `npm run kontrol` (typecheck+lint+203 test+build) yeşil                                                                                  |
+| Kritik hata          | ✅ 5 adet · **5 çözüldü**  | K-1…K-5 · K-1 ✅ T-03, K-2 ✅ T-04, K-3 ✅ T-04, K-4 ✅ T-01, K-5 ✅ T-15                                                                               |
+| Orta seviye eksik    | ⚠️ 13 adet · **9 çözüldü** | O-1, O-2, O-3 ✅ T-01 · O-4, O-8 ✅ T-05 · O-5, O-9 ✅ T-09 · O-6, O-7 ✅ T-07 · **O-10, O-11, O-12, O-13 ⏭️ PLAN-02'ye devredildi** (gerekçeler → §11) |
+| Ürün/içerik boşluğu  | ✅ 5 adet · **5 çözüldü**  | U-1 ✅ T-06 · U-4 ✅ T-08 · U-2 ✅ T-10 · U-3 ✅ T-11 · U-5 ✅ T-12                                                                                     |
+| Küçük not            | ⚠️ 8 adet · **6 çözüldü**  | m-2 ✅ T-01 · m-3, m-6 ✅ T-09 · m-5 ✅ T-07 · m-1, m-4 ✅ T-13 · **m-7, m-8 ⏭️ PLAN-02** (ikisi de zararsız)                                           |
 
 > 📋 **Tüm bulguların tek sayfalık durum özeti için → [§11 Bulgu Durum Tablosu](#11-bulgu-durum-tablosu--plan-01-kapanışı-2026-08-24)**
 
@@ -61,7 +61,7 @@ için PLAN-02'ye devredildi. Uygulama bilinçli olarak yayına alınmadı; yerel
 
 ```ts
 export function dayOfYear(month: number, day: number): number {
-  const d = new Date(2024, month - 1, day);   // ← 2024 SABİT (artık yıl)
+  const d = new Date(2024, month - 1, day); // ← 2024 SABİT (artık yıl)
   const start = new Date(2024, 0, 1);
   return Math.floor((d.getTime() - start.getTime()) / 86400000) + 1;
 }
@@ -135,7 +135,7 @@ güven verici rakamlar; yanlış olmaları ürünün güvenilirliğine doğrudan
 > (bir daha sıfırlanmayan `started` referansı) tamamen ortadan kaldırıyor ve
 > talimatta verilen mantığın birebir uygulaması. `inView` durum geçişinin kendisi
 > (aynı mekanizmayı paylaşan `Reveal` üzerinden, aşağıdaki K-3 kanıtıyla) canlı
-> olarak doğrulandı. Sayaçların *canlı ekranda* sayısal olarak ilerlemesi bu oturumda
+> olarak doğrulandı. Sayaçların _canlı ekranda_ sayısal olarak ilerlemesi bu oturumda
 > tarayıcı panelinin ekrana basılmaması nedeniyle piksel düzeyinde ayrıca
 > gözlemlenemedi (`requestAnimationFrame` bu ortamda hiç tetiklenmedi — sayfa
 > gerçekten gizliyken/compositing yokken evrensel bir tarayıcı kısıtı, K-3'ün tam
@@ -148,8 +148,14 @@ güven verici rakamlar; yanlış olmaları ürünün güvenilirliğine doğrudan
 **Dosya:** `src/components/ui.tsx:4-42` (`Reveal`) ve `src/index.css:170-178`
 
 ```css
-.reveal { opacity: 0; transform: translateY(26px); }
-.reveal.in-view { opacity: 1; transform: translateY(0); }
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+}
+.reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
 ```
 
 Sayfada **181 adet** `.reveal` elemanı var. Hepsi `opacity: 0` ile başlıyor ve yalnızca
@@ -201,6 +207,7 @@ server: {
 ```
 
 **Kanıt (canlı konsol):**
+
 ```
 WebSocket connection to 'ws://localhost:3000/?token=...' failed
 [vite] failed to connect to websocket
@@ -216,7 +223,7 @@ Ayrıca `strictPort: true` yüzünden 3000 meşgulse Vite **hiç başlamaz** —
 > `strictPort: false` yapıldı. Vite artık HMR portunu sunucu portundan türetiyor.
 >
 > **Doğrulama:** Sunucu 3000 meşgulken 3001'e geçti (`Port 3000 is in use, trying
-> another one...`), konsolda `[vite] connected.` — WebSocket hatası yok.
+another one...`), konsolda `[vite] connected.` — WebSocket hatası yok.
 > `/@vite/client` içinde `hmrPort = null` ve soket adresi sayfanın kendi portu.
 > `src/App.tsx` üzerinde yapılan düzenleme sayfa yenilenmeden tarayıcıya yansıdı.
 
@@ -228,17 +235,17 @@ Ayrıca `strictPort: true` yüzünden 3000 meşgulse Vite **hiç başlamaz** —
 
 Kaynak kodda **hiçbiri** import edilmiyor (`grep` ile doğrulandı, hepsi 0 eşleşme):
 
-| Paket | Neden duruyor |
-|---|---|
-| `@dnd-kit/core`, `@dnd-kit/sortable`, `@dnd-kit/utilities` | İskelet şablonundan kalma |
-| `@supabase/supabase-js` | Backend yok |
-| `canvas-confetti` + `@types/canvas-confetti` | Kullanılmıyor |
-| `date-fns` | Tarih işleri elle yapılıyor |
-| `framer-motion` | Animasyonlar saf CSS |
-| `lucide-react` | İkonlar elle çizilmiş (`ui.tsx`) |
-| `react-router-dom` | Yönlendirme yok (ama **olmalı** — bkz. U-1) |
-| `recharts` | Grafik yok |
-| `uuid` + `@types/uuid` | ID'ler elle üretiliyor |
+| Paket                                                      | Neden duruyor                               |
+| ---------------------------------------------------------- | ------------------------------------------- |
+| `@dnd-kit/core`, `@dnd-kit/sortable`, `@dnd-kit/utilities` | İskelet şablonundan kalma                   |
+| `@supabase/supabase-js`                                    | Backend yok                                 |
+| `canvas-confetti` + `@types/canvas-confetti`               | Kullanılmıyor                               |
+| `date-fns`                                                 | Tarih işleri elle yapılıyor                 |
+| `framer-motion`                                            | Animasyonlar saf CSS                        |
+| `lucide-react`                                             | İkonlar elle çizilmiş (`ui.tsx`)            |
+| `react-router-dom`                                         | Yönlendirme yok (ama **olmalı** — bkz. U-1) |
+| `recharts`                                                 | Grafik yok                                  |
+| `uuid` + `@types/uuid`                                     | ID'ler elle üretiliyor                      |
 
 **Etki:** `node_modules` gereksiz büyüyor, `npm install` uzuyor, güvenlik denetimi
 gürültülü hâle geliyor. Üretim paketine girmiyorlar (tree-shaking) ama proje hijyeni bozuk.
@@ -248,12 +255,12 @@ gürültülü hâle geliyor. Üretim paketine girmiyorlar (tree-shaking) ama pro
 > Tablodaki paketlerden **`react-router-dom` hariç** hepsi (tip paketleriyle birlikte
 > 12 giriş) kaldırıldı. `react-router-dom` T-06'da kullanılacağı için **bilerek bırakıldı**.
 >
-> | Ölçüt | Önce | Sonra |
-> |---|---|---|
-> | `dependencies` | 13 | 3 |
-> | `devDependencies` | 9 | 7 |
-> | `node_modules` | 130,7 MB · 15.304 dosya | 83,6 MB · 2.728 dosya |
-> | Üretim paketi | 253 kB JS / 51 kB CSS | **değişmedi** (253.62 kB JS / 50,78 kB CSS) |
+> | Ölçüt             | Önce                    | Sonra                                       |
+> | ----------------- | ----------------------- | ------------------------------------------- |
+> | `dependencies`    | 13                      | 3                                           |
+> | `devDependencies` | 9                       | 7                                           |
+> | `node_modules`    | 130,7 MB · 15.304 dosya | 83,6 MB · 2.728 dosya                       |
+> | Üretim paketi     | 253 kB JS / 51 kB CSS   | **değişmedi** (253.62 kB JS / 50,78 kB CSS) |
 >
 > Tree-shaking öngörüsü doğrulandı: paket boyutu bayt bayt aynı kaldı, kazanç
 > tamamen kurulum süresi ve disk tarafında.
@@ -335,10 +342,10 @@ runtime hatası **tüm sayfayı beyaz ekrana** çevirir; kullanıcıya hiçbir m
 > hata sınırıyla** sarıyor; bu, `App`'in kendi render'ında oluşan bir hatayı kök
 > `ErrorBoundary`'ye hiç ulaştırmadan react-router'ın kendi jenerik İngilizce
 > "Unexpected Application Error" ekranını gösteriyor (React en yakın hata sınırını
-> kullanır — react-router'ınki `RouterProvider`'ın *içinde*, kök `ErrorBoundary`
-> *dışında* kalıyor). Canlı testte (`App.tsx`'in başına geçici `throw new Error("kök
-> test")` eklenerek) doğrulandı: konsolda `"Error handled by React Router default
-> ErrorBoundary"` görüldü, kök `ErrorBoundary` hiç devreye girmedi. Düzeltme: her
+> kullanır — react-router'ınki `RouterProvider`'ın _içinde_, kök `ErrorBoundary`
+> _dışında_ kalıyor). Canlı testte (`App.tsx`'in başına geçici `throw new Error("kök
+test")` eklenerek) doğrulandı: konsolda `"Error handled by React Router default
+ErrorBoundary"` görüldü, kök `ErrorBoundary` hiç devreye girmedi. Düzeltme: her
 > rotaya (`main.tsx`) `errorElement={<RouteErrorFallback />}` eklendi — yeni,
 > `useRouteError()` kullanan bir fonksiyon bileşeni, aynı "torn-paper" görsel
 > kimliğini taşıyor. Kök `ErrorBoundary` artık yalnızca react-router'ın kendisinin
@@ -356,14 +363,14 @@ runtime hatası **tüm sayfayı beyaz ekrana** çevirir; kullanıcıya hiçbir m
 
 ### O-6 · Erişilebilirlik boşlukları — ✅ ÇÖZÜLDÜ (T-07)
 
-| Sorun | Yer |
-|---|---|
-| Modal'da odak tuzağı (focus trap) ve kapanışta odak iadesi yok | `ui.tsx:117-152` |
-| Toaster'da `aria-live` yok — ekran okuyucu bildirimi duymuyor | `ui.tsx:159-186` |
-| "Ana içeriğe atla" bağlantısı yok | `App.tsx` |
-| Arama girdisinde görünür/`aria-label` etiket yok | `App.tsx` üst bar |
-| `text-ink-faint` (#6f7481) koyu zeminde **4.0:1** — WCAG AA eşiği 4.5:1, altında kalıyor | `index.css:22` |
-| Kategori filtre çipleri `aria-pressed` taşımıyor | `sections.tsx:159-180` |
+| Sorun                                                                                    | Yer                    |
+| ---------------------------------------------------------------------------------------- | ---------------------- |
+| Modal'da odak tuzağı (focus trap) ve kapanışta odak iadesi yok                           | `ui.tsx:117-152`       |
+| Toaster'da `aria-live` yok — ekran okuyucu bildirimi duymuyor                            | `ui.tsx:159-186`       |
+| "Ana içeriğe atla" bağlantısı yok                                                        | `App.tsx`              |
+| Arama girdisinde görünür/`aria-label` etiket yok                                         | `App.tsx` üst bar      |
+| `text-ink-faint` (#6f7481) koyu zeminde **4.0:1** — WCAG AA eşiği 4.5:1, altında kalıyor | `index.css:22`         |
+| Kategori filtre çipleri `aria-pressed` taşımıyor                                         | `sections.tsx:159-180` |
 
 > **✅ Çözüm — T-07 (2026-08-21)**
 >
@@ -537,6 +544,7 @@ Ayrıca 1.001 satırlık tek dosya, içerik büyüdükçe yönetilemez hâle gel
 **ilk eşleşen kural kazanır.** Bu, hem yanlış pozitif hem öncelik hatası üretiyordu.
 
 Somut örnekler:
+
 - `/saldırı/` hem `savas` (2. kural) hem `Şiddet` (5. karanlık tema) kalıbında var.
 - `/kazas/` kalıbı "uçak kazası" kadar Osmanlı idari birimi **"Bursa kazası"** ve **"kazasker"** unvanını da yakalar.
 - `/patlama/` nüfus patlaması gibi mecazi kullanımları felaket sayar.
@@ -551,7 +559,7 @@ Bir doğruluk testi yoktu; kural değiştirildiğinde neyin bozulduğu görülem
 > taşındı; "ilk eşleşen kazanır" yerine **puanlama** geldi (her kural 1-3 puan,
 > kategori bazında toplanır, en yüksek toplam kazanır, eşitlikte dosya başında
 > belgelenen sabit bir öncelik sırası — `felaket > savas > siyaset > bilim >
-> kesif > kultur > spor` — devreye girer). `detectDarkItem` aynı yöntemle yeniden
+kesif > kultur > spor` — devreye girer). `detectDarkItem` aynı yöntemle yeniden
 > yazıldı, ayrıca bir **eşik** kazandı: toplam puan 3'ün altındaysa `null` döner
 > (tek başına zayıf bir `saldır` eşleşmesi artık yetmiyor). Yukarıdaki 5 somut
 > örneğin hepsi düzeltildi — `kazas`/`ay'`/`ordu(su)? `/`patlama`/`sel( |i)`
@@ -560,7 +568,7 @@ Bir doğruluk testi yoktu; kural değiştirildiğinde neyin bozulduğu görülem
 > `/bat(tı|an)/` gemi/vapur/feribot bağlamına bağlandı. `saldırı`'nın
 > `savas`/`Şiddet` çakışması artık **kontrollü**: kategori tarafında orta (2)
 > puan, karanlık tarafında zayıf (2, tek başına eşiği geçmiyor) — `bombalı
-> saldırı`/`silahlı saldır` gibi somut ifadeler ayrıca güçlü (3) sinyal taşıyor.
+saldırı`/`silahlı saldır` gibi somut ifadeler ayrıca güçlü (3) sinyal taşıyor.
 >
 > **Kritik bir yan bulgu:** JS'in `\b`/`\w`'ı yalnızca ASCII harfleri kelime
 > karakteri sayıyor — ç/ğ/ı/ö/ş/ü bunun dışında. Sonuç: `\bçığ\b` gibi bir kalıp
@@ -587,6 +595,7 @@ Bir doğruluk testi yoktu; kural değiştirildiğinde neyin bozulduğu görülem
 > şartı eklenerek düzeltildi — bkz. yukarı).
 >
 > **Bilinçli olarak kapsam dışı bırakılan iki bulgu:**
+>
 > 1. `genel` oranının bazı günlerde talimatın önerdiği %40 eşiğinin üstünde
 >    kalması (ör. taranan 16 günün ortalaması ~%45) — anahtar kelime listesi
 >    genişletildikçe kazanım azalıyor (üç ayrı gerçek-veri turunda toplam ~20
@@ -602,7 +611,7 @@ Bir doğruluk testi yoktu; kural değiştirildiğinde neyin bozulduğu görülem
 >    (en yaygın biçim — "X **nedeniyle** ertelendi/iptal edildi" — düzeltildi,
 >    bu daha nadir "X'in yıl dönümünde" biçimi düzeltilmeden bırakıldı).
 >    Gerçek bir çözüm gömme (embedding) tabanlı anlam analizi gerektirir —
->    T-11'in kendi *Kapsam Dışı* tablosu bunu açıkça dışarıda bırakıyor
+>    T-11'in kendi _Kapsam Dışı_ tablosu bunu açıkça dışarıda bırakıyor
 >    ("istemci taraflı ürün, regex yeterli").
 >
 > Ayrıntı → T-11 Tamamlanma Kaydı.
@@ -610,6 +619,7 @@ Bir doğruluk testi yoktu; kural değiştirildiğinde neyin bozulduğu görülem
 ### U-4 · Site kabuğu eksik: favicon, PWA, SEO, paylaşım kartı — ✅ ÇÖZÜLDÜ (T-08)
 
 `index.html` içinde:
+
 - ❌ favicon (hiç yok — tarayıcı varsayılan simgeyi gösteriyor)
 - ❌ `og:title` / `og:description` / `og:image` — sosyal medyada çıplak bağlantı
 - ❌ `twitter:card`
@@ -642,7 +652,7 @@ Bir doğruluk testi yoktu; kural değiştirildiğinde neyin bozulduğu görülem
 > `link[rel=canonical]`'ın hem tam sayfa yüklemede hem `←`/`→` klavye kısayoluyla istemci
 > taraflı geçişte doğru güncellendiği doğrulandı; tüm 7 görsel dosya `curl`/`fetch` ile doğru
 > `Content-Type` ve boyutla servis edildiği, `manifest.webmanifest`'in `application/
-> manifest+json` ile geçerli JSON olduğu, JSON-LD'nin geçerli JSON olduğu (Lighthouse
+manifest+json` ile geçerli JSON olduğu, JSON-LD'nin geçerli JSON olduğu (Lighthouse
 > `structured-data` denetimi de geçti) doğrulandı. `npm run sitemap` 366 adres üretti,
 > son satır `29-subat` içeriyor; `scripts/sitemap.mjs`'teki ay-slug listesi `src/lib/slug.ts`
 > içindeki `MONTH_SLUGS` ile birebir eşit olduğu Node'da elle karşılaştırılarak doğrulandı.
@@ -677,12 +687,13 @@ Kritik saf fonksiyonlar (`dayOfYear`, `classifyItem`, `formatYear`, `firstSenten
 > satır kapsamı **%78,78** (746/947, hedef ≥%70). ESLint (flat config,
 > `rules-of-hooks`+`exhaustive-deps`) ve Prettier kuruldu, `npm run kontrol`
 > (typecheck+lint+test+build) tek komut hâline getirildi; `.github/workflows/
-> kontrol.yml` eklendi.
+kontrol.yml` eklendi.
 >
 > **Üç önemli, bu oturumda gerçek çalıştırmayla keşfedilen sapma** (hiçbiri
 > uygulama davranışını değiştirmedi — hepsi test/araç seviyesinde çözüldü):
+>
 > 1. **jsdom'un `requestAnimationFrame`'i gerçek tarayıcılarla tutarsız bir
->    saat veriyor** — geri çağrıya *pencere oluşturma anına göre sıfırlanmış*
+>    saat veriyor** — geri çağrıya _pencere oluşturma anına göre sıfırlanmış_
 >    bir zaman damgası verirken, doğrudan `performance.now()` çağrıları bu
 >    sıfırlamayı görmüyor (gerçek tarayıcılarda ikisi her zaman aynı saattir).
 >    `CountUp`'ın tamamen standart `t0 = performance.now()` mantığı bu yüzden
@@ -710,15 +721,15 @@ Kritik saf fonksiyonlar (`dayOfYear`, `classifyItem`, `formatYear`, `firstSenten
 
 ## 4. Küçük Notlar
 
-| # | Bulgu | Yer |
-|---|---|---|
-| m-1 | ~~`NAV[stats.indexOf(s)]` — dizi sırasına gizli bağımlılık, kırılgan~~ **✅ ÇÖZÜLDÜ (T-13)** — her `stat` nesnesine doğrudan bir `hedef` alanı eklendi, `NAV`/`indexOf` bağımlılığı tamamen kaldırıldı | `src/components/GunOzeti.tsx` |
-| m-2 | ~~`vite.config.js` — proje TS olduğu hâlde config JS~~ **✅ ÇÖZÜLDÜ (T-01)** — `vite.config.ts` | kök |
-| m-3 | ~~`CasesSection` otomatik dosyaları `slice(0, 6)` ile kesiyor, "daha fazla" yok~~ **✅ ÇÖZÜLDÜ (T-09)** — sınır kaldırıldı, "N dosya daha göster" düğmesi eklendi (aynı desen `ScienceSection`'daki `slice(0,3)`'e de uygulandı) | `App.tsx` allCases, `sections.tsx` |
-| m-4 | ~~Ticker `55s` sabit; 3 öğede de 14 öğede de aynı hız~~ **✅ ÇÖZÜLDÜ (T-13)** — süre öğe sayısına göre hesaplanıyor (`öğe × 4s`, 20-90s arasında sınırlı), satır içi `animationDuration` ile uygulanıyor (canlı doğrulandı: 14 öğede 56s) | `src/components/leaf.tsx` Ticker |
-| m-5 | ~~Kişi kartlarında görseller `loading="lazy"` var ama `width/height` yok → düzen kayması~~ **✅ ÇÖZÜLDÜ (T-07)** — kart küçük resmi `248×132`, modal küçük resmi `96×112` | `sections.tsx` PeopleRow |
-| m-6 | ~~Arama sonucu global sayacı yok; kullanıcı hangi bölümde kaç sonuç olduğunu göremiyor~~ **✅ ÇÖZÜLDÜ (T-09)** — toplam + bölüm bazlı sayaç şeridi, `aria-live` duyurusu, sonuç yoksa tek boş durum ekranı | `App.tsx` |
-| m-7 | Yazdırma (print) stil sayfası yok — kart çıktısı alınamıyor | `index.css` |
+| #   | Bulgu                                                                                                                                                                                                                                                                                                                            | Yer                                         |
+| --- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| m-1 | ~~`NAV[stats.indexOf(s)]` — dizi sırasına gizli bağımlılık, kırılgan~~ **✅ ÇÖZÜLDÜ (T-13)** — her `stat` nesnesine doğrudan bir `hedef` alanı eklendi, `NAV`/`indexOf` bağımlılığı tamamen kaldırıldı                                                                                                                           | `src/components/GunOzeti.tsx`               |
+| m-2 | ~~`vite.config.js` — proje TS olduğu hâlde config JS~~ **✅ ÇÖZÜLDÜ (T-01)** — `vite.config.ts`                                                                                                                                                                                                                                  | kök                                         |
+| m-3 | ~~`CasesSection` otomatik dosyaları `slice(0, 6)` ile kesiyor, "daha fazla" yok~~ **✅ ÇÖZÜLDÜ (T-09)** — sınır kaldırıldı, "N dosya daha göster" düğmesi eklendi (aynı desen `ScienceSection`'daki `slice(0,3)`'e de uygulandı)                                                                                                 | `App.tsx` allCases, `sections.tsx`          |
+| m-4 | ~~Ticker `55s` sabit; 3 öğede de 14 öğede de aynı hız~~ **✅ ÇÖZÜLDÜ (T-13)** — süre öğe sayısına göre hesaplanıyor (`öğe × 4s`, 20-90s arasında sınırlı), satır içi `animationDuration` ile uygulanıyor (canlı doğrulandı: 14 öğede 56s)                                                                                        | `src/components/leaf.tsx` Ticker            |
+| m-5 | ~~Kişi kartlarında görseller `loading="lazy"` var ama `width/height` yok → düzen kayması~~ **✅ ÇÖZÜLDÜ (T-07)** — kart küçük resmi `248×132`, modal küçük resmi `96×112`                                                                                                                                                        | `sections.tsx` PeopleRow                    |
+| m-6 | ~~Arama sonucu global sayacı yok; kullanıcı hangi bölümde kaç sonuç olduğunu göremiyor~~ **✅ ÇÖZÜLDÜ (T-09)** — toplam + bölüm bazlı sayaç şeridi, `aria-live` duyurusu, sonuç yoksa tek boş durum ekranı                                                                                                                       | `App.tsx`                                   |
+| m-7 | Yazdırma (print) stil sayfası yok — kart çıktısı alınamıyor                                                                                                                                                                                                                                                                      | `index.css`                                 |
 | m-8 | `estimateMinutes`'ın "3 dakika" eşiği (`n ≥ 460`) `buildAutoTalk`'ın hiçbir çağrı noktasından tetiklenemez — her girdi ona ulaşmadan önce `firstSentence(…, 420)` ile ≤420 karaktere kırpılıyor (420 < 460). Yalnızca bir okuma-süresi rozetini etkiler, T-12 testleri yazılırken keşfedildi, zararsız kabul edilip düzeltilmedi | `lib/wiki.ts` buildAutoTalk/estimateMinutes |
 
 ---
@@ -766,7 +777,9 @@ bkz. bölüm 9.
 
   {/* yaprak navigasyonu — position sınıfı YOK (static) */}
   <div className="flex items-center justify-between mt-7">
-    <button onClick={() => shift(-1)} aria-label="Önceki gün">...</button>
+    <button onClick={() => shift(-1)} aria-label="Önceki gün">
+      ...
+    </button>
     ...
   </div>
 </div>
@@ -845,7 +858,7 @@ karar plan sahibine aittir.
 > `relative` yapıldı. Üç düğme de gerçek fare tıklamasıyla doğrulandı
 > (29 Ekim → 30 Ekim → 29 Ekim → bugün).
 >
-> **Kayda geçmemiş ikinci belirti:** Bu bulgu yalnızca *tıklanamama* olarak
+> **Kayda geçmemiş ikinci belirti:** Bu bulgu yalnızca _tıklanamama_ olarak
 > yazılmıştı. T-15 hazırlanırken alınan gerçek tarayıcı ekran görüntüsü, dekoratif
 > katmanın rengi (`#e7dcc4`, opak) nedeniyle gezinme satırını **görsel olarak da
 > örttüğünü** gösterdi: "ÖNCEKİ GÜN" / "BUGÜNE DÖN" / "SONRAKİ GÜN" yazılarının
@@ -873,10 +886,10 @@ Talimatın 11 adımının parçası değildi; `npm run build && npm run preview`
 ikisi de tek satırlık, sıfır görsel etkili düzeltmelerle aynı oturumda giderildi
 (ikinci denetim: 96/100):
 
-| # | Bulgu | Yer | Düzeltme |
-|---|---|---|---|
-| 1 | Üst bardaki "Yayın Modu" düğmesinin metni `hidden md:inline` — dar viewport'ta düğmenin tek içeriği `aria-hidden` bir SVG ikon, erişilebilir adı yok | `App.tsx` | `aria-label="Yayın Modu"` eklendi |
-| 2 | `PeopleRow` kart başlığı `<h4>`, `<h2>` (bölüm başlığı) altında doğrudan geliyor — `h3` atlanıyor | `sections.tsx` | `<h4>` → `<h3>` (kişi modalındaki başlık zaten `<h3>`, çakışma yok) |
+| #   | Bulgu                                                                                                                                                | Yer            | Düzeltme                                                            |
+| --- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ------------------------------------------------------------------- |
+| 1   | Üst bardaki "Yayın Modu" düğmesinin metni `hidden md:inline` — dar viewport'ta düğmenin tek içeriği `aria-hidden` bir SVG ikon, erişilebilir adı yok | `App.tsx`      | `aria-label="Yayın Modu"` eklendi                                   |
+| 2   | `PeopleRow` kart başlığı `<h4>`, `<h2>` (bölüm başlığı) altında doğrudan geliyor — `h3` atlanıyor                                                    | `sections.tsx` | `<h4>` → `<h3>` (kişi modalındaki başlık zaten `<h3>`, çakışma yok) |
 
 ### O-10 · `text-brand` koyu zeminde metin/simge rengi olarak yetersiz kontrast — ⏭️ PLAN-02'YE DEVREDİLDİ
 
@@ -886,11 +899,11 @@ Gerçek Lighthouse/axe denetimi üç yerde `color-contrast` hatası verdi — he
 `--color-brand` (#d23b2e) kırmızısının **metin/simge rengi** olarak kullanıldığı
 ve arka planla yeterli kontrast oluşturmadığı yerler:
 
-| Yer | Renk çifti | Ölçülen oran | AA eşiği |
-|---|---|---|---|
-| `Ticker` "Bugün Tarihte" etiketi | `text-paper` (#f2ead9) / `bg-brand` (#d23b2e) | **3,98:1** | 4,5:1 |
-| `CasesSection` dosya türü rozeti (örn. "SUİKAST") | `text-brand` (#d23b2e) / panel zemini (~#171d29) | **≈3,54:1** | 4,5:1 |
-| `CasesSection` "Dosyayı aç/kapat" düğmesi | `text-brand` (#d23b2e) / panel zemini | **≈3,54:1** | 4,5:1 |
+| Yer                                               | Renk çifti                                       | Ölçülen oran | AA eşiği |
+| ------------------------------------------------- | ------------------------------------------------ | ------------ | -------- |
+| `Ticker` "Bugün Tarihte" etiketi                  | `text-paper` (#f2ead9) / `bg-brand` (#d23b2e)    | **3,98:1**   | 4,5:1    |
+| `CasesSection` dosya türü rozeti (örn. "SUİKAST") | `text-brand` (#d23b2e) / panel zemini (~#171d29) | **≈3,54:1**  | 4,5:1    |
+| `CasesSection` "Dosyayı aç/kapat" düğmesi         | `text-brand` (#d23b2e) / panel zemini            | **≈3,54:1**  | 4,5:1    |
 
 (Oranlar Node'da WCAG göreli parlaklık formülüyle elle hesaplandı, ardından
 gerçek bir Lighthouse denetimiyle bağımsız olarak doğrulandı.)
@@ -900,7 +913,7 @@ türü rozeti + aç/kapat düğmesi) düşük kontrastlı metinle gösteriyor; d
 görüşlü kullanıcılar için okunabilirlik sorunu.
 
 **Kapsam notu:** T-07 yalnızca `--color-ink-faint` (ve gerekirse `--color-ink-dim`)
-değişikliğine izin veriyordu (bkz. talimatın *Kapsam Dışı* tablosu); `--color-brand`
+değişikliğine izin veriyordu (bkz. talimatın _Kapsam Dışı_ tablosu); `--color-brand`
 tamamen farklı bir renk ve `ink-faint` gibi talimatın hazır bir değer verdiği bir
 durum değil — metin kullanımı için daha açık bir kırmızı ton mu gerekiyor, yoksa
 bu iki yerin arka plan/kullanım biçimi mi değişmeli, bu ayrı bir tasarım kararı.
@@ -952,7 +965,7 @@ yanına anlamsız tek harfler ekliyor — küçük ama görünür bir kalite sor
 da T-09'un "kullanıcıya boş/anlamsız bir şeyle karşılaştırmama" amacına ters.
 
 **Kapsam notu:** `holidays`'in **üretimi** (`wiki.ts`, T-05'in kapsamı) T-09'un
-*Kapsam Dışı* tablosunda "burada yalnızca gösteriliyor" diye işaretliydi; T-09
+_Kapsam Dışı_ tablosunda "burada yalnızca gösteriliyor" diye işaretliydi; T-09
 veriyi olduğu gibi gösterdi, filtrelemedi. Bu bilinçli bir seçimdi (talimatın
 kendi kod parçası da filtresizdi) — ama bulgu gerçek ve gösterilebilir bir
 düzeltmesi var.
@@ -1009,7 +1022,7 @@ yalnızca veri eklediği için bulguyu **görünür kıldı**, kendisi üretmedi
 şekilde çakıştığı büyük olasılıkla.
 
 **Kapsam notu:** T-10'un kapsamı açıkça "yalnızca veri" ve "sınıflandırma
-regex'leri T-11'e ait" diye sınırlıydı (bkz. T-10 *Kapsam Dışı* tablosu); bu
+regex'leri T-11'e ait" diye sınırlıydı (bkz. T-10 _Kapsam Dışı_ tablosu); bu
 bulgunun düzeltmesi `ScienceMilestone`'a `matchKeys` benzeri bir alan eklemeyi
 ve `App.tsx`'teki `allScience`'a `mergedEvents`'inkine benzer bir ayıklama
 mantığı yazmayı gerektiriyor — bu, veri şemasını **ve** bileşen mantığını
@@ -1081,82 +1094,82 @@ kapsamına alınabilir — nihai karar plan sahibine aittir.
 
 ### Kritik hatalar — 5 / 5 çözüldü
 
-| Kod | Bulgu | Durum | Talimat |
-|---|---|---|---|
-| K-1 | Takvimde "Yılın X. günü" artık yıl hatası | ✅ | T-03 |
-| K-2 | Gün değişince istatistik sayaçları güncellenmiyor | ✅ | T-04 |
-| K-3 | Sayfanın tamamı `IntersectionObserver`'a bağımlı, yedeği yok | ✅ | T-04 |
-| K-4 | HMR WebSocket'i sabit 3000 portuna bağlı | ✅ | T-01 |
-| K-5 | Gün gezinme düğmeleri dekoratif katman yüzünden görünmüyor ve tıklanamıyor | ✅ | T-15 |
+| Kod | Bulgu                                                                      | Durum | Talimat |
+| --- | -------------------------------------------------------------------------- | ----- | ------- |
+| K-1 | Takvimde "Yılın X. günü" artık yıl hatası                                  | ✅    | T-03    |
+| K-2 | Gün değişince istatistik sayaçları güncellenmiyor                          | ✅    | T-04    |
+| K-3 | Sayfanın tamamı `IntersectionObserver`'a bağımlı, yedeği yok               | ✅    | T-04    |
+| K-4 | HMR WebSocket'i sabit 3000 portuna bağlı                                   | ✅    | T-01    |
+| K-5 | Gün gezinme düğmeleri dekoratif katman yüzünden görünmüyor ve tıklanamıyor | ✅    | T-15    |
 
 ### Orta seviye eksikler — 9 / 13 çözüldü
 
-| Kod | Bulgu | Durum | Talimat |
-|---|---|---|---|
-| O-1 | Kullanılmayan 10 bağımlılık | ✅ | T-01 |
-| O-2 | `package.json` kimliği iskelet şablonundan kalma | ✅ | T-01 |
-| O-3 | `.gitignore` yanlış çatıya ait | ✅ | T-01 |
-| O-4 | Ağ katmanında iptal (abort) yok | ✅ | T-05 |
-| O-5 | Hata sınırı (`ErrorBoundary`) yok | ✅ | T-09 |
-| O-6 | Erişilebilirlik boşlukları | ✅ | T-07 |
-| O-7 | Klavye kısayolları yalnızca Yayın Modu'nda | ✅ | T-07 |
-| O-8 | Önbellek stratejisi yarım | ✅ | T-05 |
-| O-9 | `holidays` verisi çekiliyor ama kullanılmıyor | ✅ | T-09 |
-| O-10 | `text-brand` koyu zeminde yetersiz kontrast (3 yer) | ⏭️ PLAN-02 | — |
-| O-11 | `holidays` alanında Vikipedi şablon artığı çöp kayıtlar | ⏭️ PLAN-02 | — |
-| O-12 | Bilim & Keşif, editör kaydını Vikipedi'nin aynı olayına karşı ayıklamıyor | ⏭️ PLAN-02 | — |
-| O-13 | `react-router`'da 2 orta seviye güvenlik danışma kaydı | ⏭️ PLAN-02 | — |
+| Kod  | Bulgu                                                                     | Durum      | Talimat |
+| ---- | ------------------------------------------------------------------------- | ---------- | ------- |
+| O-1  | Kullanılmayan 10 bağımlılık                                               | ✅         | T-01    |
+| O-2  | `package.json` kimliği iskelet şablonundan kalma                          | ✅         | T-01    |
+| O-3  | `.gitignore` yanlış çatıya ait                                            | ✅         | T-01    |
+| O-4  | Ağ katmanında iptal (abort) yok                                           | ✅         | T-05    |
+| O-5  | Hata sınırı (`ErrorBoundary`) yok                                         | ✅         | T-09    |
+| O-6  | Erişilebilirlik boşlukları                                                | ✅         | T-07    |
+| O-7  | Klavye kısayolları yalnızca Yayın Modu'nda                                | ✅         | T-07    |
+| O-8  | Önbellek stratejisi yarım                                                 | ✅         | T-05    |
+| O-9  | `holidays` verisi çekiliyor ama kullanılmıyor                             | ✅         | T-09    |
+| O-10 | `text-brand` koyu zeminde yetersiz kontrast (3 yer)                       | ⏭️ PLAN-02 | —       |
+| O-11 | `holidays` alanında Vikipedi şablon artığı çöp kayıtlar                   | ⏭️ PLAN-02 | —       |
+| O-12 | Bilim & Keşif, editör kaydını Vikipedi'nin aynı olayına karşı ayıklamıyor | ⏭️ PLAN-02 | —       |
+| O-13 | `react-router`'da 2 orta seviye güvenlik danışma kaydı                    | ⏭️ PLAN-02 | —       |
 
 ### Ürün / içerik boşlukları — 5 / 5 çözüldü
 
-| Kod | Bulgu | Durum | Talimat |
-|---|---|---|---|
-| U-1 | Paylaşılabilir bağlantı yok | ✅ | T-06 |
-| U-2 | Editör içeriği 366 günün 10'unda (%2,7) | ✅ | T-10 (60 gün · %16,4) |
-| U-3 | Otomatik sınıflandırma kalitesi ölçülmemiş | ✅ | T-11 |
-| U-4 | Site kabuğu eksik: favicon, PWA, SEO, paylaşım kartı | ✅ | T-08 |
-| U-5 | Kalite güvencesi altyapısı hiç yok | ✅ | T-12 |
+| Kod | Bulgu                                                | Durum | Talimat               |
+| --- | ---------------------------------------------------- | ----- | --------------------- |
+| U-1 | Paylaşılabilir bağlantı yok                          | ✅    | T-06                  |
+| U-2 | Editör içeriği 366 günün 10'unda (%2,7)              | ✅    | T-10 (60 gün · %16,4) |
+| U-3 | Otomatik sınıflandırma kalitesi ölçülmemiş           | ✅    | T-11                  |
+| U-4 | Site kabuğu eksik: favicon, PWA, SEO, paylaşım kartı | ✅    | T-08                  |
+| U-5 | Kalite güvencesi altyapısı hiç yok                   | ✅    | T-12                  |
 
 ### Küçük notlar — 6 / 8 çözüldü
 
-| Kod | Bulgu | Durum | Talimat |
-|---|---|---|---|
-| m-1 | `NAV[stats.indexOf(s)]` — dizi sırasına gizli bağımlılık | ✅ | T-13 |
-| m-2 | `vite.config.js` — proje TS olduğu hâlde config JS | ✅ | T-01 |
-| m-3 | Karanlık dosyalar `slice(0, 6)` ile sessizce kesiliyor | ✅ | T-09 |
-| m-4 | Ticker hızı sabit `55s` | ✅ | T-13 |
-| m-5 | Kişi kartı görsellerinde `width`/`height` yok | ✅ | T-07 |
-| m-6 | Arama sonucu global sayacı yok | ✅ | T-09 |
-| m-7 | Yazdırma (print) stil sayfası yok | ⏭️ PLAN-02 | — |
-| m-8 | `estimateMinutes`'ın "3 dakika" eşiği erişilemez (zararsız) | ⏭️ PLAN-02 | — |
+| Kod | Bulgu                                                       | Durum      | Talimat |
+| --- | ----------------------------------------------------------- | ---------- | ------- |
+| m-1 | `NAV[stats.indexOf(s)]` — dizi sırasına gizli bağımlılık    | ✅         | T-13    |
+| m-2 | `vite.config.js` — proje TS olduğu hâlde config JS          | ✅         | T-01    |
+| m-3 | Karanlık dosyalar `slice(0, 6)` ile sessizce kesiliyor      | ✅         | T-09    |
+| m-4 | Ticker hızı sabit `55s`                                     | ✅         | T-13    |
+| m-5 | Kişi kartı görsellerinde `width`/`height` yok               | ✅         | T-07    |
+| m-6 | Arama sonucu global sayacı yok                              | ✅         | T-09    |
+| m-7 | Yazdırma (print) stil sayfası yok                           | ⏭️ PLAN-02 | —       |
+| m-8 | `estimateMinutes`'ın "3 dakika" eşiği erişilemez (zararsız) | ⏭️ PLAN-02 | —       |
 
 ### Toplam
 
-| | Adet | Çözüldü | Devredildi |
-|---|---|---|---|
-| Kritik | 5 | **5** | 0 |
-| Orta | 13 | 9 | 4 |
-| Ürün / içerik | 5 | **5** | 0 |
-| Küçük | 8 | 6 | 2 |
-| **Toplam** | **31** | **25 (%81)** | **6** |
+|               | Adet   | Çözüldü      | Devredildi |
+| ------------- | ------ | ------------ | ---------- |
+| Kritik        | 5      | **5**        | 0          |
+| Orta          | 13     | 9            | 4          |
+| Ürün / içerik | 5      | **5**        | 0          |
+| Küçük         | 8      | 6            | 2          |
+| **Toplam**    | **31** | **25 (%81)** | **6**      |
 
 ### PLAN-02'ye devredilenlerin gerekçesi
 
-| Kod | Neden bu planda yapılmadı |
-|---|---|
-| O-10 | T-07'nin doğrulaması sırasında keşfedildi; renk paleti kararı, tasarım dilinin korunması ilkesiyle birlikte ele alınmalı (PLAN-01 *Kapsam Dışı*: "tasarım dilinin değiştirilmesi") |
-| O-11 | Kaynak veri temizliği; `wiki.ts`'in ayrıştırma katmanında yeni bir süzgeç gerektiriyor, T-09'un kapsamı yalnızca gösterimdi |
-| O-12 | Hem veri şeması (`ScienceMilestone`'a `matchKeys`) hem bileşen mantığı değişikliği gerektiriyor; T-10 veri-yalnız, T-11 sınıflandırma-yalnızdı |
-| O-13 | Düzeltmesi `react-router-dom@7`'ye **kırılma içeren** bir yükseltme; T-06'nın kurduğu yönlendirme katmanının tamamının regresyon testini gerektirir |
-| m-7 | Yeni özellik (yazdırma düzeni), hata değil |
-| m-8 | Ölü kod eşiği; yalnızca bir okuma-süresi rozetini etkiliyor, kullanıcıya yansıyan bir yanlışlık yok |
+| Kod  | Neden bu planda yapılmadı                                                                                                                                                          |
+| ---- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| O-10 | T-07'nin doğrulaması sırasında keşfedildi; renk paleti kararı, tasarım dilinin korunması ilkesiyle birlikte ele alınmalı (PLAN-01 _Kapsam Dışı_: "tasarım dilinin değiştirilmesi") |
+| O-11 | Kaynak veri temizliği; `wiki.ts`'in ayrıştırma katmanında yeni bir süzgeç gerektiriyor, T-09'un kapsamı yalnızca gösterimdi                                                        |
+| O-12 | Hem veri şeması (`ScienceMilestone`'a `matchKeys`) hem bileşen mantığı değişikliği gerektiriyor; T-10 veri-yalnız, T-11 sınıflandırma-yalnızdı                                     |
+| O-13 | Düzeltmesi `react-router-dom@7`'ye **kırılma içeren** bir yükseltme; T-06'nın kurduğu yönlendirme katmanının tamamının regresyon testini gerektirir                                |
+| m-7  | Yeni özellik (yazdırma düzeni), hata değil                                                                                                                                         |
+| m-8  | Ölü kod eşiği; yalnızca bir okuma-süresi rozetini etkiliyor, kullanıcıya yansıyan bir yanlışlık yok                                                                                |
 
 ### Ayrıca not: doğrulanamamış iki madde
 
 Bunlar bulgu değil, **kapatılamamış doğrulama**dır — bir sonraki oturumda gerçek
 bir tarayıcıda elle kontrol edilmelidir:
 
-| Madde | Durum |
-|---|---|
-| Service worker'ın canlı kaydı (T-08) | Sunucu tarafı ve Workbox çıktısı doğrulandı; tarayıcıda kayıt, geliştirme ortamının sandbox kısıtı yüzünden doğrulanamadı |
-| `content-visibility:auto`'nun canlı etkisi (T-13) | Konumlandırma mantığı (`scrollIntoView`) doğrulandı; render kazancı aynı kısıt yüzünden ölçülemedi |
+| Madde                                             | Durum                                                                                                                     |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Service worker'ın canlı kaydı (T-08)              | Sunucu tarafı ve Workbox çıktısı doğrulandı; tarayıcıda kayıt, geliştirme ortamının sandbox kısıtı yüzünden doğrulanamadı |
+| `content-visibility:auto`'nun canlı etkisi (T-13) | Konumlandırma mantığı (`scrollIntoView`) doğrulandı; render kazancı aynı kısıt yüzünden ölçülemedi                        |

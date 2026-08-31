@@ -1,13 +1,13 @@
 # T-13 · Performans ve Derleme İyileştirmesi
 
-| Alan | Değer |
-|---|---|
-| **Faz** | FAZ 4 — Kalite Güvencesi |
-| **Öncelik** | 🟡 Orta |
-| **Tahmini süre** | ~3 saat |
-| **Bağımlılık** | T-04 (paylaşılan gözlemci), T-08 (PWA), T-12 (regresyon koruması) |
-| **İlgili bulgu** | m-4, m-5, performans notları |
-| **Durum** | ✅ Tamamlandı (2026-08-23) |
+| Alan             | Değer                                                             |
+| ---------------- | ----------------------------------------------------------------- |
+| **Faz**          | FAZ 4 — Kalite Güvencesi                                          |
+| **Öncelik**      | 🟡 Orta                                                           |
+| **Tahmini süre** | ~3 saat                                                           |
+| **Bağımlılık**   | T-04 (paylaşılan gözlemci), T-08 (PWA), T-12 (regresyon koruması) |
+| **İlgili bulgu** | m-4, m-5, performans notları                                      |
+| **Durum**        | ✅ Tamamlandı (2026-08-23)                                        |
 
 ---
 
@@ -31,18 +31,18 @@ dist/assets/index-*.js          253.62 kB │ gzip: 81.96 kB
 
 ### Tespit edilen maliyet kalemleri
 
-| # | Sorun | Etki |
-|---|---|---|
-| 1 | Kod bölme yok — `BroadcastMode` ilk yüklemede geliyor | Çoğu kullanıcı Yayın Modu'nu hiç açmıyor |
-| 2 | `Modal` ve kişi kartı modalı da ilk pakette | Aynı |
-| 3 | Google Fonts: 3 aile, çok geniş ağırlık aralığı | Fraunces `300..900` + italik = büyük indirme |
-| 4 | Vikipedi görsellerinde boyut yok (m-5) | Düzen kayması (CLS) — T-07'de kısmen çözülüyor |
-| 5 | Ticker animasyonu sabit 55 s (m-4) | 3 öğede sürünüyor, 14 öğede hızlı |
-| 6 | `.noise` katmanı tam ekran SVG, `z-70` | Sürekli kompozisyon maliyeti |
-| 7 | `drift-slow` animasyonları dev metinlerde | Kaydırma sırasında boyama yükü |
-| 8 | `App.tsx` 660 satır, 6 `useMemo` — hepsi her veri değişiminde | Gün geçişinde tam yeniden hesap |
-| 9 | `NAV[stats.indexOf(s)]` (m-1) | O(n²) + kırılgan bağımlılık |
-| 10 | Arama süzmesi hem bölümlerde hem sayaçta tekrarlanıyor (T-09 notu) | Çift hesap |
+| #   | Sorun                                                              | Etki                                           |
+| --- | ------------------------------------------------------------------ | ---------------------------------------------- |
+| 1   | Kod bölme yok — `BroadcastMode` ilk yüklemede geliyor              | Çoğu kullanıcı Yayın Modu'nu hiç açmıyor       |
+| 2   | `Modal` ve kişi kartı modalı da ilk pakette                        | Aynı                                           |
+| 3   | Google Fonts: 3 aile, çok geniş ağırlık aralığı                    | Fraunces `300..900` + italik = büyük indirme   |
+| 4   | Vikipedi görsellerinde boyut yok (m-5)                             | Düzen kayması (CLS) — T-07'de kısmen çözülüyor |
+| 5   | Ticker animasyonu sabit 55 s (m-4)                                 | 3 öğede sürünüyor, 14 öğede hızlı              |
+| 6   | `.noise` katmanı tam ekran SVG, `z-70`                             | Sürekli kompozisyon maliyeti                   |
+| 7   | `drift-slow` animasyonları dev metinlerde                          | Kaydırma sırasında boyama yükü                 |
+| 8   | `App.tsx` 660 satır, 6 `useMemo` — hepsi her veri değişiminde      | Gün geçişinde tam yeniden hesap                |
+| 9   | `NAV[stats.indexOf(s)]` (m-1)                                      | O(n²) + kırılgan bağımlılık                    |
+| 10  | Arama süzmesi hem bölümlerde hem sayaçta tekrarlanıyor (T-09 notu) | Çift hesap                                     |
 
 ---
 
@@ -61,11 +61,13 @@ const BroadcastMode = lazy(() =>
 
 /* ... */
 
-{broadcast && talkCards.length > 0 && (
-  <Suspense fallback={<YayinYukleniyor />}>
-    <BroadcastMode cards={talkCards} dayLabel={dayLabel} onClose={() => setBroadcast(false)} />
-  </Suspense>
-)}
+{
+  broadcast && talkCards.length > 0 && (
+    <Suspense fallback={<YayinYukleniyor />}>
+      <BroadcastMode cards={talkCards} dayLabel={dayLabel} onClose={() => setBroadcast(false)} />
+    </Suspense>
+  );
+}
 ```
 
 `YayinYukleniyor` — tam ekran koyu zemin + yanıp sönen nokta, ~10 satır.
@@ -134,7 +136,9 @@ export function Ticker({ items }: { items: { year: number; text: string }[] }) {
 }
 
 @media (max-width: 768px) {
-  .noise { display: none; }        /* mobilde görsel katkısı düşük, maliyeti yüksek */
+  .noise {
+    display: none;
+  } /* mobilde görsel katkısı düşük, maliyeti yüksek */
 }
 ```
 
@@ -142,14 +146,20 @@ export function Ticker({ items }: { items: { year: number; text: string }[] }) {
 sürekli hareket ettiriyor. `will-change` ekleyerek kompozitör katmanına al:
 
 ```css
-.drift-slow, .drift-slower { will-change: transform; }
+.drift-slow,
+.drift-slower {
+  will-change: transform;
+}
 ```
 
 Mobilde tamamen kapat:
 
 ```css
 @media (max-width: 640px) {
-  .drift-slow, .drift-slower { animation: none; }
+  .drift-slow,
+  .drift-slower {
+    animation: none;
+  }
 }
 ```
 
@@ -218,10 +228,10 @@ export function useGunVerisi(data: DayData | null, curated: CuratedDay | undefin
 
 ```ts
 const stats = [
-  { hedef: "tunel",           label: "Tarihî olay", value: mergedEvents.length, /* ... */ },
-  { hedef: "doganlar",        label: "Bugün doğan", value: births.length, /* ... */ },
-  { hedef: "kaybettiklerimiz",label: "Kaybettiklerimiz", value: deaths.length, /* ... */ },
-  { hedef: "karanlik",        label: "Karanlık dosya", value: allCases.length, /* ... */ },
+  { hedef: "tunel", label: "Tarihî olay", value: mergedEvents.length /* ... */ },
+  { hedef: "doganlar", label: "Bugün doğan", value: births.length /* ... */ },
+  { hedef: "kaybettiklerimiz", label: "Kaybettiklerimiz", value: deaths.length /* ... */ },
+  { hedef: "karanlik", label: "Karanlık dosya", value: allCases.length /* ... */ },
 ];
 ```
 
@@ -236,11 +246,14 @@ kaynaktan beslensin:
 
 ```ts
 export function useAramaSonuclari(veri, query) {
-  return useMemo(() => ({
-    olaylar: veri.mergedEvents.filter((e) => matchQuery(query, e.text, /* ... */)),
-    dogumlar: veri.births.filter(/* ... */),
-    /* ... */
-  }), [veri, query]);
+  return useMemo(
+    () => ({
+      olaylar: veri.mergedEvents.filter((e) => matchQuery(query, e.text /* ... */)),
+      dogumlar: veri.births.filter(/* ... */),
+      /* ... */
+    }),
+    [veri, query]
+  );
 }
 ```
 
@@ -259,7 +272,7 @@ import { visualizer } from "rollup-plugin-visualizer";
 plugins: [
   /* ... */
   process.env.ANALYZE && visualizer({ open: true, gzipSize: true, filename: "dist/analiz.html" }),
-].filter(Boolean)
+].filter(Boolean);
 ```
 
 ```json
@@ -296,10 +309,10 @@ kod blokları ve metinler yardımcı sınıf adı sanılıp üretim CSS'ine giri
 
 **Ölçülen etki (T-01 sırasında, kontrollü deney):**
 
-| Derleme | CSS |
-|---|---|
-| `Dokumanlar/` + `Talimatlar/` yerinde | 52,50 kB |
-| İkisi geçici olarak dışarı alınmış | **50,78 kB** |
+| Derleme                               | CSS          |
+| ------------------------------------- | ------------ |
+| `Dokumanlar/` + `Talimatlar/` yerinde | 52,50 kB     |
+| İkisi geçici olarak dışarı alınmış    | **50,78 kB** |
 
 Fark **+1,72 kB** — tamamen belge klasörlerinden geliyor, uygulama kodundan değil.
 (JS her iki durumda da bayt bayt aynı: 253,62 kB.)
@@ -321,14 +334,14 @@ Fark **+1,72 kB** — tamamen belge klasörlerinden geliyor, uygulama kodundan d
 
 ## 🚫 Kapsam Dışı
 
-| Dokunma | Neden / Hangi talimat |
-|---|---|
-| Tasarım dilini değiştirmek | Animasyonlar **kısılabilir**, kaldırılamaz |
-| Görsel kalitesini düşürmek | Vikipedi görselleri olduğu gibi kalır |
-| Yeni özellik ekleme | Bu talimat yalnızca hız ve yapı |
-| SSR / statik üretim | PLAN-02 |
-| CDN / barındırma seçimi | T-14 |
-| İçerik verisinin tembel yüklenmesi | T-10 (A3 adımı) |
+| Dokunma                            | Neden / Hangi talimat                      |
+| ---------------------------------- | ------------------------------------------ |
+| Tasarım dilini değiştirmek         | Animasyonlar **kısılabilir**, kaldırılamaz |
+| Görsel kalitesini düşürmek         | Vikipedi görselleri olduğu gibi kalır      |
+| Yeni özellik ekleme                | Bu talimat yalnızca hız ve yapı            |
+| SSR / statik üretim                | PLAN-02                                    |
+| CDN / barındırma seçimi            | T-14                                       |
+| İçerik verisinin tembel yüklenmesi | T-10 (A3 adımı)                            |
 
 ---
 
@@ -363,11 +376,11 @@ Fark **+1,72 kB** — tamamen belge klasörlerinden geliyor, uygulama kodundan d
 npm run build
 ```
 
-| Ölçüt | Önce | Sonra | Hedef |
-|---|---|---|---|
-| index JS (gzip) | 81.96 kB | ? | ≤ 70 kB |
-| CSS (gzip) | 9.71 kB | ? | ~aynı |
-| Parça sayısı | 1 | ≥ 3 | — |
+| Ölçüt           | Önce     | Sonra | Hedef   |
+| --------------- | -------- | ----- | ------- |
+| index JS (gzip) | 81.96 kB | ?     | ≤ 70 kB |
+| CSS (gzip)      | 9.71 kB  | ?     | ~aynı   |
+| Parça sayısı    | 1        | ≥ 3   | —       |
 
 ### 2. Kod bölme çalışıyor mu
 
@@ -384,24 +397,25 @@ Network → Font ile süz. İndirilen `woff2` sayısı ve toplam boyut
 
 DevTools → Lighthouse → **Mobile** + Performance:
 
-| Ölçüt | Hedef |
-|---|---|
-| Performans | ≥ 90 |
-| LCP | < 2,5 s |
-| CLS | < 0,1 |
-| TBT | < 200 ms |
+| Ölçüt      | Hedef    |
+| ---------- | -------- |
+| Performans | ≥ 90     |
+| LCP        | < 2,5 s  |
+| CLS        | < 0,1    |
+| TBT        | < 200 ms |
 
 ### 5. Regresyon turu — zorunlu
 
 Refaktör (Adım 6) davranışı değiştirmemeli. **Üç günde** tam tur:
 
-| Gün | Kontrol |
-|---|---|
+| Gün                             | Kontrol                                          |
+| ------------------------------- | ------------------------------------------------ |
 | `29 Ekim` (editör içeriği dolu) | Altı bölüm, spotlight, sayaçlar, sohbet kartları |
-| `7 Mart` (yalnızca otomatik) | Boş durumlar doğru mu |
-| `29 Şubat` | Kenar durum |
+| `7 Mart` (yalnızca otomatik)    | Boş durumlar doğru mu                            |
+| `29 Şubat`                      | Kenar durum                                      |
 
 Her günde:
+
 - Kategori süzme çalışıyor
 - Kişi kartı modalı açılıyor/kapanıyor
 - Karanlık dosya açılıyor
@@ -480,11 +494,11 @@ okunabilir hızda olmalı.
   Talimatın önerdiği 6 bileşenin (`UstBar`, `GunOzeti`, `OzelGunler`, `BolumNav`,
   `AltBilgi`, `Iskeletler`) yanına, 300 satır hedefine rahatça sığmak için üç ek
   dosya daha çıkarıldı: `AcilisBolumu.tsx` (takvim yaprağı + paylaş + `GunOzeti`
-  + `OzelGunler` + ticker'ı saran açılış bölümü), `Bolumler.tsx` (altı içerik
-  bölümü + "Bugünün anlamı" şeridi + arama boş durumu) ve `KisayolYardimi.tsx`
-  (klavye kısayolları modalı) — talimatın ağaç örneği kapsayıcı değildi
-  (ör. altı içerik bölümünün nereye gideceğini belirtmiyordu). Klavye kısayolu
-  `useEffect`'i de `src/hooks/useKlavyeKisayollari.ts`'e taşındı.
+  - `OzelGunler` + ticker'ı saran açılış bölümü), `Bolumler.tsx` (altı içerik
+    bölümü + "Bugünün anlamı" şeridi + arama boş durumu) ve `KisayolYardimi.tsx`
+    (klavye kısayolları modalı) — talimatın ağaç örneği kapsayıcı değildi
+    (ör. altı içerik bölümünün nereye gideceğini belirtmiyordu). Klavye kısayolu
+    `useEffect`'i de `src/hooks/useKlavyeKisayollari.ts`'e taşındı.
 
 - **`content-visibility` uygulandı mı:** Evet, `.section-shell` (Adım 5) —
   `SectionShell`'e eklendi, `index.css`'e `content-visibility:auto` +
@@ -495,7 +509,7 @@ okunabilir hızda olmalı.
   oturumdaki Browser pane sekmesi arka planda kaldığı için (compositing
   yapmıyor, ekran görüntüsü alınamadı) yumuşak kaydırma **animasyonu** görsel
   olarak doğrulanamadı — yalnızca konumlandırma mantığı (asıl risk: `content-
-  visibility`'nin hedefi "bulamaması") test edildi, geri alınmadı.
+visibility`'nin hedefi "bulamaması") test edildi, geri alınmadı.
 
 - **Değişen dosyalar:**
   `index.html`, `src/index.css`, `vite.config.ts`, `package.json` ·
@@ -512,7 +526,7 @@ okunabilir hızda olmalı.
 
 - **Sapmalar / notlar:**
   1. **Font aralığı** (Adım 2) — talimatın örnek diff'i (`opsz,wght@9..144,
-     600..900`, `ital` ekseni tamamen kaldırılmış) körü körüne uygulanmadı;
+600..900`, `ital` ekseni tamamen kaldırılmış) körü körüne uygulanmadı;
      `grep -rn italic` + ağırlık taraması gerçek kullanımı (3 yerde ağırlıksız
      italik, 1 yerde `font-medium` italik) ortaya çıkardı — italik ekseni
      **korunarak** yalnızca ağırlık aralığı daraltıldı
@@ -521,11 +535,11 @@ okunabilir hızda olmalı.
      tarayıcı-taklidi (oblik sentezleme) render'a düşülürdü — küçük ama
      gereksiz bir görsel regresyon.
   2. **Font preload+onload takası** (Adım 2) — talimatın `<link rel="preload"
-     as="style">` satırı tek başına render-blocking'i çözmüyordu (Lighthouse
+as="style">` satırı tek başına render-blocking'i çözmüyordu (Lighthouse
      canlı ölçümünde yakalandı); standart preload/onload-swap + `<noscript>`
      yedeği eklendi — Doğrulama Adım 4'ün (Lighthouse ≥90) gerçek gereksinimiydi.
   3. **`cross-env` eklendi** (Adım 9) — talimatın `"analyze": "ANALYZE=1 vite
-     build"` satırı yalnızca POSIX kabuğunda çalışır; proje Windows'u da
+build"` satırı yalnızca POSIX kabuğunda çalışır; proje Windows'u da
      desteklediği için (T-02'nin `başlat.bat`/`baslat.sh` çifti) `cross-env`
      devDependency olarak eklenip komut ona göre yazıldı.
   4. **Arama tekilleştirme alan listesi** (Adım 8) — üst bardaki eski sayaç
@@ -575,7 +589,7 @@ okunabilir hızda olmalı.
 - **Sonraki talimata not (T-14 ve olası PLAN-02):**
   - Lighthouse Performans/Erişilebilirlik/SEO'nun **üçü birden** ilk kez bu
     talimatta, aynı üretim derlemesine karşı ölçüldü (92/96/100) — `KULLANIM-
-    KILAVUZU.md`/`BAGLAM.md`'deki "Mevcut Durum" bu üçlü rakamı T-14'te
+KILAVUZU.md`/`BAGLAM.md`'deki "Mevcut Durum" bu üçlü rakamı T-14'te
     kesinleştirebilir (bu talimat kendi ölçümünü zaten Dokumanlar'a işledi).
   - **≥%15 ilk paket küçülmesi** hedefi, T-10'un ertelediği içerik tembel
     yüklemesi (`data/gunler/*.ts`'in ay bazlı `import()`'u) yapılmadan

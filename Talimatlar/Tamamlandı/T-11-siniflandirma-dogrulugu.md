@@ -1,13 +1,13 @@
 # T-11 · Sınıflandırma Doğruluğu
 
-| Alan | Değer |
-|---|---|
-| **Faz** | FAZ 3 — İçerik |
-| **Öncelik** | 🟡 Orta |
-| **Tahmini süre** | ~4 saat |
-| **Bağımlılık** | T-05 · **T-12'nin test altyapısı önce kurulursa çok daha güvenli** |
-| **İlgili bulgu** | U-3 |
-| **Durum** | ✅ Tamamlandı (2026-08-22) |
+| Alan             | Değer                                                              |
+| ---------------- | ------------------------------------------------------------------ |
+| **Faz**          | FAZ 3 — İçerik                                                     |
+| **Öncelik**      | 🟡 Orta                                                            |
+| **Tahmini süre** | ~4 saat                                                            |
+| **Bağımlılık**   | T-05 · **T-12'nin test altyapısı önce kurulursa çok daha güvenli** |
+| **İlgili bulgu** | U-3                                                                |
+| **Durum**        | ✅ Tamamlandı (2026-08-22)                                         |
 
 ---
 
@@ -24,12 +24,12 @@ değiştiğinde neyin bozulduğunu görünür kılmak.
 `src/lib/wiki.ts:151-196`
 
 ```ts
-const RULES: [CategoryId, RegExp][] = [ /* 7 kural */ ];
+const RULES: [CategoryId, RegExp][] = [/* 7 kural */];
 
 export function classifyItem(text: string): CategoryId {
   const t = trLower(text);
   for (const [cat, re] of RULES) {
-    if (re.test(t)) return cat;      // ← İLK EŞLEŞEN KAZANIR
+    if (re.test(t)) return cat; // ← İLK EŞLEŞEN KAZANIR
   }
   return "genel";
 }
@@ -40,19 +40,19 @@ export function classifyItem(text: string): CategoryId {
 Metin birden çok kategoriye ait olabilir. Şu an dizideki **sıra** karar veriyor,
 metnin **ağırlığı** değil.
 
-> *"Deprem sonrası çıkan isyan bastırıldı"* → `felaket` (1. kural).
+> _"Deprem sonrası çıkan isyan bastırıldı"_ → `felaket` (1. kural).
 > Oysa cümlenin ağırlığı `savas`/`siyaset` tarafında.
 
 ### Sorun 2 — Çok kısa kalıplar yanlış pozitif üretiyor
 
-| Kalıp | Amaç | Yanlış yakaladığı |
-|---|---|---|
-| `/kazas/` | "uçak kazası" | **"Bursa kazası"** (Osmanlı idari birimi), **"kazasker"** |
-| `/ay'/` | "Ay'a iniş" | **"Saray'a"**, **"Saray'ın"** |
-| `/ordu(su)? /` | "Osmanlı ordusu" | **Ordu ili** geçen her cümle |
-| `/patlama/` | "gaz patlaması" | **"nüfus patlaması"** |
-| `/sel( \|i)/` | "sel felaketi" | **"selam"**, **"selanik"** (`seli` eşleşir) |
-| `/makale/` | bilimsel makale | her türlü gazete makalesi |
+| Kalıp          | Amaç             | Yanlış yakaladığı                                         |
+| -------------- | ---------------- | --------------------------------------------------------- |
+| `/kazas/`      | "uçak kazası"    | **"Bursa kazası"** (Osmanlı idari birimi), **"kazasker"** |
+| `/ay'/`        | "Ay'a iniş"      | **"Saray'a"**, **"Saray'ın"**                             |
+| `/ordu(su)? /` | "Osmanlı ordusu" | **Ordu ili** geçen her cümle                              |
+| `/patlama/`    | "gaz patlaması"  | **"nüfus patlaması"**                                     |
+| `/sel( \|i)/`  | "sel felaketi"   | **"selam"**, **"selanik"** (`seli` eşleşir)               |
+| `/makale/`     | bilimsel makale  | her türlü gazete makalesi                                 |
 
 ### Sorun 3 — Kural çakışması
 
@@ -78,32 +78,60 @@ export interface Ornek {
   text: string;
   beklenen: CategoryId;
   karanlik: string | null;
-  not?: string;               // neden bu kategori — tartışmalı örnekler için
+  not?: string; // neden bu kategori — tartışmalı örnekler için
 }
 
 export const ORNEKLER: Ornek[] = [
   // — doğru eşleşmesi gerekenler —
   { text: "İkinci Anafartalar Savaşı başladı.", beklenen: "savas", karanlik: null },
-  { text: "Mona Lisa tablosu, Louvre Müzesi'nin bir çalışanı tarafından çalındı.",
-    beklenen: "kultur", karanlik: null },
-  { text: "Sovyet Devrimi liderlerinden Leon Troçki, Meksika'da öldürüldü.",
-    beklenen: "siyaset", karanlik: "Suikast" },
-  { text: "İstanbul Kuledibi'ndeki Eskiciler Çarşısı yandı; 167 dükkân kül oldu.",
-    beklenen: "felaket", karanlik: "Felaket" },
-  { text: "Semiorka adıyla bilinen Sovyet füzesi R7'nin ilk başarılı uçuşu gerçekleşti.",
-    beklenen: "kesif", karanlik: null },
+  {
+    text: "Mona Lisa tablosu, Louvre Müzesi'nin bir çalışanı tarafından çalındı.",
+    beklenen: "kultur",
+    karanlik: null,
+  },
+  {
+    text: "Sovyet Devrimi liderlerinden Leon Troçki, Meksika'da öldürüldü.",
+    beklenen: "siyaset",
+    karanlik: "Suikast",
+  },
+  {
+    text: "İstanbul Kuledibi'ndeki Eskiciler Çarşısı yandı; 167 dükkân kül oldu.",
+    beklenen: "felaket",
+    karanlik: "Felaket",
+  },
+  {
+    text: "Semiorka adıyla bilinen Sovyet füzesi R7'nin ilk başarılı uçuşu gerçekleşti.",
+    beklenen: "kesif",
+    karanlik: null,
+  },
 
   // — YANLIŞ POZİTİF TUZAKLARI —
-  { text: "Bursa kazası kadılığına atama yapıldı.", beklenen: "genel", karanlik: null,
-    not: "'kazas' kalıbı buraya takılmamalı" },
+  {
+    text: "Bursa kazası kadılığına atama yapıldı.",
+    beklenen: "genel",
+    karanlik: null,
+    not: "'kazas' kalıbı buraya takılmamalı",
+  },
   { text: "Rumeli kazaskerliğine getirildi.", beklenen: "genel", karanlik: null },
-  { text: "Topkapı Sarayı'na yeni bir kütüphane eklendi.", beklenen: "kultur", karanlik: null,
-    not: "'ay'' kalıbı Saray'a takılmamalı" },
-  { text: "Ordu ilinde belediye seçimleri yapıldı.", beklenen: "siyaset", karanlik: null,
-    not: "'ordu ' kalıbı il adına takılmamalı" },
+  {
+    text: "Topkapı Sarayı'na yeni bir kütüphane eklendi.",
+    beklenen: "kultur",
+    karanlik: null,
+    not: "'ay'' kalıbı Saray'a takılmamalı",
+  },
+  {
+    text: "Ordu ilinde belediye seçimleri yapıldı.",
+    beklenen: "siyaset",
+    karanlik: null,
+    not: "'ordu ' kalıbı il adına takılmamalı",
+  },
   { text: "Ülkedeki nüfus patlaması tartışmaya yol açtı.", beklenen: "genel", karanlik: null },
-  { text: "Selanik'te yeni bir okul açıldı.", beklenen: "genel", karanlik: null,
-    not: "'sel(i)' kalıbı Selanik'e takılmamalı" },
+  {
+    text: "Selanik'te yeni bir okul açıldı.",
+    beklenen: "genel",
+    karanlik: null,
+    not: "'sel(i)' kalıbı Selanik'e takılmamalı",
+  },
 ];
 ```
 
@@ -122,23 +150,23 @@ Toplamak için konsolda:
 interface Kural {
   kategori: CategoryId;
   desen: RegExp;
-  puan: number;        // 1 = zayıf ipucu, 3 = güçlü ipucu
+  puan: number; // 1 = zayıf ipucu, 3 = güçlü ipucu
 }
 
 const KURALLAR: Kural[] = [
   // güçlü ipuçları (3)
   { kategori: "felaket", desen: /\bdeprem|tsunami|kasırga|volkan(ik)?|salgın|pandemi/, puan: 3 },
-  { kategori: "savas",   desen: /\bsavaş[ıi]?\b|muharebe|kuşatma|işgal etti|cephe/, puan: 3 },
-  { kategori: "kesif",   desen: /uzay|nasa|roket|yörünge|teleskop/, puan: 3 },
-  { kategori: "bilim",   desen: /\bdna\b|genom|kuantum|nükleer|aşı(sı|yı)?\b/, puan: 3 },
+  { kategori: "savas", desen: /\bsavaş[ıi]?\b|muharebe|kuşatma|işgal etti|cephe/, puan: 3 },
+  { kategori: "kesif", desen: /uzay|nasa|roket|yörünge|teleskop/, puan: 3 },
+  { kategori: "bilim", desen: /\bdna\b|genom|kuantum|nükleer|aşı(sı|yı)?\b/, puan: 3 },
 
   // orta ipuçları (2)
   { kategori: "felaket", desen: /facia(sı)?\b|yangın[ıi]?\b|çığ\b/, puan: 2 },
   { kategori: "siyaset", desen: /cumhurbaşkan|başbakan|anayasa|antlaşma|bağımsızlık/, puan: 2 },
-  { kategori: "kultur",  desen: /roman[ıi]?\b|senfoni|opera|tiyatro|tablo(su)?\b|müze/, puan: 2 },
+  { kategori: "kultur", desen: /roman[ıi]?\b|senfoni|opera|tiyatro|tablo(su)?\b|müze/, puan: 2 },
 
   // zayıf ipuçları (1)
-  { kategori: "spor",    desen: /şampiyon|turnuva|rekor kır/, puan: 1 },
+  { kategori: "spor", desen: /şampiyon|turnuva|rekor kır/, puan: 1 },
   /* ... */
 ];
 
@@ -156,7 +184,10 @@ export function classifyItem(text: string): CategoryId {
   let enIyi: CategoryId = "genel";
   let enYuksek = 0;
   for (const [kat, p] of puanlar) {
-    if (p > enYuksek) { enYuksek = p; enIyi = kat; }
+    if (p > enYuksek) {
+      enYuksek = p;
+      enIyi = kat;
+    }
   }
   // eşitlik durumunda ÖNCELİK sırası devreye girsin
   return enIyi;
@@ -177,25 +208,25 @@ Türkçe sondan eklemeli bir dil; `\b` tek başına yetmez.
 
 Düzeltilecek kalıplar:
 
-| Eski | Yeni |
-|---|---|
-| `/kazas/` | `/\b(uçak\|tren\|maden\|trafik\|otobüs) kaza/` |
-| `/ay'/` | `/\bay'(a\|ın\|da\|dan)\b/` — ve `RULES` sırasında `saray` negatif kontrolü |
-| `/ordu(su)? /` | `/\b(osmanlı\|türk\|kızıl\|alman\|rus) ordusu/` |
-| `/patlama/` | `/(gaz\|bomba\|maden\|fabrika) patlama/` |
-| `/sel( \|i)/` | `/\bsel felaketi\|\bsel bask[ıi]n/` |
-| `/makale/` | **kaldır** — çok genel, ayırt edici değil |
-| `/bat(tı\|an)/` | `/\b(gemi\|vapur\|feribot)[a-zçğıöşü]* bat/` |
+| Eski            | Yeni                                                                        |
+| --------------- | --------------------------------------------------------------------------- |
+| `/kazas/`       | `/\b(uçak\|tren\|maden\|trafik\|otobüs) kaza/`                              |
+| `/ay'/`         | `/\bay'(a\|ın\|da\|dan)\b/` — ve `RULES` sırasında `saray` negatif kontrolü |
+| `/ordu(su)? /`  | `/\b(osmanlı\|türk\|kızıl\|alman\|rus) ordusu/`                             |
+| `/patlama/`     | `/(gaz\|bomba\|maden\|fabrika) patlama/`                                    |
+| `/sel( \|i)/`   | `/\bsel felaketi\|\bsel bask[ıi]n/`                                         |
+| `/makale/`      | **kaldır** — çok genel, ayırt edici değil                                   |
+| `/bat(tı\|an)/` | `/\b(gemi\|vapur\|feribot)[a-zçğıöşü]* bat/`                                |
 
 ### Adım 4 — `DARK_THEMES`'i aynı yöntemle düzelt
 
 ```ts
 const KARANLIK: Kural2[] = [
-  { tema: "Suikast",      desen: /suikast|suikaste kurban|öldürüldü\b/, puan: 3 },
+  { tema: "Suikast", desen: /suikast|suikaste kurban|öldürüldü\b/, puan: 3 },
   { tema: "İnfaz & İdam", desen: /idam edil|asılarak idam|kurşuna dizil/, puan: 3 },
-  { tema: "Kayıp & Gizem",desen: /esrarengiz şekilde kayb|ortadan kayboldu/, puan: 3 },
-  { tema: "Felaket",      desen: /\bdeprem|facia(sı)?\b|(gemi|uçak) kaza/, puan: 2 },
-  { tema: "Şiddet",       desen: /katliam|katledil|linç edil|bombalı saldırı/, puan: 3 },
+  { tema: "Kayıp & Gizem", desen: /esrarengiz şekilde kayb|ortadan kayboldu/, puan: 3 },
+  { tema: "Felaket", desen: /\bdeprem|facia(sı)?\b|(gemi|uçak) kaza/, puan: 2 },
+  { tema: "Şiddet", desen: /katliam|katledil|linç edil|bombalı saldırı/, puan: 3 },
 ];
 ```
 
@@ -248,11 +279,11 @@ HATALI ÖRNEKLER
 
 ### Adım 6 — Hedef ve kabul
 
-| Ölçüt | Mevcut | Hedef |
-|---|---|---|
-| Kategori doğruluğu | ölçülmemiş | **≥ %85** |
+| Ölçüt                   | Mevcut     | Hedef                |
+| ----------------------- | ---------- | -------------------- |
+| Kategori doğruluğu      | ölçülmemiş | **≥ %85**            |
 | Karanlık yanlış pozitif | ölçülmemiş | **0** (altın kümede) |
-| Karanlık kesinlik | ölçülmemiş | **≥ %90** |
+| Karanlık kesinlik       | ölçülmemiş | **≥ %90**            |
 
 > **Yanlış pozitif neden sıfır olmalı?** Karanlık Dosyalar bölümü ürünün en iddialı
 > bölümü. "Bursa kazası kadılığı" bir suç dosyası olarak görünürse ürün gülünç olur.
@@ -275,14 +306,14 @@ HATALI ÖRNEKLER
 
 ## 🚫 Kapsam Dışı
 
-| Dokunma | Neden / Hangi talimat |
-|---|---|
-| Editör içeriği (`CURATED`) | T-10 — editör verisi sınıflandırmadan geçmez |
-| `buildAutoTalk` kart **yapısı** | Yalnızca kullandığı sınıflandırma değişir |
-| Ağ katmanı | T-05 |
+| Dokunma                                                    | Neden / Hangi talimat                             |
+| ---------------------------------------------------------- | ------------------------------------------------- |
+| Editör içeriği (`CURATED`)                                 | T-10 — editör verisi sınıflandırmadan geçmez      |
+| `buildAutoTalk` kart **yapısı**                            | Yalnızca kullandığı sınıflandırma değişir         |
+| Ağ katmanı                                                 | T-05                                              |
 | Makine öğrenmesi / gömme (embedding) tabanlı sınıflandırma | Kapsam dışı — istemci taraflı ürün, regex yeterli |
-| Yeni kategori ekleme | Kapsam dışı — mevcut 8 kategori korunur |
-| Bileşen görünümleri | Dokunulmaz |
+| Yeni kategori ekleme                                       | Kapsam dışı — mevcut 8 kategori korunur           |
+| Bileşen görünümleri                                        | Dokunulmaz                                        |
 
 ---
 
@@ -314,16 +345,16 @@ Hedeflerin tutması gerekiyor. Tutmuyorsa kuralları iyileştir, örnek kümeyi
 
 ### 2. Tuzak testleri — tek tek
 
-| Girdi | Beklenen kategori | Beklenen karanlık |
-|---|---|---|
-| "Bursa kazası kadılığına atama yapıldı." | `genel` | `null` |
-| "Rumeli kazaskerliğine getirildi." | `genel` | `null` |
-| "Topkapı Sarayı'na kütüphane eklendi." | `kultur` | `null` |
-| "Ordu ilinde seçim yapıldı." | `siyaset` | `null` |
-| "Nüfus patlaması tartışmaya yol açtı." | `genel` | `null` |
-| "Selanik'te okul açıldı." | `genel` | `null` |
-| "Apollo 11 Ay'a indi." | `kesif` | `null` |
-| "Gemi fırtınada battı, 200 kişi öldü." | `felaket` | `Felaket` |
+| Girdi                                    | Beklenen kategori | Beklenen karanlık |
+| ---------------------------------------- | ----------------- | ----------------- |
+| "Bursa kazası kadılığına atama yapıldı." | `genel`           | `null`            |
+| "Rumeli kazaskerliğine getirildi."       | `genel`           | `null`            |
+| "Topkapı Sarayı'na kütüphane eklendi."   | `kultur`          | `null`            |
+| "Ordu ilinde seçim yapıldı."             | `siyaset`         | `null`            |
+| "Nüfus patlaması tartışmaya yol açtı."   | `genel`           | `null`            |
+| "Selanik'te okul açıldı."                | `genel`           | `null`            |
+| "Apollo 11 Ay'a indi."                   | `kesif`           | `null`            |
+| "Gemi fırtınada battı, 200 kişi öldü."   | `felaket`         | `Felaket`         |
 
 ### 3. Gerçek veri turu
 
@@ -348,7 +379,7 @@ Sağlıklı bir günde `genel` oranı **%40'ın altında** olmalı.
 
 ```js
 console.time("sınıflandırma");
-data.events.forEach(e => classifyItem(e.text));
+data.events.forEach((e) => classifyItem(e.text));
 console.timeEnd("sınıflandırma");
 ```
 
@@ -419,11 +450,11 @@ console.timeEnd("sınıflandırma");
 
   4. **Talimatın örnek regex'lerinden birkaçı, gerçek veriyle test edilince
      kendi verdiği Doğrulama örneklerini bile geçmiyordu** — düzeltildi,
-     talimatın *niyeti* korunarak: `/\b(gemi|vapur|feribot) bat/` tam
+     talimatın _niyeti_ korunarak: `/\b(gemi|vapur|feribot) bat/` tam
      bitişiklik istiyordu, ama "Gemi fırtınada battı" (talimatın kendi
      Doğrulama §2 örneği) gemi ile battı arasına bir kelime giriyor — kalıp
      0-2 ara kelimeye izin verecek şekilde gevşetildi. `/\bilk (insan|
-     yolculuk|uçuş)/` "ilk başarılı uçuşu" (talimatın kendi Adım 1 örneği,
+yolculuk|uçuş)/` "ilk başarılı uçuşu" (talimatın kendi Adım 1 örneği,
      Semiorka/R7) ile eşleşmiyordu — "ilk" ile hedef sözcük arasına bir
      sıfat girebilecek şekilde genişletildi.
 

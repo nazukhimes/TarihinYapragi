@@ -1,13 +1,13 @@
 # T-22 · `react-router` Güvenlik Yükseltmesi (6 → 7)
 
-| Alan | Değer |
-|---|---|
-| **Faz** | FAZ 4 — Devir ve Temizlik |
-| **Öncelik** | 🟢 Düşük (güvenlik: orta) |
-| **Tahmini süre** | ~2 saat |
-| **Bağımlılık** | Yok — ama **planın EN SONUNA bırakılmalıdır** |
-| **İlgili bulgu** | O-13 |
-| **Durum** | ⬜ Bekliyor |
+| Alan             | Değer                                         |
+| ---------------- | --------------------------------------------- |
+| **Faz**          | FAZ 4 — Devir ve Temizlik                     |
+| **Öncelik**      | 🟢 Düşük (güvenlik: orta)                     |
+| **Tahmini süre** | ~2 saat                                       |
+| **Bağımlılık**   | Yok — ama **planın EN SONUNA bırakılmalıdır** |
+| **İlgili bulgu** | O-13                                          |
+| **Durum**        | ⬜ Bekliyor                                   |
 
 > ⚠️ **Bu kırıcı bir yükseltmedir ve bilerek en sona bırakılmıştır.** Yönlendirme
 > katmanı kırılırsa diğer altı talimatın görsel doğrulaması bulanır — hangi
@@ -40,10 +40,10 @@ fix available via `npm audit fix --force`
 Will install react-router-dom@7.18.3, which is a breaking change
 ```
 
-| | Değer |
-|---|---|
-| `package.json` | `"react-router-dom": "^6.8.0"` |
-| Hedef | `7.18.3` (npm'deki güncel sürüm) |
+|                | Değer                            |
+| -------------- | -------------------------------- |
+| `package.json` | `"react-router-dom": "^6.8.0"`   |
+| Hedef          | `7.18.3` (npm'deki güncel sürüm) |
 
 ### Risk değerlendirmesi
 
@@ -54,12 +54,12 @@ ikisini de kullanır — asıl gerekçe budur.
 
 ### Etkilenecek dosyalar
 
-| Dosya | Ne kullanıyor |
-|---|---|
-| `src/main.tsx` | `createBrowserRouter`, `RouterProvider`, `Navigate`, `errorElement` |
-| `src/App.tsx` | `useParams`, `useNavigate` |
-| `src/lib/slug.ts` | Doğrudan router API'si kullanmıyor ama URL sözleşmesini üretiyor |
-| `src/components/NotFound.tsx` | Bağlantılar |
+| Dosya                         | Ne kullanıyor                                                       |
+| ----------------------------- | ------------------------------------------------------------------- |
+| `src/main.tsx`                | `createBrowserRouter`, `RouterProvider`, `Navigate`, `errorElement` |
+| `src/App.tsx`                 | `useParams`, `useNavigate`                                          |
+| `src/lib/slug.ts`             | Doğrudan router API'si kullanmıyor ama URL sözleşmesini üretiyor    |
+| `src/components/NotFound.tsx` | Bağlantılar                                                         |
 
 ### Özel dikkat — T-09'un bulgusu
 
@@ -78,9 +78,11 @@ davranışı değişmiş olabilir.
    (`CALISMA-SISTEMI.md` §6.5).
 
 2. **Yükseltmeyi yap:**
+
    ```bash
    npm install react-router-dom@7
    ```
+
    `npm audit fix --force` yerine doğrudan kurulum tercih edilir — `--force`
    başka paketleri de habersiz değiştirebilir.
 
@@ -107,13 +109,13 @@ davranışı değişmiş olabilir.
 
 ## 🚫 Kapsam Dışı
 
-| Konu | Neden |
-|---|---|
-| Yeni rota eklemek (`/olay/...` gibi) | Plan §2 — kapsam dışı |
-| URL şemasını değiştirmek | T-06'nın kurduğu sözleşme korunur |
+| Konu                                               | Neden                                                        |
+| -------------------------------------------------- | ------------------------------------------------------------ |
+| Yeni rota eklemek (`/olay/...` gibi)               | Plan §2 — kapsam dışı                                        |
+| URL şemasını değiştirmek                           | T-06'nın kurduğu sözleşme korunur                            |
 | Data router / loader / action özelliklerine geçmek | Bu bir **güvenlik yükseltmesidir**, mimari değişikliği değil |
-| Diğer bağımlılıkların yükseltilmesi | Ayrı iş; bu talimat yalnızca `react-router-dom` |
-| React 18 → 19 | Bu talimatta yok |
+| Diğer bağımlılıkların yükseltilmesi                | Ayrı iş; bu talimat yalnızca `react-router-dom`              |
+| React 18 → 19                                      | Bu talimatta yok                                             |
 
 ---
 
@@ -143,14 +145,14 @@ npm run kontrol
 
 **Yönlendirme testi — sırayla:**
 
-| Adres | Beklenen |
-|---|---|
-| `/` | Bugünün gününe yönlenir |
-| `/08-21` | `/21-agustos` olarak yeniden yazılır |
-| `/21-agustos` | Doğrudan açılır |
-| `/29-subat` | Açılır (kenar durum) |
-| `/abc` | `NotFound` |
-| Geri tuşu | Önceki güne döner |
+| Adres         | Beklenen                             |
+| ------------- | ------------------------------------ |
+| `/`           | Bugünün gününe yönlenir              |
+| `/08-21`      | `/21-agustos` olarak yeniden yazılır |
+| `/21-agustos` | Doğrudan açılır                      |
+| `/29-subat`   | Açılır (kenar durum)                 |
+| `/abc`        | `NotFound`                           |
+| Geri tuşu     | Önceki güne döner                    |
 
 **Tarayıcıda (üç gün):** 29 Ekim · 7 Mart · 29 Şubat — her birinde gün gezinme
 düğmeleri, mini takvim ve paylaş bağlantısı çalışmalı.

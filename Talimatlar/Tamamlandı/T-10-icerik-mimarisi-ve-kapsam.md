@@ -1,13 +1,13 @@
 # T-10 · İçerik Mimarisi ve Kapsam Genişletme
 
-| Alan | Değer |
-|---|---|
-| **Faz** | FAZ 3 — İçerik |
-| **Öncelik** | 🟠 Yüksek |
+| Alan             | Değer                             |
+| ---------------- | --------------------------------- |
+| **Faz**          | FAZ 3 — İçerik                    |
+| **Öncelik**      | 🟠 Yüksek                         |
 | **Tahmini süre** | ~6 saat+ (parti başına ~1,5 saat) |
-| **Bağımlılık** | T-01 |
-| **İlgili bulgu** | U-2 |
-| **Durum** | ⬜ Bekliyor |
+| **Bağımlılık**   | T-01                              |
+| **İlgili bulgu** | U-2                               |
+| **Durum**        | ⬜ Bekliyor                       |
 
 ---
 
@@ -38,13 +38,13 @@ Kapsanan 10 gün:
 
 ### Sorunlar
 
-| # | Sorun |
-|---|---|
-| 1 | Tek dosya — 60 güne çıkınca ~6.000 satır olur, düzenlenemez |
-| 2 | Tip tanımları ile veri aynı dosyada — içe aktarma zinciri gereksiz büyük |
-| 3 | Tüm veri ilk yüklemede pakete giriyor; kullanıcı tek gün görüyor |
-| 4 | İçerik şablonu yok — her gün farklı derinlikte yazılmış |
-| 5 | Kalite ölçütü yok — "bir gün ne zaman tamamlanmış sayılır?" belirsiz |
+| #   | Sorun                                                                    |
+| --- | ------------------------------------------------------------------------ |
+| 1   | Tek dosya — 60 güne çıkınca ~6.000 satır olur, düzenlenemez              |
+| 2   | Tip tanımları ile veri aynı dosyada — içe aktarma zinciri gereksiz büyük |
+| 3   | Tüm veri ilk yüklemede pakete giriyor; kullanıcı tek gün görüyor         |
+| 4   | İçerik şablonu yok — her gün farklı derinlikte yazılmış                  |
+| 5   | Kalite ölçütü yok — "bir gün ne zaman tamamlanmış sayılır?" belirsiz     |
 
 ---
 
@@ -82,8 +82,8 @@ Her ay dosyası:
 import type { CuratedDay } from "../types";
 
 export const OCAK: Record<string, CuratedDay> = {
-  "01-01": { /* ... */ },
-  "01-27": { /* ... */ },
+  "01-01": {/* ... */},
+  "01-27": {/* ... */},
 };
 ```
 
@@ -97,8 +97,18 @@ import { SUBAT } from "./gunler/02-subat";
 export * from "./types";
 
 export const CURATED: Record<string, CuratedDay> = {
-  ...OCAK, ...SUBAT, ...MART, ...NISAN, ...MAYIS, ...HAZIRAN,
-  ...TEMMUZ, ...AGUSTOS, ...EYLUL, ...EKIM, ...KASIM, ...ARALIK,
+  ...OCAK,
+  ...SUBAT,
+  ...MART,
+  ...NISAN,
+  ...MAYIS,
+  ...HAZIRAN,
+  ...TEMMUZ,
+  ...AGUSTOS,
+  ...EYLUL,
+  ...EKIM,
+  ...KASIM,
+  ...ARALIK,
 };
 ```
 
@@ -118,8 +128,8 @@ grep -rn "data/curated" src/
 
 ```ts
 const AY_YUKLEYICI: Record<number, () => Promise<Record<string, CuratedDay>>> = {
-  1:  () => import("./gunler/01-ocak").then((m) => m.OCAK),
-  2:  () => import("./gunler/02-subat").then((m) => m.SUBAT),
+  1: () => import("./gunler/01-ocak").then((m) => m.OCAK),
+  2: () => import("./gunler/02-subat").then((m) => m.SUBAT),
   /* ... */
 };
 
@@ -140,7 +150,7 @@ bilmek zorunda. Bunun için hafif bir dizin dosyası tut:
 
 ```ts
 // src/data/dizin.ts — elle güncellenen hafif liste
-export const OZEL_GUNLER = ["01-01", "02-14", "03-08", /* ... */];
+export const OZEL_GUNLER = ["01-01", "02-14", "03-08" /* ... */];
 ```
 
 T-12'de bu dizinin gerçek veriyle uyumunu doğrulayan test yaz.
@@ -156,13 +166,13 @@ T-12'de bu dizinin gerçek veriyle uyumunu doğrulayan test yaz.
 
 **Asgari sözleşme — her gün için:**
 
-| Alan | Asgari | İdeal |
-|---|---|---|
-| `spotlight` | 1 (zorunlu) | 1 |
-| `events` | 1 | 2–3 |
-| `cases` | 1 | 2 |
-| `science` | 1 | 2 |
-| `talk` | 2 | 3–4 |
+| Alan        | Asgari      | İdeal |
+| ----------- | ----------- | ----- |
+| `spotlight` | 1 (zorunlu) | 1     |
+| `events`    | 1           | 2–3   |
+| `cases`     | 1           | 2     |
+| `science`   | 1           | 2     |
+| `talk`      | 2           | 3–4   |
 
 **Kalite ölçütleri:**
 
@@ -331,15 +341,15 @@ Kalan 4 gün, editörün seçtiği "kişisel favori" günler olsun → **60**.
 
 ## 🚫 Kapsam Dışı
 
-| Dokunma | Neden / Hangi talimat |
-|---|---|
-| Sınıflandırma regex'leri | T-11 |
-| `wiki.ts` içindeki hiçbir şey | T-05 / T-11 |
-| Bileşen görünümleri | Bu talimat **yalnızca veri** |
-| CMS / yönetim paneli | Kapsam dışı — PLAN-02 |
+| Dokunma                             | Neden / Hangi talimat                                                  |
+| ----------------------------------- | ---------------------------------------------------------------------- |
+| Sınıflandırma regex'leri            | T-11                                                                   |
+| `wiki.ts` içindeki hiçbir şey       | T-05 / T-11                                                            |
+| Bileşen görünümleri                 | Bu talimat **yalnızca veri**                                           |
+| CMS / yönetim paneli                | Kapsam dışı — PLAN-02                                                  |
 | Yapay zekâ ile toplu içerik üretimi | **Yasak** — editör kalitesi korunmalı; kaynak doğrulaması elle yapılır |
-| Görsel/fotoğraf ekleme | Kapsam dışı — telif riski |
-| 366 günün tamamının doldurulması | Bu plan 60 gün hedefliyor; kalanı PLAN-02 |
+| Görsel/fotoğraf ekleme              | Kapsam dışı — telif riski                                              |
+| 366 günün tamamının doldurulması    | Bu plan 60 gün hedefliyor; kalanı PLAN-02                              |
 
 ---
 
@@ -365,7 +375,7 @@ Kalan 4 gün, editörün seçtiği "kişisel favori" günler olsun → **60**.
 - [ ] `src/data/dizin.ts` gerçek veriyle uyumlu — **oluşturulmadı, bilinçli.** Bu
       dosya yalnızca A3'ün (tembel yükleme) "Özel dosyalı günler" şeridinin tüm
       anahtarları bilmesi için tasarlanmıştı; A3 uygulanmadığı için (bkz. Genel
-      madde 3 ve *Sapmalar*) ihtiyaç doğmadı — şerit hâlâ doğrudan
+      madde 3 ve _Sapmalar_) ihtiyaç doğmadı — şerit hâlâ doğrudan
       `Object.keys(CURATED)` okuyor, canlı doğrulandı.
 
 ### Genel
@@ -412,7 +422,7 @@ for (const [k, g] of Object.entries(CURATED)) {
   if (!g.cases?.length) sorun.push("cases boş");
   if (!g.science?.length) sorun.push("science boş");
   if ((g.talk?.length ?? 0) < 2) sorun.push("talk < 2");
-  g.events?.forEach(e => {
+  g.events?.forEach((e) => {
     if ((e.matchKeys?.length ?? 0) < 2) sorun.push(`${e.id}: matchKeys < 2`);
   });
   if (sorun.length) console.log(k, "→", sorun.join(", "));
@@ -443,7 +453,7 @@ Editör olayı yazdığın bir günde, aynı olayın Vikipedi sürümü zaman t�
 
 Ana sayfadaki "Özel dosyalı günler" şeridi **tüm** kapsanan günleri göstermeli.
 60 düğme çok yer kaplarsa, ay bazlı gruplandırma gerekebilir — bu durumda
-notu *Tamamlanma Kaydı*'na yaz, düzeltmeyi T-13'e devret.
+notu _Tamamlanma Kaydı_'na yaz, düzeltmeyi T-13'e devret.
 
 ### 7. Paket boyutu
 
@@ -490,7 +500,7 @@ artmışsa A3 (tembel yükleme) adımını uygula.
 - **Sapmalar / notlar:**
   1. **En önemli sapma — "yapay zekâ ile toplu içerik üretimi yasak" notu.**
      Bölüm A (mimari) bitirildikten sonra, Bölüm B'nin (60 güne çıkarma) bu
-     talimatın kendi *Kapsam Dışı* tablosundaki açık yasakla çeliştiği fark
+     talimatın kendi _Kapsam Dışı_ tablosundaki açık yasakla çeliştiği fark
      edildi. Durum kullanıcıya doğrudan soruldu (üç seçenek: küçük pilot parti,
      4 partinin tamamı, yalnızca mimariyle dur); kullanıcı **4 partinin
      tamamının bu oturumda yazılmasına açıkça onay verdi.** Bunun karşılığında:

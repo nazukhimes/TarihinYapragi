@@ -1,17 +1,17 @@
 # T-20 · Yapay Zekâ Araştırma Katmanı
 
-| Alan | Değer |
-|---|---|
-| **Faz** | FAZ 3 — Derinlik |
-| **Öncelik** | 🟡 Orta |
-| **Tahmini süre** | ~5 saat |
-| **Bağımlılık** | **T-16 ve T-19 tamamlanmış olmalı** |
-| **İlgili bulgu** | U-6 |
-| **Durum** | ⬜ Bekliyor |
+| Alan             | Değer                               |
+| ---------------- | ----------------------------------- |
+| **Faz**          | FAZ 3 — Derinlik                    |
+| **Öncelik**      | 🟡 Orta                             |
+| **Tahmini süre** | ~5 saat                             |
+| **Bağımlılık**   | **T-16 ve T-19 tamamlanmış olmalı** |
+| **İlgili bulgu** | U-6                                 |
+| **Durum**        | ⬜ Bekliyor                         |
 
 > 📌 **Onay kaydı:** Kullanıcı 2026-08-24 oturumunda çalışma zamanı yapay zekâ
-> katmanını açıkça istedi (*"o anda orada o olayla ilgili kısa bir özet oluştursa
-> veya o olay hakkında farklı bir soru sorabilsem"*), sağlayıcı olarak ücretsiz
+> katmanını açıkça istedi (_"o anda orada o olayla ilgili kısa bir özet oluştursa
+> veya o olay hakkında farklı bir soru sorabilsem"_), sağlayıcı olarak ücretsiz
 > katmanı nedeniyle Gemini'yi seçti ve YZ'nin **istek üzerine** çalışmasını onayladı.
 
 ---
@@ -28,22 +28,22 @@ serbest soru kutusu olacak; model, önüne konan Vikipedi metnini açıklayacak;
 
 ## 📍 Mevcut Durum
 
-Böyle bir katman yok. `U-6` (ANALIZ-RAPORU-02 §3), kullanıcının *"daha detaylı
-öğrenebileceğim bir yer lazım"* ihtiyacının karşılanmadığını kaydediyor. T-19 bu
+Böyle bir katman yok. `U-6` (ANALIZ-RAPORU-02 §3), kullanıcının _"daha detaylı
+öğrenebileceğim bir yer lazım"_ ihtiyacının karşılanmadığını kaydediyor. T-19 bu
 ihtiyacın Vikipedi tarafını çözer; bu talimat soru sorma tarafını ekler.
 
 ---
 
 ## 🔒 Yapay Zekâ Politikası — bu talimat §0 yasağını KALDIRMAZ
 
-`ICERIK-SABLONU.md` §0: *"Yapay zekâ ile toplu içerik üretimi yasaktır."*
+`ICERIK-SABLONU.md` §0: _"Yapay zekâ ile toplu içerik üretimi yasaktır."_
 
-| §0'ın yasakladığı | T-20'nin yaptığı |
-|---|---|
-| `src/data/gunler/*.ts` içine YZ ile toplu içerik yazmak | Depoya **hiçbir** YZ metni yazılmaz |
-| Editör içeriği gibi görünen üretilmiş olgular | Çıktı açıkça "YZ üretimi" etiketli, editör rozetinden ayrı |
-| Doğrulanmamış olgu üretimi | Model önüne konan Vikipedi metnini açıklar; kaynak ekranda kalır |
-| Kalıcı, sürüm kontrollü içerik | Geçici, isteğe bağlı, kullanıcı tetiklemeli |
+| §0'ın yasakladığı                                       | T-20'nin yaptığı                                                 |
+| ------------------------------------------------------- | ---------------------------------------------------------------- |
+| `src/data/gunler/*.ts` içine YZ ile toplu içerik yazmak | Depoya **hiçbir** YZ metni yazılmaz                              |
+| Editör içeriği gibi görünen üretilmiş olgular           | Çıktı açıkça "YZ üretimi" etiketli, editör rozetinden ayrı       |
+| Doğrulanmamış olgu üretimi                              | Model önüne konan Vikipedi metnini açıklar; kaynak ekranda kalır |
+| Kalıcı, sürüm kontrollü içerik                          | Geçici, isteğe bağlı, kullanıcı tetiklemeli                      |
 
 ---
 
@@ -109,12 +109,12 @@ olarak işaretle.
 
 6. **Hata durumları — hepsi Türkçe:**
 
-   | Durum | Mesaj |
-   |---|---|
-   | Anahtar yok / geçersiz | "Anahtar geçersiz görünüyor. Ayarlardan kontrol edin." |
-   | Kota doldu (429) | "Günlük ücretsiz kota dolmuş olabilir. Yarın tekrar deneyin." |
-   | Ağ hatası | "Bağlantı kurulamadı." |
-   | Zaman aşımı | "Yanıt gelmedi, tekrar deneyin." |
+   | Durum                  | Mesaj                                                         |
+   | ---------------------- | ------------------------------------------------------------- |
+   | Anahtar yok / geçersiz | "Anahtar geçersiz görünüyor. Ayarlardan kontrol edin."        |
+   | Kota doldu (429)       | "Günlük ücretsiz kota dolmuş olabilir. Yarın tekrar deneyin." |
+   | Ağ hatası              | "Bağlantı kurulamadı."                                        |
+   | Zaman aşımı            | "Yanıt gelmedi, tekrar deneyin."                              |
 
    Hata hâlinde panel **Vikipedi içeriğiyle çalışmaya devam eder.**
 
@@ -126,14 +126,14 @@ olarak işaretle.
 
 ## 🚫 Kapsam Dışı
 
-| Konu | Hangi talimata ait |
-|---|---|
-| Detay panelinin kendisi | **T-19** (önce yapılmış olmalı) |
-| `extract` metninin okunması | **T-16** (önce yapılmış olmalı) |
-| YZ ile toplu içerik üretip depoya yazmak | **Yasak** — `ICERIK-SABLONU.md` §0 |
-| Backend üzerinden proxy'lenmiş anahtar | Plan §2 — backend kapsam dışı |
-| Sohbet geçmişi, çoklu tur konuşma | Bu talimatta yok; gerekirse PLAN-03 |
-| Rekorlar Kasası kartlarına bağlanması | Bu talimatta yok — T-23 sonrası ayrı iş |
+| Konu                                     | Hangi talimata ait                      |
+| ---------------------------------------- | --------------------------------------- |
+| Detay panelinin kendisi                  | **T-19** (önce yapılmış olmalı)         |
+| `extract` metninin okunması              | **T-16** (önce yapılmış olmalı)         |
+| YZ ile toplu içerik üretip depoya yazmak | **Yasak** — `ICERIK-SABLONU.md` §0      |
+| Backend üzerinden proxy'lenmiş anahtar   | Plan §2 — backend kapsam dışı           |
+| Sohbet geçmişi, çoklu tur konuşma        | Bu talimatta yok; gerekirse PLAN-03     |
+| Rekorlar Kasası kartlarına bağlanması    | Bu talimatta yok — T-23 sonrası ayrı iş |
 
 ---
 

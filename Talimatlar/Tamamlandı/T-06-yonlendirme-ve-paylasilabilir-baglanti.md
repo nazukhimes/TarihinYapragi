@@ -1,13 +1,13 @@
 # T-06 · Yönlendirme ve Paylaşılabilir Bağlantı
 
-| Alan | Değer |
-|---|---|
-| **Faz** | FAZ 2 — Ürün Kabuğu |
-| **Öncelik** | 🔴 Kritik |
-| **Tahmini süre** | ~4 saat |
-| **Bağımlılık** | T-01, T-03, T-04 |
-| **İlgili bulgu** | U-1 |
-| **Durum** | ✅ Tamamlandı |
+| Alan             | Değer               |
+| ---------------- | ------------------- |
+| **Faz**          | FAZ 2 — Ürün Kabuğu |
+| **Öncelik**      | 🔴 Kritik           |
+| **Tahmini süre** | ~4 saat             |
+| **Bağımlılık**   | T-01, T-03, T-04    |
+| **İlgili bulgu** | U-1                 |
+| **Durum**        | ✅ Tamamlandı       |
 
 ---
 
@@ -33,13 +33,13 @@ const [month, setMonth] = useState(today.getMonth() + 1);
 
 Seçili gün yalnızca React state'inde. Sonuçlar:
 
-| Sorun | Kullanıcı deneyimi |
-|---|---|
-| Tek URL | `29 Ekim` sayfası paylaşılamıyor |
+| Sorun     | Kullanıcı deneyimi                            |
+| --------- | --------------------------------------------- |
+| Tek URL   | `29 Ekim` sayfası paylaşılamıyor              |
 | Geri tuşu | Gün geçişlerini geri almıyor, siteden çıkıyor |
-| Yer imi | Her zaman bugüne açılıyor |
-| Yenileme | Seçilen gün kayboluyor |
-| SEO | Arama motoru tek sayfa görüyor, 366 gün değil |
+| Yer imi   | Her zaman bugüne açılıyor                     |
+| Yenileme  | Seçilen gün kayboluyor                        |
+| SEO       | Arama motoru tek sayfa görüyor, 366 gün değil |
 
 `react-router-dom@6.8` **zaten kurulu** ama hiç kullanılmıyor
 (T-01'de bu yüzden silinmedi).
@@ -69,7 +69,13 @@ import { MONTHS_TR } from "../components/leaf";
 
 /** "Ağustos" → "agustos" (URL güvenli) */
 const TR_MAP: Record<string, string> = {
-  ç: "c", ğ: "g", ı: "i", i: "i", ö: "o", ş: "s", ü: "u",
+  ç: "c",
+  ğ: "g",
+  ı: "i",
+  i: "i",
+  ö: "o",
+  ş: "s",
+  ü: "u",
 };
 
 function asciify(s: string): string {
@@ -141,9 +147,7 @@ const router = createBrowserRouter([
   { path: "*", element: <NotFound /> },
 ]);
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <RouterProvider router={router} />
-);
+ReactDOM.createRoot(document.getElementById("root")!).render(<RouterProvider router={router} />);
 ```
 
 > **`createBrowserRouter` kullan** (`BrowserRouter` değil) — v6.8'in önerdiği API'dir
@@ -196,16 +200,20 @@ export function NotFound() {
         <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-brand">
           Yaprak bulunamadı
         </p>
-        <p className="font-display font-black text-inkpaper leading-none my-4"
-           style={{ fontSize: "clamp(5rem, 14vw, 8rem)" }}>
+        <p
+          className="font-display font-black text-inkpaper leading-none my-4"
+          style={{ fontSize: "clamp(5rem, 14vw, 8rem)" }}
+        >
           404
         </p>
         <p className="text-inkpaper-dim text-[15px] leading-relaxed">
           Bu takvimde böyle bir gün yok. Yaprak yırtılmış olabilir.
         </p>
-        <Link to={`/${toDaySlug(bugun.getMonth() + 1, bugun.getDate())}`}
-              className="mt-6 inline-block px-5 py-3 rounded-sm bg-brand text-paper
-                         font-mono text-[12px] tracking-[0.2em] uppercase font-semibold">
+        <Link
+          to={`/${toDaySlug(bugun.getMonth() + 1, bugun.getDate())}`}
+          className="mt-6 inline-block px-5 py-3 rounded-sm bg-brand text-paper
+                         font-mono text-[12px] tracking-[0.2em] uppercase font-semibold"
+        >
           Bugüne dön
         </Link>
       </div>
@@ -228,7 +236,12 @@ async function paylas(month: number, day: number, dayLabel: string) {
   };
 
   if (navigator.share) {
-    try { await navigator.share(veri); return; } catch { /* kullanıcı vazgeçti */ }
+    try {
+      await navigator.share(veri);
+      return;
+    } catch {
+      /* kullanıcı vazgeçti */
+    }
   }
   const ok = await copyText(url);
   toast(ok ? "Bağlantı panoya kopyalandı" : "Kopyalanamadı");
@@ -262,15 +275,15 @@ sunucunun `index.html` döndürmesi gerekir.
 
 ## 🚫 Kapsam Dışı
 
-| Dokunma | Neden / Hangi talimat |
-|---|---|
-| `og:` / `canonical` meta etiketleri | T-08 (URL şeması buradan gelecek) |
-| `sitemap.xml` üretimi | T-08 |
-| `errorElement` ile hata sınırı | T-09 |
-| Sunucu tarafı işleme (SSR) | Kapsam dışı — statik SPA kararı korunuyor |
-| Klavye ile gün geçişi | T-07 |
-| Arama sorgusunun URL'e taşınması (`?q=`) | Kapsam dışı — bu planda değil |
-| Yıl bazlı URL (`/2026/08/21`) | Kapsam dışı — ürün gün bazlı, yıl bazlı değil |
+| Dokunma                                  | Neden / Hangi talimat                         |
+| ---------------------------------------- | --------------------------------------------- |
+| `og:` / `canonical` meta etiketleri      | T-08 (URL şeması buradan gelecek)             |
+| `sitemap.xml` üretimi                    | T-08                                          |
+| `errorElement` ile hata sınırı           | T-09                                          |
+| Sunucu tarafı işleme (SSR)               | Kapsam dışı — statik SPA kararı korunuyor     |
+| Klavye ile gün geçişi                    | T-07                                          |
+| Arama sorgusunun URL'e taşınması (`?q=`) | Kapsam dışı — bu planda değil                 |
+| Yıl bazlı URL (`/2026/08/21`)            | Kapsam dışı — ürün gün bazlı, yıl bazlı değil |
 
 ---
 
@@ -296,18 +309,18 @@ sunucunun `index.html` döndürmesi gerekir.
 
 ### 1. URL biçimi tablosu
 
-| Adres | Beklenen |
-|---|---|
-| `/` | `/21-agustos` (bugün) — `replace` |
-| `/21-agustos` | 21 Ağustos içeriği |
-| `/1-ocak` | 1 Ocak içeriği |
-| `/29-subat` | 29 Şubat içeriği (**404 değil**) |
-| `/31-aralik` | 31 Aralık içeriği |
-| `/08-21` | → `/21-agustos` |
-| `/32-agustos` | 404 |
-| `/31-subat` | 404 |
-| `/agustos` | 404 |
-| `/` + rastgele metin | 404 |
+| Adres                | Beklenen                          |
+| -------------------- | --------------------------------- |
+| `/`                  | `/21-agustos` (bugün) — `replace` |
+| `/21-agustos`        | 21 Ağustos içeriği                |
+| `/1-ocak`            | 1 Ocak içeriği                    |
+| `/29-subat`          | 29 Şubat içeriği (**404 değil**)  |
+| `/31-aralik`         | 31 Aralık içeriği                 |
+| `/08-21`             | → `/21-agustos`                   |
+| `/32-agustos`        | 404                               |
+| `/31-subat`          | 404                               |
+| `/agustos`           | 404                               |
+| `/` + rastgele metin | 404                               |
 
 ### 2. Gezinme senaryosu
 
@@ -333,7 +346,7 @@ sunucunun `index.html` döndürmesi gerekir.
 12 ayın slug'ı ASCII olmalı — konsolda:
 
 ```js
-MONTH_SLUGS.every(s => /^[a-z]+$/.test(s))   // true
+MONTH_SLUGS.every((s) => /^[a-z]+$/.test(s)); // true
 ```
 
 Özellikle: `subat`, `mayis`, `agustos`, `eylul`, `kasim`, `aralik`
@@ -366,13 +379,13 @@ npm run build && npm run preview
 - **Tamamlanma tarihi:** 2026-08-21
 
 - **Değişen dosyalar:**
-  - `src/lib/slug.ts` *(yeni)* — `toDaySlug`, `parseDaySlug`, `MONTH_SLUGS`
-  - `src/components/NotFound.tsx` *(yeni)* — 404 sayfası (yırtık kâğıt yaprak metaforu)
+  - `src/lib/slug.ts` _(yeni)_ — `toDaySlug`, `parseDaySlug`, `MONTH_SLUGS`
+  - `src/components/NotFound.tsx` _(yeni)_ — 404 sayfası (yırtık kâğıt yaprak metaforu)
   - `src/components/ui.tsx` — `IconShare` eklendi
   - `src/main.tsx` — `createBrowserRouter` + `RouterProvider` kuruldu (`/`, `/:daySlug`, `*`)
   - `src/App.tsx` — `day`/`month` `useState`'i kaldırıldı, `useParams`/`parseDaySlug`'tan türetiliyor; `setDate` (→ `navigate`) eklendi; sayısal biçim → kanonik yönlendirme `useEffect`'i eklendi; geçersiz slug için `<NotFound/>` erken dönüşü eklendi; Paylaş düğmesi + `shareDay` eklendi; iki `setDay/setMonth` çağrı noktası `setDate`'e taşındı
-  - `public/_redirects` *(yeni)* — Netlify/Cloudflare Pages SPA yönlendirmesi
-  - `vercel.json` *(yeni, kökte)* — Vercel SPA yönlendirmesi
+  - `public/_redirects` _(yeni)_ — Netlify/Cloudflare Pages SPA yönlendirmesi
+  - `vercel.json` _(yeni, kökte)_ — Vercel SPA yönlendirmesi
   - `.claude/launch.json` — `autoPort: true` (bu oturumda port 3000 başka bir oturumun sunucusuyla çakıştığı için; kalıcı, zararsız bir sağlamlaştırma — `vite.config.ts`'teki `strictPort: false` ile aynı felsefe)
 
 - **Sapmalar / notlar:**
@@ -388,7 +401,7 @@ npm run build && npm run preview
     çöker. Çözüm: `parsed` geçersizken `day`/`month` bugünün tarihine düşer (hesaplama
     çalışır ama sonucu kullanılmaz), tüm hook'lar (dahil `useDayData`, tüm `useMemo`'lar,
     yeni `useCallback`/`useEffect`) **koşulsuz** her render'da çağrılır; `if (!parsed) return
-    <NotFound />` en son hook'tan (`ambientYears`) **sonra**, ilk hook-olmayan satırdan
+<NotFound />` en son hook'tan (`ambientYears`) **sonra**, ilk hook-olmayan satırdan
     (`searching`) **önce** konumlandırıldı. Bedel: geçersiz bir adres için gereksiz bir
     "bugün" verisi çekilir (kullanılmaz) — kabul edilebilir bir ödünleşim.
   - **Döngüsel import (canlı testte yakalandı):** Talimat, `slug.ts`'in `MONTHS_TR`'yi
