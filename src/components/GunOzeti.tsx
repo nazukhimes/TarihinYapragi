@@ -178,9 +178,8 @@ export function GunOzeti({
           {mergedEvents.length > 1 && (
             <Reveal delay={240} className="mt-8 max-w-2xl">
               <p className="font-mono text-[12px] text-ink-faint leading-relaxed">
-                <span className="text-gold">Zaman aralığı:</span>{" "}
-                {formatYear(mergedEvents[0].year)} —{" "}
-                {formatYear(mergedEvents[mergedEvents.length - 1].year)} ·{" "}
+                <span className="text-gold">Zaman aralığı:</span> {formatYear(mergedEvents[0].year)}{" "}
+                — {formatYear(mergedEvents[mergedEvents.length - 1].year)} ·{" "}
                 {mergedEvents[mergedEvents.length - 1].year - mergedEvents[0].year} yıla yayılan{" "}
                 {mergedEvents.length} kayıt
               </p>

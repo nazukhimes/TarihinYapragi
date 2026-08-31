@@ -66,21 +66,21 @@ Node 20 gerekir — `.nvmrc` dosyasında yazılıdır.
 
 ## Komutlar
 
-| Komut                                  | Ne yapar                                        |
-| -------------------------------------- | ----------------------------------------------- |
-| `npm run dev`                          | Geliştirme sunucusu (HMR açık)                  |
-| `npm run build`                        | Üretim derlemesi — önce `sitemap.xml`'i üretir  |
-| `npm run preview`                      | Üretim derlemesini yerel olarak sunar           |
-| `npm run kontrol`                      | **Yeşil kapı:** typecheck + lint + test + build |
-| `npm run typecheck`                    | TypeScript denetimi (`tsc --noEmit`)            |
-| `npm run lint` / `lint:fix`            | ESLint                                          |
-| `npm run format` / `format:check`      | Prettier                                        |
-| `npm test` / `test:watch` / `test:cov` | Vitest (203 test)                               |
-| `npm run siniflandirma`                | Sınıflandırma doğruluğu raporu (altın küme)     |
-| `npm run rekor-avi`                    | Rekor adayı taraması — Vikipedi'den aday listesi |
-| `npm run icons`                        | Favicon ve PWA simgelerini yeniden üretir       |
-| `npm run sitemap`                      | 366 adresli `public/sitemap.xml`                |
-| `npm run analyze`                      | Paket içeriği görselleştirmesi                  |
+| Komut                                  | Ne yapar                                                       |
+| -------------------------------------- | -------------------------------------------------------------- |
+| `npm run dev`                          | Geliştirme sunucusu (HMR açık)                                 |
+| `npm run build`                        | Üretim derlemesi — önce `sitemap.xml`'i üretir                 |
+| `npm run preview`                      | Üretim derlemesini yerel olarak sunar                          |
+| `npm run kontrol`                      | **Yeşil kapı:** format:check + typecheck + lint + test + build |
+| `npm run typecheck`                    | TypeScript denetimi (`tsc --noEmit`)                           |
+| `npm run lint` / `lint:fix`            | ESLint                                                         |
+| `npm run format` / `format:check`      | Prettier                                                       |
+| `npm test` / `test:watch` / `test:cov` | Vitest (203 test)                                              |
+| `npm run siniflandirma`                | Sınıflandırma doğruluğu raporu (altın küme)                    |
+| `npm run rekor-avi`                    | Rekor adayı taraması — Vikipedi'den aday listesi               |
+| `npm run icons`                        | Favicon ve PWA simgelerini yeniden üretir                      |
+| `npm run sitemap`                      | 366 adresli `public/sitemap.xml`                               |
+| `npm run analyze`                      | Paket içeriği görselleştirmesi                                 |
 
 ## Teknoloji
 

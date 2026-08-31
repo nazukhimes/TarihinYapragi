@@ -40,9 +40,8 @@ export function AltBilgi() {
             Not
           </p>
           <p className="text-[13.5px] leading-relaxed text-ink-dim">
-            Otomatik sınıflandırmalar anahtar kelime taramasıyla yapılır; nadiren yanılabilir.
-            Kesin bilgi için kartlardaki Vikipedi bağlantılarını izleyin. Takvim, Miladi takvim
-            esas alır.
+            Otomatik sınıflandırmalar anahtar kelime taramasıyla yapılır; nadiren yanılabilir. Kesin
+            bilgi için kartlardaki Vikipedi bağlantılarını izleyin. Takvim, Miladi takvim esas alır.
           </p>
           <p className="mt-6 font-mono text-[11px] text-ink-faint">
             © {new Date().getFullYear()} Tarih Yaprağı · 366 gün, tek arşiv

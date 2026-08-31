@@ -4,13 +4,7 @@ import type { WikidataRekor } from "../lib/wikidata";
 import type { AramaSonuclari, GunVerisi } from "../hooks/useGunVerisi";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { RekorlarSection } from "./rekorlar";
-import {
-  CasesSection,
-  PeopleRow,
-  ScienceSection,
-  SectionShell,
-  TimelineSection,
-} from "./sections";
+import { CasesSection, PeopleRow, ScienceSection, SectionShell, TimelineSection } from "./sections";
 import { TalkSection } from "./talk";
 import { IconAtom, Reveal, SectionHead } from "./ui";
 import { SkeletonCards, SkeletonLines } from "./Iskeletler";
@@ -255,7 +249,11 @@ export function Bolumler({
                 <SkeletonCards />
               ) : (
                 <ErrorBoundary variant="section">
-                  <TalkSection cards={veri.talkCards} dayLabel={dayLabel} onBroadcast={onBroadcast} />
+                  <TalkSection
+                    cards={veri.talkCards}
+                    dayLabel={dayLabel}
+                    onBroadcast={onBroadcast}
+                  />
                 </ErrorBoundary>
               )}
             </div>

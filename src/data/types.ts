@@ -80,14 +80,7 @@ export interface CuratedDay {
 /* ================= REKORLAR KASASI ================= */
 
 export type RecordScope =
-  | "insan"
-  | "doga"
-  | "yapi"
-  | "hiz"
-  | "dayaniklilik"
-  | "kultur"
-  | "tuhaf"
-  | "turkiye";
+  "insan" | "doga" | "yapi" | "hiz" | "dayaniklilik" | "kultur" | "tuhaf" | "turkiye";
 
 export const RECORD_SCOPES: Record<RecordScope, { label: string; color: string }> = {
   insan: { label: "İnsan Bedeni", color: "#dd8552" },

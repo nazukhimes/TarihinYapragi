@@ -18,24 +18,30 @@ describe("formatYear", () => {
    çağırmamalı. Vikipedi `extract`i boş döndüğünde `detail`, `summary`nin
    kaynağı olan ham metne düşüyor — o durumda detay bölümü hiç açılmaz. */
 describe("dosyaDetayiVar", () => {
-  it("detay boşsa yok", () => expect(dosyaDetayiVar({ detail: "", summary: "Bir olay." })).toBe(false));
+  it("detay boşsa yok", () =>
+    expect(dosyaDetayiVar({ detail: "", summary: "Bir olay." })).toBe(false));
 
   it("detay özetin aynısıysa yok", () =>
     expect(dosyaDetayiVar({ detail: "Bir olay oldu.", summary: "Bir olay oldu." })).toBe(false));
 
   it("yalnızca boşlukla ayrılıyorsa yine yok", () =>
-    expect(dosyaDetayiVar({ detail: "Bir  olay\n oldu. ", summary: "Bir olay oldu." })).toBe(false));
+    expect(dosyaDetayiVar({ detail: "Bir  olay\n oldu. ", summary: "Bir olay oldu." })).toBe(
+      false
+    ));
 
   it("özet truncate'in üç noktasıyla bitiyorsa yine yok", () =>
     expect(dosyaDetayiVar({ detail: "Bir olay oldu.", summary: "Bir olay oldu.…" })).toBe(false));
 
   it("detay gerçekten yeni metinse var", () =>
     expect(
-      dosyaDetayiVar({ detail: "Olayın ardındaki dava 1974'e kadar sürdü.", summary: "Bir olay oldu." })
+      dosyaDetayiVar({
+        detail: "Olayın ardındaki dava 1974'e kadar sürdü.",
+        summary: "Bir olay oldu.",
+      })
     ).toBe(true));
 
   it("özet kırpılmış, detay tam metinse var (okunacak fazlası kalmış)", () =>
-    expect(dosyaDetayiVar({ detail: "Bir olay oldu ve dava açıldı.", summary: "Bir olay oldu…" })).toBe(
-      true
-    ));
+    expect(
+      dosyaDetayiVar({ detail: "Bir olay oldu ve dava açıldı.", summary: "Bir olay oldu…" })
+    ).toBe(true));
 });
