@@ -7,7 +7,7 @@
 | **Tahmini süre** | ~2 saat |
 | **Bağımlılık** | **T-16 tamamlanmış olmalı** (`detail`/`summary` karşılaştırması `extract`e bağlı) |
 | **İlgili bulgu** | O-15, O-10 |
-| **Durum** | ⬜ Bekliyor |
+| **Durum** | ✅ **Tamamlandı** — 2026-08-31 |
 
 ---
 
@@ -147,13 +147,13 @@ Gerçek Lighthouse/axe denetimi üç noktada `color-contrast` hatası verdi:
 
 ## ☑️ Kabul Kriterleri
 
-- [ ] Otomatik üretilen hiçbir dosyada `KAPANDI` damgası yok
-- [ ] Otomatik dosyalarda sahte konum metni yok
-- [ ] `CasesSection`'da Editör/Otomatik rozeti var, `ScienceSection` ile aynı biçimde
-- [ ] `detail === summary` olan kartta "Dosyayı aç" düğmesi hiç çıkmıyor
-- [ ] Üç kontrast çifti de **≥ 4,5:1**, ölçüm Tamamlanma Kaydı'nda yazılı
-- [ ] `src/data/gunler/*.ts` dosyalarında **hiçbir değişiklik yok** (`git diff` boş)
-- [ ] `npm run kontrol` yeşil
+- [x] Otomatik üretilen hiçbir dosyada `KAPANDI` damgası yok — hepsi `ARŞİV KAYDI`
+- [x] Otomatik dosyalarda sahte konum metni yok — `location` boş, satır hiç render edilmiyor
+- [x] `CasesSection`'da Editör/Otomatik rozeti var, `ScienceSection` ile aynı biçimde
+- [x] `detail === summary` olan kartta "Dosyayı aç" düğmesi hiç çıkmıyor — `dosyaDetayiVar`, 6 birim testi
+- [x] Üç kontrast çifti de **≥ 4,5:1** (ölçülen: 5,00 · 4,84 · 5,21), tablo aşağıda
+- [x] `src/data/gunler/*.ts` dosyalarında **hiçbir değişiklik yok** (`git diff` boş)
+- [x] `npm run kontrol` yeşil — 250 test
 
 ---
 
@@ -184,10 +184,68 @@ npm run kontrol
 
 ## 📝 Tamamlanma Kaydı
 
-> Talimat bitince doldurulur.
+- **Tamamlanma tarihi:** 2026-08-31
 
-- **Tamamlanma tarihi:**
 - **Değişen dosyalar:**
-- **Kontrast ölçümü (önce / sonra):**
+
+  | Dosya | Ne değişti |
+  |---|---|
+  | `src/data/types.ts` | `CaseFile`'a `curated?: boolean`; `status` birleşimine `"ARŞİV KAYDI"` |
+  | `src/hooks/useGunVerisi.ts` | Editör kayıtları `curated: true` ile işaretleniyor; otomatik kayıtta `location: ""`, `status: "ARŞİV KAYDI"`, `curated: false` |
+  | `src/components/sections.tsx` | Kaynak rozeti, arşiv damgası ayrımı, boş konum satırı gizleme, `dosyaDetayiVar` kapısı, AA renkleri |
+  | `src/components/sections.test.ts` | `dosyaDetayiVar` için 6 test |
+  | `src/components/leaf.tsx` | `Ticker` etiketi `bg-brand-label`, elmas `text-brand-text` |
+  | `src/index.css` | `--color-brand-text` ve `--color-brand-label` token'ları |
+
+  `src/data/gunler/` altında **hiçbir değişiklik yok** — `git diff --stat src/data/gunler/` boş döndü.
+
+- **Kontrast ölçümü (önce / sonra):** oranlar canlı sayfada, gerçek hesaplanmış
+  renklerden (alfa katmanları zemine karıştırılarak) WCAG göreli parlaklık
+  formülüyle ölçüldü. Kapalı kart en açık zemini verdiği için en zor durumdur.
+
+  | Yer | Önce | Sonra | Ölçüm zemini |
+  |---|---|---|---|
+  | `Ticker` "Bugün Tarihte" etiketi | 3,98:1 ❌ | **5,00:1** ✅ | #f2ead9 / #b83127 |
+  | `CasesSection` dosya türü rozeti | ≈3,54:1 ❌ | **5,40:1** ✅ | #e35f52 / #0e1119 |
+  | `CasesSection` "Dosyayı aç/kapat" | ≈3,54:1 ❌ | **4,84:1** ✅ | #e35f52 / #171d29 |
+  | `Ticker` ◆ ayracı *(listede yoktu)* | 3,90:1 ❌ | **5,34:1** ✅ | #e35f52 / #1a1014 |
+  | "Editör" rozeti *(yeni)* | — | **9,82:1** ✅ | #e8b04b / #0c0f15 |
+  | "Otomatik" rozeti *(yeni)* | — | **5,89:1** ✅ | #8b909c / #0e1119 |
+  | "ARŞİV KAYDI" damgası *(yeni)* | — | **5,28:1** ✅ | #8b909c / #171d29 |
+
 - **Sapmalar / notlar:**
+
+  1. **Madde 3'te ikinci seçenek uygulandı.** `location` "Konum bilgisi yok"
+     yazmak yerine boş bırakıldı ve `CasesSection` boş konumu hiç render etmiyor.
+     Gerekçe: kart zaten "Otomatik" rozeti taşıyor, konumun yokluğu kendini
+     anlatıyor; her otomatik karta aynı cümleyi basmak gürültü olurdu.
+  2. **Damga görsel olarak da ayrıştırıldı.** Nötr renk tek başına yetmiyordu:
+     eğik duran, kalın çerçeveli mürekkep damgası biçimi "ARŞİV KAYDI"nı hâlâ
+     hüküm gibi gösteriyordu. Arşiv etiketi artık eğilmiyor ve kenarlığı kesik
+     çizgi — editör damgasıyla bir bakışta ayrılıyor.
+  3. **Listede olmayan iki nokta daha AA'ya çekildi:** `Ticker` ◆ ayracı (3,90:1)
+     ve "FAİLİ MEÇHUL" damgasının metin rengi. İkisi de aynı `text-brand`
+     kusurunun aynı iki bileşendeki devamıydı; ayrı bırakılsa axe denetimi yine
+     kırmızı dönerdi. Palet **genel olarak değiştirilmedi** — `--color-brand`
+     dolgu rengi olarak aynen duruyor.
+  4. **Madde 5'in karşılaştırması sağlamlaştırıldı.** Talimattaki
+     `c.detail.trim() !== c.summary.trim()` yanıltıcıydı: `summary`
+     `truncate`ten geçtiği için boşlukları sadeleşmiş, `detail` ham geliyor.
+     İkisi de aynı metinken sırf iç boşluk farkından "farklı" sayılıyorlardı.
+     `dosyaDetayiVar` artık boşlukları ve `truncate`in bıraktığı üç noktayı
+     eleyip karşılaştırıyor; kural 6 birim testiyle kilitlendi.
+  5. **Canlı veride bu durum artık nadir.** 29 Ekim ve 7 Mart'ta üretilen
+     dosyaların hepsinde `extract` dolu geldiği için "Dosyayı aç" düğmesi
+     yerinde. Kural bu yüzden tarayıcıda değil, birim testiyle doğrulandı.
+
 - **Sonraki talimata not:**
+
+  - **Otomatik kartlarda başlık ile özet birbirinin aynısı.** 29 Şubat'ta net
+     görülüyor: başlık `firstClause(item.text)`, özet `truncate(item.text, 240)`
+     — kısa kayıtlarda ikisi de aynı cümle çıkıyor, kartta üst üste iki kez
+     yazıyor. T-17'nin kapsamı `detail`/`summary` çiftiydi, bu ayrı bir çift.
+     **T-21'e (devredilen içerik bulguları) aday.**
+  - `CaseFile.curated` artık var; T-18'in kaynak bağlantısı çipleri "yalnızca
+     otomatik kayıtlarda göster" ayrımını bu bayrakla yapabilir.
+  - `--color-brand-text` token'ı hazır: T-18/T-19'da koyu panel üzerine kırmızı
+     metin koyacaksanız `text-brand` değil bunu kullanın.

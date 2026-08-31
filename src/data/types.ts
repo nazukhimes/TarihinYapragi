@@ -29,11 +29,19 @@ export interface CaseFile {
   year: number;
   type: CaseType;
   title: string;
+  /** Gerçek yer adı. Bilinmiyorsa boş bırakılır — uydurma konum yazılmaz. */
   location: string;
-  status: "ÇÖZÜLDÜ" | "FAİLİ MEÇHUL" | "SÜRÜYOR" | "KAPANDI";
+  /**
+   * Dosyanın akıbeti. İlk dördü editör hükmüdür; **"ARŞİV KAYDI" hüküm değildir**,
+   * yalnızca kaydın Vikipedi taramasından geldiğini ve akıbetinin bilinmediğini
+   * söyler (T-17 / O-15).
+   */
+  status: "ÇÖZÜLDÜ" | "FAİLİ MEÇHUL" | "SÜRÜYOR" | "KAPANDI" | "ARŞİV KAYDI";
   summary: string;
   detail: string;
   tags: string[];
+  /** Kayıt elle mi yazıldı, Vikipedi taramasından mı geldi. */
+  curated?: boolean;
 }
 
 export interface ScienceMilestone {

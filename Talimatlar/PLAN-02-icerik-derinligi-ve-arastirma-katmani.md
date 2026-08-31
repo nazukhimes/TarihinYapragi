@@ -3,8 +3,8 @@
 | Alan | Değer |
 |---|---|
 | **Oluşturulma** | 2026-08-24 |
-| **Durum** | 🟡 **Sürüyor — 1 / 7** (FAZ 1'in ilk adımı kapandı) |
-| **Son hareket** | 2026-08-31 · **T-16 tamamlandı** — Vikipedi veri sözleşmesi düzeltildi (K-6, K-7, O-16, m-9 kapandı) |
+| **Durum** | 🟡 **Sürüyor — 2 / 7** (FAZ 1 tamamlandı) |
+| **Son hareket** | 2026-08-31 · **T-17 tamamlandı** — karanlık dosyalarda kaynak dürüstlüğü ve AA kontrastı (O-15, O-10 kapandı) |
 | **Talimat sayısı** | 7 (T-16 … T-22) |
 | **Faz sayısı** | 4 |
 | **Dayanak** | [`../Dokumanlar/ANALIZ-RAPORU-02.md`](../Dokumanlar/ANALIZ-RAPORU-02.md) |
@@ -62,7 +62,7 @@ Plan bittiğinde:
 | Talimat | Başlık | Bulgular | Öncelik | Süre |
 |---|---|---|---|---|
 | ~~**T-16**~~ | ~~Vikipedi veri sözleşmesi düzeltmesi~~ ✅ | K-6, K-7, O-16, m-9 | 🔴 Kritik | ~3s |
-| **T-17** | Karanlık dosyalarda kaynak dürüstlüğü ve kontrast | O-15, O-10 | 🟠 Yüksek | ~2s |
+| ~~**T-17**~~ | ~~Karanlık dosyalarda kaynak dürüstlüğü ve kontrast~~ ✅ | O-15, O-10 | 🟠 Yüksek | ~2s |
 
 > ✅ **T-16 kapandı (2026-08-31).** `extract` artık okunuyor: Sohbet Kartları'nda
 > "Bugün Doğanlar" ve "Aramızdan Ayrılanlar" üretiliyor, kişi adları düz metin,
@@ -74,6 +74,14 @@ Plan bittiğinde:
 (monogram, `alt`, arama dahil) · `description` kişi kartlarında alt başlık olarak gösterilir ·
 `src/lib/__fixtures__/` altına gerçek API yanıtının kırpılmış kopyası konur, `wiki.test.ts`
 ondan beslenir.
+
+> ✅ **T-17 kapandı (2026-08-31) — FAZ 1 bitti.** Arşiv taramasından gelen dosyalar
+> artık "KAPANDI" hükmü vermiyor (`ARŞİV KAYDI`), sahte konum yazmıyor ve altın
+> "Editör" rozetinin yanında nötr "Otomatik" rozetiyle ayrılıyor. Arşiv etiketi eğik
+> mürekkep damgası biçiminden de çıkarıldı. O-10'un üç kontrast kaydı ve listede
+> olmayan iki nokta daha AA'nın üstüne alındı; `--color-brand` dolgu rengi olarak
+> aynen duruyor.
+> Ayrıntı: [`Tamamlandı/T-17-karanlik-dosya-durustlugu.md`](Tamamland%C4%B1/T-17-karanlik-dosya-durustlugu.md)
 
 **T-17 kapsamı:** Otomatik dosyalarda `status: "KAPANDI"` kaldırılır, yerine kaynağı belli eden
 nötr bir işaret gelir · `location` sabiti dürüst bir ifadeyle değişir · Zaman Tüneli ve Bilim
@@ -214,7 +222,7 @@ Vikipedi içeriğinin otomatik, YZ'nin istek üzerine çalışmasını onayladı
 | # | Talimat dosyası | Faz | Bulgular | Durum | Tarih |
 |---|---|---|---|---|---|
 | ~~T-16~~ ✅ | [`T-16-vikipedi-veri-sozlesmesi.md`](Tamamland%C4%B1/T-16-vikipedi-veri-sozlesmesi.md) | 1 | K-6, K-7, O-16, m-9 | ✅ **Tamamlandı** | 2026-08-31 |
-| T-17 | [`T-17-karanlik-dosya-durustlugu.md`](T-17-karanlik-dosya-durustlugu.md) | 1 | O-15, O-10 | ⬜ Bekliyor | — |
+| ~~T-17~~ ✅ | [`T-17-karanlik-dosya-durustlugu.md`](Tamamland%C4%B1/T-17-karanlik-dosya-durustlugu.md) | 1 | O-15, O-10 | ✅ **Tamamlandı** | 2026-08-31 |
 | T-18 | [`T-18-kaynak-ve-ilgili-sayfalar.md`](T-18-kaynak-ve-ilgili-sayfalar.md) | 2 | O-14 | ⬜ Bekliyor | — |
 | T-19 | [`T-19-detay-paneli.md`](T-19-detay-paneli.md) | 3 | U-6 | ⬜ Bekliyor | — |
 | T-20 | [`T-20-yapay-zeka-katmani.md`](T-20-yapay-zeka-katmani.md) | 3 | U-6 | ⬜ Bekliyor | — |

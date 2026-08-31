@@ -26,7 +26,15 @@
   --color-inkpaper: #23201a;
   --color-inkpaper-dim: #6c6555;
 
+  /* Marka kırmızısı tek tonda hem dolgu hem metin olamıyor: #d23b2e koyu panelde
+     3,54:1, üzerine paper metin gelince 3,98:1 kalıyordu — ikisi de AA'nın (4,5:1)
+     altında (O-10). Rol başına ayrı token:
+       --color-brand       dekoratif dolgu ve kenarlık — marka rengi, değişmez
+       --color-brand-text  koyu panel üzerinde metin/simge  → panelde 4,84:1
+       --color-brand-label üzerine paper metin gelen dolgu  → paper ile 5,00:1 */
   --color-brand: #d23b2e;
+  --color-brand-text: #e35f52;
+  --color-brand-label: #b83127;
   --color-brand-deep: #9c2a21;
   --color-gold: #e8b04b;
   --color-teal: #43a08f;

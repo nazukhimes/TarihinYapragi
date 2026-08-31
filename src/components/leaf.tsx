@@ -298,7 +298,7 @@ export function Ticker({ items }: { items: { year: number; text: string }[] }) {
   const sure = Math.min(90, Math.max(20, items.length * 4));
   return (
     <div className="relative overflow-hidden border-y border-brand-deep/60 bg-[#1a1014] py-2.5 group">
-      <div className="absolute left-0 top-0 bottom-0 z-10 flex items-center bg-brand pl-4 pr-5 shadow-[14px_0_24px_rgba(10,6,8,0.5)]">
+      <div className="absolute left-0 top-0 bottom-0 z-10 flex items-center bg-brand-label pl-4 pr-5 shadow-[14px_0_24px_rgba(10,6,8,0.5)]">
         <span className="font-mono text-[11px] tracking-[0.24em] uppercase text-paper font-semibold whitespace-nowrap">
           Bugün Tarihte
         </span>
@@ -311,7 +311,7 @@ export function Ticker({ items }: { items: { year: number; text: string }[] }) {
         {loop.map((it, i) => (
           <span key={i} className="inline-flex items-center gap-3 text-[13.5px] text-ink/85">
             <span className="font-mono font-bold text-gold">{it.year}</span>
-            <span className="text-brand">◆</span>
+            <span className="text-brand-text">◆</span>
             <span className="max-w-[520px] truncate">{it.text}</span>
           </span>
         ))}

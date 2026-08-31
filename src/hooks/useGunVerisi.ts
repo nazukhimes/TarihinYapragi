@@ -103,7 +103,8 @@ export function useGunVerisi(
 
   /* ---------- karanlık dosyalar ---------- */
   const allCases: CaseFile[] = useMemo(() => {
-    const base = curated?.cases || [];
+    // Editör kayıtları gunler/*.ts dosyalarına dokunulmadan burada işaretlenir (T-17).
+    const base: CaseFile[] = (curated?.cases || []).map((c) => ({ ...c, curated: true }));
     const seen = new Set<string>();
     const auto: CaseFile[] = [];
     [...(data?.deaths || []), ...(data?.events || [])].forEach((item) => {
@@ -127,11 +128,15 @@ export function useGunVerisi(
         year: item.year,
         type,
         title: firstClause(item.text),
-        location: "Arşiv taraması — otomatik tespit",
-        status: "KAPANDI",
+        // Bu bir arşiv arama sonucu: ne yeri ne akıbeti biliniyor. Eskiden her
+        // kayda sabit bir konum metni ve "KAPANDI" damgası yazılıyordu; ikisi de
+        // uydurmaydı ve kaydı editör dosyasından ayırt edilemez kılıyordu (O-15).
+        location: "",
+        status: "ARŞİV KAYDI",
         summary: truncate(item.text, 240),
         detail: item.pages?.[0]?.extract || item.text,
         tags: [theme.toLocaleLowerCase("tr-TR"), formatYear(item.year)],
+        curated: false,
       });
     });
     return [...base, ...auto];

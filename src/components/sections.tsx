@@ -480,6 +480,21 @@ export function PeopleRow({
 
 const CASES_LIMIT = 6;
 
+/** Boşlukları ve sondaki üç noktayı atar. `summary` `truncate`ten geçtiği,
+ *  `detail` geçmediği için ham karşılaştırma yanıltıyordu. */
+function sadeMetin(s: string): string {
+  return s.replace(/\s+/g, " ").trim().replace(/…$/, "");
+}
+
+/**
+ * "Dosyayı aç" düğmesi yalnızca detay gerçekten yeni bilgi taşıyorsa çıkar.
+ * Vikipedi'nin `extract`i boş döndüğünde `detail` özetin aynısına düşüyor;
+ * o zaman düğme kullanıcıyı aynı metni ikinci kez okumaya çağırıyordu (O-15).
+ */
+export function dosyaDetayiVar(c: Pick<CaseFile, "detail" | "summary">): boolean {
+  return !!c.detail && sadeMetin(c.detail) !== sadeMetin(c.summary);
+}
+
 export function CasesSection({
   cases,
   matched,
@@ -527,6 +542,15 @@ export function CasesSection({
       )}
       {gosterilecek.map((c, i) => {
         const open = openId === c.id;
+        const arsiv = c.status === "ARŞİV KAYDI";
+        const detayVar = dosyaDetayiVar(c);
+        const damgaSinifi = arsiv
+          ? "border-dashed text-ink-faint border-ink-faint/50"
+          : c.status === "FAİLİ MEÇHUL"
+            ? "stamp-in text-brand-text border-brand/80"
+            : c.status === "SÜRÜYOR"
+              ? "stamp-in text-gold border-gold/80"
+              : "stamp-in text-ink-faint border-ink-faint/60";
         return (
           <Reveal key={c.id} delay={Math.min(i * 70, 280)}>
             <article
@@ -539,27 +563,36 @@ export function CasesSection({
               {/* dosya üst bandı */}
               <div className="flex items-center justify-between px-5 py-3 border-b border-line/80 bg-night/40">
                 <div className="flex items-center gap-3">
-                  <IconSkull className="w-4.5 h-4.5 text-brand" />
-                  <span className="font-mono text-[12px] font-bold tracking-[0.2em] text-brand">
+                  <IconSkull className="w-4.5 h-4.5 text-brand-text" />
+                  <span className="font-mono text-[12px] font-bold tracking-[0.2em] text-brand-text">
                     {CASE_LABELS[c.type]}
                   </span>
                 </div>
-                <span className="font-mono text-[12px] tabular-nums text-ink-faint">
-                  DOSYA {formatYear(c.year)}
-                </span>
+                <div className="flex items-center gap-2.5">
+                  {/* Kaynak rozeti — biçimi ScienceSection'dakiyle aynı
+                      (BAGLAM.md §1, ürün ilkesi 3: kaynağı gizleme). */}
+                  <span
+                    className={`font-mono text-[9.5px] tracking-[0.18em] uppercase px-1.5 py-0.5 rounded-sm border ${
+                      c.curated
+                        ? "bg-gold/15 text-gold border-gold/40"
+                        : "text-ink-faint border-line"
+                    }`}
+                  >
+                    {c.curated ? "Editör" : "Otomatik"}
+                  </span>
+                  <span className="font-mono text-[12px] tabular-nums text-ink-faint">
+                    DOSYA {formatYear(c.year)}
+                  </span>
+                </div>
               </div>
 
               <div className="p-5 relative">
-                {/* damga */}
+                {/* damga — "ARŞİV KAYDI" bir hüküm değil, kaydın nereden geldiğini
+                    söyleyen bir etiket. O yüzden mürekkep damgası taklidi yapmaz:
+                    eğik durmaz, kenarlığı kesik çizgidir (O-15). */}
                 <span
-                  className={`stamp-in pointer-events-none absolute top-4 right-4 select-none font-mono text-[10px] font-bold tracking-[0.22em] px-2.5 py-1 border-2 rounded-sm ${
-                    c.status === "FAİLİ MEÇHUL"
-                      ? "text-brand border-brand/80"
-                      : c.status === "SÜRÜYOR"
-                        ? "text-gold border-gold/80"
-                        : "text-ink-faint border-ink-faint/60"
-                  }`}
-                  style={{ transform: "rotate(-8deg)" }}
+                  className={`pointer-events-none absolute top-4 right-4 select-none font-mono text-[10px] font-bold tracking-[0.22em] px-2.5 py-1 border-2 rounded-sm ${damgaSinifi}`}
+                  style={arsiv ? undefined : { transform: "rotate(-8deg)" }}
                 >
                   {c.status}
                 </span>
@@ -567,12 +600,14 @@ export function CasesSection({
                 <h3 className="font-display font-bold text-[21px] leading-snug text-ink pr-24 group-hover:text-gold/95 transition-colors duration-200">
                   {c.title}
                 </h3>
-                <p className="mt-1 font-mono text-[11.5px] tracking-wide text-copper">
-                  {c.location}
-                </p>
+                {c.location && (
+                  <p className="mt-1 font-mono text-[11.5px] tracking-wide text-copper">
+                    {c.location}
+                  </p>
+                )}
                 <p className="mt-3 text-[14.5px] leading-relaxed text-ink-dim">{c.summary}</p>
 
-                {open && (
+                {open && detayVar && (
                   <div className="rise-in mt-4 pt-4 border-t border-dashed border-line">
                     <p className="text-[14px] leading-relaxed text-ink-dim">{c.detail}</p>
                   </div>
@@ -589,13 +624,15 @@ export function CasesSection({
                       </span>
                     ))}
                   </div>
-                  <button
-                    onClick={() => setOpenId(open ? null : c.id)}
-                    className="inline-flex items-center gap-1.5 font-mono text-[12px] tracking-widest uppercase text-brand hover:text-paper transition-colors cursor-pointer"
-                  >
-                    {open ? "Dosyayı kapat" : "Dosyayı aç"}
-                    <IconArrow dir={open ? "up" : "down"} className="w-3 h-3" />
-                  </button>
+                  {detayVar && (
+                    <button
+                      onClick={() => setOpenId(open ? null : c.id)}
+                      className="inline-flex items-center gap-1.5 font-mono text-[12px] tracking-widest uppercase text-brand-text hover:text-paper transition-colors cursor-pointer"
+                    >
+                      {open ? "Dosyayı kapat" : "Dosyayı aç"}
+                      <IconArrow dir={open ? "up" : "down"} className="w-3 h-3" />
+                    </button>
+                  )}
                 </div>
               </div>
             </article>
