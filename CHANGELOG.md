@@ -29,6 +29,24 @@ Biçim [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/) yaklaşımını 
   listesi çıkaran editör aracı. Depoya hiçbir şey yazmaz; çıktı
   `Dokumanlar/rekor-adaylari.md` (T-23)
 
+### Düzeltilen
+
+- **Satır sonları depo genelinde LF'e sabitlendi** — `npm run format:check`, hiç
+  dokunulmamış dosyalar dahil tüm kaynak dosyalarında düşüyordu. Depodaki içerik
+  zaten LF'ti; Windows'taki `core.autocrlf=true` ayarı checkout sırasında CRLF'e
+  çeviriyordu. `.gitattributes` (`* text=auto eol=lf`) bunu makineden bağımsız
+  olarak sabitliyor. `*.bat` CRLF kalır
+- **Yeşil kapı biçim denetimini de içeriyor** — `npm run kontrol` artık
+  `format:check` ile başlıyor; aynı adım CI iş akışına da eklendi (iş akışı
+  `kontrol`u çağırmıyor, adımları tek tek çalıştırıyor). Satır sonu gürültüsü
+  temizlenince ortaya çıkan 5 dosyadaki biçim borcu kapatıldı
+- **ESLint derleme ve önbellek dizinlerini artık taramıyor** — `.vite`, `build`,
+  `dev-dist` ve `.claude` yok sayılanlara eklendi. `npm run dev` çalıştırılmış bir
+  kopyada `eslint .`, `.vite/deps` altındaki paketlenmiş React kaynağı yüzünden
+  yüzlerce hata veriyordu
+- **Vitest yalnızca `src/` altını tarıyor** — `.claude/worktrees/` altında bir
+  çalışma kopyası varken testler iki kez toplanıyordu (9 yerine 18 dosya)
+
 ### Not
 
 Guinness World Records'ın halka açık bir API'si yok ve kullanım şartları içeriğinin
