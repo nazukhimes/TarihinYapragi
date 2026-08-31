@@ -60,6 +60,12 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: ["./src/test/setup.ts"],
+    // Testler yalnızca src/ altında yaşıyor. Kapsamı açıkça sınırlamak,
+    // vitest'in varsayılan taramasının depo kökündeki proje kopyalarını
+    // (ör. Claude Code'un `.claude/worktrees/` altındaki worktree'leri)
+    // toplamasını engelliyor — aksi halde aynı testler iki kez koşuyor ve
+    // ana kopyanın yeşil kapısı başka bir daldaki teste bağlı hale geliyor.
+    include: ["src/**/*.{test,spec}.{ts,tsx}"],
     // "threads" havuzu (varsayılan), jsdom'un bağımlılığı undici@8.0.3+'ın
     // gerektirdiği `node:worker_threads.markAsUncloneable`'ın worker_threads
     // içinde ara sıra kullanılamaz olması yüzünden CI'da kararsız
