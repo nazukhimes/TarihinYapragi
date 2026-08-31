@@ -1,0 +1,25 @@
+# Satır sonu politikası: depo genelinde LF.
+# Deponun içindeki (index) tüm metin dosyaları LF olarak saklanır ve
+# çalışma kopyasına da LF olarak yazılır. eol=lf, Windows'taki
+# core.autocrlf=true ayarını geçersiz kılar; böylece checkout sonrası
+# dosyalar CRLF'e dönüşüp Prettier'in endOfLine:"lf" ayarıyla çakışmaz.
+* text=auto eol=lf
+
+# Windows toplu iş dosyaları CRLF olmak zorunda (cmd.exe gereksinimi).
+*.bat text eol=crlf
+
+# İkili dosyalar — satır sonu dönüşümü ve metin farkı uygulanmaz.
+*.png binary
+*.ico binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.avif binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+*.eot binary
+*.pdf binary
+*.zip binary
