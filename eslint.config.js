@@ -5,7 +5,15 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import globals from "globals";
 
 export default ts.config(
-  { ignores: ["dist", "node_modules", "coverage"] },
+  // Yok sayılanlar .gitignore ile hizalı tutulur — hiçbiri elle yazılmış kaynak değil:
+  // `.vite` Vite'ın ön-derleme önbelleği, `dev-dist` PWA eklentisinin geliştirme
+  // çıktısı. Taranırlarsa paketlenmiş React kaynağı yüzlerce no-undef üretiyor.
+  // `.claude` ise Claude Code'un worktree'lerini barındırıyor; projenin tam bir
+  // kopyası olduğu için typescript-eslint ikinci bir tsconfig kökü görüp
+  // "No tsconfigRootDir was set" hatası veriyor.
+  {
+    ignores: ["dist", "build", "dev-dist", ".vite", "node_modules", "coverage", ".claude"],
+  },
   js.configs.recommended,
   ...ts.configs.recommended,
   {
