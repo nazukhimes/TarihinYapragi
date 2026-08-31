@@ -30,3 +30,6 @@ Thumbs.db
 .env
 .env.*
 !.env.example
+
+# rekor-avi çıktısı — üretilmiş aday listesi, içerik değil
+Dokumanlar/rekor-adaylari.md

@@ -69,6 +69,80 @@ export interface CuratedDay {
   spotlight?: { kicker: string; title: string; text: string };
 }
 
+/* ================= REKORLAR KASASI ================= */
+
+export type RecordScope =
+  | "insan"
+  | "doga"
+  | "yapi"
+  | "hiz"
+  | "dayaniklilik"
+  | "kultur"
+  | "tuhaf"
+  | "turkiye";
+
+export const RECORD_SCOPES: Record<RecordScope, { label: string; color: string }> = {
+  insan: { label: "İnsan Bedeni", color: "#dd8552" },
+  doga: { label: "Doğa", color: "#8fbf6a" },
+  yapi: { label: "Yapılar", color: "#8e99ab" },
+  hiz: { label: "Hız", color: "#e8b04b" },
+  dayaniklilik: { label: "Dayanıklılık", color: "#43a08f" },
+  kultur: { label: "Kültür", color: "#c08bc9" },
+  tuhaf: { label: "Tuhaf Kategoriler", color: "#6f9fd8" },
+  turkiye: { label: "Türkiye", color: "#d23b2e" },
+};
+
+/** GÜNCEL: bugün hâlâ geçerli · KIRILDI: sonradan aşıldı ·
+ * EMEKLİ: kategori artık kabul edilmiyor (genelde güvenlik gerekçesiyle). */
+export type RecordStatus = "GÜNCEL" | "KIRILDI" | "EMEKLİ";
+
+export const RECORD_STATUS_LABELS: Record<RecordStatus, string> = {
+  GÜNCEL: "HÂLÂ GEÇERLİ",
+  KIRILDI: "SONRADAN KIRILDI",
+  EMEKLİ: "KATEGORİ EMEKLİ",
+};
+
+export interface WorldRecord {
+  id: string;
+  /** Rekorun adı — tek satır, ekranda başlık olur. */
+  title: string;
+  /** Kişi, kurum, tür ya da yer. */
+  holder: string;
+  /** Rakam ve birimiyle: "8,8 cm", "192 saat 19 dakika", "9,58 saniye". */
+  value: string;
+  /** Rekorun kurulduğu/ölçüldüğü yıl. */
+  year: number;
+  /**
+   * Rekorun kırıldığı gün, `MM-DD` biçiminde. **İsteğe bağlı.**
+   * Verilirse rekor o güne sabitlenir ("Bugün kırılan rekor"); verilmezse
+   * yıl boyunca dönen rotasyon havuzuna girer (bkz. `src/lib/rekor.ts`).
+   */
+  date?: string;
+  place?: string;
+  scope: RecordScope;
+  status: RecordStatus;
+  /** Kırıldıysa kim/ne tarafından — `status: "KIRILDI"` ile birlikte anlamlı. */
+  brokenBy?: string;
+  /** 1-2 cümle. Kartın üstünde görünen özet. */
+  summary: string;
+  /** 3-4 cümle. Rekorun değil, ardındaki hikâyenin anlatımı — yayında okunacak metin. */
+  story: string;
+  /** Rakamı hayal edilebilir kılan kıyas: "üst üste dizilmiş 14 otobüs kadar". */
+  compare?: string;
+  /** Yayında konuya girerken okunacak tek cümlelik açılış. Soru işareti yok. */
+  opener?: string;
+  /** İzleyiciye sorulabilecek tartışma sorusu. */
+  question?: string;
+  /**
+   * Guinness World Records'ın resmen onayladığı bir unvan mı, yoksa
+   * "en"i tartışmalı/başka kaynaklara dayanan bir kayıt mı.
+   */
+  official: boolean;
+  /** Doğrulama bağlantısı — tercihen Vikipedi. Ekranda "Kaynağı aç" olur. */
+  sourceUrl?: string;
+  tags: string[];
+}
+
 export function curatedKey(month: number, day: number): string {
   return `${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 }

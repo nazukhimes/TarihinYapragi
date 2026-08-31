@@ -161,7 +161,8 @@ TarihinYapragi/
 │   ├── data/
 │   │   ├── types.ts        ← Tip tanımları + curatedKey() (T-10)
 │   │   ├── index.ts        ← 12 ay dosyasını birleştirip CURATED'ı dışa aktarır (T-10)
-│   │   ├── data.test.ts    ← CURATED bütünlük testi (T-12)
+│   │   ├── rekorlar.ts     ← Rekorlar Kasası editör havuzu (T-23)
+│   │   ├── data.test.ts    ← CURATED + REKORLAR bütünlük testi (T-12, T-23)
 │   │   └── gunler/         ← 12 ay dosyası (01-ocak.ts … 12-aralik.ts), şu an 60 gün (T-10)
 │   │
 │   ├── lib/
@@ -170,6 +171,8 @@ TarihinYapragi/
 │   │   ├── classification.ts ← classifyItem / detectDarkItem — puanlı kural motoru (T-11)
 │   │   ├── config.ts       ← WIKI_API_BASE (ortam değişkeninden, varsayılanlı)
 │   │   ├── date.ts         ← Artık yıl / gün sayısı / haftanın günü — saf fonksiyonlar
+│   │   ├── rekor.ts        ← (T-23) Rekor rotasyonu: gün → havuzdan deterministik seçki
+│   │   ├── wikidata.ts     ← (T-23) "Bugün kırılan rekor" — Wikidata P1000 sorgusu, CC0
 │   │   ├── slug.ts         ← toDaySlug / parseDaySlug — gün ↔ URL çevrimi (T-06)
 │   │   ├── useInView.ts    ← Paylaşılan IntersectionObserver + setTimeout güvenlik ağı (T-04)
 │   │   ├── wiki.ts         ← API çağrısı, önbellek, otomatik kart üretimi (sınıflandırmayı classification.ts'ten alır)
@@ -185,6 +188,7 @@ TarihinYapragi/
 │       ├── NotFound.tsx    ← 404 sayfası — geçersiz gün adresi (T-06)
 │       ├── sections.tsx    ← Zaman tüneli, kişi kartları, karanlık dosyalar, bilim (T-13: `query`→`matched` API, `SectionShell` artık `content-visibility:auto`)
 │       ├── talk.tsx        ← Sohbet kartları (Yayın Modu artık `broadcast.tsx`'te, T-13)
+│       ├── rekorlar.tsx    ← (T-23) Rekorlar Kasası bölümü + Wikidata şeridi
 │       ├── broadcast.tsx   ← (T-13) Yayın Modu (teleprompter) — `App.tsx`'te `React.lazy` ile yüklenir
 │       ├── ui.tsx          ← Reveal, CountUp, Modal, Toaster, copyText, tüm SVG ikonlar
 │       ├── ui.test.tsx / sections.test.ts ← bileşen testleri (T-12)
@@ -193,7 +197,7 @@ TarihinYapragi/
 │       ├── GunOzeti.tsx    ← (T-13) Spotlight + sayaçlar + zaman aralığı + yükleniyor/hata durumları
 │       ├── OzelGunler.tsx  ← (T-13) "Özel dosyalı günler" pill şeridi
 │       ├── BolumNav.tsx    ← (T-13) Yapışkan bölüm navigasyonu (NAV dizisi burada)
-│       ├── Bolumler.tsx    ← (T-13) Altı içerik bölümü + "Bugünün anlamı" şeridi + arama boş durumu
+│       ├── Bolumler.tsx    ← (T-13/T-23) Yedi içerik bölümü + "Bugünün anlamı" şeridi + arama boş durumu
 │       ├── AltBilgi.tsx    ← (T-13) Footer
 │       ├── KisayolYardimi.tsx ← (T-13) Klavye kısayolları modalı
 │       └── Iskeletler.tsx  ← (T-13) SkeletonLines / SkeletonCards
@@ -348,9 +352,9 @@ tarayıcı sekmesinde takvim yaprağı favikonu, sosyal medyada başlık+görsel
 366 adresi kapsayan `sitemap.xml` (T-08). Gün değişince sekme başlığı ve
 `canonical` bağlantısı otomatik güncelleniyor. Gerçek bir Lighthouse denetimi
 SEO puanını 100/100 verdi. Uygulama artık bir bileşen çökse bile beyaz ekran
-vermiyor: kökte (`main.tsx`) ve altı bölümün her birinde ayrı bir
+vermiyor: kökte (`main.tsx`) ve yedi bölümün her birinde ayrı bir
 `ErrorBoundary` (`src/components/ErrorBoundary.tsx`) var; bir bölüm çökerse
-yalnızca o bölüm bir hata kartı gösterir, diğer beşi normal çalışmaya devam
+yalnızca o bölüm bir hata kartı gösterir, diğerleri normal çalışmaya devam
 eder — hata yığını yalnızca geliştirme modunda görünür. `createBrowserRouter`
 rotalarına da ayrı bir `errorElement` bağlandı (canlı doğrulamada, react-router'ın
 kendi dahili hata sınırının rota bileşenlerindeki hatayı kök `ErrorBoundary`'ye
@@ -358,7 +362,7 @@ hiç ulaştırmadığı ortaya çıktı — bkz. T-09 Tamamlanma Kaydı). Ağ ha
 tek bir genel mesaj yerine türüne göre ayrı başlık gösteriyor (bağlantı yok /
 kayıt yok / arşiv yoğun / sunucu yanıtsız / bilinmeyen), yeniden denenebilir
 olmayan hatalarda "Yeniden dene" düğmesi hiç çıkmıyor (T-09). Arama artık
-toplam ve bölüm bazlı sonuç sayısını gösteriyor, sonuç yoksa altı boş bölüm
+toplam ve bölüm bazlı sonuç sayısını gösteriyor, sonuç yoksa yedi boş bölüm
 yerine tek bir açıklayıcı ekran çıkıyor (T-09). Daha önce sessizce çekilip
 gösterilmeyen `holidays` verisi artık Zaman Tüneli'nin üstünde bir "Bugünün
 anlamı" şeridi olarak görünüyor; Karanlık Dosyalar ve Bilim & Keşif'te altıdan

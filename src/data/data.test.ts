@@ -1,5 +1,12 @@
 import { describe, it, expect } from "vitest";
-import { CURATED, CATEGORIES, CASE_LABELS } from "./index";
+import {
+  CURATED,
+  CATEGORIES,
+  CASE_LABELS,
+  REKORLAR,
+  RECORD_SCOPES,
+  RECORD_STATUS_LABELS,
+} from "./index";
 import { daysInMonth } from "../lib/date";
 
 describe("CURATED bütünlüğü", () => {
@@ -53,5 +60,66 @@ describe("CURATED bütünlüğü", () => {
       expect(gun, k).toBeLessThanOrEqual(daysInMonth(ay));
       expect(gun, k).toBeGreaterThanOrEqual(1);
     });
+  });
+});
+
+describe("REKORLAR bütünlüğü", () => {
+  it("tüm id'ler benzersiz", () => {
+    const idler = REKORLAR.map((r) => r.id);
+    expect(new Set(idler).size).toBe(idler.length);
+  });
+
+  it("geçerli kapsam ve durum değerleri", () => {
+    REKORLAR.forEach((r) => {
+      expect(Object.keys(RECORD_SCOPES), r.id).toContain(r.scope);
+      expect(Object.keys(RECORD_STATUS_LABELS), r.id).toContain(r.status);
+    });
+  });
+
+  it("zorunlu metin alanları dolu", () => {
+    REKORLAR.forEach((r) => {
+      expect(r.title.trim().length, r.id).toBeGreaterThan(0);
+      expect(r.holder.trim().length, r.id).toBeGreaterThan(0);
+      expect(r.value.trim().length, r.id).toBeGreaterThan(0);
+      expect(r.summary.trim().length, r.id).toBeGreaterThan(0);
+      expect(r.tags.length, r.id).toBeGreaterThan(0);
+    });
+  });
+
+  it("story en az 3 cümle (ICERIK-SABLONU kalite ölçütü)", () => {
+    REKORLAR.forEach((r) => {
+      const cumleler = r.story.split(/[.!?]\s/).filter((c) => c.trim().length > 10);
+      expect(cumleler.length, r.id).toBeGreaterThanOrEqual(3);
+    });
+  });
+
+  it("date verilmişse MM-DD ve geçerli takvim günü", () => {
+    REKORLAR.filter((r) => r.date).forEach((r) => {
+      expect(r.date, r.id).toMatch(/^(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/);
+      const [ay, gun] = r.date!.split("-").map(Number);
+      expect(gun, r.id).toBeLessThanOrEqual(daysInMonth(ay));
+    });
+  });
+
+  it("KIRILDI olan her rekorda brokenBy var", () => {
+    REKORLAR.filter((r) => r.status === "KIRILDI").forEach((r) => {
+      expect(r.brokenBy, r.id).toBeTruthy();
+    });
+  });
+
+  it("sourceUrl verilmişse geçerli bir https adresi", () => {
+    REKORLAR.filter((r) => r.sourceUrl).forEach((r) => {
+      expect(r.sourceUrl, r.id).toMatch(/^https:\/\//);
+    });
+  });
+
+  it("yayın açılışı soru işaretiyle bitmez (ICERIK-SABLONU kuralı)", () => {
+    REKORLAR.filter((r) => r.opener).forEach((r) => {
+      expect(r.opener!.trim().endsWith("?"), r.id).toBe(false);
+    });
+  });
+
+  it("rotasyonun anlamlı olması için havuz yeterince büyük", () => {
+    expect(REKORLAR.length).toBeGreaterThanOrEqual(12);
   });
 });

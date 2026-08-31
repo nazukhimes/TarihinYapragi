@@ -4,6 +4,7 @@ export const NAV = [
   { id: "kaybettiklerimiz", label: "Kaybettiklerimiz" },
   { id: "karanlik", label: "Karanlık Dosyalar" },
   { id: "bilim", label: "Bilim & Keşif" },
+  { id: "rekorlar", label: "Rekorlar Kasası" },
   { id: "sohbet", label: "Sohbet Kartları" },
 ];
 

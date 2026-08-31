@@ -1,7 +1,9 @@
-import type { TalkCard } from "../data";
+import { REKORLAR, type TalkCard } from "../data";
 import type { DayData } from "../lib/wiki";
+import type { WikidataRekor } from "../lib/wikidata";
 import type { AramaSonuclari, GunVerisi } from "../hooks/useGunVerisi";
 import { ErrorBoundary } from "./ErrorBoundary";
+import { RekorlarSection } from "./rekorlar";
 import {
   CasesSection,
   PeopleRow,
@@ -26,6 +28,8 @@ export function Bolumler({
   arama,
   dayLabel,
   onBroadcast,
+  wikidata,
+  wikidataLoading,
 }: {
   noSearchResults: boolean;
   query: string;
@@ -37,6 +41,9 @@ export function Bolumler({
   arama: AramaSonuclari;
   dayLabel: string;
   onBroadcast: () => void;
+  /** Seçili günde kırılmış, Wikidata'dan canlı gelen rekorlar (bkz. Rekorlar Kasası). */
+  wikidata: WikidataRekor[];
+  wikidataLoading: boolean;
 }) {
   return (
     <div className="max-w-7xl mx-auto px-4 md:px-8">
@@ -198,11 +205,39 @@ export function Bolumler({
             </div>
           </SectionShell>
 
-          {/* ======== 06 SOHBET KARTLARI ======== */}
-          <SectionShell id="sohbet" labelledBy="baslik-06">
-            <div className="pt-20 pb-24">
+          {/* ======== 06 REKORLAR KASASI ======== */}
+          <SectionShell id="rekorlar" labelledBy="baslik-06">
+            <div className="pt-20">
               <SectionHead
                 index="06"
+                kicker="Sınırlar"
+                title="Rekorlar Kasası"
+                desc="Dünyanın 'en'leri — editör kasasından günlük seçki. Rekoru aç: hikâyesi, kıyası ve yayında okunacak açılış cümlesi içinde."
+                accent="#dd8552"
+                right={
+                  veri.rekorlar.length > 0 && (
+                    <span className="font-mono text-[12px] text-ink-faint">
+                      {REKORLAR.length} kayıtlık kasadan {veri.rekorlar.length}&apos;ü
+                    </span>
+                  )
+                }
+              />
+              <ErrorBoundary variant="section">
+                <RekorlarSection
+                  records={veri.rekorlar}
+                  matched={arama.rekor}
+                  wikidata={wikidata}
+                  wikidataLoading={wikidataLoading}
+                />
+              </ErrorBoundary>
+            </div>
+          </SectionShell>
+
+          {/* ======== 07 SOHBET KARTLARI ======== */}
+          <SectionShell id="sohbet" labelledBy="baslik-07">
+            <div className="pt-20 pb-24">
+              <SectionHead
+                index="07"
                 kicker="Yayıncılar için"
                 title="Sohbet Kartları"
                 desc="Canlı yayında okunmaya hazır, kanca cümleli bilgi kartları. Kopyala ve paylaş ya da Yayın Modu ile teleprompter gibi kullan."

@@ -501,7 +501,7 @@ davranış **birebir aynı** kaldı:
 | `GunOzeti.tsx` | Spotlight başlığı + sayaçlar + zaman aralığı + yükleniyor/hata durumları | `HATA_BASLIK` haritası buraya taşındı; `stats` dizisi burada kurulur (`hedef` alanıyla, m-1 düzeltmesi) |
 | `OzelGunler.tsx` | "Özel dosyalı günler" pill şeridi | `CURATED`'ı doğrudan içe aktarır |
 | `BolumNav.tsx` | Yapışkan bölüm navigasyonu | `NAV` dizisi artık burada tanımlı (eskiden `App.tsx`'te); `visible` prop'u `false` ise `null` döner |
-| `Bolumler.tsx` | Altı içerik bölümü (`SectionShell`×6) + "Bugünün anlamı" şeridi + arama boş durumu | `arama: AramaSonuclari`'ni her bölüme `matched` olarak dağıtır (bkz. 4.1, 4.3) |
+| `Bolumler.tsx` | Yedi içerik bölümü (`SectionShell`×7) + "Bugünün anlamı" şeridi + arama boş durumu | `arama: AramaSonuclari`'ni her bölüme `matched` olarak dağıtır (bkz. 4.1, 4.3) |
 | `AltBilgi.tsx` | Footer | Durumsuz, saf statik JSX |
 | `KisayolYardimi.tsx` | Klavye kısayolları modalı (`?` ile açılır) | `Modal`'ı sarar, kısayol listeleri sabit dizi |
 | `Iskeletler.tsx` | `SkeletonLines`/`SkeletonCards` | Değişmedi, yalnızca taşındı |
@@ -560,7 +560,7 @@ Hepsi dosya sonundaki `@media (prefers-reduced-motion: reduce)` bloğuyla 0.01ms
 
 | Yapmak istediğiniz | Adımlar |
 |---|---|
-| **Yeni bölüm** | 1) `App.tsx` → `NAV` dizisine `{id, label}` ekle · 2) `SectionShell` + `SectionHead` ile blok yaz · 3) veri için yeni `useMemo` · 4) `SkeletonCards` yükleme durumu |
+| **Yeni bölüm** | 1) `BolumNav.tsx` → `NAV` dizisine `{id, label}` ekle · 2) `SectionShell` + `SectionHead` ile blok yaz · 3) veri için yeni `useMemo` · 4) `SkeletonCards` yükleme durumu |
 | **Yeni kategori** | 1) `data/types.ts` → `CategoryId` birleşimine ekle · 2) `CATEGORIES`'e `{label, color}` · 3) `classification.ts` → `KURALLAR`'a puanlı kural(lar) + `PRIORITY`'ye ekle · 4) `npm run siniflandirma` ile doğrula |
 | **Yeni dosya türü** | 1) `data/types.ts` → `CaseType` birleşimi · 2) `CASE_LABELS` · 3) `App.tsx` tema→tür haritası |
 | **Yeni gün içeriği** | İlgili ay dosyasına (`data/gunler/MM-ad.ts`) `"MM-DD": { spotlight?, events?, cases, science, talk }` ekle — şablon ve kalite ölçütleri için [`ICERIK-SABLONU.md`](ICERIK-SABLONU.md) |
@@ -656,7 +656,7 @@ kalitesi açısından önemli değişiklikler:
   `leaf.tsx` → `Ticker`) — önceden sabit 55s, 3 öğede sürünüyordu.
 - **`.noise` ve `.drift-slow`/`.drift-slower`** mobilde (≤768px / ≤640px)
   tamamen kapatılıyor (`index.css`) — masaüstünde değişmedi.
-- **`content-visibility: auto`** altı içerik bölümünün her birinde
+- **`content-visibility: auto`** yedi içerik bölümünün her birinde
   (`.section-shell`, `sections.tsx` → `SectionShell`) — ekran dışı bölümler
   render/boyama maliyetinden muaf. `scrollIntoView` ile hedef konumlandırma
   canlı doğrulandı, geri alınmadı (bkz. T-13 Tamamlanma Kaydı).
@@ -1030,3 +1030,92 @@ npm run kontrol     # typecheck → lint → test → build
 
 Aynı komut her push'ta `.github/workflows/kontrol.yml` içinde koşar. Bir talimat
 bu zincir yeşil olmadan kapatılmaz (`CALISMA-SISTEMI.md` §6.2).
+
+
+---
+
+## 14. Rekorlar Kasası (T-23)
+
+Yedinci içerik bölümü. Diğer altısından ayrılan yanı: **gün merkezli değildir.**
+"En uzun burun" 5 Ağustos'a ait bir olgu değildir, ama uygulamanın kuralı "boş gün
+yoktur" (`BAGLAM.md` §1, ürün ilkesi 4). Bu gerilim rotasyonla çözülür.
+
+### 14.1 Neden Guinness'ten veri çekilmiyor
+
+| Yol | Durum |
+|---|---|
+| GWR resmî API | **Yok.** Halka açık bir uç nokta yayımlamıyorlar |
+| GWR sitesini kazımak | **Yasak.** Kullanım şartları içeriğin kopyalanmasını, yeniden yayımlanmasını ve başka bir siteye konmasını açıkça yasaklıyor |
+| Üçüncü parti "Guinness API"leri | Kaynağı belirsiz, büyük olasılıkla kazımaya dayalı — aynı yasağın türevi |
+| **Wikidata `P1000`** | **CC0 (kamu malı).** Kullanılan yol |
+| **Vikipedi metni** | CC BY-SA. `rekor-avi` scriptinin aday kaynağı |
+
+Ayrım şudur: **rekorun kendisi bir olgudur**, telifli olan GWR'ın yazdığı metin ve
+çektiği fotoğraftır. Kasadaki her kayıt elle, kendi cümlelerimizle yazılır; `official`
+alanı GWR'ın o unvanı onaylayıp onaylamadığını söyler, metni oradan almaz.
+
+### 14.2 Üç katman
+
+```
+┌─ 1. EDİTÖR HAVUZU ─────────────────────────────────────────┐
+│  src/data/rekorlar.ts — elle yazılmış, doğrulanmış kayıtlar │
+│  Kartların gövdesi. "Editör" rozetiyle işaretli.            │
+└───────────────────────┬─────────────────────────────────────┘
+                        │  src/lib/rekor.ts → gununRekorlari()
+                        │  · date: "MM-DD" olanlar o güne sabitlenir
+                        │  · gerisi deterministik rotasyondan gelir
+                        ▼
+┌─ 2. WIKIDATA ŞERİDİ ───────────────────────────────────────┐
+│  src/lib/wikidata.ts — P1000 + P580, seçili güne filtreli   │
+│  "Bugün kırılan rekorlar". Ayrı şerit, "Wikidata" rozeti.   │
+│  İkincil katman: hata verirse sessizce boş döner.           │
+└─────────────────────────────────────────────────────────────┘
+
+┌─ 3. REKOR AVI (çalışma zamanı değil, editör aracı) ────────┐
+│  scripts/rekor-avi.mjs — npm run rekor-avi                  │
+│  Vikipedi'yi insource: ile tarar → Dokumanlar/              │
+│  rekor-adaylari.md (gitignore'da). Depoya HİÇBİR ŞEY yazmaz.│
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 14.3 Rotasyon — `src/lib/rekor.ts`
+
+```
+gün → dayOfYear(month, day, 2001)      ← sabit referans yıl
+      × rotasyonAdimi(havuzBoyu)        ← havuz boyuyla aralarında asal
+      % havuzBoyu                       ← başlangıç indeksi
+      → ardışık `adet` kayıt (modulo ile sararak)
+```
+
+İki tasarım kararı ve gerekçeleri:
+
+- **Sabit referans yıl (2001).** `dayOfYear` içinde bulunulan yılı kullansaydı
+  paylaşılan bir bağlantı yıl değişince başka rekorlar gösterirdi.
+- **Aralarında asal adım.** Adım ile havuz boyu ortak bölen paylaşırsa rotasyon
+  havuzun bir alt kümesinde döner ve bazı kayıtlar **hiçbir gün görünmez**.
+  `rekor.test.ts` bunu bir yıl boyunca dolaşarak doğrular.
+
+Havuzu 365 güne tamamlamak gerekmez: ~20 kayıt yılın tamamını dolu gösterir,
+havuz büyüdükçe tekrar aralığı açılır.
+
+### 14.4 Wikidata katmanının sınırları (canlı ölçüm)
+
+- `P1000` havuzu dar (bini bulmuyor) ve ağırlıkla atletizm + havacılık kazaları.
+  **Çoğu gün boş döner** — o zaman şerit hiç gösterilmez.
+- Türkçe etiket kapsamı zayıf: 6.253 rekor öğesinin yalnızca ~800'ünde TR etiketi var.
+  Etiketi çözülemeyen kayıt ham `Q…` kimliği olarak gelir ve `normalize()` bunları atar.
+- Bazı ifadeler rekoru yalnızca `"national record"` olarak adlandırır; hangi ülke,
+  hangi branş olduğu niteleyicilerde kalır ve etiket servisine yansımaz. Bu jenerik
+  adlar da elenir (16 Ağustos sorgusunda gözlendi).
+- Aynı sporcu aynı gün birden çok mesafede rekor kırabiliyor (ör. 800 m + 1500 m
+  serbest, 16 Ağustos 1949). Kişi başına tek satır bırakılır.
+- `LS_PREFIX` bir **sürüm numarası** taşır (`ty-wdrec2-`). `normalize()` kuralları
+  değiştiğinde artırılır; yoksa eski elemeyle üretilmiş kayıtlar TTL (7 gün) dolana
+  kadar ekranda kalırdı.
+
+### 14.5 Sohbet Kartları'na bağlanma
+
+`buildRekorTalk()` yalnızca `opener` alanı yazılmış rekorları karta çevirir —
+kancası olmayan bir rekor yayında okunacak bir metin değildir. Kartlar editör
+kartlarının ardına, otomatik Vikipedi kartlarının önüne girer. Böylece Yayın Modu
+(teleprompter) rekorlar için ayrı bir ekran gerektirmez.

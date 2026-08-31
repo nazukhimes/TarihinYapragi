@@ -13,6 +13,7 @@ import { ARALIK } from "./gunler/12-aralik";
 import type { CuratedDay } from "./types";
 
 export * from "./types";
+export { REKORLAR, REKOR_IDLER } from "./rekorlar";
 
 export const CURATED: Record<string, CuratedDay> = {
   ...OCAK,

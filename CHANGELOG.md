@@ -8,6 +8,36 @@ Biçim [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/) yaklaşımını 
 
 ---
 
+## [Yayımlanmamış]
+
+### Eklenen
+
+- **Rekorlar Kasası (7. bölüm)** — dünyanın "en"leri için editör havuzundan
+  günlük seçki. Her kayıtta rekorun hikâyesi, rakamı hayal edilebilir kılan bir
+  kıyas cümlesi ve yayında okunacak bir açılış cümlesi var. Kapsam çipleriyle
+  süzülebiliyor, arama bölüme dahil (T-23)
+- **Rekor rotasyonu** — havuzu 365 güne tamamlamak gerekmiyor: tarihi doğrulanmış
+  rekorlar kendi gününde "Bugün" rozetiyle çıkıyor, gerisi yıl boyunca dönen
+  deterministik bir rotasyondan geliyor. Aynı gün her zaman aynı seçkiyi verir,
+  paylaşılan bağlantı yıl değişince başka içerik göstermez (T-23)
+- **"Bugün kırılan rekorlar" şeridi** — seçili günde kırılmış, tarihi doğrulanmış
+  rekorlar Wikidata'dan (CC0) canlı geliyor. Editör kartlarından ayrı şeritte,
+  "Wikidata" rozetiyle. Çoğu gün boş döner; o zaman hiç gösterilmez (T-23)
+- **Rekor kartları Sohbet Kartları'na akıyor** — `opener` alanı yazılmış rekorlar
+  Yayın Modu'nda (teleprompter) da çıkıyor, ayrı bir ekran gerekmiyor (T-23)
+- **`npm run rekor-avi`** — Vikipedi'yi `insource:` aramasıyla tarayıp rekor adayı
+  listesi çıkaran editör aracı. Depoya hiçbir şey yazmaz; çıktı
+  `Dokumanlar/rekor-adaylari.md` (T-23)
+
+### Not
+
+Guinness World Records'ın halka açık bir API'si yok ve kullanım şartları içeriğinin
+kopyalanmasını yasaklıyor. Kasadaki her kayıt elle, kendi cümlelerimizle yazıldı;
+`official` alanı yalnızca GWR'ın o unvanı onaylayıp onaylamadığını söyler. Otomatik
+katman tamamen CC0 lisanslı Wikidata'ya dayanır (bkz. `Dokumanlar/MIMARI.md` §14.1).
+
+---
+
 ## [0.2.0] — 2026-08-24
 
 PLAN-01 (_Temel Düzeltme ve Tamamlama_) tamamlandı — 15 talimat, 5 faz.

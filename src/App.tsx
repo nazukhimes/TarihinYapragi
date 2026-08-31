@@ -2,6 +2,7 @@ import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } fro
 import { useNavigate, useParams } from "react-router-dom";
 import { CURATED, curatedKey } from "./data";
 import { useDayData } from "./lib/wiki";
+import { useWikidataRekorlari } from "./lib/wikidata";
 import { daysInMonth } from "./lib/date";
 import { MONTHS_TR } from "./components/leaf";
 import { NotFound } from "./components/NotFound";
@@ -127,8 +128,12 @@ export default function App() {
     toast(ok ? "Bağlantı panoya kopyalandı" : "Kopyalanamadı");
   }, [month, day, dayLabel]);
 
-  const veri = useGunVerisi(data, curated);
+  const veri = useGunVerisi(data, curated, month, day);
   const arama = useAramaSonuclari(veri, query);
+
+  // Rekorlar Kasası'nın ikincil katmanı — bölümün kendisi editör havuzuyla
+  // çalışır, bu sorgu başarısız olursa sessizce boş döner (bkz. lib/wikidata.ts).
+  const { items: wikidata, loading: wikidataLoading } = useWikidataRekorlari(month, day);
 
   const searching = query.trim().length > 0;
   const toplamSonuc = searching
@@ -136,7 +141,8 @@ export default function App() {
       arama.dogum.length +
       arama.vefat.length +
       arama.dosya.length +
-      arama.bilim.length
+      arama.bilim.length +
+      arama.rekor.length
     : 0;
   const noSearchResults = searching && toplamSonuc === 0;
 
@@ -223,6 +229,8 @@ export default function App() {
           arama={arama}
           dayLabel={dayLabel}
           onBroadcast={() => setBroadcast(true)}
+          wikidata={wikidata}
+          wikidataLoading={wikidataLoading}
         />
       </main>
 

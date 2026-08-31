@@ -170,3 +170,80 @@ kaynak: `src/data/types.ts`.
    ve Bilim & Keşif bölümleri, okunabilir sohbet kartları, `KOPYALA` düğmesi.
 3. Editör olayının otomatik (Vikipedi) sürümüyle zaman tünelinde **iki kez**
    görünmediğini doğrula.
+
+
+---
+
+## 8. Rekorlar Kasası — `src/data/rekorlar.ts` (T-23)
+
+Rekorlar günlere değil **havuza** yazılır. 365 günü doldurmak gerekmez: rotasyon
+her gün havuzdan üç kayıt seçer (`src/lib/rekor.ts`). Bir rekor eklemek bir günü
+doldurmakla aynı şey değildir — sıra beklemeden, istediğiniz zaman eklenir.
+
+### 8.1 Altın kural burada da geçerli
+
+Yapay zekâ ile toplu rekor üretimi **yasaktır.** `npm run rekor-avi` yalnızca aday
+listesi çıkarır (`Dokumanlar/rekor-adaylari.md`); kaydı editör okur, doğrular ve
+elle yazar. Dil modelleri rekor sorularında en çok uydurma yapan alandadır:
+rakamlar spesifik, isimler az bilinen kişilerden ve model yanlış cevabı da
+kendinden emin bir tonla verir.
+
+### 8.2 `value` alanının kuralı
+
+`value` ekranda **en büyük puntoyla** çıkar ve yayında doğrudan okunur. Bu yüzden:
+
+> Yalnızca kaynağında **açıkça geçen** rakam yazılır.
+
+Yaygın olarak bilinen ama kaynakta doğrulanamayan bir sayı `value`'ya konmaz;
+gerekiyorsa `story` içinde "yaklaşık" diye geçer. Örnek: Jyoti Amge'nin boyu
+TR/EN Vikipedi özetlerinde geçmediği için `value: "Yaklaşık 63 cm"` yazıldı,
+"62,8 cm" değil.
+
+### 8.3 `date` — ne zaman yazılır, ne zaman yazılmaz
+
+`date: "MM-DD"` rekoru o güne **sabitler** ve karta "Bugün" rozeti koyar.
+Yalnızca kırılma günü kesin doğrulandıysa yazılır. Emin değilseniz **boş bırakın** —
+kayıt rotasyona girer, hiçbir şey kaybedilmez. Yanlış güne sabitlenmiş bir rekor
+ise her yıl o gün yanlış bilgi gösterir.
+
+### 8.4 `status` — bayatlamaya karşı
+
+| Değer | Ne zaman |
+|---|---|
+| `GÜNCEL` | Bugün hâlâ geçerli |
+| `KIRILDI` | Sonradan aşıldı — `brokenBy` **zorunlu** (test bunu denetler) |
+| `EMEKLİ` | Kategori artık kabul edilmiyor (genelde güvenlik gerekçesiyle) |
+
+Sürekli kırılan rekorlarda (sırıkla atlama, sprint) kaydı `GÜNCEL` bırakmak
+bayat bir rakamı geçerliymiş gibi gösterir. Duplantis kaydı bu yüzden `KIRILDI`
+ve `brokenBy: "Yine kendisi — rekoru düzenli olarak bir santim artırıyor"`.
+
+### 8.5 `official` — GWR onaylı mı
+
+`true` yalnızca Guinness World Records'ın resmen onayladığı unvanlar içindir.
+"En"i tartışmalı, birden fazla adayı olan başlıklar (`"dünyanın en eski restoranı"`)
+`false` alır ve ekranda ayrı bir uyarı satırıyla gösterilir.
+
+### 8.6 Yayıncı alanları
+
+Bunlar kasayı bir ansiklopediden ayıran şey — boş bırakılabilir ama bırakılmamalı:
+
+| Alan | Ne yazılır |
+|---|---|
+| `story` | Rekorun kendisini değil, **ardındaki hikâyeyi**. En az 3 cümle (test denetler). Kim bu insan, neden yaptı, sonra ne oldu |
+| `compare` | Rakamı hayal edilebilir kılan kıyas: "üst üste dizilmiş 14 otobüs kadar" |
+| `opener` | Yayında konuya girerken okunacak tek cümle. **Soru işareti olmadan** (test denetler) |
+| `question` | İzleyiciye sorulabilecek tartışma sorusu |
+
+`opener` yazılmayan rekor Sohbet Kartı'na dönüşmez — kasada durur ama Yayın
+Modu'na girmez.
+
+### 8.7 Ekledikten sonra
+
+1. `npm run test` — `data.test.ts` içindeki "REKORLAR bütünlüğü" testleri
+   `id` benzersizliğini, `status`/`brokenBy` tutarlılığını, `date` biçimini,
+   `story` uzunluğunu ve `opener` kuralını denetler.
+2. Günü tarayıcıda aç: kart doğru kapsamda mı, damga doğru mu, "Kaynak"
+   bağlantısı çalışıyor mu.
+3. `date` yazdıysanız o güne gidip **listenin başında** ve "Bugün" rozetiyle
+   çıktığını doğrulayın.

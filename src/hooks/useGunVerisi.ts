@@ -2,12 +2,17 @@ import { useMemo } from "react";
 import {
   CASE_LABELS,
   CATEGORIES,
+  RECORD_SCOPES,
+  RECORD_STATUS_LABELS,
   type CaseFile,
   type CaseType,
   type CuratedDay,
   type ScienceMilestone,
   type TalkCard,
+  type WorldRecord,
 } from "../data";
+import { REKORLAR } from "../data/rekorlar";
+import { buildRekorTalk, gununRekorlari } from "../lib/rekor";
 import { buildAutoTalk, classifyItem, detectDarkItem, type DayData } from "../lib/wiki";
 import {
   formatYear,
@@ -44,6 +49,7 @@ export interface GunVerisi {
   deaths: PersonCard[];
   allCases: CaseFile[];
   allScience: (ScienceMilestone & { curated?: boolean })[];
+  rekorlar: WorldRecord[];
   talkCards: TalkCard[];
   spotlight: Spotlight | null;
   tickerItems: { year: number; text: string }[];
@@ -52,8 +58,16 @@ export interface GunVerisi {
 
 /** Günün ham `data` (Vikipedi) + `curated` (editör) verisinden bölümlerin ihtiyaç
  * duyduğu türetilmiş listeleri hesaplar. Davranış T-13 öncesiyle birebir aynı —
- * yalnızca App.tsx'ten buraya taşındı (Adım 6). */
-export function useGunVerisi(data: DayData | null, curated: CuratedDay | undefined): GunVerisi {
+ * yalnızca App.tsx'ten buraya taşındı (Adım 6).
+ *
+ * `month`/`day` yalnızca Rekorlar Kasası için gerekir: rekor havuzu güne göre
+ * değil rotasyonla dağıtılır, bu yüzden Vikipedi verisinden türetilemez. */
+export function useGunVerisi(
+  data: DayData | null,
+  curated: CuratedDay | undefined,
+  month: number,
+  day: number
+): GunVerisi {
   /* ---------- birleşik zaman tüneli ---------- */
   const mergedEvents: MergedEvent[] = useMemo(() => {
     const out: MergedEvent[] = (curated?.events || []).map((ev) => ({
@@ -142,12 +156,21 @@ export function useGunVerisi(data: DayData | null, curated: CuratedDay | undefin
     return [...base, ...auto].sort((a, b) => b.year - a.year);
   }, [data, curated]);
 
+  /* ---------- rekorlar kasası ---------- */
+  const rekorlar: WorldRecord[] = useMemo(
+    () => gununRekorlari(REKORLAR, month, day).gosterilecek,
+    [month, day]
+  );
+
   /* ---------- sohbet kartları ---------- */
   const talkCards: TalkCard[] = useMemo(() => {
     const base = curated?.talk || [];
-    if (!data) return base;
-    return [...base, ...buildAutoTalk(data)].slice(0, 9);
-  }, [data, curated]);
+    // Rekor kartları editör kartlarının hemen ardına girer, otomatik Vikipedi
+    // kartlarının önüne: elle yazılmış oldukları için kalite sıraları oradadır.
+    const rekorKartlari = buildRekorTalk(rekorlar);
+    if (!data) return [...base, ...rekorKartlari];
+    return [...base, ...rekorKartlari, ...buildAutoTalk(data)].slice(0, 9);
+  }, [data, curated, rekorlar]);
 
   /* ---------- öne çıkan dosya ---------- */
   const spotlight: Spotlight | null = useMemo(() => {
@@ -191,6 +214,7 @@ export function useGunVerisi(data: DayData | null, curated: CuratedDay | undefin
     deaths,
     allCases,
     allScience,
+    rekorlar,
     talkCards,
     spotlight,
     tickerItems,
@@ -204,6 +228,7 @@ export interface AramaSonuclari {
   vefat: PersonCard[];
   dosya: CaseFile[];
   bilim: (ScienceMilestone & { curated?: boolean })[];
+  rekor: WorldRecord[];
 }
 
 /** Arama metnini bölümlerin (Zaman Tüneli, Doğanlar, Kaybettiklerimiz, Karanlık
@@ -222,6 +247,7 @@ export function useAramaSonuclari(veri: GunVerisi, query: string): AramaSonuclar
         vefat: veri.deaths,
         dosya: veri.allCases,
         bilim: veri.allScience,
+        rekor: veri.rekorlar,
       };
     }
     return {
@@ -248,6 +274,21 @@ export function useAramaSonuclari(veri: GunVerisi, query: string): AramaSonuclar
       ),
       bilim: veri.allScience.filter((s) =>
         matchQuery(query, s.title, s.summary, s.field, formatYear(s.year))
+      ),
+      rekor: veri.rekorlar.filter((r) =>
+        matchQuery(
+          query,
+          r.title,
+          r.holder,
+          r.value,
+          r.summary,
+          r.story,
+          r.place,
+          r.tags.join(" "),
+          formatYear(r.year),
+          RECORD_SCOPES[r.scope].label,
+          RECORD_STATUS_LABELS[r.status]
+        )
       ),
     };
   }, [veri, query]);

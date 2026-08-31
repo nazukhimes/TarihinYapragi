@@ -11,12 +11,15 @@ etrafında toplayan, Türkçe, tamamen istemci taraflı bir masaüstü/web uygul
 
 Bir gün seçersiniz; uygulama o güne ait olayları, doğanları ve kaybettiklerimizi
 Vikipedi'nin "Tarihte Bugün" servisinden çeker, konularına göre sınıflandırır ve
-altı bölümde sunar. 60 gün için ayrıca elle yazılmış editör içeriği vardır — günün
-dosyası, zaman tüneli notları, bilim dönüm noktaları.
+yedi bölümde sunar. 60 gün için ayrıca elle yazılmış editör içeriği vardır — günün
+dosyası, zaman tüneli notları, bilim dönüm noktaları, rekorlar.
 
 - **Takvim yaprağı** — gün, ay, haftanın günü, yılın kaçıncı günü; artık yıl dahil doğru
-- **Altı bölüm** — Zaman Tüneli · Bugün Doğanlar · Kaybettiklerimiz · Karanlık Dosyalar ·
-  Bilim & Keşif · Bugünün Anlamı
+- **Yedi bölüm** — Zaman Tüneli · Bugün Doğanlar · Kaybettiklerimiz · Karanlık Dosyalar ·
+  Bilim & Keşif · Rekorlar Kasası · Sohbet Kartları
+- **Rekorlar Kasası** — editör havuzundan günlük seçki; her rekorun hikâyesi, kıyası ve
+  yayında okunacak açılış cümlesi var. Tarihi doğrulanmış rekorlar kendi gününde çıkar,
+  gerisi yıl boyunca dönen bir rotasyondan gelir
 - **Her güne bir adres** — `/29-ekim` gibi; yer imine eklenebilir, paylaşılabilir
 - **Arama** — Türkçe karakter duyarlı, sonuç sayacıyla
 - **Yayın Modu** — yayıncılar için büyük puntolu, kaydırmalı sohbet kartı ekranı
@@ -74,6 +77,7 @@ Node 20 gerekir — `.nvmrc` dosyasında yazılıdır.
 | `npm run format` / `format:check`      | Prettier                                        |
 | `npm test` / `test:watch` / `test:cov` | Vitest (203 test)                               |
 | `npm run siniflandirma`                | Sınıflandırma doğruluğu raporu (altın küme)     |
+| `npm run rekor-avi`                    | Rekor adayı taraması — Vikipedi'den aday listesi |
 | `npm run icons`                        | Favicon ve PWA simgelerini yeniden üretir       |
 | `npm run sitemap`                      | 366 adresli `public/sitemap.xml`                |
 | `npm run analyze`                      | Paket içeriği görselleştirmesi                  |
