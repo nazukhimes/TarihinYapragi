@@ -327,20 +327,92 @@ body {
   }
 }
 
+/* ---------- yazdırma (m-7) ----------
+   Ekranda uygulama koyu zeminli, yapışkan barlı ve dekoratif katmanlı; kâğıtta
+   bunların hiçbiri işe yaramıyor, mürekkep yiyor ve okunurluğu düşürüyor.
+   Kâğıt çıktısı: beyaz zemin, siyah metin, dekor yok, bağlantı adresleri açık. */
 @media print {
+  /* ⚠ TUZAK: `.section-shell` ekranda `content-visibility: auto` ile ekran dışı
+     bölümleri boyamadan muaf tutuyor (T-13 Adım 5). Yazdırmada bu optimizasyon
+     TERSİNE ÇALIŞIR — henüz görüntülenmemiş bölümler kâğıda BOŞ basılır.
+     Yazdırmada mutlaka iptal edilmeli; `contain-intrinsic-size` de birlikte
+     kalkmalı, yoksa bölüm sahte yüksekliğiyle basılır. */
+  .section-shell {
+    content-visibility: visible !important;
+    contain-intrinsic-size: none !important;
+  }
+
+  /* kâğıt yüzeyi: beyaz zemin, siyah metin. Renk/zemin bilgisi bileşenlerde
+     yüzlerce yardımcı sınıfa (bg-night, text-ink, bg-panel…) dağılmış durumda;
+     tek tek geçersiz kılmak yerine hepsi topluca sıfırlanıyor. */
+  :root {
+    color-scheme: light;
+  }
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  *,
+  *::before,
+  *::after {
+    background-image: none !important;
+    background-color: transparent !important;
+    color: #000 !important;
+    border-color: #999 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* dekoratif katmanlar: `.glowfield` sayfanın KÖK sarmalayıcısı (App.tsx) —
+     gizlenemez, yalnızca zemini kalkar (yukarıdaki toplu kural bunu yapıyor).
+     Kalanlar üstte duran boş kaplama katmanları, tamamen kalkar.
+
+     `.outline-num` ekranda içi boş (transparent + text-stroke) dev rakamlar
+     çiziyor: açılıştaki "dev ambiyans yılları" ve bilim kartlarındaki yıl
+     filigranı. İkisi de metnin ÜSTÜNE binen salt süs; kâğıtta okunurluğu
+     düşürür ve bilim kartındaki yıl zaten kartın içinde yazıyla da geçiyor.
+     (Not: yalnızca yeniden renklendirmek yetmez — yukarıdaki toplu
+     `color: #000` bu rakamları kâğıtta simsiyah, kapkalın basardı.) */
+  .gridlines,
+  .noise,
+  .scanlines,
+  .ticker-track,
+  .outline-num {
+    display: none !important;
+  }
+
+  /* yapışkan üst bar ve bölüm navigasyonu kâğıtta gezinme değil, gürültü.
+     Tarih başlığı zaten açılış bölümünde büyük punto ile duruyor. */
+  header,
+  nav[aria-label="Bölümler"],
+  .skip-link {
+    display: none !important;
+  }
+
+  /* ekranda göze giren animasyonlu açılış, kâğıtta yarı saydam kalmasın */
   .reveal {
     opacity: 1 !important;
     transform: none !important;
   }
-  .noise,
-  .gridlines,
-  .ticker-track,
-  .scanlines {
-    display: none !important;
+
+  /* kâğıtta bağlantıya tıklanamaz — adresi metnin yanında görünsün.
+     Yalnızca gerçek dış adresler yazılır: "#bilim" gibi sayfa içi çapalar ve
+     javascript: bağlantıları çıktıya bir şey katmaz. */
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    word-break: break-all;
   }
-  header,
-  nav {
-    position: static !important;
+
+  /* bölümler sayfa ortasından bölünmesin */
+  section {
+    break-inside: avoid-page;
+  }
+  h1,
+  h2,
+  h3 {
+    break-after: avoid-page;
   }
 }
 

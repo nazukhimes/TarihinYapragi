@@ -1,7 +1,16 @@
 import { describe, it, expect } from "vitest";
-import { normalize, classifyStatus, buildAutoTalk, yilMaddesiMi, PAGES_LIMIT } from "./wiki";
-import type { DayData, WikiPage } from "./wiki";
+import {
+  normalize,
+  classifyStatus,
+  buildAutoTalk,
+  estimateMinutes,
+  gecerliHolidayMi,
+  yilMaddesiMi,
+  PAGES_LIMIT,
+} from "./wiki";
+import type { DayData, RawHoliday, WikiPage } from "./wiki";
 import otd from "./__fixtures__/otd-tr-08-31.json";
+import otdTatil from "./__fixtures__/otd-tr-10-29-holidays.json";
 
 /**
  * `otd`, gerçek API yanıtının kırpılmış hâlidir:
@@ -140,6 +149,116 @@ describe("classifyStatus — HTTP durum kodu → kullanıcı mesajı", () => {
   });
 });
 
+describe("gecerliHolidayMi — şablon artığı çöp kayıtlar (O-11)", () => {
+  /**
+   * `otdTatil`, gerçek API yanıtının `holidays` dizisidir:
+   * `api.wikimedia.org/feed/v1/wikipedia/tr/onthisday/all/10/29` (29 Ekim).
+   * Hiçbir kayıttan tek bir alan bile silinmedi — çöp kayıtların imzası
+   * (`namespace.id`, boş `pages`) uydurma değil, Vikipedi'nin kendi yanıtı.
+   */
+  const tatiller = (otdTatil as { holidays: RawHoliday[] }).holidays;
+  const metin = (h: RawHoliday) => h.text?.trim() ?? "";
+  const bul = (t: string) => {
+    const h = tatiller.find((x) => metin(x) === t);
+    if (!h) throw new Error(`fixture'da "${t}" kaydı yok`);
+    return h;
+  };
+
+  it("fixture gerçekten çöp kayıt içeriyor — g / t / d", () => {
+    expect(tatiller.map(metin)).toEqual([
+      "Türkiye'de Cumhuriyet Bayramı",
+      "Kızılay Haftası (29 Ekim - 4 Kasım)",
+      "g",
+      "t",
+      "d",
+    ]);
+  });
+
+  it("5 kayıttan yalnızca 2 gerçek tatil geçiyor", () => {
+    expect(tatiller.filter(gecerliHolidayMi).map(metin)).toEqual([
+      "Türkiye'de Cumhuriyet Bayramı",
+      "Kızılay Haftası (29 Ekim - 4 Kasım)",
+    ]);
+  });
+
+  it('"g" şablon uzayına (namespace 10) işaret ettiği için elenir', () => {
+    const g = bul("g");
+    expect(g.pages![0].namespace!.id).toBe(10);
+    expect(gecerliHolidayMi(g)).toBe(false);
+  });
+
+  it('"t" şablon tartışma uzayına (namespace 11) işaret ettiği için elenir', () => {
+    const t = bul("t");
+    expect(t.pages![0].namespace!.id).toBe(11);
+    expect(gecerliHolidayMi(t)).toBe(false);
+  });
+
+  it('"d" hiç sayfa taşımaz — onu yalnızca uzunluk kuralı yakalar', () => {
+    const d = bul("d");
+    expect(d.pages ?? []).toHaveLength(0); // ad uzayı kuralı burada çaresiz
+    expect(gecerliHolidayMi(d)).toBe(false);
+  });
+
+  it("sayfası olmayan GEÇERLİ kayıt elenmez — boş pages tek başına çöp demek değil", () => {
+    const k = bul("Kızılay Haftası (29 Ekim - 4 Kasım)");
+    expect(k.pages ?? []).toHaveLength(0);
+    expect(gecerliHolidayMi(k)).toBe(true);
+  });
+
+  it("madde uzayındaki (namespace 0) kayıt geçer", () => {
+    const c = bul("Türkiye'de Cumhuriyet Bayramı");
+    expect(c.pages![0].namespace!.id).toBe(0);
+    expect(gecerliHolidayMi(c)).toBe(true);
+  });
+
+  it.each([
+    ["metin yok", {}],
+    ["boş metin", { text: "   " }],
+    ["tek harf", { text: "x" }],
+  ])("%s → elenir", (_ad, h) => expect(gecerliHolidayMi(h as RawHoliday)).toBe(false));
+
+  it("ad uzayı bilinmiyorsa kayda karışılmaz", () => {
+    const h: RawHoliday = { text: "Bir bayram", pages: [{ title: "Bayram" }] };
+    expect(gecerliHolidayMi(h)).toBe(true);
+  });
+});
+
+describe("estimateMinutes — hiçbir dal erişilemez değil (m-8)", () => {
+  const govde = (n: number) => "a".repeat(n);
+
+  it.each([
+    [1, 0],
+    [1, 239],
+    [2, 240],
+    [2, 329],
+    [3, 330],
+    [3, 420],
+  ])("→ %i dakika (%i karakter)", (beklenen, uzunluk) => {
+    expect(estimateMinutes(govde(uzunluk))).toBe(beklenen);
+  });
+
+  it("3 dalı GERÇEK boru hattından da çıkabiliyor — eşik kırpma sınırının altında", () => {
+    // m-8'in özü: eşik, gövdenin kırpıldığı sınırın (420) üstünde kalırsa bu dal
+    // hiçbir zaman çalışmaz. Kırpılmış gerçek bir gövdeyle doğrulanır.
+    const uzunOlay = "Uzun bir olay metni. " + "ayrıntı ".repeat(120);
+    const gun: DayData = {
+      events: [{ id: "e1", year: 1900, text: uzunOlay, lang: "tr" }],
+      births: [],
+      deaths: [],
+      holidays: [],
+      selected: [],
+      sources: { events: "tr", births: "tr", deaths: "tr" },
+      offline: false,
+      stale: false,
+      error: null,
+      fetchedAt: 0,
+    };
+    const kart = buildAutoTalk(gun)[0];
+    expect(kart.body.length).toBeLessThanOrEqual(420); // kırpma hâlâ yürürlükte
+    expect(kart.minutes).toBe(3);
+  });
+});
+
 describe("buildAutoTalk — sohbet kartı üretimi", () => {
   const bosGun: DayData = {
     events: [],
@@ -234,7 +353,7 @@ describe("buildAutoTalk — sohbet kartı üretimi", () => {
     expect(cards.map((c) => c.id)).not.toContain("auto-holiday");
   });
 
-  it("240-459 karakter gövde → estimateMinutes 2 döner", () => {
+  it("240-329 karakter gövde → estimateMinutes 2 döner", () => {
     const uzunMetin = "Bu, ".repeat(70) + "bitti.";
     const gun: DayData = {
       ...bosGun,

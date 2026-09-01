@@ -128,6 +128,7 @@ export const EYLUL: Record<string, CuratedDay> = {
         title: "Jüpiter'in beşinci uydusu Amalthea keşfedildi",
         summary:
           "Edward Emerson Barnard, Kaliforniya'daki Lick Gözlemevi'nde 36 inçlik bir teleskopla Jüpiter'i incelerken küçük bir uydu fark etti. Amalthea, 1609'da Galileo'dan bu yana yalnızca gözle (fotoğraf olmadan) keşfedilen son gezegen uydusu oldu — ondan sonraki tüm keşifler fotoğraf plakalarıyla yapıldı.",
+        matchKeys: ["amalthea"],
       },
     ],
     talk: [

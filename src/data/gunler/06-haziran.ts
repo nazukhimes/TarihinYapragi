@@ -42,6 +42,7 @@ export const HAZIRAN: Record<string, CuratedDay> = {
         title: "Soyuz 21 fırlatıldı",
         summary:
           "Sovyet kozmonotlar Boris Volinov ve Vitali Jolobov'u taşıyan Soyuz 21, Salyut 5 uzay istasyonuna bağlanmak üzere fırlatıldı. Görev, istasyonda rahatsız edici bir koku raporu nedeniyle planlanandan erken sonlandırıldı — yıllar sonra bunun bir sistem arızasından kaynaklandığı anlaşıldı; uzayda 'küçük' bir teknik sorunun bile bir görevi bitirebileceğinin erken örneklerinden biriydi.",
+        matchKeys: ["soyuz 21"],
       },
     ],
     talk: [
@@ -110,6 +111,7 @@ export const HAZIRAN: Record<string, CuratedDay> = {
         title: "Uzaya çıkan ilk kadın: Valentina Tereşkova",
         summary:
           "Sovyet kozmonot Tereşkova, Vostok 6 ile 71 kez Dünya'nın etrafında tur atarak o güne dek tüm Amerikalı astronotların toplam uzay süresinden daha uzun bir yolculuk yaptı. Bir tekstil fabrikası işçisiyken amatör paraşütçülüğü sayesinde programa seçilmişti; bir sonraki kadın kozmonotun uzaya çıkması tam 19 yıl sürdü.",
+        matchKeys: ["tereşkova"],
       },
     ],
     talk: [

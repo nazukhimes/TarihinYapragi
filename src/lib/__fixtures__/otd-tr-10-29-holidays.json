@@ -1,0 +1,150 @@
+{
+  "holidays": [
+    {
+      "text": "Türkiye'de Cumhuriyet Bayramı",
+      "pages": [
+        {
+          "type": "standard",
+          "title": "Cumhuriyet_Bayramı",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Cumhuriyet Bayramı</span></span>",
+          "namespace": {
+            "id": 0,
+            "text": ""
+          },
+          "wikibase_item": "Q802614",
+          "titles": {
+            "canonical": "Cumhuriyet_Bayramı",
+            "normalized": "Cumhuriyet Bayramı",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-main\">Cumhuriyet Bayramı</span></span>"
+          },
+          "pageid": 5648,
+          "thumbnail": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/%E0%A4%B6%E0%A4%BE%E0%A4%B2%E0%A5%87%E0%A4%AF_%E0%A4%B8%E0%A4%82%E0%A4%9A%E0%A4%B2%E0%A4%A8_%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%9C%E0%A4%BE%E0%A4%B8%E0%A4%A4%E0%A5%8D%E0%A4%A4%E0%A4%BE%E0%A4%95_%E0%A4%A6%E0%A4%BF%E0%A4%A8.jpg/330px-%E0%A4%B6%E0%A4%BE%E0%A4%B2%E0%A5%87%E0%A4%AF_%E0%A4%B8%E0%A4%82%E0%A4%9A%E0%A4%B2%E0%A4%A8_%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%9C%E0%A4%BE%E0%A4%B8%E0%A4%A4%E0%A5%8D%E0%A4%A4%E0%A4%BE%E0%A4%95_%E0%A4%A6%E0%A4%BF%E0%A4%A8.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+            "width": 330,
+            "height": 248
+          },
+          "originalimage": {
+            "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/%E0%A4%B6%E0%A4%BE%E0%A4%B2%E0%A5%87%E0%A4%AF_%E0%A4%B8%E0%A4%82%E0%A4%9A%E0%A4%B2%E0%A4%A8_%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%9C%E0%A4%BE%E0%A4%B8%E0%A4%A4%E0%A5%8D%E0%A4%A4%E0%A4%BE%E0%A4%95_%E0%A4%A6%E0%A4%BF%E0%A4%A8.jpg/3840px-%E0%A4%B6%E0%A4%BE%E0%A4%B2%E0%A5%87%E0%A4%AF_%E0%A4%B8%E0%A4%82%E0%A4%9A%E0%A4%B2%E0%A4%A8_%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%9C%E0%A4%BE%E0%A4%B8%E0%A4%A4%E0%A5%8D%E0%A4%A4%E0%A4%BE%E0%A4%95_%E0%A4%A6%E0%A4%BF%E0%A4%A8.jpg?utm_source=tr.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+            "width": 4160,
+            "height": 3120
+          },
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "37276982",
+          "tid": "9a9fe689-61de-11f1-ad32-69cddb38e5fb",
+          "timestamp": "2026-06-06T19:33:33Z",
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/Cumhuriyet_Bayram%C4%B1",
+              "revisions": "https://tr.wikipedia.org/wiki/Cumhuriyet_Bayram%C4%B1?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/Cumhuriyet_Bayram%C4%B1?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Cumhuriyet_Bayram%C4%B1"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/Cumhuriyet_Bayram%C4%B1",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/Cumhuriyet_Bayram%C4%B1",
+              "edit": "https://tr.wikipedia.org/wiki/Cumhuriyet_Bayram%C4%B1?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/Tart%C4%B1%C5%9Fma:Cumhuriyet_Bayram%C4%B1"
+            }
+          },
+          "extract": "Cumhuriyet Bayramı veya Cumhuriyet Günü, birçok ülkenin cumhuriyet rejimine geçtiği tarihi esas alarak, resmi tatil olarak kutladığı günün adıdır.",
+          "extract_html": "<p><b>Cumhuriyet Bayramı</b> veya <i>Cumhuriyet Günü</i>, birçok ülkenin cumhuriyet rejimine geçtiği tarihi esas alarak, resmi tatil olarak kutladığı günün adıdır.</p>",
+          "normalizedtitle": "Cumhuriyet Bayramı"
+        }
+      ]
+    },
+    {
+      "text": "Kızılay Haftası (29 Ekim - 4 Kasım)",
+      "pages": []
+    },
+    {
+      "text": "g",
+      "pages": [
+        {
+          "type": "no-extract",
+          "title": "Şablon:Aylar",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-namespace\">Şablon</span><span class=\"mw-page-title-separator\">:</span><span class=\"mw-page-title-main\">Aylar</span></span>",
+          "namespace": {
+            "id": 10,
+            "text": "Şablon"
+          },
+          "wikibase_item": "Q5613734",
+          "titles": {
+            "canonical": "Şablon:Aylar",
+            "normalized": "Şablon:Aylar",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-namespace\">Şablon</span><span class=\"mw-page-title-separator\">:</span><span class=\"mw-page-title-main\">Aylar</span></span>"
+          },
+          "pageid": 2009,
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "29788952",
+          "tid": "35a25462-fecb-11ed-aea3-e0341e3218f6",
+          "timestamp": "2023-05-30T09:20:25Z",
+          "description": "Wikimedia şablonu",
+          "description_source": "central",
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/%C5%9Eablon%3AAylar",
+              "revisions": "https://tr.wikipedia.org/wiki/%C5%9Eablon%3AAylar?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/%C5%9Eablon%3AAylar?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/%C5%9Eablon_tart%C4%B1%C5%9Fma:Aylar"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/%C5%9Eablon%3AAylar",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/%C5%9Eablon%3AAylar",
+              "edit": "https://tr.wikipedia.org/wiki/%C5%9Eablon%3AAylar?action=edit",
+              "talk": "https://tr.wikipedia.org/wiki/%C5%9Eablon_tart%C4%B1%C5%9Fma:Aylar"
+            }
+          },
+          "extract": "",
+          "extract_html": "",
+          "normalizedtitle": "Şablon:Aylar"
+        }
+      ]
+    },
+    {
+      "text": "t",
+      "pages": [
+        {
+          "type": "no-extract",
+          "title": "Şablon_tartışma:Aylar",
+          "displaytitle": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-namespace\">Şablon tartışma</span><span class=\"mw-page-title-separator\">:</span><span class=\"mw-page-title-main\">Aylar</span></span>",
+          "namespace": {
+            "id": 11,
+            "text": "Şablon tartışma"
+          },
+          "titles": {
+            "canonical": "Şablon_tartışma:Aylar",
+            "normalized": "Şablon tartışma:Aylar",
+            "display": "<span lang=\"tr\" dir=\"ltr\"><span class=\"mw-page-title-namespace\">Şablon tartışma</span><span class=\"mw-page-title-separator\">:</span><span class=\"mw-page-title-main\">Aylar</span></span>"
+          },
+          "pageid": 2074620,
+          "lang": "tr",
+          "dir": "ltr",
+          "revision": "31968073",
+          "tid": "5b882f6d-dc75-11ee-bd48-1a061f23ad73",
+          "timestamp": "2024-03-07T11:25:10Z",
+          "content_urls": {
+            "desktop": {
+              "page": "https://tr.wikipedia.org/wiki/%C5%9Eablon_tart%C4%B1%C5%9Fma%3AAylar",
+              "revisions": "https://tr.wikipedia.org/wiki/%C5%9Eablon_tart%C4%B1%C5%9Fma%3AAylar?action=history",
+              "edit": "https://tr.wikipedia.org/wiki/%C5%9Eablon_tart%C4%B1%C5%9Fma%3AAylar?action=edit"
+            },
+            "mobile": {
+              "page": "https://tr.wikipedia.org/wiki/%C5%9Eablon_tart%C4%B1%C5%9Fma%3AAylar",
+              "revisions": "https://tr.wikipedia.org/wiki/Special:History/%C5%9Eablon_tart%C4%B1%C5%9Fma%3AAylar",
+              "edit": "https://tr.wikipedia.org/wiki/%C5%9Eablon_tart%C4%B1%C5%9Fma%3AAylar?action=edit"
+            }
+          },
+          "extract": "",
+          "extract_html": "",
+          "normalizedtitle": "Şablon tartışma:Aylar"
+        }
+      ]
+    },
+    {
+      "text": "d",
+      "pages": []
+    }
+  ]
+}

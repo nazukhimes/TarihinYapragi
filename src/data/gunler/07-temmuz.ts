@@ -51,6 +51,7 @@ export const TEMMUZ: Record<string, CuratedDay> = {
         title: "50 yıllık bir tahmin doğrulandı",
         summary:
           "Higgs bozonu, Standart Model'in son eksik parçasıydı; keşfi parçacık fiziğinde onlarca yıllık bir arayışı kapattı. Peter Higgs, teorisini ortaya attığında 34 yaşındaydı; parçacığın bulunduğu duyurunun yapıldığı salonda, 83 yaşında gözyaşlarını tutamadı.",
+        matchKeys: ["tanrı parçacığı"],
       },
     ],
     talk: [
@@ -180,6 +181,7 @@ export const TEMMUZ: Record<string, CuratedDay> = {
         title: "New Horizons, Plüton'a ulaştı",
         summary:
           "Dokuz buçuk yıllık bir yolculuğun ardından NASA'nın New Horizons aracı, Plüton'un yanından geçerek cüce gezegenin ilk yakın çekim fotoğraflarını gönderdi. Görüntüler, Plüton'un buzdan kalp şeklinde devasa bir ovaya sahip olduğunu ve o güne dek sanılandan çok daha karmaşık, jeolojik olarak 'canlı' bir dünya olduğunu ortaya çıkardı.",
+        matchKeys: ["new horizons"],
       },
     ],
     talk: [
@@ -390,6 +392,7 @@ export const TEMMUZ: Record<string, CuratedDay> = {
         title: "İnsan, başka bir gök cisminde yürüdü",
         summary:
           "Apollo 11 ile Ay'a iniş, mühendislik tarihinin zirvelerinden: 400.000 kişinin çalıştığı program, 1960'ların bilgisayar gücüyle — bugünkü bir hesap makinesinden zayıf — başarıldı. Ay'dan getirilen 21,5 kg kaya ve toprak, Güneş Sistemi'nin tarihini yeniden yazdırdı.",
+        matchKeys: ["apollo 11"],
       },
       {
         id: "sci-0720-viking",
@@ -398,6 +401,7 @@ export const TEMMUZ: Record<string, CuratedDay> = {
         title: "Viking 1, Mars yüzeyine başarılı iniş yaptı",
         summary:
           "Tam yedi yıl sonra, yine 20 Temmuz'da: Viking 1, ABD'nin Mars'a ilk başarılı inişini gerçekleştirdi ve yüzeyden ilk net fotoğrafları gönderdi. Üzerindeki deneyler 'yaşam izi' aradı; sonuçlar bugün bile tartışılıyor.",
+        matchKeys: ["viking 1"],
       },
     ],
     talk: [

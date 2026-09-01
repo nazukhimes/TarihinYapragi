@@ -7,7 +7,7 @@
 | **Tahmini süre** | ~2 saat                                         |
 | **Bağımlılık**   | Yok — bağımsız, herhangi bir sırada yapılabilir |
 | **İlgili bulgu** | O-11, O-12, m-7, m-8                            |
-| **Durum**        | ⬜ Bekliyor                                     |
+| **Durum**        | ✅ Tamamlandı — 2026-09-01                      |
 
 ---
 
@@ -145,12 +145,16 @@ isterse koyu zemin, sabit üst bar ve dekoratif katmanlar çıktıya gidiyor.
 
 ## ☑️ Kabul Kriterleri
 
-- [ ] "Bugünün anlamı" şeridinde tek harflik kayıt yok (29 Ekim'de doğrulanır)
-- [ ] `gecerliHolidayMi` saf fonksiyon olarak ayrılmış ve test edilmiş
-- [ ] Aynı bilim olayı Bilim & Keşif'te iki kez listelenmiyor
-- [ ] `Ctrl+P` önizlemesi okunabilir: beyaz zemin, dekor yok, bölümler dolu basılıyor
-- [ ] `estimateMinutes`'ın hiçbir dalı erişilemez değil
-- [ ] `npm run kontrol` yeşil
+- [x] "Bugünün anlamı" şeridinde tek harflik kayıt yok (29 Ekim'de doğrulandı:
+      5 kayıttan 3'ü elendi, "Cumhuriyet Bayramı" ve "Kızılay Haftası" kaldı)
+- [x] `gecerliHolidayMi` saf fonksiyon olarak ayrılmış ve test edilmiş (9 test,
+      fixture 29 Ekim'in canlı yanıtı)
+- [x] Aynı bilim olayı Bilim & Keşif'te iki kez listelenmiyor (60 gün ölçüldü:
+      22 mükerrerin 22'si elendi, fazla eleme 0; 4 Ekim'de tarayıcıda doğrulandı)
+- [x] `Ctrl+P` önizlemesi okunabilir: beyaz zemin, dekor yok, bölümler dolu basılıyor
+      (yedi bölümün de `content-visibility` değeri `visible`, boş bölüm yok)
+- [x] `estimateMinutes`'ın hiçbir dalı erişilemez değil (eski eşikle 3 test kırmızı)
+- [x] `npm run kontrol` yeşil (399 test, 0 hata)
 
 ---
 
@@ -184,11 +188,74 @@ npm run kontrol
 
 ## 📝 Tamamlanma Kaydı
 
-> Talimat bitince doldurulur.
+- **Tamamlanma tarihi:** 2026-09-01
 
-- **Tamamlanma tarihi:**
 - **Değişen dosyalar:**
-- **m-8 için seçilen yol ve gerekçesi:**
-- **Elenen holiday kaydı sayısı (örnek bir günde):**
+  - `src/lib/wiki.ts` — `gecerliHolidayMi` + `MIN_HOLIDAY_UZUNLUK`, `WikiPage.namespace`,
+    `RawHoliday` dışa aktarımı, `estimateMinutes` yeniden eşiklendi ve dışa aktarıldı,
+    `GOVDE_MAX` sabiti
+  - `src/lib/wiki.test.ts` — `gecerliHolidayMi` (9 test) ve `estimateMinutes` (7 test)
+  - `src/lib/__fixtures__/otd-tr-10-29-holidays.json` — **yeni**, 29 Ekim'in canlı
+    `holidays` dizisi (5 kayıt, hiçbir alan silinmedi)
+  - `src/hooks/useGunVerisi.ts` — `allScience`'a `matchKeys` koruması
+  - `src/hooks/useGunVerisi.test.ts` — **yeni**, mükerrer ayıklama (4 test)
+  - `src/data/types.ts` — `ScienceMilestone.matchKeys?`
+  - `src/data/gunler/*.ts` — 12 dosya, 22 kayda `matchKeys` yazıldı
+  - `src/data/data.test.ts` — science `matchKeys` biçim testi
+  - `src/index.css` — `@media print` bloğu genişletildi
+
+- **m-8 için seçilen yol ve gerekçesi:** **Eşikler gerçek girdi aralığına çekildi**
+  (kırpma sınırı yükseltilmedi). 420 kart düzeninin taşıyabildiği uzunluk, yani bir
+  ürün kararı; onu bir rozet uğruna büyütmek görünen metni uzatır ve düzeni bozardı.
+  Rozet ise yalnızca gösterge — girdiye uyması gereken taraf o. Alt eşik 240'ta
+  bırakıldı (kısa kartların rozeti değişmesin), üst eşik kalan aralığın ortasına
+  çekildi: `(240 + 420) / 2 = 330`. İki sayı artık `GOVDE_MAX` üzerinden birbirine
+  bağlı; eskiden 420 ile 460 bağımsızdı ve sessizce ayrışmışlardı. Üç dal da
+  erişilebilir — eski eşikle üç test kırmızıya dönüyor (doğrulandı).
+  `src/lib/rekor.ts`'teki `sureTahmini`'ye dokunulmadı.
+
+- **Elenen holiday kaydı sayısı (örnek bir günde):** 29 Ekim'de **5 kayıttan 3'ü**
+  elendi (`g`, `t`, `d`), 2 gerçek tatil kaldı. Canlı olarak ölçülen diğer günler:
+  7 Mart 7→4, 5 Ağustos 3→0, 16 Ağustos 4→1, 29 Şubat 1→1.
+
 - **Sapmalar / notlar:**
+  1. **m-7 kısmen yapılmıştı.** Talimat "`src/index.css`'te hiç `@media print` bloğu
+     yok" diyor; aslında 12 satırlık bir blok vardı (`.reveal`, `noise`/`gridlines`/
+     `ticker-track`/`scanlines` gizleme, `header`/`nav` için `position: static`).
+     Yeni blok yazmak yerine mevcut blok genişletildi.
+  2. **`content-visibility` tuzağı ölçülerek doğrulandı.** Yazdırma kuralları
+     kapalıyken ekran dışı yedi bölümün de yüksekliği `contain-intrinsic-size`
+     yer tutucusuna, yani **800 px**'e düşüyor; kural açıkken gerçek yüksekliklerine
+     (18542 / 1171 / 1039 / 2186 / 1756 / 2004 / 6332 px) çıkıyor. Tuzak gerçek.
+  3. **`.outline-num` de gizlendi** (talimatın listesinde yoktu). Açılıştaki "dev
+     ambiyans yılları" ve bilim kartlarındaki yıl filigranı metnin üstüne biniyor;
+     ayrıca toplu `color: #000` kuralı onları kâğıtta simsiyah/kapkalın basardı.
+     Bilim kartındaki yıl zaten kartın içinde yazıyla da geçiyor.
+  4. **O-12 için `matchKeys` yazmak zorunluydu.** Yalnızca alanı eklemek kabul
+     kriterini karşılamıyordu: hiçbir kayıtta anahtar olmayınca koruma hiç çalışmaz.
+     Mükerrerlik **ölçüldü** — editör bilim kaydı olan 60 günün canlı Vikipedi
+     yanıtı çekilip `classifyItem` ile süzüldü: **22 gerçek mükerrer**. Anahtarlar
+     editör başlığından değil **API metninden** seçildi (API "Aleksey Leonov" der,
+     editör "Alexei"; API "Mariner-2", editör "Mariner 2"). Doğrulama betiği:
+     22/22 elendi, **fazla eleme 0**, kalan aynı-yıl çakışması 0.
+  5. **29 Ekim'de ARPANET mükerrer DEĞİL.** Vikipedi'nin 1969 ARPANET metnini
+     `classifyItem` "genel" sayıyor, yani Bilim & Keşif'e hiç girmiyor. O günkü
+     doğrulama bu yüzden 4 Ekim (Sputnik) üzerinden de yapıldı — orada koruma
+     gerçekten devreye giriyor.
+  6. Vikipedi API'si 60 günü hızlı çekerken hız sınırına takıldı (35 yanıt hata
+     metni döndü); istekler 6 saniye arayla tekrarlandı.
+
 - **Sonraki talimata not:**
+  - **`holidays` dil seçimi süzgeçten ÖNCE yapılıyor** (`wiki.ts`,
+    `tr?.holidays?.length ? tr.holidays : en?.holidays`). 5 Ağustos gibi TR listesi
+    **yalnızca çöpten** ibaret olan günlerde liste dolu sayılıp EN'e düşülmüyor;
+    süzgeçten sonra şerit boş kalıyor. Kabul kriteri bunu ("ya dolu ya hiç yok")
+    karşılıyor, o yüzden kapsam genişletilmedi. Düzeltilecekse dikkat: `events`/
+    `births`/`deaths` için EN yedeği dil rozetiyle gösteriliyor, `holidays` içinse
+    `sources` kaydı yok — İngilizce metin Türkçe şeride rozetsiz girer.
+  - `ScienceMilestone.matchKeys` **isteğe bağlı** kalsın: yalnızca Vikipedi'de
+    gerçekten otomatik karşılığı çıkan kayıtlara yazılır. Zorunlu yapmak, karşılığı
+    olmayan 45 kayda uydurma anahtar yazdırır.
+  - Yazdırma bloğu `@media print` içinde; ekranda denemek için bloğu geçici olarak
+    `@media screen` yapıp sayfayı yeniden yüklemek en sadık yöntem (CSSOM'dan
+    kural enjekte etmek düzeni oturmuş sayfada boyama artığı bırakıyor).

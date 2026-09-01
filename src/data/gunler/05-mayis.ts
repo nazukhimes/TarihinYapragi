@@ -270,6 +270,7 @@ export const MAYIS: Record<string, CuratedDay> = {
         title: "Bir konuşma, bir bütçeyi 500 kat artırdı",
         summary:
           "Kennedy'nin Ay hedefi, yalnızca bir söylemden ibaret değildi — NASA'nın bütçesini birkaç yıl içinde defalarca katladı, zirvede federal bütçenin yaklaşık yüzde 4'üne ulaştı. 400.000'i aşkın kişi programda çalıştı. Tarihte nadiren bir siyasi konuşma, bu denli somut ve ölçülebilir bir mühendislik hedefine dönüştü.",
+        matchKeys: ["kennedy"],
       },
     ],
     talk: [

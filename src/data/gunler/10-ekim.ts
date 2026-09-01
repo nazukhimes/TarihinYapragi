@@ -51,6 +51,7 @@ export const EKIM: Record<string, CuratedDay> = {
         title: "İnsanlık, Dünya'nın dışına ilk nesnesini gönderdi",
         summary:
           "Sputnik'in fırlatılması, ondan dört yıl sonra ilk insanlı uçuşa, on iki yıl sonra Ay'a inişe uzanan bir yarışın startıydı. Uydunun kendisi bilimsel açıdan mütevazıydı — yalnızca sıcaklık ve basınç ölçen bir radyo vericisiydi — ama 'insan yapımı bir nesne Dünya'nın dışına çıkabilir' fikrini ilk kez kanıtladı.",
+        matchKeys: ["sputnik"],
       },
     ],
     talk: [

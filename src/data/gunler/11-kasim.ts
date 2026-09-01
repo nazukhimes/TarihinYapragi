@@ -42,6 +42,7 @@ export const KASIM: Record<string, CuratedDay> = {
         title: "İnsanlık ilk kez vücudun içine baktı",
         summary:
           "Röntgen'in keşfi, tıp tarihinin en hızlı yayılan buluşlarından biri oldu — keşiften birkaç ay sonra hastaneler kırık kemikleri X ışınıyla teşhis etmeye başladı. Bugün her yıl milyarlarca röntgen, tomografi ve mamografi çekimi, o karanlık laboratuvardaki tesadüfi parıltıya dayanıyor.",
+        matchKeys: ["röntgen"],
       },
     ],
     talk: [
@@ -329,6 +330,7 @@ export const KASIM: Record<string, CuratedDay> = {
         title: "Evrim teorisi kitaplaştı",
         summary:
           "Darwin'in kitabı, canlı çeşitliliğini doğaüstü bir açıklama olmadan, gözlemlenebilir bir mekanizmayla (doğal seçilim) açıklayan ilk kapsamlı çalışmaydı. Fikir o kadar tartışmalıydı ki Darwin, kitabının son cümlesinde bile insanı doğrudan zikretmekten kaçındı; insanın da bu sürecin bir parçası olduğunu ancak 12 yıl sonra, başka bir kitapla açıkça yazacaktı.",
+        matchKeys: ["darwin"],
       },
     ],
     talk: [

@@ -37,6 +37,23 @@ describe("CURATED bütünlüğü", () => {
     );
   });
 
+  it("science matchKeys yazılmışsa boş değil ve küçük harfli", () => {
+    // Eşleşme `trLower(metin).includes(trLower(anahtar))` ile yapılıyor; büyük
+    // harfli bir anahtar da çalışır ama editör dosyalarında yazım tek biçim
+    // kalsın diye küçük harf şart koşuluyor (O-12). Alan İSTEĞE BAĞLI: yalnızca
+    // Vikipedi'de gerçekten otomatik karşılığı çıkan kayıtlara yazılır.
+    gunler.forEach(([k, g]) =>
+      g.science.forEach((s) => {
+        if (s.matchKeys === undefined) return;
+        expect(s.matchKeys.length, `${k}/${s.id}`).toBeGreaterThan(0);
+        s.matchKeys.forEach((anahtar) => {
+          expect(anahtar.trim(), `${k}/${s.id}`).not.toBe("");
+          expect(anahtar, `${k}/${s.id}`).toBe(anahtar.toLocaleLowerCase("tr-TR"));
+        });
+      })
+    );
+  });
+
   it("geçerli kategori ve dosya türleri", () => {
     gunler.forEach(([k, g]) => {
       g.events?.forEach((e) => expect(Object.keys(CATEGORIES), k).toContain(e.category));

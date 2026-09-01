@@ -13,6 +13,9 @@ export interface WikiPage {
   thumbnail?: { source: string };
   originalimage?: { source: string };
   content_urls?: { desktop?: { page?: string } };
+  /** Vikipedi ad uzayı. `0` madde uzayıdır; `10` Şablon, `11` Şablon tartışma.
+   *  Yalnızca `holidays` süzgecinde okunur (bkz. `gecerliHolidayMi`, O-11). */
+  namespace?: { id: number; text?: string };
 }
 
 export interface OtdItem {
@@ -54,11 +57,15 @@ interface RawOtd {
   year?: number;
   pages?: WikiPage[];
 }
+export interface RawHoliday {
+  text?: string;
+  pages?: WikiPage[];
+}
 interface RawDay {
   events?: RawOtd[];
   births?: RawOtd[];
   deaths?: RawOtd[];
-  holidays?: { text?: string; pages?: WikiPage[] }[];
+  holidays?: RawHoliday[];
   selected?: RawOtd[];
 }
 
@@ -91,6 +98,45 @@ interface CachedDay {
  * 5, kırpmanın nadirleştiği ve çip satırının hâlâ okunabildiği yer.
  */
 export const PAGES_LIMIT = 5;
+
+/** Bir `holidays` kaydının kırpılmış metni en az bu kadar karakter olmalı. */
+export const MIN_HOLIDAY_UZUNLUK = 2;
+
+/**
+ * Vikipedi TR'nin "bugün tarihte" şablonu, `holidays` listesine kendi gezinme
+ * çubuğunun **g / t / d** (görüntüle / tartışma / değiştir) bağlantılarını da
+ * karıştırıyor. Ekranda şöyle görünüyordu (O-11):
+ *
+ *     BUGÜNÜN ANLAMI
+ *     ◆ g   ◆ t   ◆ d
+ *
+ * Ham veride bu üç kaydın imzası şu (2026-09-01'de 5 ve 16 Ağustos, 7 Mart ve
+ * 29 Ekim'de canlı doğrulandı):
+ *
+ *     "g" → pages: [{ namespace: { id: 10 }, title: "Şablon:Aylar" }]
+ *     "t" → pages: [{ namespace: { id: 11 }, title: "Şablon_tartışma:Aylar" }]
+ *     "d" → pages: []                       ← hiç sayfası yok
+ *
+ * Bu yüzden **iki bağımsız kural da gerekli**: ad uzayı kuralı "d"yi yakalamaz
+ * (sayfası yoktur), uzunluk kuralı da tek başına yeterli görünse bile ad uzayı
+ * kuralı asıl nedeni ifade eder ve ileride uzayabilecek şablon artıklarını da
+ * eler.
+ *
+ * DİKKAT: `pages`ı boş olan kayıtların hepsi çöp değildir — "Kızılay Haftası
+ * (29 Ekim - 4 Kasım)" ve "Uluslararası Hacı Bektaş-ı Veli anma günü" gerçek
+ * kayıtlar oldukları hâlde `pages: []` ile geliyor. Boş `pages` tek başına
+ * eleme sebebi olamaz.
+ *
+ * Kaynak Vikipedi'nin kendi şablonu; uygulamanın hatası değil ama uygulamanın
+ * süzmesi gerekiyor.
+ */
+export function gecerliHolidayMi(h: RawHoliday): boolean {
+  const metin = h.text?.trim() ?? "";
+  if (metin.length < MIN_HOLIDAY_UZUNLUK) return false;
+  // Ad uzayı bilinmiyorsa (alan yoksa) kayda karışılmaz; yalnızca "madde değil"
+  // diye AÇIKÇA işaretlenmiş sayfalar eleme sebebidir.
+  return !(h.pages ?? []).some((p) => p.namespace != null && p.namespace.id !== 0);
+}
 
 /** Salt yıl başlığı: `1985`, `2016`, `MÖ 44`. */
 const SALT_YIL = /^(MÖ\s*)?\d{1,4}$/;
@@ -306,7 +352,7 @@ export async function fetchDayData(
 
   const holidaysRaw = tr?.holidays?.length ? tr.holidays : en?.holidays || [];
   const holidays: HolidayItem[] = holidaysRaw
-    .filter((h) => h.text)
+    .filter(gecerliHolidayMi)
     .map((h, i) => ({ text: h.text!.trim(), id: `hol-${i}` }));
 
   const data: DayData = {
@@ -334,10 +380,38 @@ function firstSentence(s: string, max = 220): string {
   return out.length > max ? out.slice(0, max - 1).trimEnd() + "…" : out;
 }
 
-function estimateMinutes(body: string): 1 | 2 | 3 {
+/** Otomatik kart gövdesinin karakter üst sınırı. `buildAutoTalk`'ın her çağrı
+ *  noktası girdiyi `firstSentence(..., ≤ GOVDE_MAX)` ile kırpar; `estimateMinutes`
+ *  eşikleri bu sayıya bağlıdır (m-8). İkisi ayrı ayrı değiştirilemez. */
+const GOVDE_MAX = 420;
+
+/** Okuma süresi rozeti (dakika).
+ *
+ *  Eşikler **gerçek girdi aralığına** göre seçilir. Eski üst eşik 460'tı ama
+ *  gövdeler her zaman ≤ `GOVDE_MAX` (420) karakterdi: 460 hiç aşılamıyordu, yani
+ *  "3" dalı **hiçbir zaman çalışmıyordu** (m-8, ölü dal).
+ *
+ *  m-8 için seçilen yol: **kırpma sınırını yükseltmek değil, eşikleri gerçek
+ *  aralığa çekmek.** Gerekçe: 420 kart düzeninin taşıyabildiği metin uzunluğu,
+ *  yani ürün kararı; onu rozet uğruna büyütmek görünen metni uzatır ve düzeni
+ *  bozar. Rozet ise yalnızca bir göstergedir, girdiye uymak zorunda olan taraf o.
+ *
+ *  - Alt eşik 240'ta bırakıldı → kısa kartların mevcut rozeti değişmiyor.
+ *  - Üst eşik kalan gerçek aralığın ortasına çekildi: (240 + 420) / 2 = 330.
+ *
+ *  Üç dal da erişilebilir. `GOVDE_MAX` değişirse `UST_ESIK` de değişmeli —
+ *  `wiki.test.ts` bunu doğrulayan bir testle bağlar.
+ *
+ *  Not: `src/lib/rekor.ts` içindeki `sureTahmini` aynı sayıları kullanır ama
+ *  oradaki girdi kırpılmadığı için 3 dalı zaten erişilebilir; o fonksiyona
+ *  dokunulmadı (T-21 kapsam dışı). */
+const ALT_ESIK = 240;
+const UST_ESIK = (ALT_ESIK + GOVDE_MAX) / 2; // 330
+
+export function estimateMinutes(body: string): 1 | 2 | 3 {
   const n = body.length;
-  if (n < 240) return 1;
-  if (n < 460) return 2;
+  if (n < ALT_ESIK) return 1;
+  if (n < UST_ESIK) return 2;
   return 3;
 }
 
@@ -351,8 +425,8 @@ export function buildAutoTalk(day: DayData): TalkCard[] {
       id: "auto-lead",
       category: featured.year <= 500 ? "Kadim Tarih" : featured.year < 1500 ? "Orta Çağ" : "Tarih",
       hook: `Yıl ${featured.year}: Bugünün manşeti`,
-      body: firstSentence(body, 420),
-      minutes: estimateMinutes(firstSentence(body, 420)),
+      body: firstSentence(body, GOVDE_MAX),
+      minutes: estimateMinutes(firstSentence(body, GOVDE_MAX)),
     });
   }
 
@@ -401,8 +475,8 @@ export function buildAutoTalk(day: DayData): TalkCard[] {
       id: "auto-dark",
       category: "Karanlık Tarih",
       hook: `Karanlık arşivden: ${dark.theme}`,
-      body: firstSentence(dark.d.text, 420),
-      minutes: estimateMinutes(firstSentence(dark.d.text, 420)),
+      body: firstSentence(dark.d.text, GOVDE_MAX),
+      minutes: estimateMinutes(firstSentence(dark.d.text, GOVDE_MAX)),
     });
   }
 

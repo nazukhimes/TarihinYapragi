@@ -329,6 +329,7 @@ export const NISAN: Record<string, CuratedDay> = {
         title: "Hubble Uzay Teleskobu yörüngeye yerleştirildi",
         summary:
           "Discovery uzay mekiği, Hubble'ı yörüngeye bıraktı. İlk fotoğraflar bulanıktı — aynasında üretim hatası vardı. 1993'te astronotlar yörüngede 'gözlük' taktı ve Hubble, evrenin en derin görüntülerini çekmeye başladı. 35 yılı aşkın süredir hâlâ çalışıyor.",
+        matchKeys: ["hubble"],
       },
       {
         id: "sci-0425-robins",

@@ -187,6 +187,7 @@ export const ARALIK: Record<string, CuratedDay> = {
         title: "Mariner 2, Venüs'ün yanından geçti",
         summary:
           "NASA'nın Mariner 2 uzay aracı, başka bir gezegenin yanından başarıyla geçen ilk araç oldu; Venüs'ün yüzey sıcaklığının önceki tahminlerin çok üzerinde, kurşunu eritecek kadar yüksek olduğunu ölçtü. Görev, 'ikiz gezegen' sanılan Venüs'ün aslında Dünya'dan ne kadar farklı, yaşama elverişsiz bir dünya olduğunu ilk kez kanıtladı.",
+        matchKeys: ["mariner-2", "mariner 2"],
       },
     ],
     talk: [
@@ -255,6 +256,7 @@ export const ARALIK: Record<string, CuratedDay> = {
         title: "Douglas DC-3 ilk uçuşunu yaptı",
         summary:
           "Wright Kardeşler'in ilk uçuşundan yalnızca 32 yıl sonra gökyüzüne çıkan DC-3, yolcu havacılığını kâr edebilir bir iş koluna dönüştüren ilk uçak oldu. Güvenilirliği ve dayanıklılığıyla tanınan DC-3'ler, üretiminin üzerinden 90 yılı aşkın süre geçmesine rağmen dünyanın bazı bölgelerinde hâlâ uçuyor.",
+        matchKeys: ["dc-3"],
       },
     ],
     talk: [
@@ -391,6 +393,7 @@ export const ARALIK: Record<string, CuratedDay> = {
         title: "James Webb Uzay Teleskobu fırlatıldı",
         summary:
           "Hubble'ın halefi olarak tasarlanan James Webb Uzay Teleskobu, bir Ariane 5 roketiyle Fransız Guyanası'ndan fırlatıldı. Kızılötesi ışıkta gözlem yapan dev aynası, katlanarak fırlatılıp uzayda otomatik açıldı; teleskop, evrenin ilk galaksilerinden bazılarının ışığını yakalayarak Big Bang'den yalnızca birkaç yüz milyon yıl sonrasına kadar geriye bakabiliyor.",
+        matchKeys: ["james webb"],
       },
     ],
     talk: [

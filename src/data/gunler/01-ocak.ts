@@ -51,6 +51,7 @@ export const OCAK: Record<string, CuratedDay> = {
         title: "Hubble: Samanyolu evrenin tamamı değilmiş",
         summary:
           "Edwin Hubble'ın bir bilim toplantısında okunan bildirisi, Andromeda'nın Samanyolu içinde bir bulutsu değil, milyonlarca ışıkyılı uzaktaki ayrı bir galaksi olduğunu duyurdu. Evrenin tek bir galaksiden ibaret olmadığı ilk kez kanıtlanmıştı — kozmolojinin ölçeği bir gecede katrilyonlarca kat büyüdü.",
+        matchKeys: ["edwin hubble"],
       },
     ],
     talk: [

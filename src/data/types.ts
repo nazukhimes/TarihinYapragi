@@ -53,6 +53,11 @@ export interface ScienceMilestone {
   field: string;
   title: string;
   summary: string;
+  /** Aynı olayın Vikipedi'den gelen otomatik kaydını elemek için aranan
+   *  anahtarlar — `CuratedEvent.matchKeys` ile aynı iş, aynı kural (O-12).
+   *  İsteğe bağlı: yazılmadığında eleme yapılmaz, kayıt bozulmaz. Yalnızca
+   *  otomatik karşılığı GERÇEKTEN çıkan kayıtlara yazılır (bkz. T-21). */
+  matchKeys?: string[];
 }
 
 export interface TalkCard {

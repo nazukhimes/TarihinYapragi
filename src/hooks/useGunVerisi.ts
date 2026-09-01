@@ -158,11 +158,18 @@ export function useGunVerisi(
 
   /* ---------- bilim ---------- */
   const allScience: (ScienceMilestone & { curated?: boolean })[] = useMemo(() => {
-    const base = (curated?.science || []).map((s) => ({ ...s, curated: true as const }));
+    const cur = curated?.science || [];
+    const base = cur.map((s) => ({ ...s, curated: true as const }));
     const auto: (ScienceMilestone & { curated?: boolean })[] = (data?.events || [])
       .filter((e) => {
         const c = classifyItem(e.text);
-        return c === "bilim" || c === "kesif";
+        if (c !== "bilim" && c !== "kesif") return false;
+        // Editör kaydı olan olayın Vikipedi karşılığı listelenmez — aksi hâlde
+        // aynı dönüm noktası bölümde iki kez çıkıyordu (O-12). Koruma
+        // `mergedEvents`'teki ile birebir aynı: küratörlü kaydın matchKeys'i
+        // olayın metninde geçiyorsa otomatik kayıt düşer.
+        const t = trLower(e.text);
+        return !cur.some((cs) => (cs.matchKeys || []).some((k) => t.includes(trLower(k))));
       })
       .map((e) => ({
         id: `sci-${e.id}`,

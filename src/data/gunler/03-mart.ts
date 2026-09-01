@@ -315,6 +315,7 @@ export const MART: Record<string, CuratedDay> = {
         title: "Alexei Leonov uzayda yürüyen ilk insan oldu",
         summary:
           "Voskhod 2 görevinde kapsülden dışarı çıkan Sovyet kozmonot Leonov, boşlukta yaklaşık 12 dakika geçirdi. Uzay giysisi boşlukta beklenmedik şekilde şişince kapsüle geri girmekte zorlandı; giysisinden bir valfle havayı boşaltarak son anda içeri sığabildi — uzay tarihinin anlatılmayan ilk kriz anlarından biri.",
+        matchKeys: ["leonov"],
       },
     ],
     talk: [

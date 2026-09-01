@@ -42,6 +42,7 @@ export const SUBAT: Record<string, CuratedDay> = {
         title: "Ay'a ilk yumuşak iniş yapıldı",
         summary:
           "Sovyet uzay aracı Luna 9, Ay yüzeyine parçalanmadan inen ilk araç oldu ve beş dakika içinde Dünya'ya veri göndermeye başladı. Aracın gönderdiği ilk panoramik fotoğraflar, Ay yüzeyinin bazı bilim insanlarının korktuğu gibi derin bir toz tabakasına gömülü olmadığını, sert ve inişe uygun olduğunu kanıtladı — üç yıl sonraki insanlı inişin önünü açan kritik bir bulgu.",
+        matchKeys: ["luna 9"],
       },
     ],
     talk: [
@@ -204,6 +205,7 @@ export const SUBAT: Record<string, CuratedDay> = {
         title: "Telefonun iki patenti aynı gün dosyalandı",
         summary:
           "Alexander Graham Bell'in patent başvurusu ile Elisha Gray'in benzer tasarımı aynı gün, saatler arayla patent ofisine ulaştı. Patent Bell'e verildi; tarih, telefonu ona yazdı ama tartışma 150 yıldır bitmedi.",
+        matchKeys: ["telefon patenti"],
       },
     ],
     talk: [
@@ -286,6 +288,7 @@ export const SUBAT: Record<string, CuratedDay> = {
         title: "Bir sensör hatası, tarihi bir uçuşu az kalsın gölgeledi",
         summary:
           "Glenn'in uçuşu sırasında yaşanan yanlış alarm, uzay mühendisliğinde 'fazlalıklı doğrulama' (birden fazla bağımsız sensörle kontrol) ilkesinin önemini gösterdi. Görev ayrıca, insan vücudunun yerçekimsiz ortamda yutkunma, görme ve denge açısından beklenenden çok daha iyi uyum sağladığını kanıtlayarak daha uzun uzay görevlerinin önünü açtı.",
+        matchKeys: ["john glenn", "friendship 7"],
       },
     ],
     talk: [

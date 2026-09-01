@@ -164,6 +164,7 @@ export const AGUSTOS: Record<string, CuratedDay> = {
         title: "Mars'ın uydusu Deimos keşfedildi",
         summary:
           "Amerikalı gökbilimci Asaph Hall, Washington Deniz Gözlemevi'nde Mars'ı günlerce tararken gezegenin küçük uydusu Deimos'u buldu; altı gün sonra da diğer uydu Phobos'u keşfetti. Hall, aramayı neredeyse bırakacaktı — eşi Angelina Stickney, onu bir gece daha denemesi için ikna etmişti.",
+        matchKeys: ["deimos"],
       },
     ],
     talk: [
@@ -335,6 +336,7 @@ export const AGUSTOS: Record<string, CuratedDay> = {
         title: "Voyager 2, Cape Canaveral'dan fırlatıldı",
         summary:
           "İnsanlığın en uzak elçisi yolculuğuna başladı. Jüpiter, Satürn, Uranüs ve Neptün'ü yakından gören tek araç olan Voyager 2, bugün Güneş Sistemi'nin dışına çıktı ve hâlâ Dünya'ya veri gönderiyor.",
+        matchKeys: ["voyager 2"],
       },
       {
         id: "sci-0820-belka",
