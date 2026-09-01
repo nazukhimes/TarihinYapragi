@@ -42,6 +42,9 @@ export interface CaseFile {
   tags: string[];
   /** Kayıt elle mi yazıldı, Vikipedi taramasından mı geldi. */
   curated?: boolean;
+  /** Detay panelindeki "Vikipedi'de ara" çıkışının hangi Vikipedi'ye gideceği.
+   *  Editör dosyalarında yazılmaz — varsayılan "tr" (T-19). */
+  lang?: "tr" | "en";
 }
 
 export interface ScienceMilestone {

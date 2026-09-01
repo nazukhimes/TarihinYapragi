@@ -23,3 +23,18 @@ export function SkeletonCards() {
     </div>
   );
 }
+
+/**
+ * Panel içi bekleme göstergesi — "Daha fazlasını oku" basıldığında düğmenin
+ * yerine geçer (T-19 madde 5). Yukarıdaki iskeletlerle aynı desen:
+ * `animate-pulse` + `bg-panel-2` çubuklar.
+ */
+export function SkeletonParagraf() {
+  return (
+    <div className="animate-pulse space-y-2" role="status" aria-label="Özet yükleniyor">
+      {[92, 100, 74].map((w) => (
+        <div key={w} className="h-3 bg-panel-2 rounded-sm" style={{ width: `${w}%` }} />
+      ))}
+    </div>
+  );
+}

@@ -8,7 +8,12 @@ import {
 } from "../data";
 import { classifyItem, type OtdItem } from "../lib/wiki";
 import type { OlayMakalesi } from "../lib/olayMakalesi";
-import { IconArrow, IconExternal, IconSearch, IconSkull, Modal, Reveal } from "./ui";
+import { DetayPaneli, type OlayKaynagi } from "./DetayPaneli";
+import { IconArrow, IconSkull, Modal, Reveal } from "./ui";
+
+/** T-19'da `DetayPaneli`'ne taşındı; buradaki dışa aktarım eski çağrılar için durur. */
+export { wikiAramaUrl } from "./DetayPaneli";
+export type { OlayKaynagi } from "./DetayPaneli";
 
 const trLower = (s: string) => s.toLocaleLowerCase("tr-TR");
 
@@ -29,15 +34,6 @@ function centuryOf(y: number): string {
 
 /* ================= ZAMAN TÜNELİ ================= */
 
-/** Olayla ilgili tek bir Vikipedi sayfası — çip olarak basılır. */
-export interface OlayKaynagi {
-  title: string;
-  /** API'nin kısa tanımı ("ABD başkanının resmî konutu"). Boş gelebilir. */
-  description?: string;
-  extract?: string;
-  url: string;
-}
-
 export interface MergedEvent {
   id: string;
   year: number;
@@ -53,19 +49,22 @@ export interface MergedEvent {
   pages: OlayKaynagi[];
 }
 
-/** Detay panelinde gösterilecek Vikipedi özeti — özet taşıyan ilk sayfadan. */
-export function olayOzeti(e: Pick<MergedEvent, "pages">): string | undefined {
-  return e.pages.find((p) => p.extract)?.extract;
+/**
+ * Panelde gösterilecek özeti taşıyan sayfa — özet taşıyan **ilk** sayfa.
+ *
+ * Metin, görsel ve künye bilerek aynı sayfadan alınır: farklı sayfalardan
+ * derlenen bir panel, İngiltere'nin özetini Beyaz Saray'ın fotoğrafıyla
+ * yan yana koyardı. 6 günlük canlı örnekte (233 olay) bu tercihin bedeli
+ * küçük: en az bir sayfasında görsel olan 223 olayın 215'inde görsel zaten
+ * **özeti veren** sayfada duruyor.
+ */
+export function olayOzetSayfasi(e: Pick<MergedEvent, "pages">): OlayKaynagi | undefined {
+  return e.pages.find((p) => p.extract);
 }
 
-/**
- * Olay metniyle Vikipedi'nin **gerçek arama sayfasını** açar.
- *
- * Hiçbir sayfanın olayın kendisi olmadığı durumların tek dürüst çıkışı budur:
- * 1958 Bursa Kapalı Çarşı yangınının beslemedeki tek sayfası "Bursa"dır.
- */
-export function wikiAramaUrl(lang: "tr" | "en", metin: string): string {
-  return `https://${lang}.wikipedia.org/w/index.php?search=${encodeURIComponent(metin)}`;
+/** Detay panelinde gösterilecek Vikipedi özeti — özet taşıyan ilk sayfadan. */
+export function olayOzeti(e: Pick<MergedEvent, "pages">): string | undefined {
+  return olayOzetSayfasi(e)?.extract;
 }
 
 export function TimelineSection({
@@ -131,7 +130,9 @@ export function TimelineSection({
             const showCentury = !prev || centuryOf(prev.year) !== centuryOf(e.year);
             const open = openId === e.id;
             const catInfo = CATEGORIES[e.category];
-            const ozet = olayOzeti(e);
+            const ozetSayfasi = olayOzetSayfasi(e);
+            const ozet = ozetSayfasi?.extract;
+            const makale = olayMakaleleri[e.id];
             return (
               <li key={e.id}>
                 {showCentury && (
@@ -194,11 +195,27 @@ export function TimelineSection({
 
                   {open && (
                     <div
-                      className="rise-in mt-3 max-w-3xl border-l-2 pl-4 py-1 text-[14.5px] leading-relaxed text-ink-dim"
+                      className="rise-in mt-3 max-w-3xl border-l-2 pl-4 py-1"
                       style={{ borderColor: catInfo.color }}
                     >
-                      {(e.detail || ozet) && <p>{e.detail || ozet}</p>}
-                      <KaynakCipleri event={e} makale={olayMakaleleri[e.id]} />
+                      <DetayPaneli
+                        baslik={e.text}
+                        metin={e.detail || ozet}
+                        // Editör metninin kaynağı editördür; görsel ve künye
+                        // yalnızca besleme özetiyle birlikte anlamlıdır.
+                        gorsel={e.detail ? undefined : ozetSayfasi?.thumbnail}
+                        metinKaynagi={e.detail ? undefined : ozetSayfasi}
+                        sayfalar={e.pages}
+                        olayMakalesi={makale}
+                        aramaMetni={e.text}
+                        dil={e.lang}
+                        kaynak={e.curated ? "editor" : "otomatik"}
+                        // Editör kaydında "Editör notu" çipi satırın başında zaten var.
+                        rozetGoster={!e.curated}
+                        // Beslemedeki her sayfanın özeti elimizde; okunacak fazlası
+                        // yalnızca çapraz eşlemenin bulduğu olay makalesinde var.
+                        ozetBasligi={makale?.title}
+                      />
                     </div>
                   )}
                 </Reveal>
@@ -207,72 +224,6 @@ export function TimelineSection({
           })}
         </ol>
       )}
-    </div>
-  );
-}
-
-/**
- * Olayın kaynak çıkışları: ilgili sayfaların hepsi + Vikipedi araması.
- *
- * **Tek bir sayfa "doğru cevap" olarak dayatılmaz.** Besleme sayfaları olay
- * metnindeki geçiş sırasına göre verir; hangisinin olayın kendisi olduğunu
- * güvenilir biçimde seçen bir kural yoktur (O-14'te bir puanlama sezgiseli
- * denendi ve 3 olayda sonucu bozduğu için reddedildi). Bu yüzden hepsi
- * açıklamasıyla listelenir, seçim kullanıcınındır.
- */
-function KaynakCipleri({ event: e, makale }: { event: MergedEvent; makale?: OlayMakalesi }) {
-  // Çapraz eşleme zaten listede olan bir sayfayı bulduysa aynı bağlantıyı iki kez basma.
-  const cipler = makale ? e.pages.filter((p) => p.url !== makale.url) : e.pages;
-
-  return (
-    <div className={e.detail || olayOzeti(e) ? "mt-4" : ""}>
-      <p className="font-mono text-[10px] tracking-[0.24em] uppercase text-ink-faint mb-2">
-        Kaynaklar
-      </p>
-      <div className="flex flex-wrap gap-2">
-        {makale && (
-          <a
-            href={makale.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group/cip max-w-full rounded-sm border border-gold/50 bg-gold/[0.08] px-3 py-1.5 transition-colors hover:border-gold hover:bg-gold/15"
-          >
-            <span className="block font-mono text-[9.5px] tracking-[0.2em] uppercase text-gold">
-              Bu olay hakkında
-            </span>
-            <span className="block text-[13px] leading-snug text-ink group-hover/cip:text-gold transition-colors">
-              {makale.title} <IconExternal className="inline w-3 h-3 align-[-1px]" />
-            </span>
-          </a>
-        )}
-        {cipler.map((p) => (
-          <a
-            key={p.url}
-            href={p.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group/cip max-w-full sm:max-w-[280px] rounded-sm border border-line bg-panel-2/60 px-3 py-1.5 transition-colors hover:border-sky/60 hover:bg-panel-2"
-          >
-            <span className="block text-[13px] leading-snug text-ink group-hover/cip:text-sky transition-colors">
-              {p.title} <IconExternal className="inline w-3 h-3 align-[-1px]" />
-            </span>
-            {p.description && (
-              <span className="block text-[11.5px] leading-snug text-ink-faint line-clamp-1">
-                {p.description}
-              </span>
-            )}
-          </a>
-        ))}
-        <a
-          href={wikiAramaUrl(e.lang, e.text)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 self-start rounded-sm border border-dashed border-line px-3 py-1.5 font-mono text-[11px] tracking-wider uppercase text-ink-faint transition-colors hover:text-gold hover:border-gold/60"
-        >
-          <IconSearch className="w-3.5 h-3.5" />
-          Vikipedi&apos;de ara
-        </a>
-      </div>
     </div>
   );
 }
@@ -521,48 +472,50 @@ export function PeopleRow({
                 ✕
               </button>
             </div>
-            <div className="flex gap-5 items-start">
-              {modal.thumb && (
-                <img
-                  src={modal.thumb}
-                  alt={modal.name}
-                  width={96}
-                  height={112}
-                  className="w-24 h-28 object-cover object-top rounded-sm border border-line shrink-0"
-                />
-              )}
-              <div>
-                <h3
-                  id={`person-modal-${modal.id}`}
-                  className="font-display font-bold text-2xl md:text-3xl leading-tight text-ink"
-                >
-                  {modal.name}
-                </h3>
-                <span
-                  className="mt-2 inline-block font-mono text-[10.5px] tracking-[0.16em] uppercase px-2 py-1 rounded-sm"
-                  style={{
-                    color: CATEGORIES[modal.category].color,
-                    background: `${CATEGORIES[modal.category].color}1c`,
-                    border: `1px solid ${CATEGORIES[modal.category].color}44`,
-                  }}
-                >
-                  {CATEGORIES[modal.category].label}
-                </span>
-              </div>
+            <h3
+              id={`person-modal-${modal.id}`}
+              className="font-display font-bold text-2xl md:text-3xl leading-tight text-ink"
+            >
+              {modal.name}
+            </h3>
+            <span
+              className="mt-2 inline-block font-mono text-[10.5px] tracking-[0.16em] uppercase px-2 py-1 rounded-sm"
+              style={{
+                color: CATEGORIES[modal.category].color,
+                background: `${CATEGORIES[modal.category].color}1c`,
+                border: `1px solid ${CATEGORIES[modal.category].color}44`,
+              }}
+            >
+              {CATEGORIES[modal.category].label}
+            </span>
+            <div className="mt-5">
+              <DetayPaneli
+                baslik={modal.name}
+                metin={modal.extract}
+                gorsel={modal.thumb}
+                // Kişinin kendi maddesi tek kaynaktır; "Kaynaklar" satırında çip
+                // olarak durur — T-19 öncesinde ayrı bir altın düğmeydi.
+                sayfalar={
+                  modal.url
+                    ? [
+                        {
+                          title: modal.name,
+                          description: modal.description,
+                          extract: modal.extract,
+                          thumbnail: modal.thumb,
+                          url: modal.url,
+                        },
+                      ]
+                    : []
+                }
+                aramaMetni={modal.name}
+                dil={modal.lang}
+                kaynak="otomatik"
+                // Beslemedeki `extract`, `page/summary`nin verdiği metnin
+                // aynısıdır (bkz. lib/sayfaOzeti.ts) — elimizde varsa düğme çıkmaz.
+                ozetBasligi={modal.extract ? undefined : modal.name}
+              />
             </div>
-            {modal.extract && (
-              <p className="mt-5 text-[15px] leading-relaxed text-ink-dim">{modal.extract}</p>
-            )}
-            {modal.url && (
-              <a
-                href={modal.url}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-6 inline-flex items-center gap-2 px-4 py-2.5 rounded-sm bg-gold text-night font-mono text-[12px] tracking-[0.18em] uppercase font-semibold hover:bg-paper transition-colors duration-200"
-              >
-                Vikipedi'de oku <IconExternal className="w-3.5 h-3.5" />
-              </a>
-            )}
             <p className="mt-4 font-mono text-[11px] text-ink-faint">
               Kaynak: {modal.lang === "tr" ? "Türkçe" : "İngilizce"} Vikipedi arşivi
             </p>
@@ -706,7 +659,19 @@ export function CasesSection({
 
                 {open && detayVar && (
                   <div className="rise-in mt-4 pt-4 border-t border-dashed border-line">
-                    <p className="text-[14px] leading-relaxed text-ink-dim">{c.detail}</p>
+                    <DetayPaneli
+                      baslik={c.title}
+                      metin={c.detail}
+                      aramaMetni={c.title}
+                      dil={c.lang ?? "tr"}
+                      kaynak={c.curated ? "editor" : "otomatik"}
+                      // Rozet dosyanın üst bandında zaten duruyor (T-17).
+                      rozetGoster={false}
+                      // Dosya kaydı sayfa künyesi taşımıyor: otomatik kayıtta metin
+                      // `pages[0].extract`ten geliyor ama hangi sayfa olduğu
+                      // `CaseFile`'a yazılmıyor. Çip listesi bu yüzden burada boş —
+                      // T-18'in devir notundaki açık iş (T-21 adayı).
+                    />
                   </div>
                 )}
 

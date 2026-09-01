@@ -100,6 +100,8 @@ export function useGunVerisi(
             title: p.normalizedtitle || p.title,
             description: p.description,
             extract: p.extract,
+            // Panel görseli metinle aynı sayfadan gelir (T-19, olayOzetSayfasi).
+            thumbnail: p.thumbnail?.source,
             url: p.content_urls!.desktop!.page!,
           })),
       });
@@ -147,6 +149,8 @@ export function useGunVerisi(
         detail: item.pages?.[0]?.extract || item.text,
         tags: [theme.toLocaleLowerCase("tr-TR"), formatYear(item.year)],
         curated: false,
+        // Detay panelindeki arama çıkışı doğru Vikipedi'ye gitsin (T-19).
+        lang: item.lang,
       });
     });
     return [...base, ...auto];

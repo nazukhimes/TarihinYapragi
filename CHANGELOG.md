@@ -12,6 +12,26 @@ Biçim [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/) yaklaşımını 
 
 ### Eklenen
 
+- **Tek bir detay paneli** — Zaman Tüneli'nin "Detayı aç"ı, Karanlık Dosyalar'ın
+  "Dosyayı aç"ı ve kişi kartı modalı bugüne kadar aynı işi üç ayrı biçimde
+  yapıyordu. Üçü de artık aynı paneli açıyor: kaynak rozeti, görsel, özet metni,
+  kaynak çipleri ve "Vikipedi'de ara" çıkışı her yerde aynı. Dosya panelinde ve
+  kişi modalında bunların çoğu hiç yoktu (T-19)
+- **Panel görseli** — özeti veren Vikipedi maddesinin küçük görseli metnin yanında
+  çıkıyor. Görseli olmayan kayıtlarda boş kutu bırakılmıyor (T-19)
+- **Özetin künyesi** — panel metninin altında `Özet · İngiltere` gibi bir satır
+  var ve maddeye bağlanıyor. Besleme, olay metninde geçen ilk varlığın özetini
+  veriyor; bu satır olmadan 1814 kaydının paneli "Washington Yangını" çipinin
+  yanında İngiltere'nin coğrafyasını anlatıyor gibi görünüyordu (T-19)
+- **"Daha fazlasını oku"** — olayın kendi Vikipedi maddesi bulunabilmişse, o
+  maddenin özeti **düğmeye basılınca** getiriliyor. 24 Ağustos 1814'te bu,
+  "Washington Yangını" maddesinin olayı anlatan özetidir. Sayfa yüklenirken
+  hiçbir istek çıkmaz; aynı özet ikinci kez istendiğinde ağa gidilmez (T-19)
+- **Karanlık Dosyalar ve kişi kartlarında "Vikipedi'de ara"** — araştırma çıkışı
+  artık yalnızca Zaman Tüneli'nde değil (T-19)
+- **Otomatik kayıtlarda kaynak rozeti** — Vikipedi taramasından gelen olaylar ve
+  kişi kartları detayları açıldığında "Otomatik" rozeti taşıyor; editör kayıtları
+  zaten "Editör notu" çipiyle ayrılıyordu (T-19)
 - **Olayın tüm ilgili sayfaları çip olarak** — Zaman Tüneli'nde bir olayın detayı
   açıldığında Vikipedi'nin o olay için verdiği sayfaların **hepsi** açıklamalarıyla
   listeleniyor. Eskiden yalnızca ilki gösteriliyordu ve bu genellikle olayın
