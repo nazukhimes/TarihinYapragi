@@ -80,6 +80,42 @@ interface CachedDay {
   data: RawDay;
 }
 
+/**
+ * Bir öğeye kaç ilgili sayfa saklandığı.
+ *
+ * T-18 öncesinde 3'tü ve bunun bir önemi yoktu: arayüz zaten yalnızca **bir**
+ * sayfa gösteriyordu. Artık hepsi çip olarak basıldığı için sınır doğrudan
+ * kullanıcının gördüğü seçenek sayısıdır. 6 günlük canlı örnekte (08-24, 03-07,
+ * 02-29, 10-29, 01-01, 07-15 · 233 olay) yıl maddeleri elendikten sonra
+ * olayların %15'i 3'ten, yalnızca %4,3'ü 5'ten fazla sayfa taşıyordu —
+ * 5, kırpmanın nadirleştiği ve çip satırının hâlâ okunabildiği yer.
+ */
+export const PAGES_LIMIT = 5;
+
+/** Salt yıl başlığı: `1985`, `2016`, `MÖ 44`. */
+const SALT_YIL = /^(MÖ\s*)?\d{1,4}$/;
+/** Yıl maddelerinin Vikipedi açıklaması — TR'de "yıl" (2016 için "bir yıl"), EN'de "year". */
+const YIL_ACIKLAMALARI = new Set(["yıl", "bir yıl", "year"]);
+
+/**
+ * Yıl maddesi mi? (`1985 · "yıl"`)
+ *
+ * Wikimedia `pages` dizisine olay metnindeki **yıl sayısı** için de bir madde
+ * koyuyor. Bunlar T-18 öncesinde görünmüyordu, çünkü kod yalnızca ilk sayfayı
+ * okuyordu; tüm sayfalar çip olarak basılınca doğrudan çöp çipe dönüşürlerdi
+ * (T-16'da gözlendi, T-18 Kanıt 1b).
+ *
+ * İki koşul **birlikte** aranır: başlık salt yıl VE açıklama yıl maddesi kalıbı.
+ * Tek başına açıklama koşulu, açıklaması rastlantıyla "yıl" olan gerçek bir
+ * maddeyi de elerdi. Yukarıdaki 6 günlük örnekte 638 yıl maddesinin başlığı
+ * istisnasız salt sayıydı.
+ */
+export function yilMaddesiMi(p: WikiPage): boolean {
+  const desc = (p?.description || "").trim().toLocaleLowerCase("tr-TR");
+  if (!YIL_ACIKLAMALARI.has(desc)) return false;
+  return SALT_YIL.test((p.normalizedtitle || p.title || "").trim());
+}
+
 export function normalize(raw: RawOtd[] | undefined, lang: "tr" | "en", prefix: string): OtdItem[] {
   if (!raw) return [];
   return raw
@@ -87,7 +123,7 @@ export function normalize(raw: RawOtd[] | undefined, lang: "tr" | "en", prefix: 
     .map((r, i) => ({
       text: r.text!.trim(),
       year: r.year!,
-      pages: (r.pages || []).slice(0, 3),
+      pages: (r.pages || []).filter((p) => !yilMaddesiMi(p)).slice(0, PAGES_LIMIT),
       lang,
       id: `${prefix}-${lang}-${r.year}-${i}`,
     }));

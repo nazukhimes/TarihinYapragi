@@ -1,5 +1,6 @@
 import { REKORLAR, type TalkCard } from "../data";
 import type { DayData } from "../lib/wiki";
+import type { OlayMakalesi } from "../lib/olayMakalesi";
 import type { WikidataRekor } from "../lib/wikidata";
 import type { AramaSonuclari, GunVerisi } from "../hooks/useGunVerisi";
 import { ErrorBoundary } from "./ErrorBoundary";
@@ -24,6 +25,7 @@ export function Bolumler({
   onBroadcast,
   wikidata,
   wikidataLoading,
+  olayMakaleleri,
 }: {
   noSearchResults: boolean;
   query: string;
@@ -38,6 +40,8 @@ export function Bolumler({
   /** Seçili günde kırılmış, Wikidata'dan canlı gelen rekorlar (bkz. Rekorlar Kasası). */
   wikidata: WikidataRekor[];
   wikidataLoading: boolean;
+  /** Olay kimliği → EN beslemesinden çözülmüş TR olay makalesi (bkz. lib/olayMakalesi.ts). */
+  olayMakaleleri: Record<string, OlayMakalesi>;
 }) {
   return (
     <div className="max-w-7xl mx-auto px-4 md:px-8">
@@ -101,7 +105,11 @@ export function Bolumler({
                 <SkeletonLines />
               ) : (
                 <ErrorBoundary variant="section">
-                  <TimelineSection events={veri.mergedEvents} matched={arama.olay} />
+                  <TimelineSection
+                    events={veri.mergedEvents}
+                    matched={arama.olay}
+                    olayMakaleleri={olayMakaleleri}
+                  />
                 </ErrorBoundary>
               )}
             </div>

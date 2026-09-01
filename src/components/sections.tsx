@@ -7,7 +7,8 @@ import {
   type ScienceMilestone,
 } from "../data";
 import { classifyItem, type OtdItem } from "../lib/wiki";
-import { IconArrow, IconExternal, IconSkull, Modal, Reveal } from "./ui";
+import type { OlayMakalesi } from "../lib/olayMakalesi";
+import { IconArrow, IconExternal, IconSearch, IconSkull, Modal, Reveal } from "./ui";
 
 const trLower = (s: string) => s.toLocaleLowerCase("tr-TR");
 
@@ -28,6 +29,15 @@ function centuryOf(y: number): string {
 
 /* ================= ZAMAN TÜNELİ ================= */
 
+/** Olayla ilgili tek bir Vikipedi sayfası — çip olarak basılır. */
+export interface OlayKaynagi {
+  title: string;
+  /** API'nin kısa tanımı ("ABD başkanının resmî konutu"). Boş gelebilir. */
+  description?: string;
+  extract?: string;
+  url: string;
+}
+
 export interface MergedEvent {
   id: string;
   year: number;
@@ -35,18 +45,42 @@ export interface MergedEvent {
   detail?: string;
   category: CategoryId;
   curated: boolean;
-  page?: { title: string; extract?: string; url?: string };
+  /** Arama çıkışının hangi Vikipedi'ye gideceğini belirler. Editör kaydı → "tr". */
+  lang: "tr" | "en";
+  /** Olayla ilgili **tüm** sayfalar. T-18 öncesinde burada tek bir `page` vardı ve
+   * hangisinin gösterileceğine kod karar veriyordu; o seçim güvenilir biçimde
+   * yapılamadığı için (O-14) karar kullanıcıya bırakıldı. Editör kayıtlarında boş. */
+  pages: OlayKaynagi[];
+}
+
+/** Detay panelinde gösterilecek Vikipedi özeti — özet taşıyan ilk sayfadan. */
+export function olayOzeti(e: Pick<MergedEvent, "pages">): string | undefined {
+  return e.pages.find((p) => p.extract)?.extract;
+}
+
+/**
+ * Olay metniyle Vikipedi'nin **gerçek arama sayfasını** açar.
+ *
+ * Hiçbir sayfanın olayın kendisi olmadığı durumların tek dürüst çıkışı budur:
+ * 1958 Bursa Kapalı Çarşı yangınının beslemedeki tek sayfası "Bursa"dır.
+ */
+export function wikiAramaUrl(lang: "tr" | "en", metin: string): string {
+  return `https://${lang}.wikipedia.org/w/index.php?search=${encodeURIComponent(metin)}`;
 }
 
 export function TimelineSection({
   events,
   matched,
+  olayMakaleleri = {},
 }: {
   events: MergedEvent[];
   /** Arama sonucuyla eşleşen alt küme — üst düzeyde (useAramaSonuclari) tek seferde
    * hesaplanır; burada yalnızca kimlik karşılaştırması yapılır, metin taraması
    * tekrarlanmaz (T-13 Adım 8). Arama yokken tüm `events` ile aynıdır. */
   matched: MergedEvent[];
+  /** Olay kimliği → EN beslemesinden çözülmüş TR olay makalesi (bkz. lib/olayMakalesi.ts).
+   * İkincil katman: geç gelir, çoğu olayda hiç gelmez. */
+  olayMakaleleri?: Record<string, OlayMakalesi>;
 }) {
   const [cat, setCat] = useState<CategoryId | "all">("all");
   const [openId, setOpenId] = useState<string | null>(null);
@@ -97,6 +131,7 @@ export function TimelineSection({
             const showCentury = !prev || centuryOf(prev.year) !== centuryOf(e.year);
             const open = openId === e.id;
             const catInfo = CATEGORIES[e.category];
+            const ozet = olayOzeti(e);
             return (
               <li key={e.id}>
                 {showCentury && (
@@ -138,7 +173,7 @@ export function TimelineSection({
                     {e.text}
                   </p>
 
-                  {(e.detail || e.page?.extract || e.page?.url) && (
+                  {(e.detail || ozet || e.pages.length > 0) && (
                     <div className="mt-2.5 flex items-center gap-4">
                       <button
                         onClick={() => setOpenId(open ? null : e.id)}
@@ -149,15 +184,10 @@ export function TimelineSection({
                         </span>
                         <IconArrow dir={open ? "up" : "down"} className="w-3 h-3" />
                       </button>
-                      {e.page?.url && (
-                        <a
-                          href={e.page.url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-1.5 font-mono text-[12px] tracking-wider uppercase text-ink-faint hover:text-sky transition-colors"
-                        >
-                          Vikipedi <IconExternal className="w-3.5 h-3.5" />
-                        </a>
+                      {e.pages.length > 0 && (
+                        <span className="font-mono text-[11px] tracking-wider uppercase text-ink-faint">
+                          {e.pages.length} ilgili sayfa
+                        </span>
                       )}
                     </div>
                   )}
@@ -167,7 +197,8 @@ export function TimelineSection({
                       className="rise-in mt-3 max-w-3xl border-l-2 pl-4 py-1 text-[14.5px] leading-relaxed text-ink-dim"
                       style={{ borderColor: catInfo.color }}
                     >
-                      {e.detail || e.page?.extract}
+                      {(e.detail || ozet) && <p>{e.detail || ozet}</p>}
+                      <KaynakCipleri event={e} makale={olayMakaleleri[e.id]} />
                     </div>
                   )}
                 </Reveal>
@@ -176,6 +207,72 @@ export function TimelineSection({
           })}
         </ol>
       )}
+    </div>
+  );
+}
+
+/**
+ * Olayın kaynak çıkışları: ilgili sayfaların hepsi + Vikipedi araması.
+ *
+ * **Tek bir sayfa "doğru cevap" olarak dayatılmaz.** Besleme sayfaları olay
+ * metnindeki geçiş sırasına göre verir; hangisinin olayın kendisi olduğunu
+ * güvenilir biçimde seçen bir kural yoktur (O-14'te bir puanlama sezgiseli
+ * denendi ve 3 olayda sonucu bozduğu için reddedildi). Bu yüzden hepsi
+ * açıklamasıyla listelenir, seçim kullanıcınındır.
+ */
+function KaynakCipleri({ event: e, makale }: { event: MergedEvent; makale?: OlayMakalesi }) {
+  // Çapraz eşleme zaten listede olan bir sayfayı bulduysa aynı bağlantıyı iki kez basma.
+  const cipler = makale ? e.pages.filter((p) => p.url !== makale.url) : e.pages;
+
+  return (
+    <div className={e.detail || olayOzeti(e) ? "mt-4" : ""}>
+      <p className="font-mono text-[10px] tracking-[0.24em] uppercase text-ink-faint mb-2">
+        Kaynaklar
+      </p>
+      <div className="flex flex-wrap gap-2">
+        {makale && (
+          <a
+            href={makale.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group/cip max-w-full rounded-sm border border-gold/50 bg-gold/[0.08] px-3 py-1.5 transition-colors hover:border-gold hover:bg-gold/15"
+          >
+            <span className="block font-mono text-[9.5px] tracking-[0.2em] uppercase text-gold">
+              Bu olay hakkında
+            </span>
+            <span className="block text-[13px] leading-snug text-ink group-hover/cip:text-gold transition-colors">
+              {makale.title} <IconExternal className="inline w-3 h-3 align-[-1px]" />
+            </span>
+          </a>
+        )}
+        {cipler.map((p) => (
+          <a
+            key={p.url}
+            href={p.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group/cip max-w-full sm:max-w-[280px] rounded-sm border border-line bg-panel-2/60 px-3 py-1.5 transition-colors hover:border-sky/60 hover:bg-panel-2"
+          >
+            <span className="block text-[13px] leading-snug text-ink group-hover/cip:text-sky transition-colors">
+              {p.title} <IconExternal className="inline w-3 h-3 align-[-1px]" />
+            </span>
+            {p.description && (
+              <span className="block text-[11.5px] leading-snug text-ink-faint line-clamp-1">
+                {p.description}
+              </span>
+            )}
+          </a>
+        ))}
+        <a
+          href={wikiAramaUrl(e.lang, e.text)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 self-start rounded-sm border border-dashed border-line px-3 py-1.5 font-mono text-[11px] tracking-wider uppercase text-ink-faint transition-colors hover:text-gold hover:border-gold/60"
+        >
+          <IconSearch className="w-3.5 h-3.5" />
+          Vikipedi&apos;de ara
+        </a>
+      </div>
     </div>
   );
 }

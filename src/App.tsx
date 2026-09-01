@@ -2,6 +2,7 @@ import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } fro
 import { useNavigate, useParams } from "react-router-dom";
 import { CURATED, curatedKey } from "./data";
 import { useDayData } from "./lib/wiki";
+import { useOlayMakaleleri } from "./lib/olayMakalesi";
 import { useWikidataRekorlari } from "./lib/wikidata";
 import { daysInMonth } from "./lib/date";
 import { MONTHS_TR } from "./components/leaf";
@@ -135,6 +136,10 @@ export default function App() {
   // çalışır, bu sorgu başarısız olursa sessizce boş döner (bkz. lib/wikidata.ts).
   const { items: wikidata, loading: wikidataLoading } = useWikidataRekorlari(month, day);
 
+  // Zaman Tüneli'nin ikincil katmanı — olayın kendisine ait TR makalesi, EN
+  // beslemesinden çapraz eşlemeyle. Çoğu olayda hiç gelmez (bkz. lib/olayMakalesi.ts).
+  const olayMakaleleri = useOlayMakaleleri(month, day, data);
+
   const searching = query.trim().length > 0;
   const toplamSonuc = searching
     ? arama.olay.length +
@@ -231,6 +236,7 @@ export default function App() {
           onBroadcast={() => setBroadcast(true)}
           wikidata={wikidata}
           wikidataLoading={wikidataLoading}
+          olayMakaleleri={olayMakaleleri}
         />
       </main>
 

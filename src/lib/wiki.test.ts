@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { normalize, classifyStatus, buildAutoTalk } from "./wiki";
+import { normalize, classifyStatus, buildAutoTalk, yilMaddesiMi, PAGES_LIMIT } from "./wiki";
 import type { DayData, WikiPage } from "./wiki";
 import otd from "./__fixtures__/otd-tr-08-31.json";
 
@@ -53,9 +53,10 @@ describe("normalize — bozuk veriye dayanıklılık", () => {
   it("year yoksa eler", () => expect(normalize([{ text: "a" }], "tr", "x")).toHaveLength(0));
   it("text boşsa eler", () =>
     expect(normalize([{ year: 1, text: "  " }], "tr", "x")).toHaveLength(0));
-  it("pages 3 ile sınırlı", () => {
-    const r = normalize([{ year: 1, text: "a", pages: [1, 2, 3, 4, 5] as never }], "tr", "x");
-    expect(r[0].pages).toHaveLength(3);
+  it(`pages ${PAGES_LIMIT} ile sınırlı`, () => {
+    const fazla = Array.from({ length: PAGES_LIMIT + 3 }, (_, i) => ({ title: `S${i}` }));
+    const r = normalize([{ year: 1, text: "a", pages: fazla }], "tr", "x");
+    expect(r[0].pages).toHaveLength(PAGES_LIMIT);
   });
   it("geçerli girdi doğru alanlarla eşleniyor", () => {
     const r = normalize([{ year: 1922, text: "  Cumhuriyet ilan edildi.  " }], "tr", "events");
@@ -68,6 +69,46 @@ describe("normalize — bozuk veriye dayanıklılık", () => {
         id: "events-tr-1922-0",
       },
     ]);
+  });
+});
+
+/* T-18 / Kanıt 1b: besleme, olay metnindeki yıl sayısı için de bir madde
+   döndürüyor (`1985 · "yıl"`). Tek sayfa gösterilirken görünmüyorlardı; tüm
+   sayfalar çip olarak basılınca doğrudan çöp çipe dönüşürler. */
+describe("yilMaddesiMi — çöp çip elemesi", () => {
+  it("fixture'daki gerçek yıl maddesini tanıyor", () => {
+    const yil = fixture.deaths[0].pages![1];
+    expect(yil.title).toBe("1985");
+    expect(yil.description).toBe("yıl");
+    expect(yilMaddesiMi(yil)).toBe(true);
+  });
+
+  it("gerçek kişi maddesini elemiyor", () => {
+    expect(yilMaddesiMi(fixture.deaths[0].pages![0])).toBe(false);
+  });
+
+  it("MÖ yılı da eleniyor", () =>
+    expect(yilMaddesiMi({ title: "MÖ 44", description: "yıl" })).toBe(true));
+
+  it('2016\'nın "bir yıl" açıklaması da eleniyor', () =>
+    expect(yilMaddesiMi({ title: "2016", description: "bir yıl" })).toBe(true));
+
+  it("EN besleme karşılığı da eleniyor", () =>
+    expect(yilMaddesiMi({ title: "1985", description: "year" })).toBe(true));
+
+  it("başlık salt yıl değilse açıklama eşleşse bile elemiyor", () =>
+    // İki koşul birlikte aranır; tek başına açıklama gerçek bir maddeyi de elerdi.
+    expect(yilMaddesiMi({ title: "Işık yılı", description: "yıl" })).toBe(false));
+
+  it('"yüzyıl" açıklaması yıl maddesi değildir', () =>
+    expect(yilMaddesiMi({ title: "1985", description: "yüzyıl" })).toBe(false));
+
+  it("normalize yıl maddelerini gerçek yanıttan ayıklıyor", () => {
+    const items = normalize(fixture.deaths, "tr", "deaths");
+    const hepsi = items.flatMap((i) => i.pages ?? []);
+    expect(hepsi.length).toBeGreaterThan(0);
+    expect(hepsi.map((p) => p.title)).not.toContain("1985");
+    expect(hepsi.some((p) => p.description === "yıl")).toBe(false);
   });
 });
 

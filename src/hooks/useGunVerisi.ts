@@ -18,6 +18,7 @@ import {
   formatYear,
   itemToPeople,
   matchQuery,
+  olayOzeti,
   type MergedEvent,
   type PersonCard,
 } from "../components/sections";
@@ -77,21 +78,30 @@ export function useGunVerisi(
       detail: ev.detail,
       category: ev.category,
       curated: true,
+      lang: "tr",
+      pages: [],
     }));
     const cur = curated?.events || [];
     (data?.events || []).forEach((item) => {
       const t = trLower(item.text);
       if (cur.some((ce) => ce.matchKeys.some((k) => t.includes(trLower(k))))) return;
-      const page = item.pages?.find((p) => p.extract || p.content_urls?.desktop?.page);
       out.push({
         id: item.id,
         year: item.year,
         text: item.text,
         category: classifyItem(item.text),
         curated: false,
-        page: page
-          ? { title: page.title, extract: page.extract, url: page.content_urls?.desktop?.page }
-          : undefined,
+        lang: item.lang,
+        // Sayfalardan biri seçilmez, hepsi geçirilir — seçim kullanıcınındır (T-18/O-14).
+        // Adressiz sayfa çip olamaz; canlı örnekte 2254 sayfanın hepsinde adres vardı.
+        pages: (item.pages || [])
+          .filter((p) => p.content_urls?.desktop?.page)
+          .map((p) => ({
+            title: p.normalizedtitle || p.title,
+            description: p.description,
+            extract: p.extract,
+            url: p.content_urls!.desktop!.page!,
+          })),
       });
     });
     return out.sort((a, b) => a.year - b.year);
@@ -257,7 +267,7 @@ export function useAramaSonuclari(veri: GunVerisi, query: string): AramaSonuclar
     }
     return {
       olay: veri.mergedEvents.filter((e) =>
-        matchQuery(query, e.text, e.detail, e.page?.extract, formatYear(e.year))
+        matchQuery(query, e.text, e.detail, olayOzeti(e), formatYear(e.year))
       ),
       dogum: veri.births.filter((p) =>
         matchQuery(query, p.name, p.extract, formatYear(p.year), CATEGORIES[p.category].label)

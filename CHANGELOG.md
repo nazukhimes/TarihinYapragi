@@ -12,6 +12,22 @@ Biçim [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/) yaklaşımını 
 
 ### Eklenen
 
+- **Olayın tüm ilgili sayfaları çip olarak** — Zaman Tüneli'nde bir olayın detayı
+  açıldığında Vikipedi'nin o olay için verdiği sayfaların **hepsi** açıklamalarıyla
+  listeleniyor. Eskiden yalnızca ilki gösteriliyordu ve bu genellikle olayın
+  kendisi değil, içinde geçen ilk ülke ya da şehirdi: 24 Ağustos 1814 kaydı
+  ("İngiliz Birlikleri, Washington'u işgal etti…") "İngiltere" maddesine
+  gidiyordu. Artık Beyaz Saray ve Washington, DC de listede — hangisinin açılacağına
+  kullanıcı karar veriyor (T-18)
+- **"Vikipedi'de ara" çıkışı** — her olayda, olay metniyle Vikipedi'nin gerçek
+  arama sayfasını açan bir düğme var. Hiçbir sayfanın olayın kendisi olmadığı
+  kayıtlarda (1958 Bursa Kapalı Çarşı yangını → yalnızca "Bursa" sayfası) tek
+  dürüst çıkış budur. Editör kayıtlarında da çıkar (T-18)
+- **"Bu olay hakkında" çipi** — İngilizce besleme aynı gün için daha zengin ve olay
+  makalelerine doğrudan bağlanıyor. O makalenin Türkçe karşılığı `langlinks` ile
+  çözülüp çiplerin başına alınıyor: `Burning of Washington` → **Washington
+  Yangını**. Emin olunamayan hiçbir durumda çip basılmıyor — 6 günlük ölçümde
+  233 olayın 18'inde (%7,7) çalıştı, kalanında sessiz kaldı (T-18)
 - **Rekorlar Kasası (7. bölüm)** — dünyanın "en"leri için editör havuzundan
   günlük seçki. Her kayıtta rekorun hikâyesi, rakamı hayal edilebilir kılan bir
   kıyas cümlesi ve yayında okunacak bir açılış cümlesi var. Kapsam çipleriyle
@@ -31,6 +47,14 @@ Biçim [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/) yaklaşımını 
 
 ### Düzeltilen
 
+- **Yıl maddeleri artık kaynak listesine karışmıyor** — besleme, olay metnindeki
+  yıl sayısı için de bir madde döndürüyor (`1985 · "yıl"`). Tek sayfa gösterilirken
+  görünmüyorlardı; tüm sayfalar listelenince doğrudan çöp bağlantıya dönüşeceklerdi.
+  Başlığı salt yıl **ve** açıklaması yıl maddesi kalıbında olan sayfalar eleniyor
+  (T-18)
+- **Bir olayda saklanan sayfa sayısı 3'ten 5'e çıktı** — sınır artık kullanıcının
+  gördüğü seçenek sayısı olduğu için yeniden değerlendirildi. 233 olayluk canlı
+  örnekte 3 sınırı olayların %15'ini kırpıyordu, 5 sınırı %4,3'ünü (T-18)
 - **Satır sonları depo genelinde LF'e sabitlendi** — `npm run format:check`, hiç
   dokunulmamış dosyalar dahil tüm kaynak dosyalarında düşüyordu. Depodaki içerik
   zaten LF'ti; Windows'taki `core.autocrlf=true` ayarı checkout sırasında CRLF'e
