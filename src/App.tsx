@@ -17,6 +17,7 @@ import { BolumNav } from "./components/BolumNav";
 import { Bolumler } from "./components/Bolumler";
 import { AltBilgi } from "./components/AltBilgi";
 import { KisayolYardimi } from "./components/KisayolYardimi";
+import { YzAyarlari, yzAyarlarinaAbone } from "./components/YzAyarlari";
 
 // Yayın Modu nadiren açılıyor (çoğu kullanıcı hiç açmıyor) — ayrı parçaya alınıp
 // yalnızca düğmeye basılınca yüklenir (T-13 Adım 1).
@@ -48,6 +49,7 @@ export default function App() {
   const [query, setQuery] = useState("");
   const [broadcast, setBroadcast] = useState(false);
   const [kisayolYardimi, setKisayolYardimi] = useState(false);
+  const [yzAyarlari, setYzAyarlari] = useState(false);
   const [gecikti, setGecikti] = useState(false);
   const aramaRef = useRef<HTMLInputElement>(null);
   const aramaMobilRef = useRef<HTMLInputElement>(null);
@@ -88,6 +90,10 @@ export default function App() {
     const t = new Date();
     setDate(t.getDate(), t.getMonth() + 1);
   }, [setDate]);
+
+  // Ayarlar ekranı hem üst bardan hem de detay panelindeki "Önce anahtarınızı
+  // girin" uyarısından açılıyor; ikisi de olay yayınlıyor (bkz. YzAyarlari.tsx).
+  useEffect(() => yzAyarlarinaAbone(() => setYzAyarlari(true)), []);
 
   useKlavyeKisayollari({
     aktif: !broadcast,
@@ -253,6 +259,8 @@ export default function App() {
       )}
 
       {kisayolYardimi && <KisayolYardimi onClose={() => setKisayolYardimi(false)} />}
+
+      {yzAyarlari && <YzAyarlari onClose={() => setYzAyarlari(false)} />}
     </div>
   );
 }

@@ -461,3 +461,23 @@ export function IconSkull({ className = "w-5 h-5" }: { className?: string }) {
     </svg>
   );
 }
+
+/** Yapay zekâ katmanının simgesi (T-20) — "kıvılcım". */
+export function IconSpark({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={`${ic} ${className}`} fill="none" aria-hidden>
+      <path
+        d="M10.4 2.6 12 7.8l5.2 1.6-5.2 1.6-1.6 5.2-1.6-5.2L3.6 9.4l5.2-1.6 1.6-5.2Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M18 14.2 18.8 16.8 21.4 17.6 18.8 18.4 18 21 17.2 18.4 14.6 17.6 17.2 16.8 18 14.2Z"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}

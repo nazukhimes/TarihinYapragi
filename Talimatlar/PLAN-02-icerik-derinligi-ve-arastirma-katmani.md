@@ -1,15 +1,15 @@
 # PLAN-02 · İçerik Derinliği ve Araştırma Katmanı
 
-| Alan               | Değer                                                                                                         |
-| ------------------ | ------------------------------------------------------------------------------------------------------------- |
-| **Oluşturulma**    | 2026-08-24                                                                                                    |
-| **Durum**          | 🟡 **Sürüyor — 2 / 7** (FAZ 1 tamamlandı)                                                                     |
-| **Son hareket**    | 2026-08-31 · **T-17 tamamlandı** — karanlık dosyalarda kaynak dürüstlüğü ve AA kontrastı (O-15, O-10 kapandı) |
-| **Talimat sayısı** | 7 (T-16 … T-22)                                                                                               |
-| **Faz sayısı**     | 4                                                                                                             |
-| **Dayanak**        | [`../Dokumanlar/ANALIZ-RAPORU-02.md`](../Dokumanlar/ANALIZ-RAPORU-02.md)                                      |
-| **İş akışı**       | [`../Dokumanlar/CALISMA-SISTEMI.md`](../Dokumanlar/CALISMA-SISTEMI.md)                                        |
-| **Tetikleyen**     | Kullanıcı geri bildirimi, 2026-08-24                                                                          |
+| Alan               | Değer                                                                                           |
+| ------------------ | ----------------------------------------------------------------------------------------------- |
+| **Oluşturulma**    | 2026-08-24                                                                                      |
+| **Durum**          | 🟡 **Sürüyor — 5 / 7** (FAZ 1, 2 ve 3 tamamlandı)                                               |
+| **Son hareket**    | 2026-09-01 · **T-20 tamamlandı** — çalışma zamanı yapay zekâ katmanı; FAZ 3 bitti (U-6 kapandı) |
+| **Talimat sayısı** | 7 (T-16 … T-22)                                                                                 |
+| **Faz sayısı**     | 4                                                                                               |
+| **Dayanak**        | [`../Dokumanlar/ANALIZ-RAPORU-02.md`](../Dokumanlar/ANALIZ-RAPORU-02.md)                        |
+| **İş akışı**       | [`../Dokumanlar/CALISMA-SISTEMI.md`](../Dokumanlar/CALISMA-SISTEMI.md)                          |
+| **Tetikleyen**     | Kullanıcı geri bildirimi, 2026-08-24                                                            |
 
 ---
 
@@ -110,10 +110,10 @@ prototiplendi ve **reddedildi** (11 değişiklikten 3'ü bozuyordu). Bunun yerin
 
 ### FAZ 3 — Derinlik
 
-| Talimat  | Başlık                                 | Bulgular | Öncelik | Süre |
-| -------- | -------------------------------------- | -------- | ------- | ---- |
-| **T-19** | Zengin detay paneli (Vikipedi tabanlı) | U-6      | 🟡 Orta | ~4s  |
-| **T-20** | Yapay zekâ araştırma katmanı           | U-6      | 🟡 Orta | ~5s  |
+| Talimat      | Başlık                                        | Bulgular | Öncelik | Süre |
+| ------------ | --------------------------------------------- | -------- | ------- | ---- |
+| ~~**T-19**~~ | ~~Zengin detay paneli (Vikipedi tabanlı)~~ ✅ | U-6      | 🟡 Orta | ~4s  |
+| ~~**T-20**~~ | ~~Yapay zekâ araştırma katmanı~~ ✅           | U-6      | 🟡 Orta | ~5s  |
 
 **T-19 kapsamı:** "Detayı aç" / "Dosyayı aç" panelleri ortak bir `DetayPaneli` bileşenine
 taşınır. Panel şunları gösterir: `extract` metni · görsel (`thumbnail`) · T-18'in kaynak çipleri ·
@@ -121,6 +121,15 @@ talep üzerine `page/summary` çağrısıyla daha uzun özet (CORS doğrulandı,
 T-20'nin YZ bölümü bu panelin içine oturacak.
 
 **T-20 kapsamı:** Panelin altında **"Yapay zekâya sor"** düğmesi ve serbest soru kutusu.
+
+> ✅ **T-19 ve T-20 kapandı (2026-09-01) — FAZ 3 bitti.** Üç detay görünümü tek
+> `DetayPaneli`'nde birleşti ve panelin ayırdığı yuvaya çalışma zamanı yapay zekâ
+> katmanı oturdu. Katman sağlayıcıdan bağımsız (`src/lib/yapayzeka/`), anahtar
+> kullanıcının ve yalnızca `localStorage`'da, istek yalnızca düğmeye basınca
+> gidiyor, çıktı leylak "YZ ÜRETİMİ" rozetiyle ve doğrulama uyarısıyla basılıyor.
+> **§0 yasağı yürürlükte:** depoya hiçbir YZ metni yazılmıyor.
+> Halüsinasyon elle testi gerçek anahtar gerektirdiği için kullanıcıya bırakıldı —
+> ayrıntı: [`Tamamlandı/T-20-yapay-zeka-katmani.md`](Tamamland%C4%B1/T-20-yapay-zeka-katmani.md)
 
 | Karar      | Değer                                               | Gerekçe                                                                                                            |
 | ---------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
@@ -225,7 +234,7 @@ Vikipedi içeriğinin otomatik, YZ'nin istek üzerine çalışmasını onayladı
 | ~~T-17~~ ✅ | [`T-17-karanlik-dosya-durustlugu.md`](Tamamland%C4%B1/T-17-karanlik-dosya-durustlugu.md) | 1   | O-15, O-10           | ✅ **Tamamlandı** | 2026-08-31 |
 | ~~T-18~~ ✅ | [`T-18-kaynak-ve-ilgili-sayfalar.md`](Tamamland%C4%B1/T-18-kaynak-ve-ilgili-sayfalar.md) | 2   | O-14                 | ✅ **Tamamlandı** | 2026-09-01 |
 | ~~T-19~~ ✅ | [`T-19-detay-paneli.md`](Tamamland%C4%B1/T-19-detay-paneli.md)                           | 3   | U-6                  | ✅ **Tamamlandı** | 2026-09-01 |
-| T-20        | [`T-20-yapay-zeka-katmani.md`](T-20-yapay-zeka-katmani.md)                               | 3   | U-6                  | ⬜ Bekliyor       | —          |
+| ~~T-20~~ ✅ | [`T-20-yapay-zeka-katmani.md`](Tamamland%C4%B1/T-20-yapay-zeka-katmani.md)               | 3   | U-6                  | ✅ **Tamamlandı** | 2026-09-01 |
 | T-21        | [`T-21-devredilen-icerik-bulgulari.md`](T-21-devredilen-icerik-bulgulari.md)             | 4   | O-11, O-12, m-7, m-8 | ⬜ Bekliyor       | —          |
 | T-22        | [`T-22-react-router-yukseltmesi.md`](T-22-react-router-yukseltmesi.md)                   | 4   | O-13                 | ⬜ Bekliyor       | —          |
 

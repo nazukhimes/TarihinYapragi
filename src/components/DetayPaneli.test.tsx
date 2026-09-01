@@ -224,21 +224,30 @@ describe("DetayPaneli — Daha fazlasını oku", () => {
   });
 });
 
-/* T-19 madde 6: yuva tanımlı ve bu talimatta boş. */
+/* T-19'un ayırdığı yuvayı T-20 doldurdu: yuvada artık yapay zekâ bölümü var. */
 describe("DetayPaneli — T-20 yuvası", () => {
-  it("children verilmezse hiç render edilmez", () => {
+  it("metin varsa yapay zekâ bölümü basılır", () => {
+    render(<DetayPaneli baslik="Bir olay" metin="Bir metin." kaynak="otomatik" />);
+    expect(screen.getByRole("button", { name: /Önce anahtarınızı girin/ })).toBeInTheDocument();
+  });
+
+  it("metin yoksa yuva hiç render edilmez — bağlamsız soru sorulmaz", () => {
     const { container } = render(
-      <DetayPaneli baslik="Bir olay" metin="Bir metin." kaynak="otomatik" />
+      <DetayPaneli baslik="Bir olay" kaynak="otomatik" sayfalar={SAYFALAR} />
     );
+    expect(screen.queryByRole("button", { name: /Yapay zekâya sor/ })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: /Önce anahtarınızı girin/ })
+    ).not.toBeInTheDocument();
     expect(container.querySelector(".border-dashed")).toBeNull();
   });
 
   it("children verilirse panelin en altında basılır", () => {
     render(
       <DetayPaneli baslik="Bir olay" metin="Bir metin." kaynak="otomatik">
-        <p>Yapay zekâ bölümü</p>
+        <p>Çağrı noktasına özgü eklenti</p>
       </DetayPaneli>
     );
-    expect(screen.getByText("Yapay zekâ bölümü")).toBeInTheDocument();
+    expect(screen.getByText("Çağrı noktasına özgü eklenti")).toBeInTheDocument();
   });
 });

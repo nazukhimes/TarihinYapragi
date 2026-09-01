@@ -1,7 +1,8 @@
 import type { RefObject } from "react";
 import type { AramaSonuclari } from "../hooks/useGunVerisi";
 import { LiveClock } from "./leaf";
-import { IconLeafMark, IconMic, IconSearch } from "./ui";
+import { IconLeafMark, IconMic, IconSearch, IconSpark } from "./ui";
+import { yzAyarlariniAc } from "./YzAyarlari";
 
 export function UstBar({
   query,
@@ -71,6 +72,17 @@ export function UstBar({
 
           <div className="flex items-center gap-4 ml-auto">
             <LiveClock />
+            {/* Yapay zekâ anahtarı ayarları (T-20). Sağlayıcıya değil, kullanıcının
+                kendi anahtarına ait bir ayar olduğu için genel bir dişli değil,
+                katmanın kendi kıvılcım simgesiyle duruyor. */}
+            <button
+              onClick={yzAyarlariniAc}
+              aria-label="Yapay zekâ ayarları"
+              title="Yapay zekâ ayarları"
+              className="w-9 h-9 grid place-items-center rounded-sm border border-line text-ink-faint hover:text-lilac hover:border-lilac/60 transition-colors cursor-pointer"
+            >
+              <IconSpark className="w-4 h-4" />
+            </button>
             <button
               onClick={onBroadcast}
               disabled={!talkCardsVar}

@@ -12,6 +12,20 @@ Biçim [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/) yaklaşımını 
 
 ### Eklenen
 
+- **"Yapay zekâya sor"** — bir olayın, dosyanın ya da kişinin detay panelinde
+  artık serbest soru kutusu var: model, panelin gösterdiği Vikipedi metnini
+  açıklıyor ya da o metin hakkındaki sorunuzu yanıtlıyor. Sayfadan ayrılmadan
+  "bu tam olarak ne demek?" diye sorulabiliyor. İstek **yalnızca düğmeye
+  basılınca** gider; sayfa yüklenirken hiçbir çağrı yapılmaz (T-20)
+- **Yapay zekâ ayarları** — üst bardaki kıvılcım düğmesinden kendi Gemini
+  anahtarınızı giriyorsunuz. Anahtar **yalnızca sizin tarayıcınızda** duruyor;
+  sunucumuz yok, hiçbir yere gönderilmiyor ve aynı ekrandan silinebiliyor.
+  Anahtar yoksa panel sizi ayarlara yönlendiriyor, çökmüyor (T-20)
+- **"YZ ÜRETİMİ" rozeti** — modelin ürettiği metin leylak bir rozet ve kalıcı
+  bir uyarı satırıyla çıkıyor: kaynağın Vikipedi özeti olduğu ve yayında
+  kullanmadan önce doğrulanması gerektiği yazıyor. Editör (altın) ve Otomatik
+  (nötr) rozetlerinden bilerek farklı renkte — üretilmiş metin, derlenmiş metin
+  gibi görünmüyor (T-20)
 - **Tek bir detay paneli** — Zaman Tüneli'nin "Detayı aç"ı, Karanlık Dosyalar'ın
   "Dosyayı aç"ı ve kişi kartı modalı bugüne kadar aynı işi üç ayrı biçimde
   yapıyordu. Üçü de artık aynı paneli açıyor: kaynak rozeti, görsel, özet metni,
@@ -97,6 +111,13 @@ Biçim [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/) yaklaşımını 
   çalışma kopyası varken testler iki kez toplanıyordu (9 yerine 18 dosya)
 
 ### Not
+
+**Yapay zekâ katmanı `ICERIK-SABLONU.md` §0 yasağını kaldırmaz.** Depoya hiçbir
+yapay zekâ metni yazılmaz; `src/data/gunler/*` dosyaları elle derlenmeye devam
+eder. Üretim geçicidir, isteğe bağlıdır, kullanıcının kendi anahtarıyla ve kendi
+tıklamasıyla olur ve ekranda kaynağıyla birlikte, "YZ ÜRETİMİ" rozetiyle durur.
+Model kendi hafızasından değil, önüne konan Vikipedi metninden konuşur; metin
+yoksa bölüm hiç görünmez.
 
 Guinness World Records'ın halka açık bir API'si yok ve kullanım şartları içeriğinin
 kopyalanmasını yasaklıyor. Kasadaki her kayıt elle, kendi cümlelerimizle yazıldı;

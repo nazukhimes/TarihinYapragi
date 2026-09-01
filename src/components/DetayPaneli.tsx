@@ -3,6 +3,7 @@ import type { OlayMakalesi } from "../lib/olayMakalesi";
 import { sayfaOzetiGetir, type SayfaOzeti } from "../lib/sayfaOzeti";
 import { SkeletonParagraf } from "./Iskeletler";
 import { IconArrow, IconExternal, IconSearch } from "./ui";
+import { YapayZekaBolumu } from "./YapayZekaBolumu";
 
 /** Olayla/kişiyle ilgili tek bir Vikipedi sayfası — çip olarak basılır (T-18). */
 export interface OlayKaynagi {
@@ -63,8 +64,13 @@ export interface DetayPaneliProps {
    */
   ozetBasligi?: string;
   /**
-   * **T-20 yuvası.** Yapay zekâ bölümü buraya girecek; bu talimatta hiçbir
-   * çağrı noktası doldurmaz, dolayısıyla alan hiç render edilmez.
+   * T-20 yuvasına, yapay zekâ bölümünün **altına** eklenecek ek içerik.
+   *
+   * Yuvanın kendisini T-20 doldurdu ve bunu `DetayPaneli` içinden yaptı: üç
+   * çağrı noktasının üçüne de aynı JSX'i geçirmek, T-19'un ortadan kaldırdığı
+   * "aynı iyileştirmeyi üç yere ayrı ayrı yaz" sorununu geri getirirdi.
+   * Bu prop, ileride yalnızca **bir** çağrı noktasına özgü bir eklenti
+   * gerekirse diye duruyor; bugün kimse doldurmuyor.
    */
   children?: ReactNode;
 }
@@ -82,7 +88,7 @@ export interface DetayPaneliProps {
  * böylece korunur, panel yalnızca içeriği verir.
  *
  * İçerik sırası: kaynak rozeti · görsel · metin · "Daha fazlasını oku" ·
- * kaynak çipleri + "Vikipedi'de ara" · T-20 yuvası.
+ * kaynak çipleri + "Vikipedi'de ara" · yapay zekâ bölümü (T-20).
  */
 export function DetayPaneli({
   baslik,
@@ -134,9 +140,15 @@ export function DetayPaneli({
         ustBosluk={!!(gorsel || metin || ozetBasligi)}
       />
 
-      {/* T-20 yuvası — bu talimatta boş. */}
-      {children && (
-        <div className="mt-5 pt-4 border-t border-dashed border-line/70">{children}</div>
+      {/* T-20 yuvası. `metin` yoksa `YapayZekaBolumu` kendini hiç basmaz —
+          bağlamsız soru, modeli uydurmaya zorlar (bkz. bileşenin başlığı). */}
+      {(metin || children) && (
+        <div className="mt-5 pt-4 border-t border-dashed border-line/70">
+          {metin && (
+            <YapayZekaBolumu baglam={metin} kaynakAdi={metinKaynagi?.title ?? ozetBasligi} />
+          )}
+          {children && <div className={metin ? "mt-4" : ""}>{children}</div>}
+        </div>
       )}
     </div>
   );
