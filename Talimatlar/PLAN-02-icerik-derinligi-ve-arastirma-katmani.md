@@ -3,8 +3,8 @@
 | Alan               | Değer                                                                                           |
 | ------------------ | ----------------------------------------------------------------------------------------------- |
 | **Oluşturulma**    | 2026-08-24                                                                                      |
-| **Durum**          | 🟡 **Sürüyor — 6 / 7** (FAZ 1, 2 ve 3 tamamlandı; FAZ 4'te yalnızca T-22 kaldı)                 |
-| **Son hareket**    | 2026-09-01 · **T-20 tamamlandı** — çalışma zamanı yapay zekâ katmanı; FAZ 3 bitti (U-6 kapandı) |
+| **Durum**          | 🟢 **Talimatların tamamı bitti — 7 / 7** (dört fazın hepsi kapandı; plan kapanışı bekliyor)     |
+| **Son hareket**    | 2026-09-02 · **T-22 tamamlandı** — `react-router-dom` 6 → 7 güvenlik yükseltmesi (O-13 kapandı) |
 | **Talimat sayısı** | 7 (T-16 … T-22)                                                                                 |
 | **Faz sayısı**     | 4                                                                                               |
 | **Dayanak**        | [`../Dokumanlar/ANALIZ-RAPORU-02.md`](../Dokumanlar/ANALIZ-RAPORU-02.md)                        |
@@ -236,7 +236,7 @@ Vikipedi içeriğinin otomatik, YZ'nin istek üzerine çalışmasını onayladı
 | ~~T-19~~ ✅ | [`T-19-detay-paneli.md`](Tamamland%C4%B1/T-19-detay-paneli.md)                               | 3   | U-6                  | ✅ **Tamamlandı** | 2026-09-01 |
 | ~~T-20~~ ✅ | [`T-20-yapay-zeka-katmani.md`](Tamamland%C4%B1/T-20-yapay-zeka-katmani.md)                   | 3   | U-6                  | ✅ **Tamamlandı** | 2026-09-01 |
 | ~~T-21~~ ✅ | [`T-21-devredilen-icerik-bulgulari.md`](Tamamland%C4%B1/T-21-devredilen-icerik-bulgulari.md) | 4   | O-11, O-12, m-7, m-8 | ✅ **Tamamlandı** | 2026-09-01 |
-| T-22        | [`T-22-react-router-yukseltmesi.md`](T-22-react-router-yukseltmesi.md)                       | 4   | O-13                 | ⬜ Bekliyor       | —          |
+| ~~T-22~~ ✅ | [`T-22-react-router-yukseltmesi.md`](Tamamland%C4%B1/T-22-react-router-yukseltmesi.md)       | 4   | O-13                 | ✅ **Tamamlandı** | 2026-09-02 |
 
 > **Uygulama sırası:** T-16 → T-17 → T-18 → T-19 → T-20 → T-21 → T-22.
 > T-16 zorunlu ilk adımdır (§4). T-21 bağımsızdır, araya alınabilir.

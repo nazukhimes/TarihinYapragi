@@ -898,10 +898,18 @@ npm run preview` çıktısına karşı ölçün.
 
 ---
 
-## 12. Yönlendirme (T-06)
+## 12. Yönlendirme (T-06 · T-22)
 
 Uygulamanın **tek doğruluk kaynağı URL'dir.** `App.tsx` içinde `day`/`month` için
 ayrı bir `useState` yoktur; seçili gün her zaman adres çubuğundan okunur.
+
+**Sürüm:** `react-router-dom` **7.18.3** (T-22, 2026-09-02'de 6.8 → 7'ye
+yükseltildi — iki orta seviye güvenlik danışma kaydını kapatmak için). v7'de
+`react-router-dom`, `react-router`'ın ince bir yeniden dışa aktarım katmanıdır;
+aşağıda anlatılan API'lerin hiçbirinin imzası değişmedi ve uygulama kodunda
+**tek satır değişiklik gerekmedi**. Kurulum hâlâ veri yönlendirici
+(`createBrowserRouter`) kipidir — çerçeve kipine (framework mode), yükleyicilere
+(loader) veya eylemlere (action) geçilmedi.
 
 ### 12.1 URL şeması
 
@@ -951,6 +959,13 @@ dahili hata sınırıyla sarar ve React **en yakın** hata sınırını kullanı
 render'ında oluşan bir hatayı **hiç görmez**; kullanıcı react-router'ın jenerik
 İngilizce hata ekranını görür. T-09'da canlı doğrulandı. Kök `ErrorBoundary`
 yalnızca rota render'ının dışında kalan hatalar için son çare olarak durur.
+
+> **T-22 yeniden doğrulaması (v7):** `errorElement` v7'de kaldırılmadı ve bu
+> katmanlama aynen korunuyor. `App.tsx`'e geçici bir `throw` konularak canlı
+> doğrulandı: Türkçe `RouteErrorFallback` kartı çıktı, konsola yalnızca onun
+> `(rota)` ekli mesajı düştü, kök `ErrorBoundary` tetiklenmedi. (v7'nin
+> `ErrorBoundary` **alanı** bununla karıştırılmamalı — o, çerçeve kipi rota
+> modülleri içindir; bu proje veri yönlendirici kipinde `errorElement` kullanır.)
 
 ### 12.5 Sunucu tarafı gereksinim (SPA fallback)
 

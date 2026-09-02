@@ -1046,7 +1046,7 @@ nihai karar plan sahibine aittir.
 > iyileştirmesi) talimatı sırasında, `npm audit` çalıştırılırken keşfedilmiş,
 > kod mantığı değil **bağımlılık güvenliği** ile ilgili bir bulgudur.
 
-### O-13 · `react-router-dom`'un dolaylı bağımlılığı `react-router`'da 2 orta seviye güvenlik danışma kaydı — ⏭️ PLAN-02'YE DEVREDİLDİ
+### O-13 · `react-router-dom`'un dolaylı bağımlılığı `react-router`'da 2 orta seviye güvenlik danışma kaydı — ✅ ÇÖZÜLDÜ (T-22)
 
 **Dosya:** `package.json` (dolaylı: `react-router-dom` → `react-router`)
 
@@ -1083,6 +1083,47 @@ doğrulayarak.
 **Önerilen talimat:** Henüz hiçbir talimata atanmadı. PLAN-01'in kapsamı
 dışında yeni, küçük bir talimat (ör. T-15) ya da PLAN-02'nin bakım
 kapsamına alınabilir — nihai karar plan sahibine aittir.
+
+> **✅ Çözüm — T-22 (2026-09-02)**
+>
+> `react-router-dom` `^6.8.0` → **`^7.18.3`** (`npm install react-router-dom@7`;
+> `npm audit fix --force` bilerek kullanılmadı, başka paketlere dokunmasın diye).
+> Her iki danışma kaydı da kapandı: `npm audit` artık **0 açık** bildiriyor.
+>
+> **Kırıcı değişiklik çıkmadı.** v7'de `react-router-dom` ince bir yeniden dışa
+> aktarım katmanına dönüşmüş (`export * from "react-router"` + `react-router/dom`
+> kaynaklı `RouterProvider`), kullanılan altı API'nin (`createBrowserRouter`,
+> `RouterProvider`, `Navigate`, `useNavigate`, `useParams`, `Link`,
+> `useRouteError`, `isRouteErrorResponse`) hiçbirinin imzası değişmedi.
+> `errorElement` v7'de **kaldırılmadı** — veri yönlendirici rota nesnesinde
+> hâlâ geçerli; `ErrorBoundary` alanı yalnızca çerçeve kipi (framework mode)
+> rota modülleri içindir, bu proje onu kullanmıyor. Uygulama kodunda **tek bir
+> satır bile değişmedi**; yalnızca `package.json` + `package-lock.json`.
+>
+> **Doğrulama (canlı, `npm run dev`):** `/` → `/2-eylul`; `/08-21` → `/21-agustos`
+> (adres çubuğunda `replace` ile yeniden yazıldı); `/21-agustos` doğrudan açıldı;
+> `/29-subat` açıldı; `/abc` → `NotFound`. Geri/ileri tuşu gün geçmişinde doğru
+> çalıştı (21 → 22 → 23 Ağustos, geri → 22, geri → 21, ileri → 22; her adımda
+> `document.title` de birlikte değişti). Üç günde (29 Ekim · 7 Mart · 29 Şubat)
+> gün gezinme düğmeleri, mini takvim ve paylaş bağlantısı çalıştı; 29 Şubat ↔
+> 1 Mart artık gün sınırı iki yönde de doğru; Şubat mini takvimi 29 gün
+> gösterdi (arşiv kipi). Konsolda v6'nın gelecek bayrağı (future flag) uyarıları
+> **kayboldu**, yeni uyarı çıkmadı.
+>
+> **`errorElement` yeniden doğrulaması (T-09 notu, §12.4):** `App.tsx`'e geçici
+> bir `throw` konuldu. Türkçe `RouteErrorFallback` kartı çıktı (react-router'ın
+> jenerik İngilizce ekranı değil); konsolda **yalnızca** `[Tarih Yaprağı]
+beklenmeyen hata (rota):` göründü — kök `ErrorBoundary`'nin `(rota)` eki
+> **olmayan** mesajı hiç düşmedi. React'in bileşen yığını da bunu doğruladı:
+> `App → RenderedRoute → RenderErrorBoundary` (react-router'ın kendi iç sınırı)
+> → … → `RouterProvider` → `ErrorBoundary` (bizimki, tetiklenmemiş).
+> **v7'de davranış aynen korunuyor.** Geçici `throw` geri alındı.
+>
+> **Yan etki:** `react` satıcı parçası 206,26 kB → **235,93 kB** (gzip 67,36 →
+> 77,28 kB) büyüdü; v7 çalışma zamanı v6'dan büyük. `vite.config.ts`'in
+> `manualChunks` girdisine dokunmak gerekmedi — Rollup, `react-router`'ı
+> `react-router-dom` üzerinden aynı satıcı parçasına aldı (T-13'ün uzun vadeli
+> önbellek amacı korundu; `index` parçası 385,25 kB'de sabit kaldı).
 
 ---
 
