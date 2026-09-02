@@ -128,6 +128,70 @@ export function modelSil(): void {
   }
 }
 
+/**
+ * "WEB'DE ARAŞTIR" TERCİHİ (T-25 madde 7)
+ *
+ * Varsayılan **açık**: kullanıcının şikâyeti "araştırmıyor"du (T-25 canlı
+ * kullanıcı raporu, 2026-09-02); varsayılanı kapalı yapmak aynı şikâyeti
+ * üretirdi. Kayıt yoksa (ilk kullanım, ya da `localStorage` erişilemiyor)
+ * açık sayılır — anahtar/model desenlerinin aksine burada "kayıt yok" ile
+ * "kullanıcı kapattı" ayrımı gerekiyor, bu yüzden değer `"0"`/`"1"` dizgesi.
+ */
+export const ARAMA_ADI = "ty-yz-arama";
+
+export function aramaAcikMi(): boolean {
+  try {
+    const deger = localStorage.getItem(ARAMA_ADI);
+    return deger === null || deger === "1";
+  } catch {
+    return true;
+  }
+}
+
+/** Tercihi kaydeder — ayarlar ekranındaki "Web'de araştır" anahtarı. */
+export function aramaYaz(acik: boolean): void {
+  try {
+    localStorage.setItem(ARAMA_ADI, acik ? "1" : "0");
+  } catch {
+    /* yazılamadıysa bu oturumda tercih hatırlanmaz, varsayılan (açık) kullanılır */
+  }
+  window.dispatchEvent(new CustomEvent(DEGISTI));
+}
+
+/** Kayıtlı arama tercihini okur ve değiştiğinde yeniden render eder (bkz. `useYzAnahtari`). */
+export function useAramaTercihi(): boolean {
+  return useSyncExternalStore(abone, aramaAcikMi, () => true);
+}
+
+/**
+ * MODELE ÖZGÜ "ARAMA DESTEKLENMİYOR" İŞARETİ (T-25 madde 5)
+ *
+ * `gemini.ts`, arama açıkken 400 alıp gövdede araç hatası görünce aynı model
+ * için aramasız bir isteği sessizce tekrarlar. Bu tekrar her soruda olmasın
+ * diye sonuç buraya yazılır; bir sonraki soruda o model doğrudan aramasız
+ * denenir (tek istek). Modele özgüdür çünkü aday zincirindeki bir model
+ * desteklemese bile bir başkası destekleyebilir.
+ */
+function aramaYokAnahtari(model: string): string {
+  return `ty-yz-arama-yok:${model}`;
+}
+
+export function aramaDesteklenmiyorMu(model: string): boolean {
+  try {
+    return localStorage.getItem(aramaYokAnahtari(model)) === "1";
+  } catch {
+    return false;
+  }
+}
+
+export function aramaDesteklenmiyorIsaretle(model: string): void {
+  try {
+    localStorage.setItem(aramaYokAnahtari(model), "1");
+  } catch {
+    /* yazılamadıysa her soruda iki istek atılır ama davranış bozulmaz */
+  }
+}
+
 function abone(geriCagri: () => void): () => void {
   window.addEventListener(DEGISTI, geriCagri);
   // Başka bir sekmede silinen anahtar bu sekmede de geçersizdir.

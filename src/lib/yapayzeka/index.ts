@@ -1,5 +1,5 @@
 /**
- * YAPAY ZEKÂ KATMANI — dışa açılan yüz (T-20)
+ * YAPAY ZEKÂ KATMANI — dışa açılan yüz (T-20, web araması T-25)
  *
  * Panel yalnızca burayı içe aktarır. Sağlayıcı değişirse değişen tek satır
  * aşağıdaki atamadır; `YapayZekaBolumu` hiçbir sağlayıcının adını bilmez.
@@ -10,7 +10,9 @@
  * **kaldırmaz**: burada üretilen hiçbir metin depoya yazılmaz, `src/data/gunler/*`
  * dosyalarına dokunulmaz, çıktı editör içeriği gibi görünmez. Üretim geçicidir,
  * isteğe bağlıdır, kullanıcının kendi anahtarıyla ve kendi tıklamasıyla olur;
- * ekranda "YZ ÜRETİMİ" rozetiyle ve kaynağıyla birlikte durur.
+ * ekranda "YZ ÜRETİMİ" rozetiyle ve kaynağıyla birlikte durur. Web araması da
+ * (T-25) bu ilkeye tabidir: aranan sonuçlar önbelleğe alınmaz, ekranda kaynak
+ * bağlantılarıyla birlikte durur.
  */
 
 import { gemini } from "./gemini";
@@ -26,11 +28,29 @@ export {
   anahtarSil,
   anahtarTemizle,
   anahtarYaz,
+  ARAMA_ADI,
+  aramaAcikMi,
+  aramaYaz,
   MODEL_ADI,
   modelOku,
   modelSil,
   modelYaz,
+  useAramaTercihi,
   useYzAnahtari,
 } from "./anahtar";
-export { SORU_IPUCU, VARSAYILAN_ISTEM, baglamiKirp, istemBirlestir } from "./istem";
-export { YZ_MESAJ, YzHatasi, yzDurumMesaji, type YzSaglayici } from "./tipler";
+export {
+  SORU_IPUCU,
+  VARSAYILAN_ISTEM,
+  VARSAYILAN_ISTEM_ARASTIRMA,
+  baglamiKirp,
+  istemBirlestir,
+} from "./istem";
+export {
+  YZ_MESAJ,
+  YzHatasi,
+  yzDurumMesaji,
+  type YzIstek,
+  type YzOlay,
+  type YzSaglayici,
+  type YzYanit,
+} from "./tipler";

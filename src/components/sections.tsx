@@ -8,6 +8,7 @@ import {
 } from "../data";
 import { classifyItem, type OtdItem } from "../lib/wiki";
 import type { OlayMakalesi } from "../lib/olayMakalesi";
+import type { YzOlay } from "../lib/yapayzeka";
 import { DetayPaneli, type OlayKaynagi } from "./DetayPaneli";
 import { IconArrow, IconSkull, Modal, Reveal } from "./ui";
 
@@ -71,6 +72,7 @@ export function TimelineSection({
   events,
   matched,
   olayMakaleleri = {},
+  dayLabel,
 }: {
   events: MergedEvent[];
   /** Arama sonucuyla eşleşen alt küme — üst düzeyde (useAramaSonuclari) tek seferde
@@ -80,6 +82,8 @@ export function TimelineSection({
   /** Olay kimliği → EN beslemesinden çözülmüş TR olay makalesi (bkz. lib/olayMakalesi.ts).
    * İkincil katman: geç gelir, çoğu olayda hiç gelmez. */
   olayMakaleleri?: Record<string, OlayMakalesi>;
+  /** "24 Ağustos" — yapay zekâ künyesindeki tarihi kurmak için (T-25). */
+  dayLabel: string;
 }) {
   const [cat, setCat] = useState<CategoryId | "all">("all");
   const [openId, setOpenId] = useState<string | null>(null);
@@ -133,6 +137,13 @@ export function TimelineSection({
             const ozetSayfasi = olayOzetSayfasi(e);
             const ozet = ozetSayfasi?.extract;
             const makale = olayMakaleleri[e.id];
+            // Arama modunun olayın kendisini hedeflemesi için (T-25 madde 1):
+            // bağlam metni başka bir maddenin özeti olsa bile künye olayı taşır.
+            const olay: YzOlay = {
+              tarih: `${dayLabel} ${formatYear(e.year)}`,
+              baslik: e.text,
+              madde: makale?.title ?? ozetSayfasi?.title,
+            };
             return (
               <li key={e.id}>
                 {showCentury && (
@@ -215,6 +226,7 @@ export function TimelineSection({
                         // Beslemedeki her sayfanın özeti elimizde; okunacak fazlası
                         // yalnızca çapraz eşlemenin bulduğu olay makalesinde var.
                         ozetBasligi={makale?.title}
+                        olay={olay}
                       />
                     </div>
                   )}
@@ -318,6 +330,7 @@ export function PeopleRow({
   accentLabel,
   accentColor,
   emptyText,
+  dayLabel,
 }: {
   people: PersonCard[];
   /** bkz. TimelineSection'daki `matched` notu. */
@@ -325,6 +338,8 @@ export function PeopleRow({
   accentLabel: string;
   accentColor: string;
   emptyText: string;
+  /** "24 Ağustos" — yapay zekâ künyesindeki tarihi kurmak için (T-25). */
+  dayLabel: string;
 }) {
   const [cat, setCat] = useState<CategoryId | "all">("all");
   const [modal, setModal] = useState<PersonCard | null>(null);
@@ -514,6 +529,12 @@ export function PeopleRow({
                 // Beslemedeki `extract`, `page/summary`nin verdiği metnin
                 // aynısıdır (bkz. lib/sayfaOzeti.ts) — elimizde varsa düğme çıkmaz.
                 ozetBasligi={modal.extract ? undefined : modal.name}
+                // Kişinin kendi künyesi — yıl kişinin doğum/ölüm yılı (T-25).
+                olay={{
+                  tarih: `${dayLabel} ${formatYear(modal.year)}`,
+                  baslik: modal.name,
+                  madde: modal.name,
+                }}
               />
             </div>
             <p className="mt-4 font-mono text-[11px] text-ink-faint">
@@ -548,10 +569,13 @@ export function dosyaDetayiVar(c: Pick<CaseFile, "detail" | "summary">): boolean
 export function CasesSection({
   cases,
   matched,
+  dayLabel,
 }: {
   cases: CaseFile[];
   /** bkz. TimelineSection'daki `matched` notu. */
   matched: CaseFile[];
+  /** "24 Ağustos" — yapay zekâ künyesindeki tarihi kurmak için (T-25). */
+  dayLabel: string;
 }) {
   const [openId, setOpenId] = useState<string | null>(cases[0]?.id ?? null);
   const [hepsi, setHepsi] = useState(false);
@@ -671,6 +695,7 @@ export function CasesSection({
                       // `pages[0].extract`ten geliyor ama hangi sayfa olduğu
                       // `CaseFile`'a yazılmıyor. Çip listesi bu yüzden burada boş —
                       // T-18'in devir notundaki açık iş (T-21 adayı).
+                      olay={{ tarih: `${dayLabel} ${formatYear(c.year)}`, baslik: c.title }}
                     />
                   </div>
                 )}

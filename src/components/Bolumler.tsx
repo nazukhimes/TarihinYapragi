@@ -109,6 +109,7 @@ export function Bolumler({
                     events={veri.mergedEvents}
                     matched={arama.olay}
                     olayMakaleleri={olayMakaleleri}
+                    dayLabel={dayLabel}
                   />
                 </ErrorBoundary>
               )}
@@ -135,6 +136,7 @@ export function Bolumler({
                     accentLabel="Doğum"
                     accentColor="#8fbf6a"
                     emptyText="Bu tarih için arşivde doğum kaydı bulunamadı — başka bir güne bak."
+                    dayLabel={dayLabel}
                   />
                 </ErrorBoundary>
               )}
@@ -161,6 +163,7 @@ export function Bolumler({
                     accentLabel="Vefat"
                     accentColor="#6f9fd8"
                     emptyText="Bu tarih için arşivde vefat kaydı bulunamadı."
+                    dayLabel={dayLabel}
                   />
                 </ErrorBoundary>
               )}
@@ -181,7 +184,7 @@ export function Bolumler({
                 <SkeletonCards />
               ) : (
                 <ErrorBoundary variant="section">
-                  <CasesSection cases={veri.allCases} matched={arama.dosya} />
+                  <CasesSection cases={veri.allCases} matched={arama.dosya} dayLabel={dayLabel} />
                 </ErrorBoundary>
               )}
             </div>

@@ -2,7 +2,7 @@
 
 > Uygulamayı **kullanacak** kişiler için. Kod bilgisi gerekmez.
 >
-> **Sürüm:** 0.2.0 · **Son güncelleme:** 2026-08-24
+> **Sürüm:** 0.2.0 · **Son güncelleme:** 2026-09-02
 
 ---
 
@@ -12,11 +12,12 @@
 2. [Ekranı Tanıyalım](#2-ekranı-tanıyalım)
 3. [Gün Seçme — 5 Farklı Yol](#3-gün-seçme--5-farklı-yol)
 4. [Bölümler](#4-bölümler)
-5. [Yayın Modu](#5-yayın-modu--yayıncılar-için)
-6. [Arama](#6-arama)
-7. [Klavye Kısayolları](#7-klavye-kısayolları)
-8. [Sıkça Sorulanlar](#8-sıkça-sorulanlar)
-9. [Sorun Giderme](#9-sorun-giderme)
+5. [Yapay Zekâya Sor](#5-yapay-zekâya-sor)
+6. [Yayın Modu](#6-yayın-modu--yayıncılar-için)
+7. [Arama](#7-arama)
+8. [Klavye Kısayolları](#8-klavye-kısayolları)
+9. [Sıkça Sorulanlar](#9-sıkça-sorulanlar)
+10. [Sorun Giderme](#10-sorun-giderme)
 
 ---
 
@@ -255,7 +256,51 @@ Bölüm başlığının sağında toplam **"X dk malzeme"** yazar.
 
 ---
 
-## 5. Yayın Modu — Yayıncılar İçin
+## 5. Yapay Zekâya Sor
+
+Bir olayın, kişinin ya da karanlık dosyanın detayını açtığınızda, panelin
+altında leylak renkli bir **`YAPAY ZEKÂYA SOR`** düğmesi görürsünüz. Bu, o
+kaydı yapay zekâya açıklatan ya da hakkında soru sorabileceğiniz serbest bir
+kutudur. İstek yalnızca düğmeye bastığınızda gider; sayfa açılırken hiçbir
+çağrı yapılmaz.
+
+**Kendi anahtarınız gerekir.** Uygulamanın sunucusu yok; üst bardaki kıvılcım
+simgesinden kendi Google Gemini anahtarınızı girersiniz. Anahtar yalnızca **bu
+tarayıcıda** durur, hiçbir yere gönderilmez ve aynı ekrandan silinebilir.
+Anahtarınız yoksa düğme yerine "Önce anahtarınızı girin" uyarısı çıkar.
+
+### Web'de araştırma modu
+
+Varsayılan olarak **açıktır.** Bu modda model, Vikipedi özetiyle sınırlı kalmaz —
+olayın tarihini, olay cümlesini ve ilgili Vikipedi maddesini kullanarak Google'da
+arar, 120–200 kelimelik bir özet çıkarır ve yanıtın altında **tıklanabilir kaynak
+listesi** gösterir. Bağlam metni başka bir maddenin özeti olsa bile (ör. bazı
+günlerde panele düşen metin olayın kendisini değil, içinde geçen bir ülke ya da
+şehri anlatabilir) arama olayın kendisini hedefler.
+
+Yanıtın altındaki cümle hangi modun çalıştığını söyler:
+
+- **"…web'de arama yapılarak üretildi"** — model gerçekten aradı; altındaki
+  kaynak listesinden doğrulayabilirsiniz.
+- **"…Vikipedi özetine dayanılarak üretildi"** — model aramaya gerek görmedi ya
+  da arama kapalı; yanıt yalnızca ekrandaki metne dayanır.
+
+Ayarlar ekranında (kıvılcım simgesi → anahtar girildikten sonra) **"Web'de
+araştır"** anahtarıyla bu modu kapatabilirsiniz — kapatınca yanıtlar yalnızca
+sayfadaki metne dayanır, hiç arama yapılmaz.
+
+> **Kota:** Ücretsiz Gemini katmanında günlük arama hakkı sınırlıdır. Kota
+> dolduğunda uygulama çökmez; yanıt sayfadaki metinle üretilmeye devam eder,
+> yalnızca kaynak listesi çıkmaz. Ayarlardaki **"Bağlantıyı sına"** düğmesi bu
+> kotayı harcamaz.
+
+Model çıktısı her zaman düz metin olarak basılır ve leylak **"YZ üretimi"**
+rozetiyle işaretlenir — Editör (altın) ve Otomatik (nötr) rozetlerinden bilerek
+farklı renktedir, üretilmiş metin derlenmiş metinle karıştırılmaz.
+
+---
+
+## 6. Yayın Modu — Yayıncılar İçin
 
 Sağ üstteki **🎙 YAYIN MODU** düğmesi (veya Sohbet Kartları bölümündeki
 **`YAYIN MODUNU BAŞLAT`**) tam ekran bir teleprompter açar.
@@ -282,7 +327,7 @@ Sağ üstteki **🎙 YAYIN MODU** düğmesi (veya Sohbet Kartları bölümündek
 
 ---
 
-## 6. Arama
+## 7. Arama
 
 Üst bardaki arama kutusu **seçili günün arşivinde** arar — tüm yıl içinde değil.
 
@@ -303,7 +348,7 @@ temizleme ve bugüne dönme düğmeleri.
 
 ---
 
-## 7. Klavye Kısayolları
+## 8. Klavye Kısayolları
 
 Uygulama artık **fareye hiç dokunmadan** kullanılabilir.
 
@@ -353,7 +398,7 @@ odaklandığınız öğenin etrafında **altın (kâğıt yüzeylerde kırmızı
 
 ---
 
-## 8. Sıkça Sorulanlar
+## 9. Sıkça Sorulanlar
 
 **S: Bilgiler nereden geliyor?**
 İki kaynaktan. (1) **Wikimedia REST API** — Türkçe Vikipedi'nin "Bugün tarihte"
@@ -419,7 +464,7 @@ Evet, arayüz mobil uyumludur. Kart şeritleri dokunmatik kaydırılır.
 
 ---
 
-## 9. Sorun Giderme
+## 10. Sorun Giderme
 
 | Belirti                                                                                    | Sebep                                                                     | Çözüm                                                                                                                                           |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |

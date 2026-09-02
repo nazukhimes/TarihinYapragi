@@ -31,6 +31,26 @@ function metinYaniti(metin: string) {
   return { candidates: [{ content: { parts: [{ text: metin }] } }] };
 }
 
+/** Gemini'nin `groundingMetadata` taşıyan, arama yapılmış yanıt gövdesi (T-25). */
+function aramaYaniti(
+  metin: string,
+  kaynaklar: { uri: string; title?: string }[] = [
+    { uri: "https://vertexaisearch.example/1", title: "reuters.com" },
+  ]
+) {
+  return {
+    candidates: [
+      {
+        content: { parts: [{ text: metin }] },
+        groundingMetadata: {
+          webSearchQueries: ["Washington Yangını 1814"],
+          groundingChunks: kaynaklar.map((k) => ({ web: k })),
+        },
+      },
+    ],
+  };
+}
+
 /** Anahtarlı, kutusu açılmış bölüm — testlerin çoğu buradan başlıyor. */
 async function bolumuAc(baglam = EXTRACT) {
   anahtarYaz("KUKLA-ANAHTAR");
@@ -229,5 +249,63 @@ describe("YapayZekaBolumu — dört hata durumu da Türkçe", () => {
 
     expect(await screen.findByText(YZ_MESAJ.sunucu)).toBeInTheDocument();
     expect(screen.queryByText("YZ üretimi")).not.toBeInTheDocument();
+  });
+});
+
+/* --------------------------------------------------------- web araması (T-25) */
+
+describe("YapayZekaBolumu — web araması (T-25 madde 6)", () => {
+  it("arandi true iken kaynak listesi ve yeni künye cümlesi basılır", async () => {
+    fetchKuklasi(
+      aramaYaniti("Washington yakıldı.", [
+        { uri: "https://vertexaisearch.example/1", title: "reuters.com" },
+      ])
+    );
+    await bolumuAc();
+    await userEvent.click(screen.getByRole("button", { name: /^Sor$/ }));
+
+    await waitFor(() => expect(screen.getByText("Washington yakıldı.")).toBeInTheDocument());
+    expect(screen.getByRole("link", { name: /reuters\.com/ })).toHaveAttribute(
+      "href",
+      "https://vertexaisearch.example/1"
+    );
+    expect(screen.getByText(/web'de arama yapılarak üretildi/)).toBeInTheDocument();
+  });
+
+  it("arandi false iken eski künye cümlesi basılır ve kaynak listesi hiç yok", async () => {
+    fetchKuklasi(metinYaniti("Bağlamdan üretilen yanıt."));
+    await bolumuAc();
+    await userEvent.click(screen.getByRole("button", { name: /^Sor$/ }));
+
+    await waitFor(() => expect(screen.getByText("Bağlamdan üretilen yanıt.")).toBeInTheDocument());
+    expect(screen.getByText(/Vikipedi özetine dayanılarak/)).toBeInTheDocument();
+    expect(screen.queryByText("Kaynaklar")).not.toBeInTheDocument();
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
+  });
+
+  it("model aramayı desteklemiyorsa 'Anahtar geçersiz' değil, aramasız yanıt + tek satır açıklama gösterilir", async () => {
+    const kukla = vi.fn((_url: string, init?: RequestInit) => {
+      const govde = JSON.parse((init?.body as string) ?? "{}") as { tools?: unknown };
+      if (govde.tools) {
+        return Promise.resolve({
+          ok: false,
+          status: 400,
+          json: () => Promise.resolve({ error: { message: "google_search tool not supported" } }),
+        } as Response);
+      }
+      return Promise.resolve({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve(metinYaniti("Aramasız yanıt.")),
+      } as Response);
+    });
+    vi.stubGlobal("fetch", kukla);
+
+    await bolumuAc();
+    await userEvent.click(screen.getByRole("button", { name: /^Sor$/ }));
+
+    await waitFor(() => expect(screen.getByText("Aramasız yanıt.")).toBeInTheDocument());
+    expect(screen.queryByText(YZ_MESAJ.anahtar)).not.toBeInTheDocument();
+    expect(screen.getByText(YZ_MESAJ.aramaYok)).toBeInTheDocument();
   });
 });

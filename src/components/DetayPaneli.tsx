@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from "react";
 import type { OlayMakalesi } from "../lib/olayMakalesi";
+import type { YzOlay } from "../lib/yapayzeka";
 import { sayfaOzetiGetir, type SayfaOzeti } from "../lib/sayfaOzeti";
 import { SkeletonParagraf } from "./Iskeletler";
 import { IconArrow, IconExternal, IconSearch } from "./ui";
@@ -64,6 +65,11 @@ export interface DetayPaneliProps {
    */
   ozetBasligi?: string;
   /**
+   * Modelin **neyi** araştıracağını söyleyen künye (T-25) — çağrı noktası
+   * kurar, panel uydurmaz. Yoksa arama modu yine çalışır, bağlam metnine düşer.
+   */
+  olay?: YzOlay;
+  /**
    * T-20 yuvasına, yapay zekâ bölümünün **altına** eklenecek ek içerik.
    *
    * Yuvanın kendisini T-20 doldurdu ve bunu `DetayPaneli` içinden yaptı: üç
@@ -102,6 +108,7 @@ export function DetayPaneli({
   kaynak,
   rozetGoster = true,
   ozetBasligi,
+  olay,
   children,
 }: DetayPaneliProps) {
   return (
@@ -145,7 +152,11 @@ export function DetayPaneli({
       {(metin || children) && (
         <div className="mt-5 pt-4 border-t border-dashed border-line/70">
           {metin && (
-            <YapayZekaBolumu baglam={metin} kaynakAdi={metinKaynagi?.title ?? ozetBasligi} />
+            <YapayZekaBolumu
+              baglam={metin}
+              kaynakAdi={metinKaynagi?.title ?? ozetBasligi}
+              olay={olay}
+            />
           )}
           {children && <div className={metin ? "mt-4" : ""}>{children}</div>}
         </div>

@@ -12,6 +12,20 @@ Biçim [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/) yaklaşımını 
 
 ### Eklenen
 
+- **Web aramalı araştırma modu** — "Yapay zekâya sor" artık ekrandaki Vikipedi
+  paragrafına hapsolmuyor: varsayılan olarak açık olan bu modda model, olayın
+  künyesini (tarih + olay cümlesi + ilgili madde) kullanarak Google'da arıyor,
+  120–200 kelimelik bir özet çıkarıyor ve yanıtın altında tıklanabilir kaynak
+  listesi gösteriyor. Bağlam metni başka bir maddenin özeti olsa bile (ör. 24
+  Ağustos 1814 kaydında panele düşen İngiltere'nin coğrafya özeti) künye sayesinde
+  aranan olayın kendisi oluyor. Künye satırı hangi modun çalıştığını doğru
+  söylüyor: web'de arandıysa "arandı" diyor, aranmadıysa (model gerek görmediyse
+  ya da kullanıcı kapattıysa) T-20'nin orijinal "Vikipedi özetine dayanılarak
+  üretildi" cümlesi aynen duruyor. Ayarlardan kapatılabiliyor; kapatılınca T-20'nin
+  bugünkü davranışı birebir geri geliyor. Aramayı desteklemeyen bir modelde
+  kullanıcı yanlışlıkla "Anahtar geçersiz" görmüyor — istek sessizce aramasız
+  tekrarlanıyor ve tek satır açıklama çıkıyor. "Bağlantıyı sına" günlük arama
+  kotasını harcamıyor (T-25)
 - **"Yapay zekâya sor"** — bir olayın, dosyanın ya da kişinin detay panelinde
   artık serbest soru kutusu var: model, panelin gösterdiği Vikipedi metnini
   açıklıyor ya da o metin hakkındaki sorunuzu yanıtlıyor. Sayfadan ayrılmadan
@@ -146,8 +160,10 @@ Biçim [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/) yaklaşımını 
 yapay zekâ metni yazılmaz; `src/data/gunler/*` dosyaları elle derlenmeye devam
 eder. Üretim geçicidir, isteğe bağlıdır, kullanıcının kendi anahtarıyla ve kendi
 tıklamasıyla olur ve ekranda kaynağıyla birlikte, "YZ ÜRETİMİ" rozetiyle durur.
-Model kendi hafızasından değil, önüne konan Vikipedi metninden konuşur; metin
-yoksa bölüm hiç görünmez.
+Bağlam metni olmadan hiçbir çağrı yapılmaz; metin yoksa bölüm hiç görünmez. Web
+araması açıkken (T-25) model kendi hafızasından değil Google Arama'dan konuşur
+ve kaynaklarını gösterir; kapalıyken (ya da arama desteklenmiyorsa) T-20'nin
+orijinal kuralına döner: yalnızca önüne konan Vikipedi metninden konuşur.
 
 Guinness World Records'ın halka açık bir API'si yok ve kullanım şartları içeriğinin
 kopyalanmasını yasaklıyor. Kasadaki her kayıt elle, kendi cümlelerimizle yazıldı;

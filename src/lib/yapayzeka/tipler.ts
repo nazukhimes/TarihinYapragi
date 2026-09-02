@@ -1,25 +1,59 @@
 /**
- * YAPAY ZEKÂ KATMANI — sağlayıcıdan bağımsız arayüz (T-20)
+ * YAPAY ZEKÂ KATMANI — sağlayıcıdan bağımsız arayüz (T-20, web araması T-25)
  *
  * Bu dosya **hiçbir sağlayıcıyı tanımaz.** Gemini'ye özgü her şey `gemini.ts`
  * içindedir; panel yalnızca `index.ts`'in dışa aktardığı `saglayici`yı çağırır.
  *
- * Gerekçe: ücretsiz katmanda **web araması yoktur** (bkz. `istem.ts`).
- * Arama destekli bir sağlayıcıya geçmek gerektiğinde değişecek tek yer
- * `gemini.ts`'in yanına konacak yeni bir dosya ve `index.ts`'teki tek satır olsun.
+ * Arama isteğe bağlıdır (`YzIstek.arama`) ve çağrı noktasının kararıdır —
+ * sağlayıcı yalnızca uygular. Başka bir sağlayıcıya geçmek gerektiğinde
+ * değişecek tek yer `gemini.ts`'in yanına konacak yeni bir dosya ve
+ * `index.ts`'teki tek satır olsun.
  */
+
+/** Modelin **neyi** araştıracağını söyleyen künye. Bağlam metninden bağımsızdır (T-25). */
+export interface YzOlay {
+  /** Kullanıcının baktığı takvim günü + olayın yılı: "24 Ağustos 1814". */
+  tarih: string;
+  /** Beslemenin olay cümlesi (`OtdItem.text`) ya da kişi/dosya başlığı. */
+  baslik: string;
+  /** Bağlamın geldiği Vikipedi maddesi — çağrı noktasındaki `kaynakAdi`. */
+  madde?: string;
+}
+
+export interface YzIstek {
+  /** Kullanıcının sorusu; boşsa moduna göre bir varsayılan görev kullanılır. */
+  soru: string;
+  /** Modelin dayanacağı Vikipedi metni. **Boş geçilmez** — bağlamsız çağrı
+   *  halüsinasyon üretir (T-20 §Halüsinasyon Riski). */
+  baglam: string;
+  /** Modelin **neyi** araştıracağını netleştiren künye — yoksa bağlam metnine düşülür. */
+  olay?: YzOlay;
+  /** Web araması açık mı — çağrı noktası karar verir, sağlayıcı değil (T-25). */
+  arama: boolean;
+  /** Panel kapandığında / gün değiştiğinde iptal için. */
+  signal?: AbortSignal;
+}
+
+export interface YzYanit {
+  /** Düz metin yanıt. HTML **değildir**, düz metin olarak basılır. */
+  metin: string;
+  /** Model **gerçekten** aradı mı? `webSearchQueries` doluysa evet. */
+  arandi: boolean;
+  /** En çok 5, URL'e göre tekilleştirilmiş. `url` Google yönlendirmesidir, olduğu gibi kullanılır. */
+  kaynaklar: { baslik: string; url: string }[];
+  /** Modelin Google'da aradığı sorgular — künye satırında/öneri olarak gösterilir. */
+  sorgular: string[];
+  /** `searchEntryPoint.renderedContent` — Plan A seçilirse sandbox `iframe` içinde basılır. */
+  aramaOnerileriHtml?: string;
+  /** Arama istenmişti ama bu model desteklemiyor; istek sessizce aramasız tekrarlandı
+   *  (bkz. `gemini.ts` > 400 tuzağı, T-25 madde 5). Panel bu durumda `YZ_MESAJ.aramaYok`'u gösterir. */
+  aramaDesteklenmedi?: boolean;
+}
 
 export interface YzSaglayici {
   /** Kullanıcıya gösterilen ad — ayarlar ekranında ve künye satırında geçer. */
   ad: string;
-  /**
-   * @param istem   Kullanıcının sorusu ya da varsayılan "açıkla" görevi.
-   * @param baglam  Modelin dayanacağı Vikipedi metni. **Boş geçilmez** —
-   *                bağlamsız çağrı halüsinasyon üretir (T-20 §Halüsinasyon Riski).
-   * @param signal  Panel kapandığında / gün değiştiğinde iptal için.
-   * @returns       Düz metin yanıt. HTML **değildir**, düz metin olarak basılır.
-   */
-  sor(istem: string, baglam: string, signal?: AbortSignal): Promise<string>;
+  sor(istek: YzIstek): Promise<YzYanit>;
 }
 
 /**
@@ -65,6 +99,10 @@ export const YZ_MESAJ = {
   baglantiTamam: "Bağlantı çalışıyor.",
   /** "Modelleri getir" sıfır sonuç dönünce — anahtar geçerli ama kullanılabilir model yok. */
   modelListesiBos: "Bu anahtarla metin üretebilen bir model bulunamadı.",
+  /** Arama istenmişti ama model desteklemiyordu; istek sessizce aramasız tekrarlandı (T-25 madde 5). */
+  aramaYok: "Web araması yapılamadı; yanıt yalnızca sayfadaki metne dayanıyor.",
+  /** Günlük arama kotası ayrı bir hata yüzeyi doğurursa kullanılacak Türkçe metin (T-25 madde 4). */
+  aramaKotasi: "Günlük arama hakkı dolmuş olabilir; yanıt sayfadaki metne dayanıyor.",
 } as const;
 
 /**

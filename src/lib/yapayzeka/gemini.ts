@@ -1,18 +1,35 @@
 /**
- * GEMINI SAĞLAYICISI (T-20 madde 1, aday zinciri T-24)
+ * GEMINI SAĞLAYICISI (T-20 madde 1, aday zinciri T-24, web araması T-25)
  *
  * `YzSaglayici` arayüzünün tek uygulaması. Sağlayıcıya özgü **her şey** —
  * uç nokta, gövde biçimi, yanıt ayrıştırma, model listeleme — bu dosyada
  * kalır; panel ve `istem.ts` Gemini'yi tanımaz.
  *
  * Gemini, ücretsiz katmanı olduğu için seçildi (kullanıcı kararı, 2026-08-24
- * oturumu). Ücretsiz katmanda **web araması yoktur**; halüsinasyon azaltması
- * bu yüzden bağlam gömmeye dayanır, bkz. `istem.ts`.
+ * oturumu). T-20 sırasında ücretsiz katmanda web araması yoktu; bu artık
+ * doğru değil — `google_search` aracı Gemini 2.0'dan itibaren ücretsiz
+ * katmana da açıldı (T-25 §Araştırma Kaydı, 2026-09-02). Arama isteğe
+ * bağlıdır ve çağrı noktası kararıdır (`YzIstek.arama`); kapalıyken
+ * halüsinasyon azaltması hâlâ bağlam gömmeye dayanır, bkz. `istem.ts`.
  */
 
-import { anahtarOku, modelOku, modelYaz } from "./anahtar";
+import {
+  anahtarOku,
+  aramaDesteklenmiyorIsaretle,
+  aramaDesteklenmiyorMu,
+  modelOku,
+  modelYaz,
+} from "./anahtar";
 import { istemBirlestir } from "./istem";
-import { YZ_MESAJ, YzHatasi, yzDurumMesaji, type YzSaglayici } from "./tipler";
+import {
+  YZ_MESAJ,
+  YzHatasi,
+  yzDurumMesaji,
+  type YzIstek,
+  type YzOlay,
+  type YzSaglayici,
+  type YzYanit,
+} from "./tipler";
 
 /**
  * ADAY MODEL ZİNCİRİ (T-24 madde 1).
@@ -57,9 +74,26 @@ const ZAMAN_ASIMI_MS = 30_000;
  */
 const YANIT_JETONU = 2048;
 
+/**
+ * Arama açıkken kullanılan çıktı jeton bütçesi (T-25 madde 3).
+ *
+ * `YANIT_JETONU`'nun notu burada da geçerli, bir basamak yukarıda: arama
+ * turları arttıkça düşünme jetonlarının payı büyür, 2048 tekrar
+ * `MAX_TOKENS`'a çarpar.
+ */
+const ARAMA_JETONU = 3072;
+
 /** Yanıt gövdesinin okuduğumuz kadarı — Google'ın şemasının tamamı değil. */
 interface GeminiYanit {
-  candidates?: { content?: { parts?: { text?: string }[] }; finishReason?: string }[];
+  candidates?: {
+    content?: { parts?: { text?: string }[] };
+    finishReason?: string;
+    groundingMetadata?: {
+      webSearchQueries?: string[];
+      groundingChunks?: { web?: { uri?: string; title?: string } }[];
+      searchEntryPoint?: { renderedContent?: string };
+    };
+  }[];
   promptFeedback?: { blockReason?: string };
   error?: { message?: string; status?: string };
 }
@@ -88,6 +122,46 @@ export function yanitiCoz(ham: GeminiYanit): string {
     .trim();
 }
 
+/** `web.title` boşsa gösterilecek alan adı — yönlendirme adresi hiç çözülmeden, olduğu gibi ayrıştırılır. */
+function alanAdi(url: string): string {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return url;
+  }
+}
+
+/**
+ * `groundingMetadata`den arama üst verisini ayıklar (T-25 madde 3).
+ *
+ * `yanitiCoz`ten bilerek ayrı: ikisi de bağımsız test edilebilsin diye.
+ * Kaynaklar **URL'e göre tekilleştirilir** ve **en çok 5** tanesi tutulur —
+ * kullanım şartındaki üst sınır (T-25 §Araştırma Kaydı).
+ */
+export function kaynaklariCoz(
+  ham: GeminiYanit
+): Pick<YzYanit, "arandi" | "kaynaklar" | "sorgular" | "aramaOnerileriHtml"> {
+  const meta = ham.candidates?.[0]?.groundingMetadata;
+  const sorgular = meta?.webSearchQueries ?? [];
+
+  const gorulen = new Set<string>();
+  const kaynaklar: { baslik: string; url: string }[] = [];
+  for (const parca of meta?.groundingChunks ?? []) {
+    const url = parca.web?.uri;
+    if (!url || gorulen.has(url)) continue;
+    gorulen.add(url);
+    kaynaklar.push({ baslik: parca.web?.title || alanAdi(url), url });
+    if (kaynaklar.length >= 5) break;
+  }
+
+  return {
+    arandi: sorgular.length > 0,
+    kaynaklar,
+    sorgular,
+    aramaOnerileriHtml: meta?.searchEntryPoint?.renderedContent,
+  };
+}
+
 /**
  * Bu çağrıda sırayla denenecek modeller.
  *
@@ -103,7 +177,28 @@ function denemeSirasi(): string[] {
   return [sabit, ...ADAY_MODELLER.filter((m) => m !== sabit)];
 }
 
-async function sor(istem: string, baglam: string, signal?: AbortSignal): Promise<string> {
+function govdeMetni(istem: string, baglam: string, arama: boolean, olay?: YzOlay): string {
+  return JSON.stringify({
+    contents: [{ role: "user", parts: [{ text: istemBirlestir(istem, baglam, arama, olay) }] }],
+    // Alan adı yılan_kılıfı: `google_search`, `googleSearch` değil (T-25 §Araştırma Kaydı).
+    ...(arama ? { tools: [{ google_search: {} }] } : {}),
+    generationConfig: {
+      // Görev "açıkla", "yarat" değil — düşük sıcaklık metne bağlı kalmayı artırır.
+      temperature: 0.2,
+      maxOutputTokens: arama ? ARAMA_JETONU : YANIT_JETONU,
+    },
+  });
+}
+
+/** 400 gövdesi arama aracıyla mı ilgili? Değilse gerçek bir anahtar hatasıdır, gizlenmez. */
+function aracHatasiMi(mesaj: string | undefined): boolean {
+  if (!mesaj) return false;
+  const m = mesaj.toLocaleLowerCase("en-US");
+  return m.includes("tool") || m.includes("google_search") || m.includes("not supported");
+}
+
+async function sor(istek: YzIstek): Promise<YzYanit> {
+  const { soru, baglam, olay, arama, signal } = istek;
   const anahtar = anahtarOku();
   if (!anahtar) throw new YzHatasi(YZ_MESAJ.anahtar);
   if (!basliktaTasinabilir(anahtar)) throw new YzHatasi(YZ_MESAJ.anahtar);
@@ -121,30 +216,46 @@ async function sor(istem: string, baglam: string, signal?: AbortSignal): Promise
   signal?.addEventListener("abort", disaridanIptal);
 
   try {
-    const govde = JSON.stringify({
-      contents: [{ role: "user", parts: [{ text: istemBirlestir(istem, baglam) }] }],
-      generationConfig: {
-        // Görev "açıkla", "yarat" değil — düşük sıcaklık metne bağlı kalmayı artırır.
-        temperature: 0.2,
-        maxOutputTokens: YANIT_JETONU,
-      },
-    });
-
     for (const model of denemeSirasi()) {
-      const res = await fetch(ucNokta(model), {
-        method: "POST",
-        // Anahtar **başlıkta** gider, sorgu dizesinde değil: URL'ler tarayıcı
-        // geçmişine, sunucu günlüklerine ve Referer başlığına düşer.
-        headers: { "Content-Type": "application/json", "x-goog-api-key": anahtar },
-        body: govde,
-        signal: ctrl.signal,
-      });
+      // Bu modelin arama desteklemediği önceden öğrenildiyse doğrudan aramasız
+      // denenir — her soruda iki istek atılmasın (T-25 madde 5).
+      const aramaEtkin = arama && !aramaDesteklenmiyorMu(model);
+
+      const istekAt = (aramaAcik: boolean) =>
+        fetch(ucNokta(model), {
+          method: "POST",
+          // Anahtar **başlıkta** gider, sorgu dizesinde değil: URL'ler tarayıcı
+          // geçmişine, sunucu günlüklerine ve Referer başlığına düşer.
+          headers: { "Content-Type": "application/json", "x-goog-api-key": anahtar },
+          body: govdeMetni(soru, baglam, aramaAcik, olay),
+          signal: ctrl.signal,
+        });
+
+      let res = await istekAt(aramaEtkin);
 
       // Yalnızca 404'te sıradaki adaya geçilir, kullanıcı hiçbir şey görmez
       // (T-24 madde 2). 400/401/403 anahtar sorunudur, 429 kotadır — bunlarda
-      // başka model denemek arızayı gizler ve kotayı boşa yakar.
+      // başka model denemek arızayı gizler ve kotayı boşa yakar. Tek istisna:
+      // arama açıkken 400 ve gövde araç hatası söylüyorsa (T-25 madde 5) —
+      // o zaman 429'un aksine geri çekilmek güvenlidir, kotayı yakmaz, çünkü
+      // arıza kotayla değil aracın modelde desteklenmemesiyle ilgilidir.
       if (res.status === 404) continue;
-      if (!res.ok) throw new YzHatasi(yzDurumMesaji(res.status));
+
+      let geriCekildi = false;
+      if (!res.ok) {
+        if (res.status !== 400 || !aramaEtkin) throw new YzHatasi(yzDurumMesaji(res.status));
+
+        const hataGovdesi = (await res.json().catch(() => null)) as GeminiYanit | null;
+        if (!aracHatasiMi(hataGovdesi?.error?.message)) {
+          throw new YzHatasi(yzDurumMesaji(res.status));
+        }
+
+        aramaDesteklenmiyorIsaretle(model);
+        geriCekildi = true;
+        res = await istekAt(false);
+        if (res.status === 404) continue;
+        if (!res.ok) throw new YzHatasi(yzDurumMesaji(res.status));
+      }
 
       const ham = (await res.json()) as GeminiYanit;
       const metin = yanitiCoz(ham);
@@ -157,7 +268,18 @@ async function sor(istem: string, baglam: string, signal?: AbortSignal): Promise
       }
 
       modelYaz(model);
-      return metin;
+      const { arandi, kaynaklar, sorgular, aramaOnerileriHtml } = kaynaklariCoz(ham);
+      // Arama istenmişti ama bu istekte kullanılmadı — ister bu çağrıda yeni
+      // öğrenildiği için (geriCekildi), ister zaten biliniyor olduğu için.
+      const aramaDesteklenmedi = arama && (geriCekildi || !aramaEtkin);
+      return {
+        metin,
+        arandi,
+        kaynaklar,
+        sorgular,
+        aramaOnerileriHtml,
+        ...(aramaDesteklenmedi ? { aramaDesteklenmedi: true } : {}),
+      };
     }
     // Zincirdeki her aday 404 verdi.
     throw new YzHatasi(YZ_MESAJ.model);

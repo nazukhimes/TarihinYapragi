@@ -1,27 +1,30 @@
 import { useEffect, useRef, useState } from "react";
 import {
-  SORU_IPUCU,
   saglayici,
+  SORU_IPUCU,
+  useAramaTercihi,
   useYzAnahtari,
-  VARSAYILAN_ISTEM,
   YZ_MESAJ,
   YzHatasi,
+  type YzOlay,
 } from "../lib/yapayzeka";
 import { SkeletonParagraf } from "./Iskeletler";
-import { IconArrow, IconSpark } from "./ui";
+import { IconArrow, IconExternal, IconSpark } from "./ui";
 import { yzAyarlariniAc } from "./YzAyarlari";
 
 /**
- * "YAPAY ZEKÂYA SOR" (T-20 madde 3–7)
+ * "YAPAY ZEKÂYA SOR" (T-20 madde 3–7, web araması T-25)
  *
  * `DetayPaneli`'nin T-19'da ayırdığı yuvayı doldurur. Panelin elindeki Vikipedi
  * metnini modele **bağlam olarak** verir; kullanıcı isterse kendi sorusunu yazar.
+ * Ayarlardan arama açıksa (varsayılan budur, T-25 madde 7) model bağlamla
+ * sınırlı kalmaz, olayı gerçekten web'de araştırır ve kaynaklarını gösterir.
  *
- * ## Üç kural, üçü de bilerek
+ * ## Kurallar, hepsi bilerek
  *
  * 1. **Bağlamsız çağrı yok.** `baglam` boşsa bölüm hiç render edilmez. Bağlamsız
- *    soru, modeli "hatırlamaya" zorlar; niş Türkiye tarihi konularında bu düpedüz
- *    uydurma demektir (T-20 §Halüsinasyon Riski).
+ *    soru, arama kapalıyken modeli "hatırlamaya" zorlar (T-20 §Halüsinasyon Riski);
+ *    arama açıkken de aramanın **neyi** hedefleyeceğini belirsizleştirir.
  * 2. **Otomatik çağrı yok.** İstek yalnızca düğmeye basılınca gider. Aksi hâlde
  *    her sayfa açılışı onlarca boşuna istek olurdu; ücretsiz kota bir günde biterdi.
  * 3. **Düz metin.** Model çıktısı React'in kendi metin düğümü olarak basılır;
@@ -33,16 +36,28 @@ import { yzAyarlariniAc } from "./YzAyarlari";
 export function YapayZekaBolumu({
   baglam,
   kaynakAdi,
+  olay,
 }: {
   /** Modelin dayanacağı metin — panelin gösterdiği Vikipedi özeti. */
   baglam: string;
   /** Bağlamın hangi maddeden geldiği; künye satırında geçer. Bilinmiyorsa yok. */
   kaynakAdi?: string;
+  /** Modelin **neyi** araştıracağını söyleyen künye (T-25) — bağlam metninden
+   *  bağımsızdır, arama modunun olayın kendisini hedeflemesini sağlar. */
+  olay?: YzOlay;
 }) {
   const anahtar = useYzAnahtari();
+  const aramaAcik = useAramaTercihi();
   const [acik, setAcik] = useState(false);
   const [soru, setSoru] = useState("");
-  const [yanit, setYanit] = useState<{ soru: string; metin: string } | null>(null);
+  const [yanit, setYanit] = useState<{
+    soru: string;
+    metin: string;
+    arandi: boolean;
+    kaynaklar: { baslik: string; url: string }[];
+    sorgular: string[];
+    aramaDesteklenmedi?: boolean;
+  } | null>(null);
   const [yukleniyor, setYukleniyor] = useState(false);
   const [hata, setHata] = useState<string | null>(null);
   const iptal = useRef<AbortController | null>(null);
@@ -69,8 +84,23 @@ export function YapayZekaBolumu({
     setYanit(null);
 
     try {
-      const metin = await saglayici.sor(sorulan || VARSAYILAN_ISTEM, baglam, ctrl.signal);
-      if (!ctrl.signal.aborted) setYanit({ soru: sorulan, metin });
+      const cevap = await saglayici.sor({
+        soru: sorulan,
+        baglam,
+        olay,
+        arama: aramaAcik,
+        signal: ctrl.signal,
+      });
+      if (!ctrl.signal.aborted) {
+        setYanit({
+          soru: sorulan,
+          metin: cevap.metin,
+          arandi: cevap.arandi,
+          kaynaklar: cevap.kaynaklar,
+          sorgular: cevap.sorgular,
+          aramaDesteklenmedi: cevap.aramaDesteklenmedi,
+        });
+      }
     } catch (e) {
       // İptal bir hata değil: panel kapandı ya da yeni soru soruldu.
       if (!ctrl.signal.aborted) setHata(e instanceof YzHatasi ? e.message : YZ_MESAJ.ag);
@@ -139,7 +169,9 @@ export function YapayZekaBolumu({
         </button>
       </div>
       <p className="mt-1.5 font-mono text-[10.5px] tracking-wide text-ink-faint">
-        Boş bırakırsanız olayı kısaca açıklar
+        {aramaAcik
+          ? "Boş bırakırsanız olayı araştırıp özetler"
+          : "Boş bırakırsanız olayı kısaca açıklar"}
         {kaynakAdi ? ` · bağlam: ${kaynakAdi} maddesi` : ""}
       </p>
 
@@ -155,7 +187,7 @@ export function YapayZekaBolumu({
         </p>
       )}
 
-      {yanit && <YzYaniti soru={yanit.soru} metin={yanit.metin} />}
+      {yanit && <YzYaniti {...yanit} />}
     </div>
   );
 }
@@ -168,9 +200,26 @@ export function YapayZekaBolumu({
  * ilkesi ("kaynağı gizleme") bu katman için de geçerli, hatta burada daha sert:
  * üretilmiş metin, derlenmiş metin gibi görünmemelidir.
  *
- * Kutunun altındaki uyarı satırı sabittir, kapatılamaz.
+ * Künye cümlesi `arandi`ya göre değişir (T-25 madde 6.1): web'de arandıysa
+ * bunu söyler ve kaynak listesine yönlendirir; aranmadıysa T-20'nin orijinal
+ * "Vikipedi özetine dayanarak" cümlesi aynen kalır. Kutunun altındaki uyarı
+ * satırı sabittir, kapatılamaz.
  */
-function YzYaniti({ soru, metin }: { soru: string; metin: string }) {
+function YzYaniti({
+  soru,
+  metin,
+  arandi,
+  kaynaklar,
+  sorgular,
+  aramaDesteklenmedi,
+}: {
+  soru: string;
+  metin: string;
+  arandi: boolean;
+  kaynaklar: { baslik: string; url: string }[];
+  sorgular: string[];
+  aramaDesteklenmedi?: boolean;
+}) {
   return (
     <div
       className="rise-in mt-3 rounded-sm border border-lilac/40 bg-lilac/[0.06] px-4 py-3"
@@ -189,9 +238,60 @@ function YzYaniti({ soru, metin }: { soru: string; metin: string }) {
         {metin}
       </p>
 
+      {aramaDesteklenmedi && (
+        <p className="mt-2 text-[12px] text-ink-faint" role="status">
+          {YZ_MESAJ.aramaYok}
+        </p>
+      )}
+
+      {arandi && kaynaklar.length > 0 && (
+        <div className="mt-3 pt-2.5 border-t border-dashed border-lilac/25">
+          <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-ink-faint mb-1.5">
+            Kaynaklar
+          </p>
+          <ul className="flex flex-col gap-1">
+            {kaynaklar.map((k) => (
+              <li key={k.url} className="min-w-0">
+                <a
+                  href={k.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 max-w-full text-[12.5px] text-sky hover:text-paper transition-colors"
+                >
+                  <IconExternal className="w-3.5 h-3.5 shrink-0" />
+                  <span className="truncate">{k.baslik}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Google'ın "Search Suggestions" bağlantıları — Plan B (T-25 madde 6.3'ün
+          hazır iframe'i yerine): sorgular düz metin, her biri arama sonucuna
+          çıkan bir bağlantı. Kullanım şartının "arama önerileri ya da diğer
+          bağlantılar gösterilsin" koşulunu karşılar, sandbox iframe'in canlıda
+          doğrulanmamış tıklama riskini almadan. */}
+      {arandi && sorgular.length > 0 && (
+        <div className="mt-2.5 flex flex-wrap gap-1.5">
+          {sorgular.map((s) => (
+            <a
+              key={s}
+              href={`https://www.google.com/search?q=${encodeURIComponent(s)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono text-[10.5px] px-2 py-1 rounded-sm border border-line text-ink-faint hover:text-gold hover:border-gold/50 transition-colors"
+            >
+              {s}
+            </a>
+          ))}
+        </div>
+      )}
+
       <p className="mt-3 pt-2.5 border-t border-dashed border-lilac/25 font-mono text-[10.5px] leading-relaxed tracking-wide text-ink-faint">
-        Bu metin, yukarıdaki Vikipedi özetine dayanılarak {saglayici.ad} tarafından üretildi. Editör
-        derlemesi değildir; yayında kullanmadan önce kaynaktan doğrulayın.
+        {arandi
+          ? `Bu metin, ${saglayici.ad} tarafından web'de arama yapılarak üretildi. Editör derlemesi değildir; aşağıdaki kaynaklardan doğrulayın.`
+          : `Bu metin, yukarıdaki Vikipedi özetine dayanılarak ${saglayici.ad} tarafından üretildi. Editör derlemesi değildir; yayında kullanmadan önce kaynaktan doğrulayın.`}
       </p>
     </div>
   );

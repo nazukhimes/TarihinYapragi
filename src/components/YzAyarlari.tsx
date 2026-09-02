@@ -5,6 +5,8 @@ import {
   anahtarSil,
   anahtarTemizle,
   anahtarYaz,
+  aramaAcikMi,
+  aramaYaz,
   modelleriGetir,
   modelOku,
   modelSil,
@@ -52,6 +54,8 @@ export function YzAyarlari({ onClose }: { onClose: () => void }) {
   const [deger, setDeger] = useState(() => anahtarOku());
   const kayitli = anahtarOku();
 
+  const [aramaAcik, setAramaAcik] = useState(() => aramaAcikMi());
+
   const [model, setModel] = useState(() => modelOku());
   const [modelListesi, setModelListesi] = useState<string[] | null>(null);
   const [modelYukleniyor, setModelYukleniyor] = useState(false);
@@ -76,6 +80,12 @@ export function YzAyarlari({ onClose }: { onClose: () => void }) {
     anahtarSil();
     setDeger("");
     toast("Anahtar silindi");
+  };
+
+  const aramaDegistir = () => {
+    const yeni = !aramaAcik;
+    aramaYaz(yeni);
+    setAramaAcik(yeni);
   };
 
   const modelleriGetirTikla = async () => {
@@ -109,7 +119,8 @@ export function YzAyarlari({ onClose }: { onClose: () => void }) {
     setSinaniyor(true);
     setSinamaSonucu(null);
     try {
-      await saglayici.sor(SINAMA_ISTEMI, SINAMA_BAGLAMI);
+      // Sınama tanı aracıdır; günlük arama kotasını yakmamalı (T-25 madde 7).
+      await saglayici.sor({ soru: SINAMA_ISTEMI, baglam: SINAMA_BAGLAMI, arama: false });
       setModel(modelOku());
       setSinamaSonucu({
         basarili: true,
@@ -266,6 +277,38 @@ export function YzAyarlari({ onClose }: { onClose: () => void }) {
                 {sinamaSonucu.mesaj}
               </p>
             )}
+          </div>
+        )}
+
+        {kayitli && (
+          <div className="mt-6 border-t border-line pt-5">
+            <div className="flex items-center justify-between gap-4">
+              <span className="block font-mono text-[11px] tracking-[0.24em] uppercase text-gold">
+                Web&apos;de araştır
+              </span>
+              <button
+                onClick={aramaDegistir}
+                role="switch"
+                aria-checked={aramaAcik}
+                className={`relative w-11 h-6 shrink-0 rounded-full border transition-colors duration-200 cursor-pointer ${
+                  aramaAcik ? "bg-lilac/70 border-lilac" : "bg-panel-2 border-line"
+                }`}
+              >
+                <span
+                  className={`absolute top-0.5 w-4.5 h-4.5 rounded-full bg-paper transition-transform duration-200 ${
+                    aramaAcik ? "translate-x-[22px]" : "translate-x-0.5"
+                  }`}
+                />
+              </button>
+            </div>
+            <p className="mt-2 text-[13px] leading-relaxed text-ink-dim">
+              Açıkken model, Vikipedi özetiyle sınırlı kalmadan olayı Google Arama ile araştırır ve
+              kaynaklarını gösterir.
+            </p>
+            <p className="mt-2 font-mono text-[11px] leading-relaxed text-ink-faint">
+              Ücretsiz katmanda günlük arama hakkı sınırlıdır; dolduğunda yanıt sayfadaki metinle
+              üretilir.
+            </p>
           </div>
         )}
 
