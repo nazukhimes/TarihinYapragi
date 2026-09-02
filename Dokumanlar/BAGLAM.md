@@ -39,16 +39,16 @@ bu amaca hizmet eder.
 
 ## 2. Teknoloji Yığını
 
-| Katman         | Seçim                                                              | Not                                                                                         |
-| -------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------- |
-| Çatı           | React 18 + TypeScript 5.7 (`strict: true`)                         | Sınıf bileşeni yok, hepsi fonksiyon + hook                                                  |
-| Derleyici      | Vite 6                                                             | `npm run dev` / `build` / `preview` / `typecheck` · yapılandırma `vite.config.ts`           |
-| Stil           | Tailwind CSS **v4** (`@tailwindcss/vite`)                          | Config dosyası **yok**; tema `src/index.css` içindeki `@theme` bloğunda                     |
-| Yönlendirme    | `react-router-dom` v6 (`createBrowserRouter`)                      | Her gün kendi URL'sinde: `/21-agustos` biçimi (T-06). `src/lib/slug.ts` ↔ URL çevrimi yapar |
-| Durum yönetimi | React `useState` / `useMemo`                                       | Redux/Zustand yok, gerek de yok                                                             |
-| Veri           | Wikimedia REST "On this day" API                                   | Sunucu/backend **yok**, tamamen istemci taraflı                                             |
-| Kalıcılık      | `localStorage` (çevrimdışı yedek) + bellek içi `Map`               | Veritabanı yok                                                                              |
-| Kalite         | Vitest (`jsdom`) + Testing Library, ESLint (flat config), Prettier | `npm run test` / `lint` / `format` / `kontrol` (T-12) · CI: `.github/workflows/kontrol.yml` |
+| Katman         | Seçim                                                              | Not                                                                                                                                                   |
+| -------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Çatı           | React 18 + TypeScript 5.7 (`strict: true`)                         | Sınıf bileşeni yok, hepsi fonksiyon + hook                                                                                                            |
+| Derleyici      | Vite 6                                                             | `npm run dev` / `build` / `preview` / `typecheck` · yapılandırma `vite.config.ts`                                                                     |
+| Stil           | Tailwind CSS **v4** (`@tailwindcss/vite`)                          | Config dosyası **yok**; tema `src/index.css` içindeki `@theme` bloğunda                                                                               |
+| Yönlendirme    | `react-router-dom` v7 (`createBrowserRouter`)                      | Her gün kendi URL'sinde: `/21-agustos` biçimi (T-06). `src/lib/slug.ts` ↔ URL çevrimi yapar. T-22'de 6 → 7 (güvenlik); veri yönlendirici kipi korundu |
+| Durum yönetimi | React `useState` / `useMemo`                                       | Redux/Zustand yok, gerek de yok                                                                                                                       |
+| Veri           | Wikimedia REST "On this day" API                                   | Sunucu/backend **yok**, tamamen istemci taraflı                                                                                                       |
+| Kalıcılık      | `localStorage` (çevrimdışı yedek) + bellek içi `Map`               | Veritabanı yok                                                                                                                                        |
+| Kalite         | Vitest (`jsdom`) + Testing Library, ESLint (flat config), Prettier | `npm run test` / `lint` / `format` / `kontrol` (T-12) · CI: `.github/workflows/kontrol.yml`                                                           |
 
 > **Önemli:** Bu proje **backend'siz, statik bir SPA**'dır. Derleme çıktısı (`dist/`)
 > herhangi bir statik sunucuya konulabilir. Gizli anahtar gerektiren bir `.env` yoktur;
@@ -473,12 +473,15 @@ teknik olarak hazır, yalnızca herkese açık bir adrese ihtiyaç duyuyorlar).
   `App.tsx`'in 244 satıra bölünmesi ve arama tekilleştirmesi de bu talimatta;
   Lighthouse ilk kez Performans+Erişilebilirlik+SEO birlikte ölçüldü:
   92/96/100 — ayrıntı [`MIMARI.md`](MIMARI.md) §7, §11
-- **Bulgu (T-13 sırasında, `npm audit` ile keşfedildi, hâlâ açık):**
+- ~~**Bulgu (T-13 sırasında, `npm audit` ile keşfedildi):**
   `react-router-dom`'un dolaylı bağımlılığı `react-router`'da 2 orta seviye
-  güvenlik danışma kaydı var (açık yönlendirme + SSR hydration enjeksiyonu —
-  bu proje SSR yapmadığı için ikincisi muhtemelen uygulanmıyor). Düzeltmesi
-  kırılma içeren bir `react-router-dom@7.x` yükseltmesi gerektiriyor, T-13'ün
-  kapsamı dışında bırakıldı — O-13, henüz bir talimata atanmadı →
+  güvenlik danışma kaydı (açık yönlendirme + SSR hydration enjeksiyonu — bu
+  proje SSR yapmadığı için ikincisi uygulanmıyor)~~ ✅ **T-22 ile çözüldü**
+  (O-13) — `react-router-dom` 6.8 → **7.18.3**, `npm audit` artık **0 açık**.
+  Beklenenin aksine kırıcı bir değişiklik çıkmadı: v7'de `react-router-dom`
+  `react-router`'ın ince bir yeniden dışa aktarım katmanı ve kullanılan
+  API'lerin imzaları aynı; uygulama kodunda tek satır değişmedi. `errorElement`
+  katmanlaması (T-09) canlı yeniden doğrulandı →
   [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md#o-13-react-router-domun-dolaylı-bağımlılığı-react-routerda-2-orta-seviye-güvenlik-danışma-kaydı)
 
 **Çalışma planı:** [`../Talimatlar/`](../Talimatlar/) klasöründe. İş akışı için

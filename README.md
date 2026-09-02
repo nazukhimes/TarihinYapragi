@@ -89,7 +89,7 @@ Node 20 gerekir — `.nvmrc` dosyasında yazılıdır.
 | Arayüz      | React 18 + TypeScript (strict)                           |
 | Derleyici   | Vite 6                                                   |
 | Stil        | Tailwind CSS v4 (`@theme`)                               |
-| Yönlendirme | react-router-dom v6 — `createBrowserRouter`, `/GG-ayadi` |
+| Yönlendirme | react-router-dom v7 — `createBrowserRouter`, `/GG-ayadi` |
 | Veri        | Wikimedia REST API (`feed/v1/wikipedia/tr/onthisday`)    |
 | Önbellek    | `localStorage` (24 sa TTL) + bellek içi FIFO             |
 | Test        | Vitest + jsdom + v8 kapsam                               |

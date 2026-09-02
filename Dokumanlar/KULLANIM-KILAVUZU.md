@@ -69,7 +69,8 @@ Sonra terminalde Vite'ın yazdığı adresi açın (genelde `http://localhost:30
 
 ### Gereksinim
 
-**Node.js 18 veya üzeri.** Kurulu değilse `başlat.bat` / `baslat.sh` uyarır.
+**Node.js 20 veya üzeri.** Kurulu değilse `başlat.bat` / `baslat.sh` uyarır.
+(T-22'den önce 18 yeterliydi; `react-router` 7 Node 20 istiyor.)
 İndirme: [nodejs.org](https://nodejs.org) → LTS sürümü. Proje `.nvmrc` ile Node 20'yi
 önerir; `nvm` kullananlar `nvm use` ile otomatik geçebilir (zorunlu değil).
 
