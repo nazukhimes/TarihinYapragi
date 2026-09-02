@@ -47,10 +47,11 @@ export const YZ_MESAJ = {
   /** 200 döndü ama içerik yok (güvenlik filtresi, boş aday). */
   bos: "Model bu metin için yanıt üretmedi.",
   /**
-   * 404 — anahtar geçerli ama model yok. Eskiden `ag`'ye düşüyordu ve
-   * "Bağlantı kurulamadı." diyordu; oysa bağlantı kurulmuştu, kurulmayan
-   * şey modeldi. İki durumu ayırmak `GEMINI_MODEL`'i güncellemek gerektiğini
-   * söyleyen tek ipucudur.
+   * 404 — anahtar geçerli ama modellerin **hiçbiri** yok. `gemini.ts` 404'te
+   * aday zincirindeki bir sonraki modele sessizce geçer (T-24); bu mesaj
+   * yalnızca zincirin tamamı tükenince görülür. Artık bunu görmek kaynak
+   * kodu güncellemeyi gerektirmez — ayarlardan "Modelleri getir" ile
+   * anahtarın gördüğü modeller listelenip elle seçilebilir.
    */
   model: "Model bulunamadı; sağlayıcı bu modeli artık sunmuyor olabilir.",
   /**
@@ -60,6 +61,10 @@ export const YZ_MESAJ = {
    * tek harf metin döndürmez.
    */
   kesik: "Yanıt tamamlanamadan kesildi. Tekrar deneyin.",
+  /** "Bağlantıyı sına" başarıyla dönünce gösterilir — ayarlardaki tek tanı aracı (T-24 madde 4). */
+  baglantiTamam: "Bağlantı çalışıyor.",
+  /** "Modelleri getir" sıfır sonuç dönünce — anahtar geçerli ama kullanılabilir model yok. */
+  modelListesiBos: "Bu anahtarla metin üretebilen bir model bulunamadı.",
 } as const;
 
 /**

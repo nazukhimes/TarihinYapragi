@@ -19,13 +19,17 @@ import type { YzSaglayici } from "./tipler";
 /** Aktif sağlayıcı. */
 export const saglayici: YzSaglayici = gemini;
 
-export { GEMINI_MODEL } from "./gemini";
+export { ADAY_MODELLER, modelleriGetir } from "./gemini";
 export {
   ANAHTAR_ADI,
   anahtarOku,
   anahtarSil,
   anahtarTemizle,
   anahtarYaz,
+  MODEL_ADI,
+  modelOku,
+  modelSil,
+  modelYaz,
   useYzAnahtari,
 } from "./anahtar";
 export { SORU_IPUCU, VARSAYILAN_ISTEM, baglamiKirp, istemBirlestir } from "./istem";

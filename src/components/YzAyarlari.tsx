@@ -1,6 +1,23 @@
 import { useState } from "react";
-import { anahtarOku, anahtarSil, anahtarTemizle, anahtarYaz, saglayici } from "../lib/yapayzeka";
+import {
+  ADAY_MODELLER,
+  anahtarOku,
+  anahtarSil,
+  anahtarTemizle,
+  anahtarYaz,
+  modelleriGetir,
+  modelOku,
+  modelSil,
+  modelYaz,
+  saglayici,
+  YZ_MESAJ,
+  YzHatasi,
+} from "../lib/yapayzeka";
 import { IconExternal, IconSpark, Modal, toast } from "./ui";
+
+/** "Bağlantıyı sına" isteği — kısa ve sabit, gerçek bir soru değil (T-24 madde 4). */
+const SINAMA_ISTEMI = "Tek kelimeyle yanıtla: bağlantı.";
+const SINAMA_BAGLAMI = "Bu, yapay zekâ bağlantısını sınamak için gönderilen kısa bir metindir.";
 
 /** Ayarlar modalını **her yerden** açan olay — `toast` ile aynı desen. */
 const AC = "ty-yz-ayarlar";
@@ -35,6 +52,16 @@ export function YzAyarlari({ onClose }: { onClose: () => void }) {
   const [deger, setDeger] = useState(() => anahtarOku());
   const kayitli = anahtarOku();
 
+  const [model, setModel] = useState(() => modelOku());
+  const [modelListesi, setModelListesi] = useState<string[] | null>(null);
+  const [modelYukleniyor, setModelYukleniyor] = useState(false);
+  const [modelHata, setModelHata] = useState<string | null>(null);
+
+  const [sinaniyor, setSinaniyor] = useState(false);
+  const [sinamaSonucu, setSinamaSonucu] = useState<{ basarili: boolean; mesaj: string } | null>(
+    null
+  );
+
   const kaydet = () => {
     // `trim()` değil `anahtarTemizle()`: yapıştırılan anahtarın ortasında
     // kalan görünmez karakter de burada düşsün, bir alt katmanda değil.
@@ -49,6 +76,53 @@ export function YzAyarlari({ onClose }: { onClose: () => void }) {
     anahtarSil();
     setDeger("");
     toast("Anahtar silindi");
+  };
+
+  const modelleriGetirTikla = async () => {
+    setModelYukleniyor(true);
+    setModelHata(null);
+    try {
+      const liste = await modelleriGetir();
+      setModelListesi(liste);
+      if (!liste.length) setModelHata(YZ_MESAJ.modelListesiBos);
+    } catch (e) {
+      setModelHata(e instanceof YzHatasi ? e.message : YZ_MESAJ.ag);
+    } finally {
+      setModelYukleniyor(false);
+    }
+  };
+
+  const modelSec = (secilen: string) => {
+    if (!secilen) return;
+    modelYaz(secilen);
+    setModel(secilen);
+    toast(`Model kaydedildi: ${secilen}`);
+  };
+
+  const varsayilanaDon = () => {
+    modelSil();
+    setModel("");
+    toast("Model seçimi temizlendi, otomatik zincire dönüldü");
+  };
+
+  const baglantiyiSina = async () => {
+    setSinaniyor(true);
+    setSinamaSonucu(null);
+    try {
+      await saglayici.sor(SINAMA_ISTEMI, SINAMA_BAGLAMI);
+      setModel(modelOku());
+      setSinamaSonucu({
+        basarili: true,
+        mesaj: `${YZ_MESAJ.baglantiTamam} (${modelOku() || ADAY_MODELLER[0]})`,
+      });
+    } catch (e) {
+      setSinamaSonucu({
+        basarili: false,
+        mesaj: e instanceof YzHatasi ? e.message : YZ_MESAJ.ag,
+      });
+    } finally {
+      setSinaniyor(false);
+    }
   };
 
   return (
@@ -120,6 +194,80 @@ export function YzAyarlari({ onClose }: { onClose: () => void }) {
             Anahtar al <IconExternal className="w-3.5 h-3.5" />
           </a>
         </div>
+
+        {kayitli && (
+          <div className="mt-6 border-t border-line pt-5">
+            <div className="flex items-center justify-between gap-3 mb-2">
+              <span className="block font-mono text-[11px] tracking-[0.24em] uppercase text-gold">
+                Kullanılan model
+              </span>
+              {model && (
+                <button
+                  onClick={varsayilanaDon}
+                  className="font-mono text-[10.5px] tracking-wider uppercase text-ink-faint hover:text-brand-text transition-colors cursor-pointer"
+                >
+                  Varsayılana dön
+                </button>
+              )}
+            </div>
+            <p className="font-mono text-[13px] text-ink mb-4">
+              {model || ADAY_MODELLER[0]}
+              {!model && <span className="text-ink-faint"> (otomatik aday zinciri)</span>}
+            </p>
+
+            <div className="flex flex-wrap items-center gap-3">
+              <button
+                onClick={() => void modelleriGetirTikla()}
+                disabled={modelYukleniyor}
+                className="px-4 py-2.5 rounded-sm border border-line text-ink-dim font-mono text-[11.5px] tracking-[0.18em] uppercase hover:text-brand-text hover:border-brand/60 transition-colors duration-200 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {modelYukleniyor ? "Getiriliyor…" : "Modelleri getir"}
+              </button>
+              <button
+                onClick={() => void baglantiyiSina()}
+                disabled={sinaniyor}
+                className="px-4 py-2.5 rounded-sm border border-line text-ink-dim font-mono text-[11.5px] tracking-[0.18em] uppercase hover:text-brand-text hover:border-brand/60 transition-colors duration-200 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {sinaniyor ? "Sınanıyor…" : "Bağlantıyı sına"}
+              </button>
+            </div>
+
+            {modelListesi && modelListesi.length > 0 && (
+              <label className="block mt-3">
+                <span className="sr-only">Model seç</span>
+                <select
+                  value={model && modelListesi.includes(model) ? model : ""}
+                  onChange={(e) => modelSec(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-sm bg-panel-2 border border-line font-mono text-[13px] text-ink outline-none focus:border-gold/70 transition-all duration-200"
+                >
+                  <option value="" disabled>
+                    Bir model seçin…
+                  </option>
+                  {modelListesi.map((m) => (
+                    <option key={m} value={m}>
+                      {m}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+
+            {modelHata && (
+              <p className="mt-3 text-[13px] text-brand-text" role="status">
+                {modelHata}
+              </p>
+            )}
+
+            {sinamaSonucu && (
+              <p
+                className={`mt-3 text-[13px] ${sinamaSonucu.basarili ? "text-ink" : "text-brand-text"}`}
+                role="status"
+              >
+                {sinamaSonucu.mesaj}
+              </p>
+            )}
+          </div>
+        )}
 
         <div className="mt-6 rounded-sm border border-dashed border-line bg-panel-2/50 px-4 py-3.5 text-[13px] leading-relaxed text-ink-dim">
           <p className="font-mono text-[10px] tracking-[0.24em] uppercase text-ink-faint mb-2">

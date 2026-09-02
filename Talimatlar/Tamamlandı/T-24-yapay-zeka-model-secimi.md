@@ -7,7 +7,7 @@
 | **Tahmini süre** | ~3–4 saat                                          |
 | **Bağımlılık**   | T-20 (yapay zekâ katmanı) tamamlanmış olmalı       |
 | **İlgili bulgu** | Canlı kullanıcı raporu — 2026-09-02                |
-| **Durum**        | ⬜ Bekliyor                                        |
+| **Durum**        | ✅ Tamamlandı (2026-09-02)                         |
 
 > ⚠️ **Bu talimat, kullanıcının elindeki çalışmayan bir özelliği onarır.**
 > Geçerli bir Gemini anahtarıyla "Yapay zekâya sor" `404` alıyor ve
@@ -194,4 +194,79 @@ paneli açıp deneyerek görüyor.
 
 ## 📝 Tamamlanma Kaydı
 
-_(Talimat tamamlandığında doldurulacak.)_
+**Tamamlandı: 2026-09-02.** Altı kabul kriterinin altısı da karşılandı; `npm run kontrol`
+yeşil (416 test, önceki 406'dan +10).
+
+### Ne değişti
+
+- **`gemini.ts`** — `GEMINI_MODEL` sabiti kaldırıldı, yerine `ADAY_MODELLER` (talimattaki
+  üç adaylık dizi, aynen) geldi. `sor()` artık `denemeSirasi()`'nin döndürdüğü liste
+  üzerinde döngüye giriyor: `404`'te sessizce sıradakine geçiyor, her başka durumda
+  (`400/401/403/429/5xx`/boş yanıt/`MAX_TOKENS`) döngü kırılıp doğrudan fırlatılıyor —
+  kota ve anahtar hataları asla gizlenmiyor. Başarılı model `modelYaz()` ile kaydediliyor.
+  Yeni `modelleriGetir()` fonksiyonu `ListModels`'i çağırıp `generateContent` destekleyen
+  modelleri döndürüyor (`scripts/yz-model-listesi.mjs` ile aynı süzgeç).
+- **`anahtar.ts`** — `MODEL_ADI` (`ty-yz-model`) + `modelOku`/`modelYaz`/`modelSil`,
+  anahtarınkiyle aynı try/catch deseninde.
+- **`tipler.ts`** — `YZ_MESAJ.baglantiTamam` ve `YZ_MESAJ.modelListesiBos` eklendi;
+  `model` mesajının yorumu güncellendi (artık zincirin tamamı tükenince görülüyor,
+  `GEMINI_MODEL` güncellemesi gerektirmiyor).
+- **`YzAyarlari.tsx`** — anahtar kayıtlıyken açılan yeni bir bölüm: kullanılan modeli
+  gösteren satır (`ADAY_MODELLER[0]` + "(otomatik aday zinciri)" etiketi, hiçbir şey
+  sabitlenmemişse), "Modelleri getir" (açılır listeye dolduruyor, seçim `modelYaz`'a
+  gidiyor), "Varsayılana dön" (`modelSil`, yalnızca bir model sabitliyken görünüyor) ve
+  "Bağlantıyı sına" (kısa sabit bir istemle `saglayici.sor()`'u çağırıp sonucu `role=status`
+  ile Türkçe basıyor).
+- **`yapayzeka.test.ts`** — `GEMINI_MODEL` referansı olan test `ADAY_MODELLER[0]`'e
+  güncellendi; yeni iki `describe` bloğu: "aday zinciri ve kendini onarma" (7 test — 404
+  ilerlemesi, zincir tükenmesi, 400/429'da ilerlememe, `localStorage` kalıcılığı, elle/
+  önceden-öğrenilmiş modelin önceliği, sabitlenen model 404 verirse zincire düşme) ve
+  "modelleriGetir" (3 test — anahtarsız ret, süzgeç+sıralama, HTTP hata eşlemesi).
+- **`CHANGELOG.md`** — `[Yayımlanmamış] › Düzeltilen`'e T-24 etiketli yeni madde eklendi.
+
+### Karar gerektiren bir belirsizlik: "elle seçim zinciri eziyor" ne demek
+
+Talimat metni iki farklı okumaya açıktı: (a) elle seçilen/öğrenilmiş model **tek başına**
+kullanılsın, aday zincirine hiç düşülmesin; (b) o model **önce** denensin, zincirin geri
+kalanı arkasında yedek olarak dursun. (b) seçildi — gerekçesi: "kendini onaran sağlayıcı"
+başlığının kendisi, sabitlenen model de zamanla emekliye ayrılabileceğinden onarmanın **tek
+seferlik olmaması** gerektiğini söylüyor. (a) seçilseydi, otomatik öğrenilen bir model
+retired olduğunda kullanıcı yeniden kilitlenip ayarlara gitmek zorunda kalırdı — talimatın
+çözmeye çalıştığı arızanın aynısı, bir basamak ötelenmiş hâli. `denemeSirasi()` bu yüzden
+`[sabit, ...ADAY_MODELLER.filter(m => m !== sabit)]` döndürüyor; "eziyor" ifadesi
+`localStorage`'daki **değerin** üzerine yazılması olarak okundu, ilerleme mantığının
+devre dışı bırakılması olarak değil. Test "sabitlenen model de 404 verirse aday zincirine
+düşülür" bunu doğruluyor.
+
+### Canlıda doğrulanamayan iki madde — gerçek anahtar gerektiriyor
+
+Bu oturumda kullanıcının gerçek Gemini anahtarı yoktu (T-20'nin halüsinasyon kontrolü de
+aynı sebeple kullanıcıya bırakılmıştı). Sahte bir anahtarla (`FAKE-TEST-KEY-…`) canlı
+doğrulama yapıldı: `npm run dev` ayağa kaldırılıp tarayıcıdan hem panelin "Sor" düğmesi hem
+ayarlardaki "Bağlantıyı sına" hem de "Modelleri getir" tıklandı — üçü de gerçekten
+`generativelanguage.googleapis.com`'a çıktı, Google gerçek bir `400` döndürdü ve üçü de
+doğru Türkçe mesajı ("Anahtar geçersiz görünüyor. Ayarlardan kontrol edin.") bastı
+(konsolda `Failed to load resource: 400` olarak görüldü). Ayarlar ekranında "Kullanılan
+model" satırının varsayılan durumda `gemini-3.5-flash (otomatik aday zinciri)` yazdığı da
+doğrulandı. Ama şunlar **doğrulanamadı**, çünkü gerçek bir 404 ya da başarılı yanıt
+gerektiriyor:
+
+1. Zincirin gerçekten ikinci adaya geçtiği (`ADAY_MODELLER`'in başına uydurma bir ad koyup
+   sessizce ikinciye düşmesi) — 7 birim testiyle kuklalanmış `fetch` üzerinden doğrulandı,
+   canlı değil.
+2. `npm run yz-modeller` çıktısıyla "Modelleri getir" listesinin gerçekten aynı olduğu —
+   süzgeç mantığı satır satır aynı (kod okumasıyla ve `modelleriGetir` testleriyle
+   doğrulandı) ama iki aracın **aynı anahtarla** yan yana koşturulması yapılmadı.
+
+**Kullanıcıya not:** kendi anahtarınızla bir kez "Bağlantıyı sına"ya basın; ayarlardaki
+"Kullanılan model" satırının gerçek bir model adı gösterdiğini görün. İsterseniz
+`ADAY_MODELLER`'in ilk elemanını geçici olarak uydurma bir adla değiştirip zincirin
+ikinciye sessizce düştüğünü de gözlemleyebilirsiniz.
+
+### Kapsam dışı bırakılanlar (talimatın kendi tablosuna sadık kalındı)
+
+`kaydet()` fonksiyonu hâlâ anahtar kaydedilince modalı kapatıyor — değiştirilmedi. Yeni
+model araçlarına ulaşmak için ayarları bir kez daha açmak gerekiyor; bu, talimatın
+istemediği bir davranış değişikliği (modalı açık tutmak) yerine en küçük değişiklik
+tercih edilerek bilinçli bırakıldı. `thinkingConfig`, sağlayıcı değişimi ve sunucu
+proxy'si dokunulmadı (zaten kapsam dışıydı).

@@ -81,6 +81,16 @@ Biçim [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/) yaklaşımını 
 
 ### Düzeltilen
 
+- **"Model bulunamadı" hatası kaynak kodu düzenlemeden geçmiyordu** — model adı
+  `gemini.ts` içinde tek bir sabitti; Google'ın ücretsiz katmanında bir model
+  emekliye ayrıldığında ya da yeniden adlandırıldığında uygulama `404` alıp
+  kilitleniyor, onarımı kaynak kodu düzenlemeyi gerektiriyordu. Artık sıralı
+  bir aday zinciri var: `404`'te kullanıcı hiçbir şey görmeden sıradaki model
+  denenir, çalışan model tarayıcıya kaydedilip bir sonraki soruda doğrudan
+  kullanılır — sabitlenen model de emekliye ayrılırsa zincir yeniden devreye
+  girer. Ayarlar ekranı artık kullanılan modeli gösteriyor, anahtarın gördüğü
+  modelleri listeleyip elle seçtiriyor ve anahtar/kota/model/ağ durumlarını
+  ayrı ayrı raporlayan bir "Bağlantıyı sına" düğmesi taşıyor (T-24)
 - **Geçerli anahtarla "Bağlantı kurulamadı." hatası** — anahtarı Google AI
   Studio'dan kopyalarken araya karışan görünmez karakterler (sıfır genişlikli
   boşluk, bayt sırası imi, yumuşak tire, satır sonu) anahtarla birlikte

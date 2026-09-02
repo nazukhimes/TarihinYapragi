@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
+  ADAY_MODELLER,
   ANAHTAR_ADI,
   anahtarOku,
   anahtarSil,
@@ -7,13 +8,15 @@ import {
   anahtarYaz,
   baglamiKirp,
   istemBirlestir,
+  MODEL_ADI,
+  modelleriGetir,
   saglayici,
   VARSAYILAN_ISTEM,
   YZ_MESAJ,
   YzHatasi,
   yzDurumMesaji,
 } from "./index";
-import { GEMINI_MODEL, yanitiCoz } from "./gemini";
+import { yanitiCoz } from "./gemini";
 
 const EXTRACT =
   "Washington Yangını, 1812 Savaşı sırasında 24 Ağustos 1814 tarihinde İngiliz " +
@@ -189,8 +192,8 @@ describe("hata mesajları — hepsi Türkçe (T-20 madde 6)", () => {
 
   /**
    * 404 eskiden `ag`'ye düşüp "Bağlantı kurulamadı." diyordu; oysa bağlantı
-   * kurulmuştu. Model emekliye ayrıldığında görülecek tek ipucu budur —
-   * `GEMINI_MODEL`'i güncellemek gerektiğini söyler.
+   * kurulmuştu. `yzDurumMesaji` tek bir isteğin durumunu çeviriyor — zincirin
+   * tamamı tükenince görülecek mesaj budur (bkz. "aday zinciri" testleri).
    */
   it("404 → ağ değil, model mesajı", () => {
     expect(yzDurumMesaji(404)).toBe(YZ_MESAJ.model);
@@ -223,11 +226,11 @@ describe("gemini sağlayıcısı", () => {
     expect((init?.headers as Record<string, string>)["x-goog-api-key"]).toBe("KUKLA-GIZLI");
   });
 
-  it("uç nokta tek model sabitinden kurulur", async () => {
+  it("hiçbir model sabitlenmemişse aday zincirinin ilki denenir", async () => {
     anahtarYaz("KUKLA-ANAHTAR");
     const kukla = fetchKuklasi(metinYaniti("Yanıt."));
     await saglayici.sor("", EXTRACT);
-    expect(kukla.mock.calls[0]?.[0] ?? "").toContain(`models/${GEMINI_MODEL}:generateContent`);
+    expect(kukla.mock.calls[0]?.[0] ?? "").toContain(`models/${ADAY_MODELLER[0]}:generateContent`);
   });
 
   it("gövdeye hem bağlam hem kullanıcının sorusu gömülür", async () => {
@@ -333,5 +336,130 @@ describe("gemini sağlayıcısı", () => {
     const istek = saglayici.sor("", EXTRACT, ctrl.signal);
     ctrl.abort();
     await expect(istek).rejects.toThrow(/Aborted/);
+  });
+});
+
+/* ------------------------------------------------- aday zinciri (T-24) */
+
+describe("aday zinciri ve kendini onarma (T-24)", () => {
+  /** URL'sinde `model` geçen isteğe 404, diğerlerine başarılı yanıt döner. */
+  function zincirKuklasi(model: string, basariliMetin: string) {
+    const kukla = vi.fn((url: string) =>
+      Promise.resolve({
+        ok: !url.includes(model),
+        status: url.includes(model) ? 404 : 200,
+        json: () => Promise.resolve(metinYaniti(basariliMetin)),
+      } as Response)
+    );
+    vi.stubGlobal("fetch", kukla);
+    return kukla;
+  }
+
+  it("404 → sıradaki aday sessizce denenir, kullanıcı hatayı görmez", async () => {
+    anahtarYaz("KUKLA-ANAHTAR");
+    const kukla = zincirKuklasi(ADAY_MODELLER[0], "İkinci aday yanıtı.");
+
+    await expect(saglayici.sor("", EXTRACT)).resolves.toBe("İkinci aday yanıtı.");
+    expect(kukla).toHaveBeenCalledTimes(2);
+    expect(kukla.mock.calls[1]?.[0]).toContain(`models/${ADAY_MODELLER[1]}:generateContent`);
+  });
+
+  it("zincirin tamamı 404 verirse model mesajı gösterilir", async () => {
+    anahtarYaz("KUKLA-ANAHTAR");
+    const kukla = fetchKuklasi({}, 404);
+    await expect(saglayici.sor("", EXTRACT)).rejects.toThrow(YZ_MESAJ.model);
+    expect(kukla).toHaveBeenCalledTimes(ADAY_MODELLER.length);
+  });
+
+  it("400'de sıradaki aday denenmez — anahtar sorunu gizlenmez", async () => {
+    anahtarYaz("KUKLA-ANAHTAR");
+    const kukla = fetchKuklasi({}, 400);
+    await expect(saglayici.sor("", EXTRACT)).rejects.toThrow(YZ_MESAJ.anahtar);
+    expect(kukla).toHaveBeenCalledTimes(1);
+  });
+
+  it("429'da sıradaki aday denenmez — kota boşa yakılmaz", async () => {
+    anahtarYaz("KUKLA-ANAHTAR");
+    const kukla = fetchKuklasi({}, 429);
+    await expect(saglayici.sor("", EXTRACT)).rejects.toThrow(YZ_MESAJ.kota);
+    expect(kukla).toHaveBeenCalledTimes(1);
+  });
+
+  it("çalışan model localStorage'a yazılır ve ikinci çağrıda doğrudan kullanılır", async () => {
+    anahtarYaz("KUKLA-ANAHTAR");
+    fetchKuklasi(metinYaniti("Yanıt."));
+    await saglayici.sor("", EXTRACT);
+    expect(localStorage.getItem(MODEL_ADI)).toBe(ADAY_MODELLER[0]);
+
+    const kukla2 = fetchKuklasi(metinYaniti("İkinci yanıt."));
+    await expect(saglayici.sor("", EXTRACT)).resolves.toBe("İkinci yanıt.");
+    expect(kukla2).toHaveBeenCalledTimes(1);
+    expect(kukla2.mock.calls[0]?.[0]).toContain(`models/${ADAY_MODELLER[0]}:generateContent`);
+  });
+
+  it("elle seçilen (ya da önceden öğrenilmiş) model aday zincirinin önüne geçer", async () => {
+    anahtarYaz("KUKLA-ANAHTAR");
+    localStorage.setItem(MODEL_ADI, "gemini-ozel-model");
+    const kukla = fetchKuklasi(metinYaniti("Yanıt."));
+
+    await saglayici.sor("", EXTRACT);
+    expect(kukla.mock.calls[0]?.[0]).toContain("models/gemini-ozel-model:generateContent");
+  });
+
+  it("sabitlenen model de 404 verirse aday zincirine düşülür — onarma tek seferlik değil", async () => {
+    anahtarYaz("KUKLA-ANAHTAR");
+    localStorage.setItem(MODEL_ADI, "gemini-artik-emekli");
+    const kukla = zincirKuklasi("gemini-artik-emekli", "Zincir yanıtı.");
+
+    await expect(saglayici.sor("", EXTRACT)).resolves.toBe("Zincir yanıtı.");
+    expect(kukla.mock.calls[0]?.[0]).toContain("models/gemini-artik-emekli:generateContent");
+    expect(kukla.mock.calls[1]?.[0]).toContain(`models/${ADAY_MODELLER[0]}:generateContent`);
+    expect(localStorage.getItem(MODEL_ADI)).toBe(ADAY_MODELLER[0]);
+  });
+});
+
+/* -------------------------------------------- model listeleme (T-24) */
+
+describe("modelleriGetir — ayarlardaki 'Modelleri getir' (T-24 madde 3)", () => {
+  it("anahtar yoksa ağa hiç çıkmaz", async () => {
+    const kukla = vi.fn();
+    vi.stubGlobal("fetch", kukla);
+    await expect(modelleriGetir()).rejects.toThrow(YZ_MESAJ.anahtar);
+    expect(kukla).not.toHaveBeenCalled();
+  });
+
+  it("yalnızca generateContent destekleyen modeller, önek atılmış ve sıralı döner", async () => {
+    anahtarYaz("KUKLA-ANAHTAR");
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() =>
+        Promise.resolve({
+          ok: true,
+          status: 200,
+          json: () =>
+            Promise.resolve({
+              models: [
+                {
+                  name: "models/gemini-2.5-flash",
+                  supportedGenerationMethods: ["generateContent"],
+                },
+                { name: "models/embedding-001", supportedGenerationMethods: ["embedContent"] },
+                {
+                  name: "models/gemini-2.5-flash-lite",
+                  supportedGenerationMethods: ["generateContent"],
+                },
+              ],
+            }),
+        } as Response)
+      )
+    );
+
+    await expect(modelleriGetir()).resolves.toEqual(["gemini-2.5-flash", "gemini-2.5-flash-lite"]);
+  });
+
+  it("HTTP hatası Türkçe mesaja çevrilir — script ile aynı yzDurumMesaji", async () => {
+    anahtarYaz("KUKLA-ANAHTAR");
+    fetchKuklasi({}, 429);
+    await expect(modelleriGetir()).rejects.toThrow(YZ_MESAJ.kota);
   });
 });

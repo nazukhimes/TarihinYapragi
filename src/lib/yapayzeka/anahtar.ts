@@ -87,6 +87,47 @@ export function anahtarSil(): void {
   window.dispatchEvent(new CustomEvent(DEGISTI));
 }
 
+/**
+ * MODEL SEÇİMİ (T-24 madde 1–3)
+ *
+ * Anahtarla aynı yerde duruyor çünkü aynı basit `localStorage` deseni
+ * geçerli: değer kullanıcının tarayıcısında kalır, depoya yazılmaz.
+ *
+ * Tek anahtarda iki farklı kaynaktan gelen değer durur — `gemini.ts`'in
+ * 404 zincirinde kendiliğinden bulduğu çalışan model ve kullanıcının
+ * ayarlardan elle seçtiği model. İkisi de "bir sonraki istekte doğrudan
+ * bunu dene" anlamına geldiği için ayrı anahtar gerekmiyor: elle seçim
+ * otomatik öğrenileni **ezer**, "Varsayılana dön" ikisini birden temizler.
+ */
+export const MODEL_ADI = "ty-yz-model";
+
+/** Sabitlenmiş model adı; yoksa boş dizge — bu durumda `gemini.ts` aday zincirini baştan dener. */
+export function modelOku(): string {
+  try {
+    return localStorage.getItem(MODEL_ADI) ?? "";
+  } catch {
+    return "";
+  }
+}
+
+/** Çalışan ya da elle seçilen modeli sabitler. */
+export function modelYaz(model: string): void {
+  try {
+    localStorage.setItem(MODEL_ADI, model);
+  } catch {
+    /* yazılamadıysa zincir bir sonraki istekte baştan taranır */
+  }
+}
+
+/** Sabitlemeyi kaldırır — ayarlar ekranındaki "Varsayılana dön" düğmesi. */
+export function modelSil(): void {
+  try {
+    localStorage.removeItem(MODEL_ADI);
+  } catch {
+    /* yoksa zaten silinmiş sayılır */
+  }
+}
+
 function abone(geriCagri: () => void): () => void {
   window.addEventListener(DEGISTI, geriCagri);
   // Başka bir sekmede silinen anahtar bu sekmede de geçersizdir.
