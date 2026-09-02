@@ -20,6 +20,13 @@ import type { YzSaglayici } from "./tipler";
 export const saglayici: YzSaglayici = gemini;
 
 export { GEMINI_MODEL } from "./gemini";
-export { ANAHTAR_ADI, anahtarOku, anahtarSil, anahtarYaz, useYzAnahtari } from "./anahtar";
+export {
+  ANAHTAR_ADI,
+  anahtarOku,
+  anahtarSil,
+  anahtarTemizle,
+  anahtarYaz,
+  useYzAnahtari,
+} from "./anahtar";
 export { SORU_IPUCU, VARSAYILAN_ISTEM, baglamiKirp, istemBirlestir } from "./istem";
 export { YZ_MESAJ, YzHatasi, yzDurumMesaji, type YzSaglayici } from "./tipler";

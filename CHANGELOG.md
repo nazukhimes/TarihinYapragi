@@ -81,6 +81,26 @@ Biçim [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/) yaklaşımını 
 
 ### Düzeltilen
 
+- **Geçerli anahtarla "Bağlantı kurulamadı." hatası** — anahtarı Google AI
+  Studio'dan kopyalarken araya karışan görünmez karakterler (sıfır genişlikli
+  boşluk, bayt sırası imi, yumuşak tire, satır sonu) anahtarla birlikte
+  kaydediliyordu. `trim()` bunları temizlemiyor — Unicode'da "boşluk" değil
+  "biçim" karakteri sayılıyorlar ve zaten dizgenin ortasındakini hiçbir `trim`
+  almıyor. Sonuç: anahtar kayıtlı görünüyor, "Sor" düğmesi açılıyor, ama
+  tarayıcı böyle bir değeri HTTP başlığına koyamadığı için istek **ağa hiç
+  çıkmadan** düşüyor ve ekranda ağ hatası beliriyordu. Artık anahtar hem
+  kaydedilirken hem okunurken her yerinden temizleniyor; daha önce kirli
+  kaydedilmiş anahtarlar da yeniden yapıştırılmadan düzeliyor
+- **Yanıtın düşünme bütçesine kurban gitmesi** — çıktı sınırı 900 jetondu;
+  `gemini-2.5-flash` düşünen bir model olduğu ve düşünme jetonları da aynı
+  bütçeden yendiği için model bütçeyi düşünmeye harcayıp metinsiz kapanabiliyordu.
+  Sınır 2048'e çıkarıldı ve bu durum artık "yanıt üretmedi" yerine "yanıt
+  kesildi, tekrar deneyin" diyor
+- **Yanıltıcı hata mesajları** — 404 (model emekliye ayrılmış) "Bağlantı
+  kurulamadı." diyordu; oysa bağlantı kurulmuştu, bulunamayan şey modeldi.
+  Artık ayrı bir mesajı var. Beklenmeyen hataların ham hâli de yutulmak yerine
+  konsola yazılıyor: reklam engelleyicinin kestiği istek, güvenlik duvarı ve
+  gerçek çevrimdışılık ekranda aynı görünse de konsolda ayrışıyor
 - **Yıl maddeleri artık kaynak listesine karışmıyor** — besleme, olay metnindeki
   yıl sayısı için de bir madde döndürüyor (`1985 · "yıl"`). Tek sayfa gösterilirken
   görünmüyorlardı; tüm sayfalar listelenince doğrudan çöp bağlantıya dönüşeceklerdi.

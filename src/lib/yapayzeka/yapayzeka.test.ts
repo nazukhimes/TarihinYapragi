@@ -3,6 +3,7 @@ import {
   ANAHTAR_ADI,
   anahtarOku,
   anahtarSil,
+  anahtarTemizle,
   anahtarYaz,
   baglamiKirp,
   istemBirlestir,
@@ -99,6 +100,38 @@ describe("anahtar yönetimi", () => {
   it("depo anahtarının adı sabittir", () => {
     expect(ANAHTAR_ADI).toBe("ty-yz-anahtar");
   });
+
+  /**
+   * GERİLEME TESTİ — gerçek arıza.
+   *
+   * AI Studio'dan kopyalanan anahtara karışan görünmez karakterler `trim()`in
+   * boşluk tanımına girmediği için depoya yazılıyordu; `fetch` başlığa
+   * koyamayıp `TypeError` fırlatıyor, kullanıcı "Bağlantı kurulamadı."
+   * görüyordu. Bunlar artık **her yerinden** sökülüyor.
+   */
+  it("görünmez yapıştırma artıkları anahtardan sökülür", () => {
+    const beklenen = "AIzaSyKUKLA123";
+    expect(anahtarTemizle("​AIzaSy​KUKLA123﻿")).toBe(beklenen);
+    expect(anahtarTemizle("AIzaSy­KUKLA123")).toBe(beklenen);
+    expect(anahtarTemizle("AIzaSy\nKUKLA123")).toBe(beklenen);
+    expect(anahtarTemizle("AIzaSy KUKLA123 ")).toBe(beklenen);
+  });
+
+  it("ortasında görünmez karakter olan anahtar temiz okunur", () => {
+    anahtarYaz("AIzaSy​KUKLA123");
+    expect(anahtarOku()).toBe("AIzaSyKUKLA123");
+  });
+
+  it("düzeltme öncesi kirli kaydedilmiş anahtar okumada da temizlenir", () => {
+    localStorage.setItem(ANAHTAR_ADI, "AIzaSy​KUKLA123");
+    expect(anahtarOku()).toBe("AIzaSyKUKLA123");
+  });
+
+  it("yalnızca görünmez karakterden ibaret değer anahtarı siler", () => {
+    anahtarYaz("KUKLA-ANAHTAR-1");
+    anahtarYaz("​﻿");
+    expect(anahtarOku()).toBe("");
+  });
 });
 
 /* -------------------------------------------------------------------- istem */
@@ -153,6 +186,16 @@ describe("hata mesajları — hepsi Türkçe (T-20 madde 6)", () => {
   });
 
   it("bilinmeyen durum → ağ mesajı", () => expect(yzDurumMesaji(418)).toBe(YZ_MESAJ.ag));
+
+  /**
+   * 404 eskiden `ag`'ye düşüp "Bağlantı kurulamadı." diyordu; oysa bağlantı
+   * kurulmuştu. Model emekliye ayrıldığında görülecek tek ipucu budur —
+   * `GEMINI_MODEL`'i güncellemek gerektiğini söyler.
+   */
+  it("404 → ağ değil, model mesajı", () => {
+    expect(yzDurumMesaji(404)).toBe(YZ_MESAJ.model);
+    expect(yzDurumMesaji(404)).not.toBe(YZ_MESAJ.ag);
+  });
 
   it("hiçbir mesaj İngilizce sızdırmaz", () => {
     for (const m of Object.values(YZ_MESAJ)) {
@@ -218,6 +261,31 @@ describe("gemini sağlayıcısı", () => {
     anahtarYaz("KUKLA-ANAHTAR");
     fetchKuklasi({ candidates: [] });
     await expect(saglayici.sor("", EXTRACT)).rejects.toThrow(YZ_MESAJ.bos);
+  });
+
+  /**
+   * Düşünen model, jeton bütçesini düşünmeye harcayıp metinsiz kapanabilir.
+   * Bu "model yanıt üretmedi" değil, "yanıt kesildi"dir — tekrar denemeye değer.
+   */
+  it("MAX_TOKENS ile metinsiz yanıt → 'kesildi' mesajı", async () => {
+    anahtarYaz("KUKLA-ANAHTAR");
+    fetchKuklasi({ candidates: [{ content: { parts: [] }, finishReason: "MAX_TOKENS" }] });
+    await expect(saglayici.sor("", EXTRACT)).rejects.toThrow(YZ_MESAJ.kesik);
+  });
+
+  /**
+   * GERİLEME TESTİ — başlığa konamayan anahtar.
+   *
+   * `fetch` başlık değerine ASCII dışı karakter kabul etmez ve isteği hiç
+   * göndermeden `TypeError` fırlatır. Bu eskiden ağ hatası sanılıp
+   * "Bağlantı kurulamadı." deniyordu. Artık ağa **çıkılmıyor** ve doğru
+   * mesaj veriliyor.
+   */
+  it("ASCII dışı karakter kalan anahtar ağa çıkmadan reddedilir", async () => {
+    anahtarYaz("AIzaSyKUKLAı123");
+    const kukla = fetchKuklasi(metinYaniti("Yanıt."));
+    await expect(saglayici.sor("", EXTRACT)).rejects.toThrow(YZ_MESAJ.anahtar);
+    expect(kukla).not.toHaveBeenCalled();
   });
 
   it("geçersiz anahtar (400) → Türkçe anahtar mesajı", async () => {

@@ -22,6 +22,7 @@
     "icons": "node scripts/generate-brand-assets.mjs",
     "siniflandirma": "node scripts/siniflandirma-raporu.mjs",
     "rekor-avi": "node scripts/rekor-avi.mjs",
+    "yz-modeller": "node scripts/yz-model-listesi.mjs",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",

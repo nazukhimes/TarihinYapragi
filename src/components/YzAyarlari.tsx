@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { anahtarOku, anahtarSil, anahtarYaz, saglayici } from "../lib/yapayzeka";
+import { anahtarOku, anahtarSil, anahtarTemizle, anahtarYaz, saglayici } from "../lib/yapayzeka";
 import { IconExternal, IconSpark, Modal, toast } from "./ui";
 
 /** Ayarlar modalını **her yerden** açan olay — `toast` ile aynı desen. */
@@ -36,7 +36,9 @@ export function YzAyarlari({ onClose }: { onClose: () => void }) {
   const kayitli = anahtarOku();
 
   const kaydet = () => {
-    const temiz = deger.trim();
+    // `trim()` değil `anahtarTemizle()`: yapıştırılan anahtarın ortasında
+    // kalan görünmez karakter de burada düşsün, bir alt katmanda değil.
+    const temiz = anahtarTemizle(deger);
     if (!temiz) return;
     anahtarYaz(temiz);
     toast("Anahtar bu tarayıcıya kaydedildi");

@@ -27,11 +27,42 @@ const UC_NOKTA = `https://generativelanguage.googleapis.com/v1beta/models/${GEMI
 
 const ZAMAN_ASIMI_MS = 30_000;
 
+/**
+ * ÇIKTI JETON BÜTÇESİ.
+ *
+ * Eskiden 900'dü ve bu **dardı**: `gemini-2.5-flash` düşünen bir modeldir,
+ * düşünme varsayılan olarak açıktır ve düşünme jetonları da bu bütçeden
+ * yenir. Model 900 jetonu düşünmeye harcayıp `finishReason: "MAX_TOKENS"` ile
+ * **hiç metin döndürmeden** kapanabiliyordu; ekranda sebepsiz bir "yanıt
+ * üretmedi" beliriyordu.
+ *
+ * Bütçe, düşünme payı üstüne birkaç paragraflık yanıt kalacak şekilde
+ * genişletildi. Düşünmeyi tümden kapatan `thinkingConfig` alanı bilerek
+ * kullanılmadı: v1beta şemasında doğrulanamadı ve tanınmayan bir alan
+ * bütün istekleri 400'e düşürür.
+ */
+const YANIT_JETONU = 2048;
+
 /** Yanıt gövdesinin okuduğumuz kadarı — Google'ın şemasının tamamı değil. */
 interface GeminiYanit {
-  candidates?: { content?: { parts?: { text?: string }[] } }[];
+  candidates?: { content?: { parts?: { text?: string }[] }; finishReason?: string }[];
   promptFeedback?: { blockReason?: string };
   error?: { message?: string; status?: string };
+}
+
+/**
+ * Anahtar HTTP başlığına konabilir mi?
+ *
+ * Başlık değerleri yalnızca ISO-8859-1 taşır. İçinde ASCII dışı ya da
+ * görünmez bir karakter kalan anahtar `fetch`i **istek çıkmadan** `TypeError`
+ * ile düşürür; bu da aşağıdaki `catch`te ağ hatasına benzer ve kullanıcıya
+ * "Bağlantı kurulamadı." denirdi. Sebebi burada, doğru mesajla yakalıyoruz.
+ *
+ * `anahtar.ts` görünmezleri zaten siliyor; buraya düşen artık gerçek bir
+ * karakterdir (yanlış kopyalanmış bir harf gibi) — yani anahtar hatalıdır.
+ */
+function basliktaTasinabilir(anahtar: string): boolean {
+  return /^[\x21-\x7E]+$/.test(anahtar);
 }
 
 /** `candidates[0].content.parts[*].text` → tek düz metin. */
@@ -46,6 +77,7 @@ export function yanitiCoz(ham: GeminiYanit): string {
 async function sor(istem: string, baglam: string, signal?: AbortSignal): Promise<string> {
   const anahtar = anahtarOku();
   if (!anahtar) throw new YzHatasi(YZ_MESAJ.anahtar);
+  if (!basliktaTasinabilir(anahtar)) throw new YzHatasi(YZ_MESAJ.anahtar);
 
   // Kendi süremizi koyuyoruz; dışarıdan gelen iptal de bu denetleyiciye bağlanır
   // (sayfaOzeti.ts'teki zamanlayıcı deseninin aynısı).
@@ -69,7 +101,7 @@ async function sor(istem: string, baglam: string, signal?: AbortSignal): Promise
         generationConfig: {
           // Görev "açıkla", "yarat" değil — düşük sıcaklık metne bağlı kalmayı artırır.
           temperature: 0.2,
-          maxOutputTokens: 900,
+          maxOutputTokens: YANIT_JETONU,
         },
       }),
       signal: ctrl.signal,
@@ -79,13 +111,23 @@ async function sor(istem: string, baglam: string, signal?: AbortSignal): Promise
 
     const ham = (await res.json()) as GeminiYanit;
     const metin = yanitiCoz(ham);
-    // Güvenlik filtresi ya da boş aday: 200 döner ama içerik gelmez.
-    if (!metin) throw new YzHatasi(YZ_MESAJ.bos);
+    if (!metin) {
+      // 200 döndü ama metin yok. İki ayrı sebep, iki ayrı mesaj: bütçe
+      // dolduğu için kesilen yanıt ile güvenlik filtresine takılan yanıt
+      // kullanıcı açısından aynı şey değil — biri tekrar denemeye değer.
+      const sebep = ham.candidates?.[0]?.finishReason;
+      throw new YzHatasi(sebep === "MAX_TOKENS" ? YZ_MESAJ.kesik : YZ_MESAJ.bos);
+    }
     return metin;
   } catch (e) {
     if (signal?.aborted) throw e; // beklenen iptal — çağıran bilmeli
     if (zamanAsti) throw new YzHatasi(YZ_MESAJ.zamanAsimi);
     if (e instanceof YzHatasi) throw e;
+    // Buraya düşen hata kullanıcıya tek cümleye indirgenerek gösteriliyor;
+    // ham hâli yutulmasın. Reklam engelleyicinin kestiği istek, kurumsal
+    // güvenlik duvarı ve gerçek çevrimdışılık ekranda aynı görünür ama
+    // konsolda ayrışır — kullanıcıdan tek isteyeceğimiz şey bu satır.
+    console.error("[yapay zekâ] istek başarısız:", e);
     throw new YzHatasi(YZ_MESAJ.ag);
   } finally {
     clearTimeout(zamanlayici);

@@ -25,15 +25,41 @@ export const ANAHTAR_ADI = "ty-yz-anahtar";
 const DEGISTI = "ty-yz-anahtar-degisti";
 
 /**
+ * Yapıştırma artıklarını anahtardan söker.
+ *
+ * `trim()` yetmiyordu ve bu **gerçek bir arıza sebebiydi**: AI Studio'daki
+ * anahtar kutusundan kopyalarken araya sıfır genişlikli boşluk (U+200B),
+ * bayt sırası imi (U+FEFF) ya da yumuşak tire (U+00AD) karışabiliyor. Bunlar
+ * `trim()`in *boşluk* tanımına girmez — Unicode'da "biçim" (Cf) sınıfıdırlar —
+ * ve dizgenin **ortasında** duranı zaten hiçbir `trim` almaz.
+ *
+ * Sonuç sinsiydi: anahtar kaydedilmiş görünüyor, panel "Sor" düğmesini
+ * açıyor, ama `fetch` başlığa ISO-8859-1 dışı bir karakter koyamadığı için
+ * istek **daha ağa çıkmadan** `TypeError` ile düşüyordu. Kullanıcı bunu
+ * "Bağlantı kurulamadı." olarak görüyordu; oysa bağlantı hiç denenmemişti.
+ *
+ * Yalnızca **görünmez** karakterler silinir. Gerçek bir harf (yanlışlıkla
+ * kopyalanan bir "ı" gibi) bilerek bırakılır: sessizce silmek anahtarı
+ * bozardı, bırakınca `gemini.ts`'teki denetim onu "anahtar geçersiz" diye
+ * doğru mesajla yakalar.
+ */
+export function anahtarTemizle(deger: string): string {
+  return deger.replace(/[\s\p{Cf}]/gu, "");
+}
+
+/**
  * Kayıtlı anahtar; yoksa boş dizge.
  *
  * `localStorage` erişimi try/catch içinde: Safari'nin özel penceresi ve
  * "site verilerini engelle" ayarı okumada bile fırlatır (`wiki.ts`'teki
  * çevrimdışı yedek katmanıyla aynı savunma).
+ *
+ * Temizlik **okumada da** yapılır: düzeltmeden önce kirli kaydedilmiş
+ * anahtarlar hâlâ depoda duruyor, kullanıcı yeniden yapıştırmak zorunda kalmasın.
  */
 export function anahtarOku(): string {
   try {
-    return localStorage.getItem(ANAHTAR_ADI)?.trim() ?? "";
+    return anahtarTemizle(localStorage.getItem(ANAHTAR_ADI) ?? "");
   } catch {
     return "";
   }
@@ -41,7 +67,7 @@ export function anahtarOku(): string {
 
 /** Anahtarı kaydeder. Boş/boşluk dizge kaydetmez, **siler** — "temizle" ile aynı sonuç. */
 export function anahtarYaz(deger: string): void {
-  const temiz = deger.trim();
+  const temiz = anahtarTemizle(deger);
   if (!temiz) return anahtarSil();
   try {
     localStorage.setItem(ANAHTAR_ADI, temiz);

@@ -46,6 +46,20 @@ export const YZ_MESAJ = {
   sunucu: "Yapay zekâ servisi şu an yanıt vermiyor.",
   /** 200 döndü ama içerik yok (güvenlik filtresi, boş aday). */
   bos: "Model bu metin için yanıt üretmedi.",
+  /**
+   * 404 — anahtar geçerli ama model yok. Eskiden `ag`'ye düşüyordu ve
+   * "Bağlantı kurulamadı." diyordu; oysa bağlantı kurulmuştu, kurulmayan
+   * şey modeldi. İki durumu ayırmak `GEMINI_MODEL`'i güncellemek gerektiğini
+   * söyleyen tek ipucudur.
+   */
+  model: "Model bulunamadı; sağlayıcı bu modeli artık sunmuyor olabilir.",
+  /**
+   * 200 döndü, aday var ama metin yok çünkü `finishReason: MAX_TOKENS`.
+   * Düşünen modellerde (bkz. `gemini.ts` > `YANIT_JETONU`) düşünme jetonları
+   * da çıktı bütçesinden yenir; bütçe darsa model yalnızca düşünür ve
+   * tek harf metin döndürmez.
+   */
+  kesik: "Yanıt tamamlanamadan kesildi. Tekrar deneyin.",
 } as const;
 
 /**
@@ -56,6 +70,7 @@ export const YZ_MESAJ = {
  */
 export function yzDurumMesaji(status: number): string {
   if (status === 400 || status === 401 || status === 403) return YZ_MESAJ.anahtar;
+  if (status === 404) return YZ_MESAJ.model;
   if (status === 429) return YZ_MESAJ.kota;
   if (status >= 500) return YZ_MESAJ.sunucu;
   return YZ_MESAJ.ag;
