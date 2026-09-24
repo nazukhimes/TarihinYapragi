@@ -117,7 +117,7 @@ T-11); yine de kesin bilgi için okuyucu Vikipedi bağlantısını izlemeli.
 
 ```
 TarihinYapragi/
-├── başlat.bat              ← Windows tek tıkla başlatıcı (menülü, BOM'suz + CRLF)
+├── baslat.bat              ← Windows tek tıkla başlatıcı (menülü, BOM'suz + CRLF)
 ├── baslat.sh               ← macOS/Linux başlatıcı (chmod +x)
 ├── .editorconfig           ← satır sonu / girinti sözleşmesi (*.bat hariç LF)
 ├── .nvmrc                  ← Node sürümü (20)
@@ -274,7 +274,7 @@ npm run preview
 npm run typecheck
 ```
 
-Windows'ta bunların hepsi `başlat.bat` menüsünden de yapılabilir (çift tık → 1-4 seç).
+Windows'ta bunların hepsi `baslat.bat` menüsünden de yapılabilir (çift tık → 1-4 seç).
 macOS/Linux'ta aynı menü `./baslat.sh` ile gelir.
 
 **Yeşil kapı — bir talimat kapatılmadan önce bu geçmeli:**
@@ -326,7 +326,7 @@ karşı ölçer (T-11); başlatıcı menüsünde değil, yalnızca `classificati
 zaman tüneli + kategori filtresi, kişi kartları + modal, karanlık dosya kartları,
 bilim kartları, sohbet kartları + kopyalama, Yayın Modu (klavye destekli),
 arama, çevrimdışı yedek, tip kontrolü ve üretim derlemesi. Geliştirme ortamı artık
-tek satırlık başlatıcılarla (`başlat.bat` / `baslat.sh`) ve sabit editör ayarlarıyla
+tek satırlık başlatıcılarla (`baslat.bat` / `baslat.sh`) ve sabit editör ayarlarıyla
 (`.editorconfig`, `.nvmrc`, `.vscode/*`) herkes için aynı. İstatistik sayaçları ve
 sayfa görünürlüğü artık tek paylaşılan bir `useInView` gözlemcisine ve
 `setTimeout` güvenlik ağına dayanıyor (`src/lib/useInView.ts`). Ağ katmanı artık
@@ -416,7 +416,7 @@ teknik olarak hazır, yalnızca herkese açık bir adrese ihtiyaç duyuyorlar).
   kendi sarmalayıcısına alındı) → ayrıntı [`ANALIZ-RAPORU.md`](ANALIZ-RAPORU.md)
 - ~~HMR WebSocket'inin sabit porta bağlı olması~~ ✅ **T-01 ile çözüldü**
 - ~~Kullanılmayan 10 bağımlılık (paket boyutu ve kurulum süresi)~~ ✅ **T-01 ile çözüldü**
-- ~~`başlat.bat`'ın PowerShell ile elle port araması~~ ✅ **T-02 ile çözüldü**
+- ~~`baslat.bat`'ın PowerShell ile elle port araması~~ ✅ **T-02 ile çözüldü**
 - ~~Editör ayarı / `.env` iskeleti / macOS-Linux başlatıcı yokluğu~~ ✅ **T-02 ile çözüldü**
 - ~~Ağ isteklerinde iptal yoktu, TR doluyken bile EN her zaman boşuna çekiliyordu,
   `localStorage` yedeğinde TTL/temizlik yoktu~~ ✅ **T-05 ile çözüldü**

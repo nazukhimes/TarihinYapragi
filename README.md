@@ -31,7 +31,7 @@ Veri Vikipedi'den geldiği için **hiçbir sunucuya ihtiyaç yoktur**: uygulama 
 
 ## Hızlı başlangıç
 
-**Windows:** `başlat.bat` dosyasına çift tıklayın — menüden **[1] Geliştirme
+**Windows:** `baslat.bat` dosyasına çift tıklayın — menüden **[1] Geliştirme
 sunucusu**'nu seçin.
 
 **macOS / Linux:**

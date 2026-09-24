@@ -873,7 +873,7 @@ npm run analyze   # = npm run sitemap && cross-env ANALYZE=1 vite build
 eklenir (`plugins` dizisi `.filter(Boolean)` ile süzülür); `dist/analiz.html`
 bir treemap üretir. **`cross-env` neden gerekti:** talimatın önerdiği
 `"ANALYZE=1 vite build"` yalnızca POSIX kabuğunda çalışır; proje Windows'u da
-resmî olarak destekliyor (T-02'nin `başlat.bat`/`baslat.sh` çifti), bu yüzden
+resmî olarak destekliyor (T-02'nin `baslat.bat`/`baslat.sh` çifti), bu yüzden
 `cross-env` devDependency olarak eklendi.
 
 `build.rollupOptions.output.manualChunks: { react: ["react", "react-dom",

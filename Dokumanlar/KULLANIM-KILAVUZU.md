@@ -25,7 +25,7 @@
 
 ### Windows'ta (önerilen)
 
-Proje klasöründeki **`başlat.bat`** dosyasına **çift tıklayın.**
+Proje klasöründeki **`baslat.bat`** dosyasına **çift tıklayın.**
 
 Açılan pencerede bir menü çıkar:
 
@@ -70,7 +70,7 @@ Sonra terminalde Vite'ın yazdığı adresi açın (genelde `http://localhost:30
 
 ### Gereksinim
 
-**Node.js 20 veya üzeri.** Kurulu değilse `başlat.bat` / `baslat.sh` uyarır.
+**Node.js 20 veya üzeri.** Kurulu değilse `baslat.bat` / `baslat.sh` uyarır.
 (T-22'den önce 18 yeterliydi; `react-router` 7 Node 20 istiyor.)
 İndirme: [nodejs.org](https://nodejs.org) → LTS sürümü. Proje `.nvmrc` ile Node 20'yi
 önerir; `nvm` kullananlar `nvm use` ile otomatik geçebilir (zorunlu değil).
@@ -468,7 +468,7 @@ Evet, arayüz mobil uyumludur. Kart şeritleri dokunmatik kaydırılır.
 
 | Belirti                                                                                    | Sebep                                                                     | Çözüm                                                                                                                                           |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `başlat.bat` açılıp hemen kapanıyor                                                        | Node.js kurulu değil                                                      | [nodejs.org](https://nodejs.org)'dan LTS kurun, bilgisayarı yeniden başlatın                                                                    |
+| `baslat.bat` açılıp hemen kapanıyor                                                        | Node.js kurulu değil                                                      | [nodejs.org](https://nodejs.org)'dan LTS kurun, bilgisayarı yeniden başlatın                                                                    |
 | `[HATA] npm install basarisiz oldu`                                                        | Ağ / izin sorunu                                                          | İnterneti kontrol edin; `node_modules` klasörünü silip tekrar deneyin                                                                           |
 | `./baslat.sh` çalışmıyor: `Permission denied`                                              | Çalıştırma izni yok                                                       | `chmod +x baslat.sh` çalıştırıp tekrar deneyin                                                                                                  |
 | Sayfa açılıyor ama boş                                                                     | Tarayıcı çok eski                                                         | Güncel Chrome, Edge veya Firefox kullanın                                                                                                       |
